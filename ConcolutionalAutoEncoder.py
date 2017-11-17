@@ -16,7 +16,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
     _activation_functions = {
         "relu": tf.nn.relu,
         "relu6": tf.nn.relu6,
-        #"crelu": tf.nn.crelu, #throws error
+        # "crelu": tf.nn.crelu, #throws error
         "elu": tf.nn.elu,
         "softplus": tf.nn.softplus,
         "softsign": tf.nn.softsign,
@@ -45,14 +45,24 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         "ProximalAdagradOptimizer": tf.train.ProximalAdagradOptimizer,
         "RMSPropOptimizer": tf.train.RMSPropOptimizer
     }
+    _random_functions = {
+        "zeros": tf.zeros,
+        "gamma": tf.random_gamma,
+        "normal": tf.random_normal,
+        "poisson": tf.random_poisson,
+        "uniform": tf.random_uniform
+    }
 
     def __init__(self, input_shape, number_of_stacks, filter_sizes, mirror_weights=False, activation_function="relu",
-                 batch_size=100, n_epochs=50, use_tensorboard=True, silent=False, learning_rate_function="static",
+                 batch_size=100, n_epochs=50, use_tensorboard=True, verbose=True, learning_rate_function="static",
                  lr_learning_rate=0.01, lr_decay_steps=1000, lr_decay_rate=0.9, lr_staircase=False,
                  lr_boundaries=[10000, 20000], lr_values=[1.0, 0.5, 0.1], lr_end_learning_rate=0.0001, lr_power=1.0,
-                 lr_cycle=False, optimizer="AdamOptimizer", momentum=0.9):
+                 lr_cycle=False, optimizer="AdamOptimizer", momentum=0.9, random_function_for_weights="uniform",
+                 rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=0.0, rw_maxval=None,
+                 rw_seed=None, random_function_for_biases="zeros", rb_alpha=0.5, rb_beta=None, rb_mean=0.0,
+                 rb_stddev=1.0, rb_lam=0.5, rb_minval=0.0, rb_maxval=None, rb_seed=None):
         """
-        Called when initializing the transformer
+        Calls when initializing the transformer
 
         :param input_shape:
         :param number_of_stacks:
@@ -62,7 +72,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param batch_size:
         :param n_epochs:
         :param use_tensorboard:
-        :param learning_rate_functions:
+        :param verbose:
+        :param learning_rate_function:
         :param lr_learning_rate:
         :param lr_decay_steps:
         :param lr_decay_rate:
@@ -74,7 +85,26 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param lr_cycle:
         :param optimizer:
         :param momentum:
+        :param random_function_for_weights:
+        :param rw_alpha:
+        :param rw_beta:
+        :param rw_mean:
+        :param rw_stddev:
+        :param rw_lam:
+        :param rw_minval:
+        :param rw_maxval:
+        :param rw_seed:
+        :param random_function_for_biases:
+        :param rb_alpha:
+        :param rb_beta:
+        :param rb_mean:
+        :param rb_stddev:
+        :param rb_lam:
+        :param rb_minval:
+        :param rb_maxval:
+        :param rb_seed:
         """
+
         # parse ANN topology parameters
         self.input_shape = input_shape
         self.number_of_stacks = number_of_stacks
@@ -96,8 +126,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self.lr_decay_steps = lr_decay_steps
             self.lr_decay_rate = lr_decay_rate
             self.lr_staircase = lr_staircase
-            self.lr_boundaries = lr_boundaries
-            self.lr_values = lr_values
+            # convert boun
+            self.lr_boundaries = [tf.cast(value, dtype=tf.float64) for value in lr_boundaries]
+            self.lr_values = [tf.cast(value, dtype=tf.float64) for value in lr_values]
             self.lr_end_learning_rate = lr_end_learning_rate
             self.lr_power = lr_power
             self.lr_cycle = lr_cycle
@@ -113,13 +144,46 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                                self._optimizers.keys())
         self.momentum = momentum
 
+        # parse random function for initial weights
+        if random_function_for_weights in self._random_functions.keys():
+            self.random_function_for_weights = random_function_for_weights
+            # parse random function parameters
+            self.rw_alpha = rw_alpha
+            self.rw_beta = rw_beta
+            self.rw_mean = rw_mean
+            self.rw_stddev = rw_stddev
+            self.rw_lam = rw_lam
+            self.rw_minval = rw_minval
+            self.rw_maxval = rw_maxval
+            self.rw_seed = rw_seed
+        else:
+            raise RuntimeError("Please define a valid random function for the initial weights. \nValid values are:\n",
+                               self._random_functions.keys())
+
+        # parse random function for initial weights
+        if random_function_for_biases in self._random_functions.keys():
+            self.random_function_for_biases = random_function_for_biases
+            # parse random function parameters
+            self.rb_alpha = rb_alpha
+            self.rb_beta = rb_beta
+            self.rb_mean = rb_mean
+            self.rb_stddev = rb_stddev
+            self.rb_lam = rb_lam
+            self.rb_minval = rb_minval
+            self.rb_maxval = rb_maxval
+            self.rb_seed = rb_seed
+        else:
+            raise RuntimeError(
+                "Please define a valid random function for the initial biases. \nValid values are:\n",
+                self._random_functions.keys())
+
         # parse train parameters
         self.batch_size = batch_size
         self.n_epochs = n_epochs
         self.use_tensorboard = use_tensorboard
 
         # define console output
-        self.silent = silent
+        self.verbose = verbose
 
         # Mark model as untrained
         self.model_is_trained = False
@@ -171,7 +235,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         current_input = self.input_images
         self.layers.append(self.input_images)
         # iterate over all encoder layer
-        for layer_i, n_output in enumerate(self.number_of_stacks[1:]):
+        for layer_i, n_output in enumerate(self.number_of_stacks):
             output = self._build_encoder_layer(current_input, layer_i, n_output)
             self.layers.append(output)
             current_input = output
@@ -189,36 +253,51 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         number_of_input_layers = current_input.get_shape().as_list()[3]
         self.encoder_shapes.append(current_input.get_shape().as_list())
-        weights_of_layer_i = self._create_random_layer_weights(layer_i, n_output, number_of_input_layers)
-        bias_of_layer_i = self._create_layer_biases(n_output)
+        weights_of_layer_i = self._create_random_layer_weights(
+            [self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output])
+        print([self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output])
+        bias_of_layer_i = self._create_layer_biases([n_output])
         self.encoder_weights.append(weights_of_layer_i)
         self.encoder_biases.append(bias_of_layer_i)
+        # TODO: understand strides /padding
         output = self.activation_function(
             tf.nn.conv2d(current_input, weights_of_layer_i, strides=[1, 2, 2, 1], padding='SAME') +
             bias_of_layer_i)
         return output
 
-    def _create_random_layer_weights(self, layer_i, n_output, number_of_input_layers):
+    def _create_random_layer_weights(self, shape):
         """
 
-        :param layer_i:
-        :param n_output:
-        :param number_of_input_layers:
+        :param shape:
         :return:
         """
-        weights = tf.Variable(
-            tf.random_uniform(
-                [self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output],
-                -1.0 / math.sqrt(number_of_input_layers), 1.0 / math.sqrt(number_of_input_layers)))
-        return weights
+        if self.random_function_for_weights == "zeros":
+            return tf.Variable(tf.zeros(shape))
+        if self.random_function_for_weights == "gamma":
+            return tf.Variable(tf.random_gamma(shape, self.rw_alpha, self.rw_beta, seed=self.rw_seed))
+        if self.random_function_for_weights == "normal":
+            return tf.Variable(tf.random_normal(shape, self.rw_mean, self.rw_stddev, seed=self.rw_seed))
+        if self.random_function_for_weights == "poisson":
+            return tf.Variable(tf.random_poisson(self.rw_lam, shape, seed=self.rw_seed))
+        else:
+            return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed))
 
-    def _create_layer_biases(self, n_output):
+    def _create_layer_biases(self, shape):
         """
 
         :param n_output:
         :return:
         """
-        return tf.Variable(tf.zeros([n_output]))
+        if self.random_function_for_biases == "zeros":
+            return tf.Variable(tf.zeros(shape))
+        if self.random_function_for_biases == "gamma":
+            return tf.Variable(tf.random_gamma(shape, self.rw_alpha, self.rw_beta, seed=self.rw_seed))
+        if self.random_function_for_biases == "normal":
+            return tf.Variable(tf.random_normal(shape, self.rw_mean, self.rw_stddev, seed=self.rw_seed))
+        if self.random_function_for_biases == "poisson":
+            return tf.Variable(tf.random_poisson(self.rw_lam, shape, seed=self.rw_seed))
+        else:
+            return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed))
 
     def _build_decoder(self):
         """
@@ -226,12 +305,13 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # construct the decoder
         self.decoder_weights = []
         self.decoder_biases = []
-        self.decoder_shapes = self.encoder_shapes.reverse()
+        # TODO : check if latent representation is in shapes
+        self.decoder_shapes = list(reversed(self.encoder_shapes))
 
         current_input = self.latent_representation
 
         # iterate over all encoder layer
-        for layer_i, shape in enumerate(self.encoder_shapes):
+        for layer_i, shape in enumerate(self.decoder_shapes):
             output = self._build_decoder_layer(current_input, layer_i, shape)
             self.layers.append(output)
             current_input = output
@@ -247,16 +327,18 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         # reuse weights and biases
-        reversed_encoder_biases = list(reversed(self.encoder_biases))
+        # reversed_encoder_biases = list(reversed(self.encoder_biases))
         reversed_encoder_weights = list(reversed(self.encoder_weights))
         reversed_number_of_stacks = list(reversed(self.number_of_stacks))
 
+        print(reversed_encoder_weights[layer_i].get_shape().as_list())
         if self.mirror_weights:
             weights_of_layer_i = reversed_encoder_weights[layer_i]
         else:
-            weights_of_layer_i = self._create_random_layer_weights(layer_i, reversed_number_of_stacks[layer_i],
-                                                                   reversed_encoder_weights[
-                                                                       layer_i].get_shape().as_list()[2])
+            weights_of_layer_i = self._create_random_layer_weights(
+                reversed_encoder_weights[layer_i].get_shape().as_list())
+            # weights_of_layer_i = self._create_random_layer_weights(
+            #     [reversed_encoder_weights[layer_i].get_shape().as_list()])
         # if self.mirror_biases:
         #    biases_of_layer_i = reversed_encoder_biases[layer_i + 1]
         # else:
@@ -264,6 +346,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         self.decoder_weights.append(weights_of_layer_i)
         self.decoder_biases.append(biases_of_layer_i)
+        # TODO: add names
         output = self.activation_function(tf.nn.conv2d_transpose(current_input, weights_of_layer_i,
                                                                  tf.stack(
                                                                      [tf.shape(self.input_images)[0], shape[1],
@@ -277,6 +360,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         :return:
         """
+        # TODO: allow predefined cost functions
         self.cost_function = tf.reduce_sum(tf.square(self.output_images - self.input_images))
 
     def _define_learning_rate_function(self):
@@ -294,7 +378,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # piecewise constant learning rate
         if self.learning_rate_function == "piecewise_constant":
-            self.learning_rate = tf.train.piecewise_constant(self.global_step, self.lr_boundaries, self.lr_values)
+            self.learning_rate = tf.train.piecewise_constant(tf.cast(self.global_step, dtype=tf.float64), self.lr_boundaries, self.lr_values)
             return
 
         # polynomially decaying learning rate
@@ -360,56 +444,58 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
 
         """
-        # save
-        self.train_data = train_data
 
         # train
-        self._train_model()
+        self._train_model(train_data)
 
         return self
 
-    def _train_model(self):
+    def _train_model(self, train_data):
         """
 
         """
         # Fit all training data
         for epoch_i in range(self.n_epochs):
-            self._train_model_single_epoch(epoch_i)
+            self._train_model_single_epoch(epoch_i, train_data)
+            # TODO: save session
 
         # mark model as trained:
         self.model_is_trained = True
+        # close session
+        self.tf_session.close()
 
-    def _train_model_single_epoch(self, epoch_i):
+    def _train_model_single_epoch(self, epoch_i, train_data):
         """
 
         :param epoch_i:
         :return:
         """
-        for batch_index in range(len(self.train_data) // self.batch_size):
-            self._train_model_single_batch(batch_index, epoch_i)
+        for batch_index in range(len(train_data) // self.batch_size):
+            current_batch = train_data[batch_index * self.batch_size:(batch_index + 1) * self.batch_size]
+            self._train_model_single_batch(current_batch)
 
-    def _train_model_single_batch(self, batch_index, epoch_i):
+    def _train_model_single_batch(self, current_batch):
         """
 
         :param batch_index:
         :param epoch_i:
         :return:
         """
-        current_batch = self.train_data[batch_index * self.batch_size:(batch_index + 1) * self.batch_size]
         # Tensorboard summary:
         if self.use_tensorboard:
             summary, train_cost, _, step = self.tf_session.run(
                 [self.merged_summary, self.cost_function, self.final_optimizer, self.global_step],
                 feed_dict={self.input_images: current_batch})
+            # TODO:replace feed_dict?
             self.train_writer.add_summary(summary, step)
         else:
             train_cost, _, step = self.tf_session.run(
                 [self.cost_function, self.final_optimizer, self.global_step],
                 feed_dict={self.input_images: current_batch})
-        if not self.silent:
+        if self.verbose:
             print(str(step) + ": " + str(train_cost))
 
-    def get_latent_representation(session, ANN_topology, X_variable, data, latent_variable):
+    def get_latent_representation(self, input_data):
         """
 
         :param ANN_topology:
@@ -418,8 +504,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param latent_variable:
         :return:
         """
-        return session.run(ANN_topology[latent_variable], feed_dict={ANN_topology[X_variable]: data})
+        return self.tf_session.run(self.latent_representation, feed_dict={self.input_images: input_data})
 
+    # TODO: reopen session
     def predict(self, X, y=None):
         """
 
@@ -432,6 +519,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         else:
             raise RuntimeError("You must train transformer before predicting data!")
 
+    # TODO: reopen session
     def score(self, X, y=None):
         """
 
