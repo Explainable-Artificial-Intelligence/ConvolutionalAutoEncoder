@@ -17,11 +17,11 @@ def test_on_mnist_dataset():
     test_data = mnist.test.images
     # create ANN
 
-    # cae_mnist = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3])
+    cae_mnist = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3])
 
-    # cae_mnist.fit(train_data)
+    cae_mnist.fit(train_data)
 
-    # print(cae_mnist.score(test_data))
+    print(cae_mnist.score(test_data))
     # final train error: ~500-700
     # final test error: 62417.8
 

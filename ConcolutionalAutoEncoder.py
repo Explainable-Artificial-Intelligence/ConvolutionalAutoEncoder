@@ -57,10 +57,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                  batch_size=100, n_epochs=50, use_tensorboard=True, verbose=True, learning_rate_function="static",
                  lr_learning_rate=0.01, lr_decay_steps=1000, lr_decay_rate=0.9, lr_staircase=False,
                  lr_boundaries=[10000, 20000], lr_values=[1.0, 0.5, 0.1], lr_end_learning_rate=0.0001, lr_power=1.0,
-                 lr_cycle=False, optimizer="AdamOptimizer", momentum=0.9, random_function_for_weights="uniform",
+                 lr_cycle=False, optimizer='GradientDescentOptimizer', momentum=0.9,
+                 random_function_for_weights="uniform",
                  rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=0.0, rw_maxval=None,
                  rw_seed=None, random_function_for_biases="zeros", rb_alpha=0.5, rb_beta=None, rb_mean=0.0,
-                 rb_stddev=1.0, rb_lam=0.5, rb_minval=0.0, rb_maxval=None, rb_seed=None):
+                 rb_stddev=1.0, rb_lam=0.5, rb_minval=0.0, rb_maxval=None, rb_seed=None, session_saver_path='./save/',
+                 load_prev_session=False):
         """
         Calls when initializing the transformer
 
@@ -103,6 +105,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param rb_minval:
         :param rb_maxval:
         :param rb_seed:
+        :param session_saver_path:
         """
 
         # parse ANN topology parameters
@@ -202,12 +205,37 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # create tensorflow session
         self.tf_session = tf.Session()
+
+        # initialize session saver:
+        self.session_saver_path = session_saver_path
+        self.load_prev_session = load_prev_session
+        if self.session_saver_path is not None:
+            self.session_saver = tf.train.Saver()
+            if self.load_prev_session:
+                # load previous session:
+                prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
+                self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
+                self.model_is_trained = True
+                print()
+
         self.tf_session.run(tf.global_variables_initializer())
 
         # initialize Tensorboard
         if self.use_tensorboard:
             self._define_summary_variables()
             self._init_tensorboard_file_writer()
+
+        # initialize session saver:
+        self.session_saver_path = session_saver_path
+        self.load_prev_session = load_prev_session
+        if self.session_saver_path is not None:
+            self.session_saver = tf.train.Saver()
+            if self.load_prev_session:
+                # load previous session:
+                prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
+                self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
+                self.model_is_trained = True
+                print()
 
     def _build_network_topology(self):
         """
@@ -378,7 +406,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # piecewise constant learning rate
         if self.learning_rate_function == "piecewise_constant":
-            self.learning_rate = tf.train.piecewise_constant(tf.cast(self.global_step, dtype=tf.float64), self.lr_boundaries, self.lr_values)
+            self.learning_rate = tf.train.piecewise_constant(tf.cast(self.global_step, dtype=tf.float64),
+                                                             self.lr_boundaries, self.lr_values)
             return
 
         # polynomially decaying learning rate
@@ -457,12 +486,15 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # Fit all training data
         for epoch_i in range(self.n_epochs):
             self._train_model_single_epoch(epoch_i, train_data)
-            # TODO: save session
+            # save session  after each epoch
+            if self.session_saver_path is not None:
+                self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
+                                        global_step=self.global_step)
 
         # mark model as trained:
         self.model_is_trained = True
         # close session
-        self.tf_session.close()
+        #self.tf_session.close()
 
     def _train_model_single_epoch(self, epoch_i, train_data):
         """
