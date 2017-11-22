@@ -13,7 +13,7 @@ def test_on_cifar_dataset():
 
     :return:
     """
-    # load mnist data
+    # load cifar data
     # define input file paths:
     filename_prefix = "CIFAR-10/cifar-10-batches-py/data_batch_"
     cifar_train_data_list = []

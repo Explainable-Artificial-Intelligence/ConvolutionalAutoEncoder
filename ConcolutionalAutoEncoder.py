@@ -57,9 +57,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                  batch_size=100, n_epochs=50, use_tensorboard=True, verbose=True, learning_rate_function="static",
                  lr_learning_rate=0.01, lr_decay_steps=1000, lr_decay_rate=0.9, lr_staircase=False,
                  lr_boundaries=[10000, 20000], lr_values=[1.0, 0.5, 0.1], lr_end_learning_rate=0.0001, lr_power=1.0,
-                 lr_cycle=False, optimizer='GradientDescentOptimizer', momentum=0.9,
-                 random_function_for_weights="uniform",
-                 rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=0.0, rw_maxval=None,
+                 lr_cycle=False, optimizer='AdamOptimizer', momentum=0.9, random_function_for_weights="uniform",
+                 rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=0.0, rw_maxval=1.0,
                  rw_seed=None, random_function_for_biases="zeros", rb_alpha=0.5, rb_beta=None, rb_mean=0.0,
                  rb_stddev=1.0, rb_lam=0.5, rb_minval=0.0, rb_maxval=None, rb_seed=None, session_saver_path='./save/',
                  load_prev_session=False):
@@ -209,6 +208,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # initialize session saver:
         self.session_saver_path = session_saver_path
         self.load_prev_session = load_prev_session
+        self.tf_session.run(tf.global_variables_initializer())
         if self.session_saver_path is not None:
             self.session_saver = tf.train.Saver()
             if self.load_prev_session:
@@ -218,31 +218,31 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 self.model_is_trained = True
                 print()
 
-        self.tf_session.run(tf.global_variables_initializer())
+
 
         # initialize Tensorboard
         if self.use_tensorboard:
             self._define_summary_variables()
             self._init_tensorboard_file_writer()
 
-        # initialize session saver:
-        self.session_saver_path = session_saver_path
-        self.load_prev_session = load_prev_session
-        if self.session_saver_path is not None:
-            self.session_saver = tf.train.Saver()
-            if self.load_prev_session:
-                # load previous session:
-                prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
-                self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
-                self.model_is_trained = True
-                print()
+        # # initialize session saver:
+        # self.session_saver_path = session_saver_path
+        # self.load_prev_session = load_prev_session
+        # if self.session_saver_path is not None:
+        #     self.session_saver = tf.train.Saver()
+        #     if self.load_prev_session:
+        #         # load previous session:
+        #         prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
+        #         self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
+        #         self.model_is_trained = True
+        #         print()
 
     def _build_network_topology(self):
         """
         Builds the ANN topology for a convolutional autoencoder
         """
         # create placeholder for input images
-        self.input_images = tf.placeholder(tf.float32, self.input_shape)
+        self.input_images = tf.placeholder(tf.float32, self.input_shape, name="Input_Images")
 
         # define model topology
         # encoder part
@@ -282,9 +282,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         number_of_input_layers = current_input.get_shape().as_list()[3]
         self.encoder_shapes.append(current_input.get_shape().as_list())
         weights_of_layer_i = self._create_random_layer_weights(
-            [self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output])
+            [self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output],
+            "encoder_weights_layer_" + str(layer_i))
         print([self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output])
-        bias_of_layer_i = self._create_layer_biases([n_output])
+        bias_of_layer_i = self._create_layer_biases([n_output], "encoder_biases_layer_" + str(layer_i))
         self.encoder_weights.append(weights_of_layer_i)
         self.encoder_biases.append(bias_of_layer_i)
         # TODO: understand strides /padding
@@ -293,39 +294,40 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             bias_of_layer_i)
         return output
 
-    def _create_random_layer_weights(self, shape):
+    def _create_random_layer_weights(self, shape, name=""):
         """
 
+        :param names:
         :param shape:
         :return:
         """
         if self.random_function_for_weights == "zeros":
-            return tf.Variable(tf.zeros(shape))
+            return tf.Variable(tf.zeros(shape), name=name)
         if self.random_function_for_weights == "gamma":
-            return tf.Variable(tf.random_gamma(shape, self.rw_alpha, self.rw_beta, seed=self.rw_seed))
+            return tf.Variable(tf.random_gamma(shape, self.rw_alpha, self.rw_beta, seed=self.rw_seed), name=name)
         if self.random_function_for_weights == "normal":
-            return tf.Variable(tf.random_normal(shape, self.rw_mean, self.rw_stddev, seed=self.rw_seed))
+            return tf.Variable(tf.random_normal(shape, self.rw_mean, self.rw_stddev, seed=self.rw_seed), name=name)
         if self.random_function_for_weights == "poisson":
-            return tf.Variable(tf.random_poisson(self.rw_lam, shape, seed=self.rw_seed))
+            return tf.Variable(tf.random_poisson(self.rw_lam, shape, seed=self.rw_seed), name=name)
         else:
-            return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed))
+            return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed), name=name)
 
-    def _create_layer_biases(self, shape):
+    def _create_layer_biases(self, shape, name=""):
         """
 
         :param n_output:
         :return:
         """
         if self.random_function_for_biases == "zeros":
-            return tf.Variable(tf.zeros(shape))
+            return tf.Variable(tf.zeros(shape), name=name)
         if self.random_function_for_biases == "gamma":
-            return tf.Variable(tf.random_gamma(shape, self.rw_alpha, self.rw_beta, seed=self.rw_seed))
+            return tf.Variable(tf.random_gamma(shape, self.rw_alpha, self.rw_beta, seed=self.rw_seed), name=name)
         if self.random_function_for_biases == "normal":
-            return tf.Variable(tf.random_normal(shape, self.rw_mean, self.rw_stddev, seed=self.rw_seed))
+            return tf.Variable(tf.random_normal(shape, self.rw_mean, self.rw_stddev, seed=self.rw_seed), name=name)
         if self.random_function_for_biases == "poisson":
-            return tf.Variable(tf.random_poisson(self.rw_lam, shape, seed=self.rw_seed))
+            return tf.Variable(tf.random_poisson(self.rw_lam, shape, seed=self.rw_seed), name=name)
         else:
-            return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed))
+            return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed), name=name)
 
     def _build_decoder(self):
         """
@@ -364,13 +366,14 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             weights_of_layer_i = reversed_encoder_weights[layer_i]
         else:
             weights_of_layer_i = self._create_random_layer_weights(
-                reversed_encoder_weights[layer_i].get_shape().as_list())
+                reversed_encoder_weights[layer_i].get_shape().as_list(), "decoder_weights_layer_" + str(layer_i))
             # weights_of_layer_i = self._create_random_layer_weights(
             #     [reversed_encoder_weights[layer_i].get_shape().as_list()])
         # if self.mirror_biases:
         #    biases_of_layer_i = reversed_encoder_biases[layer_i + 1]
         # else:
-        biases_of_layer_i = self._create_layer_biases(weights_of_layer_i.get_shape().as_list()[2])
+        biases_of_layer_i = self._create_layer_biases(weights_of_layer_i.get_shape().as_list()[2],
+                                                      "decoder_biases_layer_" + str(layer_i))
 
         self.decoder_weights.append(weights_of_layer_i)
         self.decoder_biases.append(biases_of_layer_i)
@@ -397,7 +400,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         # set an global counter for the training iteration
-        self.global_step = tf.Variable(0, trainable=False, dtype=tf.int64)
+        self.global_step = tf.Variable(0, trainable=False, dtype=tf.int64, name="global_step")
 
         # static learning rate:
         if self.learning_rate_function == "static":
@@ -490,11 +493,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             if self.session_saver_path is not None:
                 self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
                                         global_step=self.global_step)
+                print("model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
 
         # mark model as trained:
         self.model_is_trained = True
         # close session
-        #self.tf_session.close()
+        # self.tf_session.close()
 
     def _train_model_single_epoch(self, epoch_i, train_data):
         """
