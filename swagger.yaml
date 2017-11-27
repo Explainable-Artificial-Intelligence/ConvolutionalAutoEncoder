@@ -1,0 +1,753 @@
+swagger: '2.0'
+info:
+  description: 'WebUI to build, train and tune a Convolutional Autoencoder'
+  version: 1.0.0
+  title: Convolutional Autoencoder
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: leon.schuetz@student.uni-tuebingen.de
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'localhost:80'
+basePath: /v2
+tags:
+  - name: input
+    description: All methods corresponding to the input data
+  - name: build
+    description: All methods corresponding to the learning parameters
+  - name: train
+    description: All methods corresponding to the CAE training
+  - name: visualize
+    description: All methods corresponding to the CAE visualisation
+  - name: tune
+    description: All methods corresponding to the CAE parameter tuning
+schemes:
+  - http
+paths:
+  '/input/{filename}':
+    get:
+      tags:
+        - input
+      summary: Load a train data file
+      description: Load a train data file in numpy array data format
+      operationId: loadTrainData
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: filename
+          in: path
+          description: retruns the train data images for a given file path
+          required: true
+          type: string
+          format: string
+      responses:
+        '200':
+          description: file successful loaded
+          schema:
+            $ref: '#/definitions/InputData'
+        '404':
+          description: File not found
+        '415':
+          description: File parsing error
+  /build:
+    post:
+      tags:
+        - build
+      summary: passes all learning and ANN parameters to the server
+      description: Includes learning parameters and ANN topology
+      operationId: passANNParameters
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: inputParameters
+          in: body
+          description: object with all tunable parameters
+          required: true
+          schema:
+            $ref: '#/definitions/ParameterSet'
+      responses:
+        '202':
+          description: Parameters successfully commited
+        '415':
+          description: File parsing error
+  /train:
+    put:
+      tags:
+        - train
+      summary: 'starts, pauses and stops the training'
+      description: ''
+      operationId: controlTraining
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: trainStatus
+          in: body
+          description: new status for training
+          required: true
+          schema:
+            $ref: '#/definitions/TrainStatus'
+      responses:
+        '200':
+          description: Train status updated
+  /visualize:
+    get:
+      tags:
+        - visualize
+      summary: returns the clustering of the latent representation
+      description: ''
+      operationId: getClustering
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: dimension
+          in: query
+          description: dimension of the latent representation
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Operation successful
+          schema:
+            $ref: '#/definitions/Clustering'
+  '/visualize/{imageID}':
+    get:
+      tags:
+        - visualize
+      summary: returns the ANN output for a given input image ID
+      description: ''
+      operationId: getOutputImage
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: imageID
+          in: path
+          description: id (position) of the input image
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Operation successful
+          schema:
+            $ref: '#/definitions/Image'
+  '/visualize/load/{filename}':
+    get:
+      tags:
+        - visualize
+      summary: Load a test data file
+      description: Load a test data file in numpy array data format
+      operationId: loadTestData
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: filename
+          in: path
+          description: retruns the test data images for a given file path
+          required: true
+          type: string
+          format: string
+      responses:
+        '200':
+          description: file successful loaded
+          schema:
+            $ref: '#/definitions/InputData'
+        '404':
+          description: File not found
+        '415':
+          description: File parsing error
+  /tune:
+    post:
+      tags:
+        - tune
+      summary: passes all learning and ANN parameters to the server
+      description: Includes learning parameters and ANN topology as lists
+      operationId: passANNParameterLists
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: inputParameterLists
+          in: body
+          description: object with all tunable parameter lists
+          required: true
+          schema:
+            $ref: '#/definitions/ParameterLists'
+      responses:
+        '202':
+          description: Parameters successfully commited
+        '415':
+          description: File parsing error
+  /tune/control:
+    put:
+      tags:
+        - tune
+      summary: 'starts, pauses and stops the tuning'
+      description: ''
+      operationId: controlTuning
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: trainStatus
+          in: body
+          description: new status for training
+          required: true
+          schema:
+            $ref: '#/definitions/TrainStatus'
+      responses:
+        '200':
+          description: Train status updated
+definitions:
+  InputData:
+    type: object
+    properties:
+      numImages:
+        type: integer
+        format: int64
+      resX:
+        type: integer
+        format: int32
+      resY:
+        type: integer
+        format: int32
+      images:
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+  ParameterSet:
+    type: object
+    properties:
+      inputShape:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 0
+          - 28
+          - 28
+          - 1
+      numberOfStacks:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 12
+          - 8
+          - 8
+          - 4
+      filterSizes:
+        type: array
+        items:
+          type: integer
+          format: int32
+          example:
+            - 5
+            - 5
+            - 3
+            - 3
+      mirrorWeights:
+        type: boolean
+        example: 'false'
+      activationFunction:
+        type: string
+        example: relu
+      batchSize:
+        type: integer
+        format: int32
+        example: 100
+      nEpochs:
+        type: integer
+        format: int32
+        example: 50
+      useTensorboard:
+        type: boolean
+        example: true
+      verbose:
+        type: boolean
+        example: true
+      learningRateFunction:
+        type: string
+        example: static
+      lrInitialLearningRate:
+        type: number
+        format: double
+        example: 0.01
+      lrDecaySteps:
+        type: integer
+        format: int32
+        example: 1000
+      lrDecayRate:
+        type: number
+        format: double
+        example: 0.9
+      lrStaircase:
+        type: boolean
+        example: false
+      lrBoundaries:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 10000
+          - 20000
+      lrValues:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+          - 0.5
+          - 0.1
+      lrEndLearningRate:
+        type: number
+        format: double
+        example: 0.0001
+      lrPower:
+        type: number
+        format: double
+        example: 1
+      lrCycle:
+        type: boolean
+        example: false
+      opimizer:
+        type: string
+        example: AdamOptimizer
+      momentum:
+        type: number
+        format: double
+        example: 0.9
+      randomFunctionForWeights:
+        type: string
+        example: uniform
+      rwAlpha:
+        type: number
+        format: double
+        example: 0.5
+      rwBeta:
+        type: number
+        format: double
+        example: 0
+      rwMean:
+        type: number
+        format: double
+        example: 0
+      rwStddev:
+        type: number
+        format: double
+        example: 1
+      rwLam:
+        type: number
+        format: double
+        example: 0.5
+      rwMinval:
+        type: number
+        format: double
+        example: 0
+      rwMaxval:
+        type: number
+        format: double
+        example: 1
+      rwSeed:
+        type: integer
+        format: int32
+        example: 0
+      randomFunctionForBiases:
+        type: string
+        example: zeros
+      rbAlpha:
+        type: number
+        format: double
+        example: 0.5
+      rbBeta:
+        type: number
+        format: double
+        example: 0
+      rbMean:
+        type: number
+        format: double
+        example: 0
+      rbStddev:
+        type: number
+        format: double
+        example: 1
+      rbLam:
+        type: number
+        format: double
+        example: 0.5
+      rbMinval:
+        type: number
+        format: double
+        example: 0
+      rbMaxval:
+        type: number
+        format: double
+        example: 1
+      rbSeed:
+        type: integer
+        format: int32
+        example: 0
+      sessionSaverPath:
+        type: string
+        example: ./save/
+      loadPrevSession:
+        type: boolean
+        example: false
+  Clustering:
+    type: object
+    properties:
+      minX:
+        type: number
+        format: float
+      maxX:
+        type: number
+        format: float
+      minY:
+        type: number
+        format: float
+      maxY:
+        type: number
+        format: float
+      nClusters:
+        type: integer
+        format: int32
+      points:
+        type: array
+        items:
+          $ref: '#/definitions/2DPoint'
+  2DPoint:
+    type: object
+    properties:
+      x:
+        type: number
+        format: float
+      'y':
+        type: number
+        format: float
+      cluster:
+        type: integer
+        format: int32
+  TrainStatus:
+    type: string
+    enum:
+      - start
+      - pause
+      - stop
+      - resume
+  Image:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          type: string
+      id:
+        type: integer
+        format: int32
+  ParameterLists:
+    type: object
+    properties:
+      inputShapeList:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example:
+          - - 0
+            - 28
+            - 28
+            - 1
+      numberOfStacksList:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example:
+          - - 12
+            - 8
+            - 8
+            - 4
+      filterSizeList:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example:
+          - - 5
+            - 5
+            - 3
+            - 3
+      mirrorWeightList:
+        type: array
+        items:
+          type: boolean
+        example:
+          - 'false'
+      activationFunctionList:
+        type: array
+        items:
+          type: string
+        example:
+          - relu
+      batchSizeList:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 100
+      nEpochList:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 50
+      useTensorboard:
+        type: boolean
+        example: true
+      verbose:
+        type: boolean
+        example: true
+      learningRateFunctionList:
+        type: array
+        items:
+          type: string
+        example:
+          - static
+      lrInitialLearningRateList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.01
+      lrDecayStepList:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 1000
+      lrDecayRateList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.9
+      lrStaircaseList:
+        type: array
+        items:
+          type: boolean
+        example:
+          - false
+      lrBoundaryList:
+        type: array
+        items:
+          type: array
+          items:
+            type: integer
+            format: int32
+        example:
+          - - 10000
+            - 20000
+      lrValueList:
+        type: array
+        items:
+          type: array
+          items:
+            type: number
+            format: double
+        example:
+          - - 1
+            - 0.5
+            - 0.1
+      lrEndLearningRateList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.0001
+      lrPowerList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+      lrCycleList:
+        type: array
+        items:
+          type: boolean
+        example:
+          - false
+      opimizerList:
+        type: array
+        items:
+          type: string
+        example:
+          - AdamOptimizer
+      momentumList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.9
+      randomFunctionForWeightsList:
+        type: array
+        items:
+          type: string
+        example:
+          - uniform
+      rwAlphaList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.5
+      rwBetaList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0
+      rwMeanList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0
+      rwStddevList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+      rwLamList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.5
+      rwMinvalList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0
+      rwMaxvalList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+      rwSeedList:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 0
+      randomFunctionForBiasesList:
+        type: array
+        items:
+          type: string
+        example:
+          - zeros
+      rbAlphaList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.5
+      rbBetaList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0
+      rbMeanList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0
+      rbStddevList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+      rbLamList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.5
+      rbMinvalList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0
+      rbMaxvalList:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+      rbSeedList:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 0
+      sessionSaverPath:
+        type: string
+        example: ./save/
+      loadPrevSession:
+        type: boolean
+        example: false

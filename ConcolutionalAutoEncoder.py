@@ -55,7 +55,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def __init__(self, input_shape, number_of_stacks, filter_sizes, mirror_weights=False, activation_function="relu",
                  batch_size=100, n_epochs=50, use_tensorboard=True, verbose=True, learning_rate_function="static",
-                 lr_learning_rate=0.01, lr_decay_steps=1000, lr_decay_rate=0.9, lr_staircase=False,
+                 lr_initial_learning_rate=0.01, lr_decay_steps=1000, lr_decay_rate=0.9, lr_staircase=False,
                  lr_boundaries=[10000, 20000], lr_values=[1.0, 0.5, 0.1], lr_end_learning_rate=0.0001, lr_power=1.0,
                  lr_cycle=False, optimizer='AdamOptimizer', momentum=0.9, random_function_for_weights="uniform",
                  rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=0.0, rw_maxval=1.0,
@@ -75,7 +75,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param use_tensorboard:
         :param verbose:
         :param learning_rate_function:
-        :param lr_learning_rate:
+        :param lr_initial_learning_rate:
         :param lr_decay_steps:
         :param lr_decay_rate:
         :param lr_staircase:
@@ -124,7 +124,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         if learning_rate_function in self._decaying_learning_rate.keys():
             self.learning_rate_function = learning_rate_function
-            self.lr_learning_rate = lr_learning_rate
+            self.lr_initial_learning_rate = lr_initial_learning_rate
             self.lr_decay_steps = lr_decay_steps
             self.lr_decay_rate = lr_decay_rate
             self.lr_staircase = lr_staircase
@@ -404,7 +404,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # static learning rate:
         if self.learning_rate_function == "static":
-            self.learning_rate = self.lr_learning_rate
+            self.learning_rate = self.lr_initial_learning_rate
             return
 
         # piecewise constant learning rate
@@ -415,12 +415,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # polynomially decaying learning rate
         if self.learning_rate_function == "polynomial_decay":
-            self.learning_rate = tf.train.polynomial_decay(self.lr_learning_rate, self.global_step, self.lr_decay_steps,
+            self.learning_rate = tf.train.polynomial_decay(self.lr_initial_learning_rate, self.global_step, self.lr_decay_steps,
                                                            self.lr_end_learning_rate, self.lr_power, self.lr_cycle)
             return
 
         # exponentially decaying learning rate
-        self.learning_rate = self._decaying_learning_rate[self.learning_rate_function](self.lr_learning_rate,
+        self.learning_rate = self._decaying_learning_rate[self.learning_rate_function](self.lr_initial_learning_rate,
                                                                                        self.global_step,
                                                                                        self.lr_decay_steps,
                                                                                        self.lr_decay_rate,

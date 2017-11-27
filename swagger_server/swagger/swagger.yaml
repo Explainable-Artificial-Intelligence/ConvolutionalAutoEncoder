@@ -1,0 +1,758 @@
+---
+swagger: "2.0"
+info:
+  description: "WebUI to build, train and tune a Convolutional Autoencoder"
+  version: "1.0.0"
+  title: "Convolutional Autoencoder"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "leon.schuetz@student.uni-tuebingen.de"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:80"
+basePath: "/v2"
+tags:
+- name: "input"
+  description: "All methods corresponding to the input data"
+- name: "build"
+  description: "All methods corresponding to the learning parameters"
+- name: "train"
+  description: "All methods corresponding to the CAE training"
+- name: "visualize"
+  description: "All methods corresponding to the CAE visualisation"
+- name: "tune"
+  description: "All methods corresponding to the CAE parameter tuning"
+schemes:
+- "http"
+paths:
+  /input/{filename}:
+    get:
+      tags:
+      - "input"
+      summary: "Load a train data file"
+      description: "Load a train data file in numpy array data format"
+      operationId: "load_train_data"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filename"
+        in: "path"
+        description: "retruns the train data images for a given file path"
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "file successful loaded"
+          schema:
+            $ref: "#/definitions/InputData"
+        404:
+          description: "File not found"
+        415:
+          description: "File parsing error"
+      x-swagger-router-controller: "swagger_server.controllers.input_controller"
+  /build:
+    post:
+      tags:
+      - "build"
+      summary: "passes all learning and ANN parameters to the server"
+      description: "Includes learning parameters and ANN topology"
+      operationId: "pass_ann_parameters"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "inputParameters"
+        description: "object with all tunable parameters"
+        required: true
+        schema:
+          $ref: "#/definitions/ParameterSet"
+      responses:
+        202:
+          description: "Parameters successfully commited"
+        415:
+          description: "File parsing error"
+      x-swagger-router-controller: "swagger_server.controllers.build_controller"
+  /train:
+    put:
+      tags:
+      - "train"
+      summary: "starts, pauses and stops the training"
+      description: ""
+      operationId: "control_training"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "trainStatus"
+        description: "new status for training"
+        required: true
+        schema:
+          $ref: "#/definitions/TrainStatus"
+      responses:
+        200:
+          description: "Train status updated"
+      x-swagger-router-controller: "swagger_server.controllers.train_controller"
+  /visualize:
+    get:
+      tags:
+      - "visualize"
+      summary: "returns the clustering of the latent representation"
+      description: ""
+      operationId: "get_clustering"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dimension"
+        in: "query"
+        description: "dimension of the latent representation"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Operation successful"
+          schema:
+            $ref: "#/definitions/Clustering"
+      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
+  /visualize/{imageID}:
+    get:
+      tags:
+      - "visualize"
+      summary: "returns the ANN output for a given input image ID"
+      description: ""
+      operationId: "get_output_image"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "imageID"
+        in: "path"
+        description: "id (position) of the input image"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Operation successful"
+          schema:
+            $ref: "#/definitions/Image"
+      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
+  /visualize/load/{filename}:
+    get:
+      tags:
+      - "visualize"
+      summary: "Load a test data file"
+      description: "Load a test data file in numpy array data format"
+      operationId: "load_test_data"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filename"
+        in: "path"
+        description: "retruns the test data images for a given file path"
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "file successful loaded"
+          schema:
+            $ref: "#/definitions/InputData"
+        404:
+          description: "File not found"
+        415:
+          description: "File parsing error"
+      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
+  /tune:
+    post:
+      tags:
+      - "tune"
+      summary: "passes all learning and ANN parameters to the server"
+      description: "Includes learning parameters and ANN topology as lists"
+      operationId: "pass_ann_parameter_lists"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "inputParameterLists"
+        description: "object with all tunable parameter lists"
+        required: true
+        schema:
+          $ref: "#/definitions/ParameterLists"
+      responses:
+        202:
+          description: "Parameters successfully commited"
+        415:
+          description: "File parsing error"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/control:
+    put:
+      tags:
+      - "tune"
+      summary: "starts, pauses and stops the tuning"
+      description: ""
+      operationId: "control_tuning"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "trainStatus"
+        description: "new status for training"
+        required: true
+        schema:
+          $ref: "#/definitions/TrainStatus"
+      responses:
+        200:
+          description: "Train status updated"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+definitions:
+  InputData:
+    type: "object"
+    properties:
+      numImages:
+        type: "integer"
+        format: "int64"
+      resX:
+        type: "integer"
+        format: "int32"
+      resY:
+        type: "integer"
+        format: "int32"
+      images:
+        type: "array"
+        items:
+          $ref: "#/definitions/Image"
+  ParameterSet:
+    type: "object"
+    properties:
+      inputShape:
+        type: "array"
+        example:
+        - 0
+        - 28
+        - 28
+        - 1
+        items:
+          type: "integer"
+          format: "int32"
+      numberOfStacks:
+        type: "array"
+        example:
+        - 12
+        - 8
+        - 8
+        - 4
+        items:
+          type: "integer"
+          format: "int32"
+      filterSizes:
+        type: "array"
+        items:
+          type: "integer"
+          format: "int32"
+          example: ""
+      mirrorWeights:
+        type: "boolean"
+        example: false
+      activationFunction:
+        type: "string"
+        example: "relu"
+      batchSize:
+        type: "integer"
+        format: "int32"
+        example: 100
+      nEpochs:
+        type: "integer"
+        format: "int32"
+        example: 50
+      useTensorboard:
+        type: "boolean"
+        example: true
+      verbose:
+        type: "boolean"
+        example: true
+      learningRateFunction:
+        type: "string"
+        example: "static"
+      lrInitialLearningRate:
+        type: "number"
+        format: "double"
+        example: 0.01000000000000000020816681711721685132943093776702880859375
+      lrDecaySteps:
+        type: "integer"
+        format: "int32"
+        example: 1000
+      lrDecayRate:
+        type: "number"
+        format: "double"
+        example: 0.90000000000000002220446049250313080847263336181640625
+      lrStaircase:
+        type: "boolean"
+        example: false
+      lrBoundaries:
+        type: "array"
+        example:
+        - 10000
+        - 20000
+        items:
+          type: "integer"
+          format: "int32"
+      lrValues:
+        type: "array"
+        example:
+        - 1
+        - 0.5
+        - 0.1
+        items:
+          type: "number"
+          format: "double"
+      lrEndLearningRate:
+        type: "number"
+        format: "double"
+        example: 0.000100000000000000004792173602385929598312941379845142364501953125
+      lrPower:
+        type: "number"
+        format: "double"
+        example: 1
+      lrCycle:
+        type: "boolean"
+        example: false
+      opimizer:
+        type: "string"
+        example: "AdamOptimizer"
+      momentum:
+        type: "number"
+        format: "double"
+        example: 0.90000000000000002220446049250313080847263336181640625
+      randomFunctionForWeights:
+        type: "string"
+        example: "uniform"
+      rwAlpha:
+        type: "number"
+        format: "double"
+        example: 0.5
+      rwBeta:
+        type: "number"
+        format: "double"
+        example: 0
+      rwMean:
+        type: "number"
+        format: "double"
+        example: 0
+      rwStddev:
+        type: "number"
+        format: "double"
+        example: 1
+      rwLam:
+        type: "number"
+        format: "double"
+        example: 0.5
+      rwMinval:
+        type: "number"
+        format: "double"
+        example: 0
+      rwMaxval:
+        type: "number"
+        format: "double"
+        example: 1
+      rwSeed:
+        type: "integer"
+        format: "int32"
+        example: 0
+      randomFunctionForBiases:
+        type: "string"
+        example: "zeros"
+      rbAlpha:
+        type: "number"
+        format: "double"
+        example: 0.5
+      rbBeta:
+        type: "number"
+        format: "double"
+        example: 0
+      rbMean:
+        type: "number"
+        format: "double"
+        example: 0
+      rbStddev:
+        type: "number"
+        format: "double"
+        example: 1
+      rbLam:
+        type: "number"
+        format: "double"
+        example: 0.5
+      rbMinval:
+        type: "number"
+        format: "double"
+        example: 0
+      rbMaxval:
+        type: "number"
+        format: "double"
+        example: 1
+      rbSeed:
+        type: "integer"
+        format: "int32"
+        example: 0
+      sessionSaverPath:
+        type: "string"
+        example: "./save/"
+      loadPrevSession:
+        type: "boolean"
+        example: false
+  Clustering:
+    type: "object"
+    properties:
+      minX:
+        type: "number"
+        format: "float"
+      maxX:
+        type: "number"
+        format: "float"
+      minY:
+        type: "number"
+        format: "float"
+      maxY:
+        type: "number"
+        format: "float"
+      nClusters:
+        type: "integer"
+        format: "int32"
+      points:
+        type: "array"
+        items:
+          $ref: "#/definitions/2DPoint"
+  2DPoint:
+    type: "object"
+    properties:
+      x:
+        type: "number"
+        format: "float"
+      y:
+        type: "number"
+        format: "float"
+      cluster:
+        type: "integer"
+        format: "int32"
+  TrainStatus:
+    type: "string"
+    enum:
+    - "start"
+    - "pause"
+    - "stop"
+    - "resume"
+  Image:
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          type: "string"
+      id:
+        type: "integer"
+        format: "int32"
+  ParameterLists:
+    type: "object"
+    properties:
+      inputShapeList:
+        type: "array"
+        example:
+        - - 0
+          - 28
+          - 28
+          - 1
+        items:
+          type: "array"
+          items:
+            type: "integer"
+            format: "int32"
+      numberOfStacksList:
+        type: "array"
+        example:
+        - - 12
+          - 8
+          - 8
+          - 4
+        items:
+          type: "array"
+          items:
+            type: "integer"
+            format: "int32"
+      filterSizeList:
+        type: "array"
+        example:
+        - - 5
+          - 5
+          - 3
+          - 3
+        items:
+          type: "array"
+          items:
+            type: "integer"
+            format: "int32"
+      mirrorWeightList:
+        type: "array"
+        example:
+        - "false"
+        items:
+          type: "boolean"
+      activationFunctionList:
+        type: "array"
+        example:
+        - "relu"
+        items:
+          type: "string"
+      batchSizeList:
+        type: "array"
+        example:
+        - 100
+        items:
+          type: "integer"
+          format: "int32"
+      nEpochList:
+        type: "array"
+        example:
+        - 50
+        items:
+          type: "integer"
+          format: "int32"
+      useTensorboard:
+        type: "boolean"
+        example: true
+      verbose:
+        type: "boolean"
+        example: true
+      learningRateFunctionList:
+        type: "array"
+        example:
+        - "static"
+        items:
+          type: "string"
+      lrInitialLearningRateList:
+        type: "array"
+        example:
+        - 0.01
+        items:
+          type: "number"
+          format: "double"
+      lrDecayStepList:
+        type: "array"
+        example:
+        - 1000
+        items:
+          type: "integer"
+          format: "int32"
+      lrDecayRateList:
+        type: "array"
+        example:
+        - 0.9
+        items:
+          type: "number"
+          format: "double"
+      lrStaircaseList:
+        type: "array"
+        example:
+        - false
+        items:
+          type: "boolean"
+      lrBoundaryList:
+        type: "array"
+        example:
+        - - 10000
+          - 20000
+        items:
+          type: "array"
+          items:
+            type: "integer"
+            format: "int32"
+      lrValueList:
+        type: "array"
+        example:
+        - - 1
+          - 0.5
+          - 0.1
+        items:
+          type: "array"
+          items:
+            type: "number"
+            format: "double"
+      lrEndLearningRateList:
+        type: "array"
+        example:
+        - 1.0E-4
+        items:
+          type: "number"
+          format: "double"
+      lrPowerList:
+        type: "array"
+        example:
+        - 1
+        items:
+          type: "number"
+          format: "double"
+      lrCycleList:
+        type: "array"
+        example:
+        - false
+        items:
+          type: "boolean"
+      opimizerList:
+        type: "array"
+        example:
+        - "AdamOptimizer"
+        items:
+          type: "string"
+      momentumList:
+        type: "array"
+        example:
+        - 0.9
+        items:
+          type: "number"
+          format: "double"
+      randomFunctionForWeightsList:
+        type: "array"
+        example:
+        - "uniform"
+        items:
+          type: "string"
+      rwAlphaList:
+        type: "array"
+        example:
+        - 0.5
+        items:
+          type: "number"
+          format: "double"
+      rwBetaList:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "number"
+          format: "double"
+      rwMeanList:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "number"
+          format: "double"
+      rwStddevList:
+        type: "array"
+        example:
+        - 1
+        items:
+          type: "number"
+          format: "double"
+      rwLamList:
+        type: "array"
+        example:
+        - 0.5
+        items:
+          type: "number"
+          format: "double"
+      rwMinvalList:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "number"
+          format: "double"
+      rwMaxvalList:
+        type: "array"
+        example:
+        - 1
+        items:
+          type: "number"
+          format: "double"
+      rwSeedList:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "integer"
+          format: "int32"
+      randomFunctionForBiasesList:
+        type: "array"
+        example:
+        - "zeros"
+        items:
+          type: "string"
+      rbAlphaList:
+        type: "array"
+        example:
+        - 0.5
+        items:
+          type: "number"
+          format: "double"
+      rbBetaList:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "number"
+          format: "double"
+      rbMeanList:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "number"
+          format: "double"
+      rbStddevList:
+        type: "array"
+        example:
+        - 1
+        items:
+          type: "number"
+          format: "double"
+      rbLamList:
+        type: "array"
+        example:
+        - 0.5
+        items:
+          type: "number"
+          format: "double"
+      rbMinvalList:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "number"
+          format: "double"
+      rbMaxvalList:
+        type: "array"
+        example:
+        - 1
+        items:
+          type: "number"
+          format: "double"
+      rbSeedList:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "integer"
+          format: "int32"
+      sessionSaverPath:
+        type: "string"
+        example: "./save/"
+      loadPrevSession:
+        type: "boolean"
+        example: false
