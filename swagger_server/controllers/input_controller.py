@@ -6,6 +6,7 @@ import os
 import numpy as np
 from flask import g
 
+from Storage import Storage
 from swagger_server.models.input_data import InputData, Image
 from datetime import date, datetime
 from typing import List, Dict
@@ -40,7 +41,7 @@ def load_train_data(filename):
                 input_images.images.append(image)
 
             # save train data
-            g.train_data = train_data
+            Storage.set_train_data(train_data)
 
             return "input_images", 200
         except ValueError:

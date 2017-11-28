@@ -1,4 +1,6 @@
 import connexion
+
+from Storage import Storage
 from swagger_server.models.train_status import TrainStatus
 from datetime import date, datetime
 from typing import List, Dict
@@ -17,6 +19,13 @@ def control_training(trainStatus):
     """
     if connexion.request.is_json:
         trainStatus = TrainStatus.from_dict(connexion.request.get_json())
+
+        if trainStatus == "start":
+            # get cae and train data
+            cae = Storage.get_cae()
+            train_data = Storage.get_train_data()
+            # start training:
+            cae.fit(train_data)
 
         return "hello", 200
     return 'do some magic!'

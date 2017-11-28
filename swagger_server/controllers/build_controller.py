@@ -2,6 +2,7 @@ import connexion
 from flask import g
 
 from ConcolutionalAutoEncoder import SklearnCAE
+from Storage import Storage
 from swagger_server.models.parameter_set import ParameterSet
 from datetime import date, datetime
 from typing import List, Dict
@@ -39,5 +40,8 @@ def pass_ann_parameters(inputParameters):
                          inputParameters.rb_mean, inputParameters.rb_stddev, inputParameters.rb_lam,
                          inputParameters.rb_minval, inputParameters.rb_maxval, inputParameters.rb_seed,
                          inputParameters.session_saver_path, inputParameters.load_prev_session)
+        # save CAE
+        Storage.set_cae(cae)
+
         return "CAE created", 202
     return 'parameter parsing error', 415
