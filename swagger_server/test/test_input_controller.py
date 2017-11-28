@@ -17,9 +17,11 @@ class TestInputController(BaseTestCase):
 
         Load a train data file
         """
-        response = self.client.open('/v2/input/{filename}'.format(filename='filename_example'),
+        query_string = [('filename', 'filename_example')]
+        response = self.client.open('/v2/input',
                                     method='GET',
-                                    content_type='application/json')
+                                    content_type='application/json',
+                                    query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
 

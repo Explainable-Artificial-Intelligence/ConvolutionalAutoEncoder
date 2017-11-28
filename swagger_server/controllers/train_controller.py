@@ -17,4 +17,6 @@ def control_training(trainStatus):
     """
     if connexion.request.is_json:
         trainStatus = TrainStatus.from_dict(connexion.request.get_json())
+
+        return "hello", 200
     return 'do some magic!'

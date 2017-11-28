@@ -10,7 +10,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:80"
+host: "localhost:8080"
 basePath: "/v2"
 tags:
 - name: "input"
@@ -26,7 +26,7 @@ tags:
 schemes:
 - "http"
 paths:
-  /input/{filename}:
+  /input:
     get:
       tags:
       - "input"
@@ -39,7 +39,7 @@ paths:
       - "application/json"
       parameters:
       - name: "filename"
-        in: "path"
+        in: "query"
         description: "retruns the train data images for a given file path"
         required: true
         type: "string"
@@ -264,10 +264,14 @@ definitions:
           format: "int32"
       filterSizes:
         type: "array"
+        example:
+        - 5
+        - 5
+        - 3
+        - 3
         items:
           type: "integer"
           format: "int32"
-          example: ""
       mirrorWeights:
         type: "boolean"
         example: false

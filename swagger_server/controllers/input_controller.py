@@ -1,5 +1,12 @@
 import connexion
-from swagger_server.models.input_data import InputData
+import sys
+
+import os
+
+import numpy as np
+from flask import g
+
+from swagger_server.models.input_data import InputData, Image
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
@@ -15,4 +22,29 @@ def load_train_data(filename):
 
     :rtype: InputData
     """
-    return 'do some magic!'
+    print("input file: %s" % filename, file=sys.stderr)
+    if os.path.isfile(filename):
+        print("yeah!!!", file=sys.stderr)
+        try:
+            global train_data
+            train_data = np.load(filename)
+            input_images = InputData()
+            input_images.num_images = train_data.shape[0]
+            input_images.res_x = train_data.shape[1]
+            input_images.res_y = train_data.shape[2]
+            input_images.images = []
+            for i in range(train_data.shape[0]):
+                image = Image()
+                image.id = i
+                image.data = train_data[i].tolist()
+                input_images.images.append(image)
+
+            # save train data
+            g.train_data = train_data
+
+            return "input_images", 200
+        except ValueError:
+            return 'file parsing error', 415
+    else:
+        return 'file not found', 404
+
