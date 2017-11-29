@@ -27,5 +27,9 @@ def control_training(trainStatus):
             # start training:
             cae.fit(train_data)
 
+            # save output
+            train_data_output = cae.predict(train_data)
+            Storage.set_output_train_data(train_data_output)
+
         return "hello", 200
     return 'do some magic!'

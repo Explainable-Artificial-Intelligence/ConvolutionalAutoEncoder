@@ -1,4 +1,6 @@
 import connexion
+
+from Storage import Storage
 from swagger_server.models.clustering import Clustering
 from swagger_server.models.image import Image
 from swagger_server.models.input_data import InputData
@@ -29,6 +31,8 @@ def get_output_image(imageID):
 
     :rtype: Image
     """
+    image = Image()
+    image.data = Storage.get_output_image(imageID)
     return 'do some magic!'
 
 

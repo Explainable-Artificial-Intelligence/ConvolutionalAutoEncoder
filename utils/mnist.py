@@ -17,7 +17,7 @@ def test_on_mnist_dataset():
     test_data = mnist.test.images
     # create ANN
 
-    cae_mnist = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3])
+    cae_mnist = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3], rw_minval=-0.5, rw_maxval=0.5)
 
     cae_mnist.fit(train_data)
 

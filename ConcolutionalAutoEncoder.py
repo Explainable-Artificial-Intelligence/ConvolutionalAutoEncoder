@@ -58,9 +58,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                  lr_initial_learning_rate=0.01, lr_decay_steps=1000, lr_decay_rate=0.9, lr_staircase=False,
                  lr_boundaries=[10000, 20000], lr_values=[1.0, 0.5, 0.1], lr_end_learning_rate=0.0001, lr_power=1.0,
                  lr_cycle=False, optimizer='AdamOptimizer', momentum=0.9, random_function_for_weights="uniform",
-                 rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=0.0, rw_maxval=1.0,
+                 rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=-.5, rw_maxval=.5,
                  rw_seed=None, random_function_for_biases="zeros", rb_alpha=0.5, rb_beta=None, rb_mean=0.0,
-                 rb_stddev=1.0, rb_lam=0.5, rb_minval=0.0, rb_maxval=None, rb_seed=None, session_saver_path='./save/',
+                 rb_stddev=1.0, rb_lam=0.5, rb_minval=-.5, rb_maxval=.5, rb_seed=None, session_saver_path='./save/',
                  load_prev_session=False):
         """
         Calls when initializing the transformer
@@ -248,6 +248,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # encoder part
         self._build_encoder()
 
+        # latent representation
+        #self._build_inner_layer()
+
         # decoder part
         self._build_decoder()
 
@@ -329,6 +332,31 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         else:
             return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed), name=name)
 
+    def _build_inner_layer(self):
+        """
+
+        :return:
+        """
+        # construct inner layer
+        self.latent_weights = []
+        self.latent_biases = []
+        self.latent_shape = []
+        encoder_input = self.layers[-1]
+
+        print([self.filter_sizes[-1], self.filter_sizes[-2], encoder_input.get_shape().as_list()[3], len(encoder_input.shape)])
+        self.latent_weights = self._create_random_layer_weights(
+            [self.filter_sizes[-1], self.filter_sizes[-1], encoder_input.get_shape().as_list()[3], len(encoder_input.shape)],
+            "latent_weights")
+        self.latent_biases = self._create_layer_biases([len(encoder_input.shape)], "latent_biases")
+        output = self.activation_function(
+            tf.nn.conv2d(encoder_input, self.latent_weights, strides=[1, 2, 2, 1], padding='SAME') +
+            self.latent_biases)
+
+        #self.encoder_weights.append(self.latent_weights)
+        self.encoder_shapes.append(encoder_input.get_shape().as_list())
+        # save latent representation
+        self.latent_representation = output
+
     def _build_decoder(self):
         """
         """
@@ -357,9 +385,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         # reuse weights and biases
-        # reversed_encoder_biases = list(reversed(self.encoder_biases))
         reversed_encoder_weights = list(reversed(self.encoder_weights))
-        reversed_number_of_stacks = list(reversed(self.number_of_stacks))
+
 
         print(reversed_encoder_weights[layer_i].get_shape().as_list())
         if self.mirror_weights:
@@ -367,17 +394,14 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         else:
             weights_of_layer_i = self._create_random_layer_weights(
                 reversed_encoder_weights[layer_i].get_shape().as_list(), "decoder_weights_layer_" + str(layer_i))
-            # weights_of_layer_i = self._create_random_layer_weights(
-            #     [reversed_encoder_weights[layer_i].get_shape().as_list()])
-        # if self.mirror_biases:
-        #    biases_of_layer_i = reversed_encoder_biases[layer_i + 1]
-        # else:
+
         biases_of_layer_i = self._create_layer_biases(weights_of_layer_i.get_shape().as_list()[2],
                                                       "decoder_biases_layer_" + str(layer_i))
 
         self.decoder_weights.append(weights_of_layer_i)
         self.decoder_biases.append(biases_of_layer_i)
         # TODO: add names
+        #print([current_input.shape, weights_of_layer_i.shape, tf.stack([tf.shape(self.input_images)[0], shape[1], shape[2], shape[3]])])
         output = self.activation_function(tf.nn.conv2d_transpose(current_input, weights_of_layer_i,
                                                                  tf.stack(
                                                                      [tf.shape(self.input_images)[0], shape[1],
@@ -567,3 +591,5 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             return self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
         else:
             raise RuntimeError("You must train transformer before scoring data!")
+
+
