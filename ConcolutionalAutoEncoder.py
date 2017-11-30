@@ -215,6 +215,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             if self.load_prev_session:
                 # load previous session:
                 prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
+                print(prev_session.model_checkpoint_path)
                 self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
                 self.model_is_trained = True
                 print()

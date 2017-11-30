@@ -34,7 +34,7 @@ def load_train_data(filename):
             input_images.res_x = train_data.shape[1]
             input_images.res_y = train_data.shape[2]
             input_images.images = []
-            for i in range(train_data.shape[0]):
+            for i in range(100):
                 image = Image()
                 image.id = i
                 image.data = train_data[i].tolist()
@@ -43,7 +43,7 @@ def load_train_data(filename):
             # save train data
             Storage.set_train_data(train_data)
 
-            return "input_images", 200
+            return input_images, 200
         except ValueError:
             return 'file parsing error', 415
     else:
