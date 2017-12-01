@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 import connexion
+
+from FileParser import download_test_data
 from .encoder import JSONEncoder
 
 
 if __name__ == '__main__':
-    # define global variables:
-    global train_data
+    download_test_data()
 
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = JSONEncoder
