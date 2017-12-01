@@ -211,7 +211,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.tf_session.run(tf.global_variables_initializer())
         if self.session_saver_path is not None:
             self.session_saver = tf.train.Saver(tf.trainable_variables())
-            #self.session_saver = tf.train.Saver()
+            # self.session_saver = tf.train.Saver()
             if self.load_prev_session:
                 # load previous session:
                 prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
@@ -220,24 +220,13 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 self.model_is_trained = True
                 print()
 
-
-
         # initialize Tensorboard
         if self.use_tensorboard:
             self._define_summary_variables()
             self._init_tensorboard_file_writer()
 
-        # # initialize session saver:
-        # self.session_saver_path = session_saver_path
-        # self.load_prev_session = load_prev_session
-        # if self.session_saver_path is not None:
-        #     self.session_saver = tf.train.Saver()
-        #     if self.load_prev_session:
-        #         # load previous session:
-        #         prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
-        #         self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
-        #         self.model_is_trained = True
-        #         print()
+        # set ANN status:
+        self.ann_status = "initialized"
 
     def _build_network_topology(self):
         """
@@ -251,7 +240,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self._build_encoder()
 
         # latent representation
-        #self._build_inner_layer()
+        # self._build_inner_layer()
 
         # decoder part
         self._build_decoder()
@@ -345,16 +334,18 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.latent_shape = []
         encoder_input = self.layers[-1]
 
-        print([self.filter_sizes[-1], self.filter_sizes[-2], encoder_input.get_shape().as_list()[3], len(encoder_input.shape)])
+        print([self.filter_sizes[-1], self.filter_sizes[-2], encoder_input.get_shape().as_list()[3],
+               len(encoder_input.shape)])
         self.latent_weights = self._create_random_layer_weights(
-            [self.filter_sizes[-1], self.filter_sizes[-1], encoder_input.get_shape().as_list()[3], len(encoder_input.shape)],
+            [self.filter_sizes[-1], self.filter_sizes[-1], encoder_input.get_shape().as_list()[3],
+             len(encoder_input.shape)],
             "latent_weights")
         self.latent_biases = self._create_layer_biases([len(encoder_input.shape)], "latent_biases")
         output = self.activation_function(
             tf.nn.conv2d(encoder_input, self.latent_weights, strides=[1, 2, 2, 1], padding='SAME') +
             self.latent_biases)
 
-        #self.encoder_weights.append(self.latent_weights)
+        # self.encoder_weights.append(self.latent_weights)
         self.encoder_shapes.append(encoder_input.get_shape().as_list())
         # save latent representation
         self.latent_representation = output
@@ -389,7 +380,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # reuse weights and biases
         reversed_encoder_weights = list(reversed(self.encoder_weights))
 
-
         print(reversed_encoder_weights[layer_i].get_shape().as_list())
         if self.mirror_weights:
             weights_of_layer_i = reversed_encoder_weights[layer_i]
@@ -403,7 +393,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.decoder_weights.append(weights_of_layer_i)
         self.decoder_biases.append(biases_of_layer_i)
         # TODO: add names
-        #print([current_input.shape, weights_of_layer_i.shape, tf.stack([tf.shape(self.input_images)[0], shape[1], shape[2], shape[3]])])
+        # print([current_input.shape, weights_of_layer_i.shape, tf.stack([tf.shape(self.input_images)[0], shape[1], shape[2], shape[3]])])
         output = self.activation_function(tf.nn.conv2d_transpose(current_input, weights_of_layer_i,
                                                                  tf.stack(
                                                                      [tf.shape(self.input_images)[0], shape[1],
@@ -441,7 +431,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # polynomially decaying learning rate
         if self.learning_rate_function == "polynomial_decay":
-            self.learning_rate = tf.train.polynomial_decay(self.lr_initial_learning_rate, self.global_step, self.lr_decay_steps,
+            self.learning_rate = tf.train.polynomial_decay(self.lr_initial_learning_rate, self.global_step,
+                                                           self.lr_decay_steps,
                                                            self.lr_end_learning_rate, self.lr_power, self.lr_cycle)
             return
 
@@ -512,6 +503,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
 
         """
+        # set ANN status
+        self.ann_status = "training"
+
         # Fit all training data
         for epoch_i in range(self.n_epochs):
             self._train_model_single_epoch(epoch_i, train_data)
@@ -520,11 +514,18 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
                                         global_step=self.global_step)
                 print("model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
+            if self.ann_status != "training":
+                break
 
-        # mark model as trained:
-        self.model_is_trained = True
-        # close session
-        # self.tf_session.close()
+        # set new training status:
+        if self.ann_status == "training":
+            self.ann_status = "trained"
+            # mark model as trained:
+            self.model_is_trained = True
+        else:
+            self.ann_status = "aborted"
+            # close session
+            # self.tf_session.close()
 
     def _train_model_single_epoch(self, epoch_i, train_data):
         """
@@ -533,6 +534,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         for batch_index in range(len(train_data) // self.batch_size):
+            # check if training is aborted:
+            if self.ann_status != "training":
+                return
             current_batch = train_data[batch_index * self.batch_size:(batch_index + 1) * self.batch_size]
             self._train_model_single_batch(current_batch)
 
@@ -543,7 +547,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param epoch_i:
         :return:
         """
-        # Tensorboard summary:
+        # check if training is aborted:
+        if self.ann_status != "training":
+            return
         if self.use_tensorboard:
             summary, train_cost, _, step = self.tf_session.run(
                 [self.merged_summary, self.cost_function, self.final_optimizer, self.global_step],
@@ -556,6 +562,14 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 feed_dict={self.input_images: current_batch})
         if self.verbose:
             print(str(step) + ": " + str(train_cost))
+
+    def update_ann_status(self, status):
+        """
+
+        :return:
+        """
+        if status == "stop":
+            self.ann_status = "stop"
 
     def get_latent_representation(self, input_data):
         """
@@ -593,5 +607,3 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             return self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
         else:
             raise RuntimeError("You must train transformer before scoring data!")
-
-

@@ -1,4 +1,6 @@
 """includes a static class which stores all server data"""
+import threading
+
 import numpy as np
 
 
@@ -8,6 +10,7 @@ class Storage(object):
     train_data_output = []
     cae = object()
     parameter_set = {}
+    cae_thread = threading.Thread()
 
     @classmethod
     def set_train_data(cls, train_data):
@@ -32,3 +35,13 @@ class Storage(object):
     @classmethod
     def get_output_image(cls, image_id):
         return cls.train_data_output[image_id]
+
+    @classmethod
+    def set_cae_thread(cls, cae_thread):
+        cls.cae_thread = cae_thread
+
+    @classmethod
+    def get_cae_thread(cls):
+        return cls.cae_thread
+
+
