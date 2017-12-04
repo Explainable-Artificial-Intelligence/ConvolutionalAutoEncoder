@@ -210,8 +210,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.load_prev_session = load_prev_session
         self.tf_session.run(tf.global_variables_initializer())
         if self.session_saver_path is not None:
-            self.session_saver = tf.train.Saver(tf.trainable_variables())
-            # self.session_saver = tf.train.Saver()
+            self.session_saver = tf.train.Saver()
             if self.load_prev_session:
                 # load previous session:
                 prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
@@ -219,6 +218,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
                 self.model_is_trained = True
                 print()
+
 
         # initialize Tensorboard
         if self.use_tensorboard:
@@ -607,3 +607,11 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             return self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
         else:
             raise RuntimeError("You must train transformer before scoring data!")
+
+    def close(self):
+        """
+        closes the tf.session
+        :return:
+
+        """
+        self.tf_session.close()
