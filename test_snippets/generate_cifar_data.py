@@ -61,7 +61,7 @@ test_data = convert_raw_image_data(file_dict[b'data'], [-1, 3, 32, 32]).tolist()
 # write test/train data to file
 
 # with open("../data/cifar_train_data.txt", 'w') as train_data_file:
-#     for line in train_data:
+#     for line in input_data:
 #         # print(str(line) + "\n")
 #         train_data_file.write(str(line) + "\n")
 #

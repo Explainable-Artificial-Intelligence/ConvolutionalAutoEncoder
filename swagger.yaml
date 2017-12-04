@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: 'WebUI to build, train and tune a Convolutional Autoencoder'
-  version: 1.0.0
+  version: 1.0.5
   title: Convolutional Autoencoder
   termsOfService: 'http://swagger.io/terms/'
   contact:
@@ -25,8 +25,8 @@ tags:
 schemes:
   - http
 paths:
-  '/input/{filename}':
-    get:
+  /input/loadFile:
+    post:
       tags:
         - input
       summary: Load a train data file
@@ -38,20 +38,95 @@ paths:
         - application/json
       parameters:
         - name: filename
-          in: path
-          description: retruns the train data images for a given file path
+          in: query
           required: true
+          type: string
+          format: string
+        - name: datasetname
+          in: query
+          description: name for dataset on the server
+          required: false
           type: string
           format: string
       responses:
         '200':
           description: file successful loaded
-          schema:
-            $ref: '#/definitions/InputData'
         '404':
           description: File not found
         '415':
           description: File parsing error
+  /input/getImages:
+    get:
+      tags:
+        - input
+      summary: returns a subset of input images
+      description: images are encoded as png byte strings
+      operationId: getInputImages
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: datasetname
+          in: query
+          description: name for dataset on the server
+          required: false
+          type: string
+          format: string
+        - name: startIndex
+          in: query
+          description: name for dataset on the server
+          required: true
+          type: integer
+          format: int32
+        - name: endIndex
+          in: query
+          description: name for dataset on the server
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Images successfully returned
+          schema:
+            $ref: '#/definitions/InputData'
+        '404':
+          description: No data found
+        '415':
+          description: Index out of bounds
+  /input/getImageBatch:
+    get:
+      tags:
+        - input
+      summary: returns the next batch of input images
+      description: images are encoded as png byte strings
+      operationId: getNextInputImageBatch
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: datasetname
+          in: query
+          description: name for dataset on the server
+          required: false
+          type: string
+          format: string
+        - name: batchSize
+          in: query
+          description: name for dataset on the server
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Images successfully returned
+          schema:
+            $ref: '#/definitions/InputData'
+        '404':
+          description: No data found
+        '415':
+          description: Index out of bounds
   /build:
     post:
       tags:
@@ -143,7 +218,7 @@ paths:
           schema:
             $ref: '#/definitions/Image'
   '/visualize/load/{filename}':
-    get:
+    post:
       tags:
         - visualize
       summary: Load a test data file
@@ -163,8 +238,6 @@ paths:
       responses:
         '200':
           description: file successful loaded
-          schema:
-            $ref: '#/definitions/InputData'
         '404':
           description: File not found
         '415':
@@ -258,14 +331,14 @@ definitions:
         items:
           type: integer
           format: int32
-          example:
-            - 5
-            - 5
-            - 3
-            - 3
+        example:
+          - 5
+          - 5
+          - 3
+          - 3
       mirrorWeights:
         type: boolean
-        example: 'false'
+        example: false
       activationFunction:
         type: string
         example: relu
@@ -279,7 +352,7 @@ definitions:
         example: 50
       useTensorboard:
         type: boolean
-        example: true
+        example: false
       verbose:
         type: boolean
         example: true
@@ -362,7 +435,7 @@ definitions:
       rwMinval:
         type: number
         format: double
-        example: 0
+        example: -1
       rwMaxval:
         type: number
         format: double
@@ -456,10 +529,8 @@ definitions:
   Image:
     type: object
     properties:
-      data:
-        type: array
-        items:
-          type: string
+      bytestring:
+        type: string
       id:
         type: integer
         format: int32
@@ -507,7 +578,7 @@ definitions:
         items:
           type: boolean
         example:
-          - 'false'
+          - false
       activationFunctionList:
         type: array
         items:

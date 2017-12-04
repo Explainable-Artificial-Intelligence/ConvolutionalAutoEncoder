@@ -1,12 +1,12 @@
 import threading
 
 import connexion
-
-from Storage import Storage
 from swagger_server.models.train_status import TrainStatus
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
+
+from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
 
 
@@ -25,7 +25,7 @@ def control_training(trainStatus):
         if trainStatus == "start":
             # get cae and train data
             cae = Storage.get_cae()
-            train_data = Storage.get_train_data()
+            train_data = Storage.get_input_data()
             # define background thread:
             cae_thread = threading.Thread(target=cae.fit, args=(train_data,))
             Storage.set_cae_thread(cae_thread)
@@ -44,8 +44,8 @@ def control_training(trainStatus):
             return "Training aborted", 200
 
             # save output
-            #train_data_output = cae.predict(train_data)
-            #Storage.set_output_train_data(train_data_output)
+            #output_data = cae.predict(input_data)
+            #Storage.set_output_train_data(output_data)
 
         return "hello", 200
     return 'do some magic!'

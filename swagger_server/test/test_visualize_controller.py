@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 from swagger_server.models.clustering import Clustering
 from swagger_server.models.image import Image
-from swagger_server.models.input_data import InputData
 from . import BaseTestCase
 from six import BytesIO
 from flask import json
@@ -44,7 +43,7 @@ class TestVisualizeController(BaseTestCase):
         Load a test data file
         """
         response = self.client.open('/v2/visualize/load/{filename}'.format(filename='filename_example'),
-                                    method='GET',
+                                    method='POST',
                                     content_type='application/json')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 

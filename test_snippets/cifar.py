@@ -37,7 +37,7 @@ def test_on_cifar_dataset():
     # create ANN
     # cae_cifar = ConcolutionalAutoEncoder.SklearnCAE([None, 32, 32, 3], [50, 35, 25, 20], [3, 3, 3, 2, 2])
 
-    # cae_cifar.fit(train_data)
+    # cae_cifar.fit(input_data)
 
     #print(cae_cifar.score(test_data))
     # final train error: ~ 2200-2500
@@ -46,7 +46,7 @@ def test_on_cifar_dataset():
     #cae_cifar_mirror = ConcolutionalAutoEncoder.SklearnCAE([None, 32, 32, 3], [50, 35, 25, 20], [3, 3, 3, 2, 2],
     #                                                       mirror_weights=True)
 
-    #cae_cifar_mirror.fit(train_data)
+    #cae_cifar_mirror.fit(input_data)
 
     #print(cae_cifar_mirror.score(test_data))
     # final train error: ~ 17000-22000
@@ -55,7 +55,7 @@ def test_on_cifar_dataset():
     #cae_cifar_decay_lr = ConcolutionalAutoEncoder.SklearnCAE([None, 32, 32, 3], [50, 35, 25, 20], [3, 3, 3, 2, 2],
     #                                                       learning_rate_function="exponential_decay")
 
-    #cae_cifar_decay_lr.fit(train_data)
+    #cae_cifar_decay_lr.fit(input_data)
 
     #print(cae_cifar_decay_lr.score(test_data))
     # final train error: ~1100-1300

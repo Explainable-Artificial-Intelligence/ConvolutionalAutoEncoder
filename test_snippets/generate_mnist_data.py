@@ -14,7 +14,7 @@ test_data = mnist.test.images.tolist()
 # write test/train data to file
 
 # with open("../data/mnist_train_data.txt", 'w') as train_data_file:
-#     for line in train_data:
+#     for line in input_data:
 #         #print(str(line) + "\n")
 #         train_data_file.write(str(line) + "\n")
 #

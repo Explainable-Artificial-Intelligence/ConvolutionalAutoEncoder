@@ -1,9 +1,6 @@
 import connexion
-
-from Storage import Storage
 from swagger_server.models.clustering import Clustering
 from swagger_server.models.image import Image
-from swagger_server.models.input_data import InputData
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
@@ -31,8 +28,6 @@ def get_output_image(imageID):
 
     :rtype: Image
     """
-    image = Image()
-    image.data = Storage.get_output_image(imageID)
     return 'do some magic!'
 
 
@@ -43,6 +38,6 @@ def load_test_data(filename):
     :param filename: retruns the test data images for a given file path
     :type filename: str
 
-    :rtype: InputData
+    :rtype: None
     """
     return 'do some magic!'

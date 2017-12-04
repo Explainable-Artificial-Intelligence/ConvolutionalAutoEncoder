@@ -17,7 +17,7 @@ def test_on_mnist_dataset():
     test_data = mnist.test.images
     # create ANN
 
-    cae_mnist = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3], rw_minval=-0.5, rw_maxval=0.5)
+    cae_mnist = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3])
 
     cae_mnist.fit(train_data)
 
@@ -28,7 +28,7 @@ def test_on_mnist_dataset():
     # cae_mnist_mirror = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3],
     #                                                       mirror_weights=True)
 
-    # cae_mnist_mirror.fit(train_data)
+    # cae_mnist_mirror.fit(input_data)
 
     # print(cae_mnist_mirror.score(test_data))
     # final train error: ~550-860
@@ -57,13 +57,13 @@ def test_on_mnist_dataset():
     # sess.run(tf.global_variables_initializer())
     #
     # # train model
-    # train_model(sess, auto_encoder, 'cost', 'X', train_data, test_data, optimizer, batch_size, n_epochs,
+    # train_model(sess, auto_encoder, 'cost', 'X', input_data, test_data, optimizer, batch_size, n_epochs,
     #             train_writer,
     #             test_writer, merged_summary)
     #
     # # evaluate latent representation
     # cmap = plt.get_cmap('jet', 10)
-    # visualize_latent_representation(auto_encoder, sess, train_data, train_labels)
+    # visualize_latent_representation(auto_encoder, sess, input_data, train_labels)
 
 
 def main():
@@ -94,8 +94,8 @@ if __name__ == "__main__":
 #
 #
 #
-#     def visualize_latent_representation(auto_encoder, sess, train_data, train_labels):
-#         latent_representation_train_data = get_latent_representation(sess, auto_encoder, 'X', train_data, 'Z')
+#     def visualize_latent_representation(auto_encoder, sess, input_data, train_labels):
+#         latent_representation_train_data = get_latent_representation(sess, auto_encoder, 'X', input_data, 'Z')
 #         print(latent_representation_train_data.shape)
 #         latent_representation_train_data = latent_representation_train_data.reshape(
 #             latent_representation_train_data.shape[0], -1)
@@ -153,7 +153,7 @@ if __name__ == "__main__":
 #             cifar_train_data_list = itertools.chain(cifar_train_data_list, file_dict[b'data'])
 #             cifar_train_labels = itertools.chain(cifar_train_labels, file_dict[b'labels'])
 #
-#         train_data = convert_raw_image_data(list(cifar_train_data_list), [-1, 3, 32, 32])
+#         input_data = convert_raw_image_data(list(cifar_train_data_list), [-1, 3, 32, 32])
 #
 #         # read test data
 #         test_data_filename = "CIFAR-10/cifar-10-batches-py/test_batch"
@@ -180,9 +180,9 @@ if __name__ == "__main__":
 #         sess.run(tf.global_variables_initializer())
 #
 #         # train model
-#         train_model(sess, auto_encoder, 'cost', 'X', train_data, test_data, optimizer, batch_size, n_epochs,
+#         train_model(sess, auto_encoder, 'cost', 'X', input_data, test_data, optimizer, batch_size, n_epochs,
 #                     train_writer,
 #                     test_writer, merged_summary)
 #
-#         visualize_latent_representation(auto_encoder, sess, train_data, train_labels)
+#         visualize_latent_representation(auto_encoder, sess, input_data, train_labels)
 #

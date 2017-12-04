@@ -1,12 +1,12 @@
 import connexion
-from flask import g
 
 from ConcolutionalAutoEncoder import SklearnCAE
-from Storage import Storage
 from swagger_server.models.parameter_set import ParameterSet
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
+
+from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
 
 
@@ -21,7 +21,7 @@ def pass_ann_parameters(inputParameters):
     """
     if connexion.request.is_json:
         inputParameters = ParameterSet.from_dict(connexion.request.get_json())
-
+        
         # create convolutional auto encoder:
         input_shape = [None, inputParameters.input_shape[1], inputParameters.input_shape[2],
                        inputParameters.input_shape[3]]
