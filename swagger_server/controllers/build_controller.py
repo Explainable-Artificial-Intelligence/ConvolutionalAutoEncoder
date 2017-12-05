@@ -1,6 +1,6 @@
 import connexion
 
-from ConcolutionalAutoEncoder import SklearnCAE
+from ConvolutionalAutoEncoder import SklearnCAE
 from swagger_server.models.parameter_set import ParameterSet
 from datetime import date, datetime
 from typing import List, Dict

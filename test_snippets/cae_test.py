@@ -1,4 +1,4 @@
-import ConcolutionalAutoEncoder
+import ConvolutionalAutoEncoder
 
 
 def test():
@@ -25,7 +25,7 @@ def test():
                   'AdagradDAOptimizer', 'MomentumOptimizer']
     for optimizer in optimizers:
         print(optimizer)
-        cae_test = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3],
+        cae_test = ConvolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3],
                                                        optimizer=optimizer, n_epochs=3, use_tensorboard=False,
                                                        verbose=True)
         cae_test.fit(train_data)
@@ -37,7 +37,7 @@ def test():
     activation_functions = ['relu', 'relu6', 'elu', 'softplus', 'softsign', 'sigmoid', 'tanh']
     for act_fct in activation_functions:
         print(act_fct)
-        cae_test = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3],
+        cae_test = ConvolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3],
                                                        activation_function=act_fct, n_epochs=3, use_tensorboard=False,
                                                        verbose=False)
         cae_test.fit(train_data)
@@ -50,7 +50,7 @@ def test():
                                'natural_exp_decay', 'polynomial_decay']
     for lr_fct in learning_rate_functions:
         print(lr_fct)
-        cae_test = ConcolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3],
+        cae_test = ConvolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3],
                                                        learning_rate_function=lr_fct, n_epochs=3, use_tensorboard=False,
                                                        verbose=False)
         cae_test.fit(train_data)

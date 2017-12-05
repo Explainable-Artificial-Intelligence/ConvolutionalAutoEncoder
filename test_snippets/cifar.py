@@ -6,7 +6,7 @@ import numpy as np
 import math
 import os
 
-import ConcolutionalAutoEncoder
+import ConvolutionalAutoEncoder
 
 def test_on_cifar_dataset():
     """
@@ -61,7 +61,7 @@ def test_on_cifar_dataset():
     # final train error: ~1100-1300
     # final test error: 119035.0
 
-    cae_cifar_momentum = ConcolutionalAutoEncoder.SklearnCAE([None, 32, 32, 3], [50, 35, 25, 20], [3, 3, 3, 2, 2],
+    cae_cifar_momentum = ConvolutionalAutoEncoder.SklearnCAE([None, 32, 32, 3], [50, 35, 25, 20], [3, 3, 3, 2, 2],
                                                              optimizer="AdadeltaOptimizer", learning_rate_function="exponential_decay")
 
     cae_cifar_momentum.fit(train_data)
