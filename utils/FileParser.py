@@ -29,6 +29,7 @@ def download_test_data():
         os.makedirs(data_path)
 
     # download files
+    # TODO: don't download data, but use them online
     if not os.path.exists(os.path.join(data_path, "cifar_test_data.npy")):
         urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/VklV3XIwaprp3SfybM7nq5EoJnrhHuFyJRe3u9qZDs3",
                                    os.path.join(data_path, "cifar_test_data.npy"))

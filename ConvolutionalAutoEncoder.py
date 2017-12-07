@@ -4,6 +4,7 @@ import pickle
 import itertools
 import numpy as np
 import os
+import sys
 from sklearn import metrics
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cluster import KMeans
@@ -190,17 +191,11 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # Mark model as untrained
         self.model_is_trained = False
 
-        # build ANN
-        self._build_network_topology()
+        # set ANN status:
+        self.ann_status = tf.Variable("initialized", name="ANN_Status", dtype=tf.string)
+        self.trained_epochs = tf.Variable(0, dtype=tf.int32, name="trained_epochs")
 
-        # define cost function
-        self._define_cost_function()
-
-        # define learning rate function
-        self._define_learning_rate_function()
-
-        # define optimizer
-        self._define_optimizer()
+        self._build_ann()
 
         # create tensorflow session
         self.tf_session = tf.Session()
@@ -213,20 +208,32 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self.session_saver = tf.train.Saver()
             if self.load_prev_session:
                 # load previous session:
-                prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
-                print(prev_session.model_checkpoint_path)
-                self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
-                self.model_is_trained = True
-                print()
-
+                self._load_session()
 
         # initialize Tensorboard
         if self.use_tensorboard:
             self._define_summary_variables()
             self._init_tensorboard_file_writer()
 
-        # set ANN status:
-        self.ann_status = "initialized"
+    def _load_session(self):
+        if self.session_saver_path is not None:
+            prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
+            self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
+            if self.verbose:
+                print("session restored!")
+
+    def _build_ann(self):
+        """
+
+        """
+        # build ANN
+        self._build_network_topology()
+        # define cost function
+        self._define_cost_function()
+        # define learning rate function
+        self._define_learning_rate_function()
+        # define optimizer
+        self._define_optimizer()
 
     def _build_network_topology(self):
         """
@@ -238,9 +245,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # define model topology
         # encoder part
         self._build_encoder()
-
-        # latent representation
-        # self._build_inner_layer()
 
         # decoder part
         self._build_decoder()
@@ -323,40 +327,13 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         else:
             return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed), name=name)
 
-    def _build_inner_layer(self):
-        """
-
-        :return:
-        """
-        # construct inner layer
-        self.latent_weights = []
-        self.latent_biases = []
-        self.latent_shape = []
-        encoder_input = self.layers[-1]
-
-        print([self.filter_sizes[-1], self.filter_sizes[-2], encoder_input.get_shape().as_list()[3],
-               len(encoder_input.shape)])
-        self.latent_weights = self._create_random_layer_weights(
-            [self.filter_sizes[-1], self.filter_sizes[-1], encoder_input.get_shape().as_list()[3],
-             len(encoder_input.shape)],
-            "latent_weights")
-        self.latent_biases = self._create_layer_biases([len(encoder_input.shape)], "latent_biases")
-        output = self.activation_function(
-            tf.nn.conv2d(encoder_input, self.latent_weights, strides=[1, 2, 2, 1], padding='SAME') +
-            self.latent_biases)
-
-        # self.encoder_weights.append(self.latent_weights)
-        self.encoder_shapes.append(encoder_input.get_shape().as_list())
-        # save latent representation
-        self.latent_representation = output
-
     def _build_decoder(self):
         """
+        Builds the decoder of the Convolutional Autoencoder
         """
         # construct the decoder
         self.decoder_weights = []
         self.decoder_biases = []
-        # TODO : check if latent representation is in shapes
         self.decoder_shapes = list(reversed(self.encoder_shapes))
 
         current_input = self.latent_representation
@@ -503,29 +480,44 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
 
         """
+        # reopen a previous training:
+        if self.model_is_trained:
+            self._load_session()
         # set ANN status
-        self.ann_status = "training"
+        self.tf_session.run(self.ann_status.assign("training"))
 
         # Fit all training data
-        for epoch_i in range(self.n_epochs):
+        start_epoch = self.trained_epochs.eval(self.tf_session)
+        for epoch_i in range(start_epoch, self.n_epochs):
             self._train_model_single_epoch(epoch_i, train_data)
             # save session  after each epoch
-            if self.session_saver_path is not None:
+            if self.session_saver_path is not None and epoch_i % 5 == 0:
                 self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
                                         global_step=self.global_step)
                 print("model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
-            if self.ann_status != "training":
+            print(self.ann_status.eval(self.tf_session))
+            if not self.ann_status.eval(self.tf_session) == b'training':
                 break
+            # set number of trained epochs:
+            self.tf_session.run(self.trained_epochs.assign_add(1))
 
-        # set new training status:
-        if self.ann_status == "training":
-            self.ann_status = "trained"
-            # mark model as trained:
-            self.model_is_trained = True
+        # mark model as trained:
+        self.model_is_trained = True
+
+        # set new ann status:
+        if self.trained_epochs == (self.n_epochs - 1):
+            self.tf_session.run(self.ann_status.assign("completely trained"))
         else:
-            self.ann_status = "aborted"
+            self.tf_session.run(self.ann_status.assign("partly trained"))
             # close session
             # self.tf_session.close()
+
+        # save final train status
+        if self.session_saver_path is not None:
+            self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
+                                    global_step=self.global_step)
+            print("final model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
+            #self._close_session()
 
     def _train_model_single_epoch(self, epoch_i, train_data):
         """
@@ -535,7 +527,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         for batch_index in range(len(train_data) // self.batch_size):
             # check if training is aborted:
-            if self.ann_status != "training":
+            if not self.ann_status.eval(self.tf_session)== b'training':
                 return
             current_batch = train_data[batch_index * self.batch_size:(batch_index + 1) * self.batch_size]
             self._train_model_single_batch(current_batch)
@@ -548,7 +540,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         # check if training is aborted:
-        if self.ann_status != "training":
+        if not self.ann_status.eval(self.tf_session) == b'training':
             return
         if self.use_tensorboard:
             summary, train_cost, _, step = self.tf_session.run(
@@ -569,7 +561,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         if status == "stop":
-            self.ann_status = "stop"
+            self.tf_session.run(self.ann_status.assign("stop", use_locking=True))
 
     def get_latent_representation(self, input_data):
         """
@@ -591,11 +583,16 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         if self.model_is_trained:
-            return self.tf_session.run(self.output_images, feed_dict={self.input_images: X})
+            # reopen session (if model is saved to disk):
+            self._load_session()
+            self._print_training_warning()
+            prediction = self.tf_session.run(self.output_images, feed_dict={self.input_images: X})
+            # close session (if possible):
+            self._close_session()
+            return prediction
         else:
             raise RuntimeError("You must train transformer before predicting data!")
 
-    # TODO: reopen session
     def score(self, X, y=None):
         """
 
@@ -604,14 +601,31 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         if self.model_is_trained:
-            return self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
+            # reopen session (if model is saved to disk):
+            self._load_session()
+            self._print_training_warning()
+            prediction = self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
+            # close session (if possible):
+            self._close_session()
+            return prediction
         else:
             raise RuntimeError("You must train transformer before scoring data!")
 
-    def close(self):
+    def _close_session(self):
         """
-        closes the tf.session
+        closes the tf.session if the trained model is saved to disk
         :return:
 
         """
-        self.tf_session.close()
+        if self.session_saver_path is not None:
+            self.tf_session.close()
+            tf.reset_default_graph()
+
+    def _print_training_warning(self):
+        """
+        prints a warning if a prediction/scoring is done without a completly trained ANN
+        :return:
+        """
+
+        if not self.ann_status.eval(self.tf_session) == "completely trained":
+            print("WARNING: The ANN is not completely trained", file=sys.stderr)

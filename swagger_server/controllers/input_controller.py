@@ -50,6 +50,7 @@ def get_input_images(startIndex, endIndex, datasetname="train_data"):
     for i in range(startIndex, endIndex):
         image = Image()
         image.id = i
+        # TODO : use byte array
         image.bytestring = str(convert_image_array_to_byte_string(train_data[i]))
         input_images.images.append(image)
 
@@ -98,6 +99,7 @@ def load_train_data(filename, datasetname="train_data"):
     if os.path.isfile(filename):
         print("file found", file=sys.stderr)
         try:
+            # TODO: support different input formats
             train_data = np.load(filename)
             # save train data
             Storage.set_input_data(train_data, datasetname)
