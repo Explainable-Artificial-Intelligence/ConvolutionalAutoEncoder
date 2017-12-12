@@ -108,6 +108,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param session_saver_path:
         """
 
+        # reset currently active tf graph
+        tf.reset_default_graph()
+
         # parse ANN topology parameters
         self.input_shape = input_shape
         self.number_of_stacks = number_of_stacks
@@ -209,6 +212,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             if self.load_prev_session:
                 # load previous session:
                 self._load_session()
+                # Mark model as trained
+                self.model_is_trained = True
 
         # initialize Tensorboard
         if self.use_tensorboard:
@@ -508,7 +513,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.model_is_trained = True
 
         # set new ann status:
-        if self.trained_epochs == (self.n_epochs - 1):
+
+        if self.tf_session.run(self.trained_epochs) == (self.n_epochs - 1):
             self.tf_session.run(self.ann_status.assign("completely trained"))
         else:
             self.tf_session.run(self.ann_status.assign("partly trained"))

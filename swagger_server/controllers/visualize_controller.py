@@ -49,7 +49,8 @@ def get_output_image(imageID, datasetname="train_data"):
     # create Image
     output_image = Image()
     output_image.id = imageID
-    output_image.bytestring = str(convert_image_array_to_byte_string(output_image_array))
+    output_image.bytestring = str(
+        convert_image_array_to_byte_string(output_image_array, channels=output_image_array.shape[2]))
 
     return output_image, 200
 
