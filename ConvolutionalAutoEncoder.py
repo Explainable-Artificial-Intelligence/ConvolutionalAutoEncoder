@@ -217,7 +217,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _load_session(self):
         if self.session_saver_path is not None:
+            self._build_ann()
             prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
+            self.tf_session = tf.Session()
+            self.tf_session.run(tf.global_variables_initializer())
             self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
             if self.verbose:
                 print("session restored!")
@@ -517,7 +520,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
                                     global_step=self.global_step)
             print("final model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
-            #self._close_session()
+            self._close_session()
 
     def _train_model_single_epoch(self, epoch_i, train_data):
         """
