@@ -514,10 +514,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # set new ann status:
 
-        if self.tf_session.run(self.trained_epochs) == (self.n_epochs - 1):
+
+        if self.tf_session.run(self.trained_epochs) == self.n_epochs:
             self.tf_session.run(self.ann_status.assign("completely trained"))
         else:
             self.tf_session.run(self.ann_status.assign("partly trained"))
+            print("%i of %i epochs trained" % (self.tf_session.run(self.trained_epochs), self.n_epochs))
             # close session
             # self.tf_session.close()
 
@@ -536,7 +538,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         for batch_index in range(len(train_data) // self.batch_size):
             # check if training is aborted:
-            if not self.ann_status.eval(self.tf_session)== b'training':
+            if not self.ann_status.eval(self.tf_session) == b'training':
                 return
             current_batch = train_data[batch_index * self.batch_size:(batch_index + 1) * self.batch_size]
             self._train_model_single_batch(current_batch)
@@ -636,5 +638,5 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
 
-        if not self.ann_status.eval(self.tf_session) == "completely trained":
+        if not self.ann_status.eval(self.tf_session) == b'completely trained':
             print("WARNING: The ANN is not completely trained", file=sys.stderr)
