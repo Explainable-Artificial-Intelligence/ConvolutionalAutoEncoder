@@ -5,6 +5,36 @@ import numpy as np
 import os
 import urllib.request
 
+import sys
+from PIL import Image
+
+
+def load_input_data(filepath):
+    """
+    imports input files in several formats
+    :param filepath:
+    :return:
+    """
+
+    if os.path.isfile(filepath):
+        print("file found", file=sys.stderr)
+        if filepath.endswith('.npy') or filepath.endswith('.NPY'):
+            try:
+                input_data = read_npy_arr_file(filepath)
+                return 'file loaded', 200, input_data
+            except ValueError:
+                return 'file parsing error', 415, None
+
+    if os.path.isdir(filepath):
+        print("folder found", file=sys.stderr)
+        try:
+            input_data = read_image_folder(filepath)
+            return 'file loaded', 200, input_data
+        except ValueError:
+            return 'folder parsing error', 415, None
+
+    return 'file not found', 404, None
+
 
 def read_npy_arr_file(filepath):
     """
@@ -15,6 +45,25 @@ def read_npy_arr_file(filepath):
     np_array = np.load(filepath)
 
     return np_array
+
+
+def read_image_folder(folderpath):
+    """
+    returns a numpy array of all images of the folder
+
+    :param folderpath:
+    :return:
+    """
+    image_array_list = []
+    for (path, dirs, files) in os.walk(folderpath):
+        for file in files:
+            filename = os.path.join(path, file)
+            if filename.endswith('.png') or filename.endswith('.PNG'):
+                image = Image.open(filename)
+                # convert to numpy array and save the array to the list
+                image_array_list.append(np.array(image))
+
+    return np.array(image_array_list).reshape([55000, 28, 28, 1])
 
 
 def download_test_data():

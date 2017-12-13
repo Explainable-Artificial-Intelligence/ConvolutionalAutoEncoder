@@ -10,6 +10,7 @@ from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
 
+from utils.FileParser import load_input_data
 from utils.ImageProcessing import convert_image_array_to_byte_string
 from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
@@ -95,17 +96,10 @@ def load_train_data(filename, datasetname="train_data"):
 
     :rtype: None
     """
-    print("input file: %s" % filename, file=sys.stderr)
-    if os.path.isfile(filename):
-        print("file found", file=sys.stderr)
-        try:
-            # TODO: support different input formats
-            train_data = np.load(filename)
-            # save train data
-            Storage.set_input_data(train_data, datasetname)
+    print("input file/folder: %s" % filename, file=sys.stderr)
 
-            return 'file loaded', 200
-        except ValueError:
-            return 'file parsing error', 415
-    else:
-        return 'file not found', 404
+    response, response_code, input_data = load_input_data(filename)
+    if response_code == 200:
+        # save train data
+        Storage.set_input_data(input_data, datasetname)
+    return response, response_code
