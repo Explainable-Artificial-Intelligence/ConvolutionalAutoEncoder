@@ -201,6 +201,111 @@ paths:
           schema:
             $ref: "#/definitions/Clustering"
       x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
+  /visualize/loadFile:
+    post:
+      tags:
+      - "visualize"
+      summary: "Load a train data file"
+      description: "Load a train data file in numpy array data format"
+      operationId: "load_additional_data"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filename"
+        in: "query"
+        required: true
+        type: "string"
+        format: "string"
+      - name: "datasetname"
+        in: "query"
+        description: "name for dataset on the server"
+        required: false
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "file successful loaded"
+        404:
+          description: "File not found"
+        415:
+          description: "File parsing error"
+      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
+  /visualize/getOutputImages:
+    get:
+      tags:
+      - "visualize"
+      summary: "returns a subset of input images"
+      description: "images are encoded as png byte strings"
+      operationId: "get_output_images"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "datasetname"
+        in: "query"
+        description: "name for dataset on the server"
+        required: false
+        type: "string"
+        format: "string"
+      - name: "startIndex"
+        in: "query"
+        description: "start position of the image set"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "endIndex"
+        in: "query"
+        description: "end position of the image set"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Images successfully returned"
+          schema:
+            $ref: "#/definitions/InputData"
+        404:
+          description: "No data found"
+        415:
+          description: "Index out of bounds"
+      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
+  /visualize/getOutputImageBatch:
+    get:
+      tags:
+      - "visualize"
+      summary: "returns the next batch of input images"
+      description: "images are encoded as png byte strings"
+      operationId: "get_next_output_image_batch"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "datasetname"
+        in: "query"
+        description: "name for dataset on the server"
+        required: false
+        type: "string"
+        format: "string"
+      - name: "batchSize"
+        in: "query"
+        description: "number of images for the next set"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Images successfully returned"
+          schema:
+            $ref: "#/definitions/InputData"
+        404:
+          description: "No data found"
+        415:
+          description: "Index out of bounds"
+      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
   /visualize/{imageID}:
     get:
       tags:
@@ -339,10 +444,14 @@ definitions:
           format: "int32"
       filterSizes:
         type: "array"
+        example:
+        - 5
+        - 5
+        - 3
+        - 3
         items:
           type: "integer"
           format: "int32"
-          example: ""
       mirrorWeights:
         type: "boolean"
         example: false
