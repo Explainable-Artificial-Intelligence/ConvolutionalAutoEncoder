@@ -31,14 +31,14 @@ jsFrontend for building and training a CAE
         - finish TODOs
     
 # Layout
-##Sketches
-###Input
+## Sketches
+### Input
 ![input](doc/layout/Input.png)
-###Build
+### Build
 ![build](doc/layout/Build.png)
-###Train
+### Train
 ![train](doc/layout/Train.png)
-###Visualize
+### Visualize
 ![visualize](doc/layout/Visualize.png)
-###Tune
+### Tune
 ![tune](doc/layout/Tune.png)
