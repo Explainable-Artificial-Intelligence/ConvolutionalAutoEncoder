@@ -33,7 +33,7 @@ def load_input_data(filepath):
         except ValueError:
             return 'folder parsing error', 415, None
 
-    return 'file not found', 404, None
+    return 'file or folder not found', 404, None
 
 
 def read_npy_arr_file(filepath):
@@ -54,6 +54,8 @@ def read_image_folder(folderpath):
     :param folderpath:
     :return:
     """
+    # TODO: allow resizing and check for image size
+    # TODO: superwised learning by folder
     image_array_list = []
     for (path, dirs, files) in os.walk(folderpath):
         for file in files:
@@ -63,6 +65,7 @@ def read_image_folder(folderpath):
                 # convert to numpy array and save the array to the list
                 image_array_list.append(np.array(image))
 
+    #TODO: no hard coded reshape
     return np.array(image_array_list).reshape([55000, 28, 28, 1])
 
 

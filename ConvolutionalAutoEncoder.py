@@ -499,6 +499,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         for epoch_i in range(start_epoch, self.n_epochs):
             self._train_model_single_epoch(epoch_i, train_data)
             # save session  after each epoch
+            # TODO: modifiable num epochs
             if self.session_saver_path is not None and epoch_i % 5 == 0:
                 self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
                                         global_step=self.global_step)

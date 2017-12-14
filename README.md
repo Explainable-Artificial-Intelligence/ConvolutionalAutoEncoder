@@ -30,3 +30,15 @@ jsFrontend for building and training a CAE
         - PCA
         - finish TODOs
     
+# Layout
+##Sketches
+###Input
+![input](doc/layout/Input.png)
+###Build
+![build](doc/layout/Build.png)
+###Train
+![train](doc/layout/Train.png)
+###Visualize
+![visualize](doc/layout/Visualize.png)
+###Tune
+![tune](doc/layout/Tune.png)
