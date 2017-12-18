@@ -11,19 +11,19 @@ from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
 
 
-def get_clustering(dimension=None):
+def get_clustering(algorithm=None):
     """
     returns the clustering of the latent representation
     
-    :param dimension: dimension of the latent representation
-    :type dimension: int
+    :param algorithm: determines the clutering algorithm
+    :type algorithm: str
 
     :rtype: Clustering
     """
     return 'do some magic!'
 
 
-def get_next_output_image_batch(datasetname="train_data", batchSize=100):
+def get_next_output_image_batch(datasetname=None, batchSize=100, sortBy=None):
     """
     returns the next batch of input images
     images are encoded as png byte strings
@@ -31,10 +31,11 @@ def get_next_output_image_batch(datasetname="train_data", batchSize=100):
     :type datasetname: str
     :param batchSize: number of images for the next set
     :type batchSize: int
+    :param sortBy: defines the sorting of the output images
+    :type sortBy: str
 
     :rtype: InputData
     """
-
     # check if output images already computed
     compute_output_images(datasetname)
 
@@ -74,7 +75,7 @@ def get_output_image(imageID, datasetname="train_data"):
     return output_image, 200
 
 
-def get_output_images(startIndex, endIndex, datasetname="train_data"):
+def get_output_images(startIndex, endIndex, datasetname="train_data", sortBy=None):
     """
     returns a subset of output images
     images are encoded as png byte strings
@@ -84,6 +85,8 @@ def get_output_images(startIndex, endIndex, datasetname="train_data"):
     :type endIndex: int
     :param datasetname: name for dataset on the server
     :type datasetname: str
+    :param sortBy: defines the sorting of the output images
+    :type sortBy: str
 
     :rtype: InputData
     """
@@ -95,7 +98,7 @@ def get_output_images(startIndex, endIndex, datasetname="train_data"):
     # check if output images already computed
     compute_output_images(datasetname)
     try:
-         output_data = Storage.get_output_data(datasetname)
+        output_data = Storage.get_output_data(datasetname)
     except KeyError:
         return 'No data found', 404
 

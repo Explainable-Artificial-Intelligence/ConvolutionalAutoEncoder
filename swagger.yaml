@@ -85,6 +85,11 @@ paths:
           required: true
           type: integer
           format: int32
+        - name: sortBy
+          in: query
+          description: defines the sorting of the input images
+          required: false
+          type: string
       responses:
         '200':
           description: Images successfully returned
@@ -118,6 +123,11 @@ paths:
           required: false
           type: integer
           format: int32
+        - name: sortBy
+          in: query
+          description: defines the sorting of the input images
+          required: false
+          type: string
       responses:
         '200':
           description: Images successfully returned
@@ -150,7 +160,7 @@ paths:
           description: Parameters successfully commited
         '415':
           description: File parsing error
-  /train:
+  /train/control:
     put:
       tags:
         - train
@@ -171,7 +181,48 @@ paths:
       responses:
         '200':
           description: Train status updated
-  /visualize:
+  '/train/currentANNImages/{setSize}':
+    get:
+      tags:
+        - train
+      summary: >-
+        returns a subset of the current train images and the corresponding
+        latent representation and output
+      description: ''
+      operationId: getCurrentANNImages
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: setSize
+          in: path
+          description: size of the image subset
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Train images updated
+          schema:
+            $ref: '#/definitions/CurrentTrainImages'
+  /train/currentTrainStatus:
+    get:
+      tags:
+        - train
+      summary: returns the next batch of scalar train variables
+      description: as dict of lists
+      operationId: getCurrentTrainStatus
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Train images updated
+          schema:
+            $ref: '#/definitions/CurrentTrainStatus'
+  /visualize/clustering:
     get:
       tags:
         - visualize
@@ -183,12 +234,11 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: dimension
+        - name: algorithm
           in: query
-          description: dimension of the latent representation
+          description: determines the clutering algorithm
           required: false
-          type: integer
-          format: int32
+          type: string
       responses:
         '200':
           description: Operation successful
@@ -254,6 +304,11 @@ paths:
           required: true
           type: integer
           format: int32
+        - name: sortBy
+          in: query
+          description: defines the sorting of the output images
+          required: false
+          type: string
       responses:
         '200':
           description: Images successfully returned
@@ -287,6 +342,11 @@ paths:
           required: false
           type: integer
           format: int32
+        - name: sortBy
+          in: query
+          description: defines the sorting of the output images
+          required: false
+          type: string
       responses:
         '200':
           description: Images successfully returned
@@ -628,6 +688,7 @@ definitions:
       - pause
       - stop
       - resume
+    example: \"start\"
   Image:
     type: object
     properties:
@@ -924,3 +985,31 @@ definitions:
       loadPrevSession:
         type: boolean
         example: false
+  CurrentTrainImages:
+    type: object
+    properties:
+      inputLayer:
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+      latentLayer:
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+      outputLayer:
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+  CurrentTrainStatus:
+    type: object
+    properties:
+      cost:
+        type: array
+        items:
+          type: number
+          format: double
+      currentLearningRate:
+        type: array
+        items:
+          type: number
+          format: double

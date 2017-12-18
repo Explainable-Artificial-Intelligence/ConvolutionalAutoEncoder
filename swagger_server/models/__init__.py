@@ -3,6 +3,8 @@
 from __future__ import absolute_import
 # import models into model package
 from .clustering import Clustering
+from .current_train_images import CurrentTrainImages
+from .current_train_status import CurrentTrainStatus
 from .image import Image
 from .input_data import InputData
 from .model2_d_point import Model2DPoint

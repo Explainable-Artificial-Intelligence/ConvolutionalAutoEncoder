@@ -19,8 +19,8 @@ class TestVisualizeController(BaseTestCase):
 
         returns the clustering of the latent representation
         """
-        query_string = [('dimension', 56)]
-        response = self.client.open('/v2/visualize',
+        query_string = [('algorithm', 'algorithm_example')]
+        response = self.client.open('/v2/visualize/clustering',
                                     method='GET',
                                     content_type='application/json',
                                     query_string=query_string)
@@ -33,7 +33,8 @@ class TestVisualizeController(BaseTestCase):
         returns the next batch of input images
         """
         query_string = [('datasetname', 'datasetname_example'),
-                        ('batchSize', 56)]
+                        ('batchSize', 56),
+                        ('sortBy', 'sortBy_example')]
         response = self.client.open('/v2/visualize/getOutputImageBatch',
                                     method='GET',
                                     content_type='application/json',
@@ -59,7 +60,8 @@ class TestVisualizeController(BaseTestCase):
         """
         query_string = [('datasetname', 'datasetname_example'),
                         ('startIndex', 56),
-                        ('endIndex', 56)]
+                        ('endIndex', 56),
+                        ('sortBy', 'sortBy_example')]
         response = self.client.open('/v2/visualize/getOutputImages',
                                     method='GET',
                                     content_type='application/json',

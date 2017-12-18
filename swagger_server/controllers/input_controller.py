@@ -16,7 +16,7 @@ from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
 
 
-def get_input_images(startIndex, endIndex, datasetname="train_data"):
+def get_input_images(startIndex, endIndex, datasetname="train_data", sortBy=None):
     """
     returns a subset of input images
     images are encoded as png byte strings
@@ -26,10 +26,11 @@ def get_input_images(startIndex, endIndex, datasetname="train_data"):
     :type endIndex: int
     :param datasetname: name for dataset on the server
     :type datasetname: str
+    :param sortBy: defines the sorting of the input images
+    :type sortBy: str
 
     :rtype: InputData
     """
-
     if startIndex < 0 or endIndex < 0:
         return 'Index error: < 0', 415
     if startIndex > endIndex:
@@ -61,7 +62,7 @@ def get_input_images(startIndex, endIndex, datasetname="train_data"):
     return input_images, 200
 
 
-def get_next_input_image_batch(datasetname="train_data", batchSize=100):
+def get_next_input_image_batch(datasetname=None, batchSize=100, sortBy=None):
     """
     returns the next batch of input images
     images are encoded as png byte strings
@@ -69,6 +70,8 @@ def get_next_input_image_batch(datasetname="train_data", batchSize=100):
     :type datasetname: str
     :param batchSize: name for dataset on the server
     :type batchSize: int
+    :param sortBy: defines the sorting of the input images
+    :type sortBy: str
 
     :rtype: InputData
     """

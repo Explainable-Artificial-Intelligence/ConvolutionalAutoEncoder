@@ -87,6 +87,11 @@ paths:
         required: true
         type: "integer"
         format: "int32"
+      - name: "sortBy"
+        in: "query"
+        description: "defines the sorting of the input images"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Images successfully returned"
@@ -121,6 +126,11 @@ paths:
         required: false
         type: "integer"
         format: "int32"
+      - name: "sortBy"
+        in: "query"
+        description: "defines the sorting of the input images"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Images successfully returned"
@@ -155,7 +165,7 @@ paths:
         415:
           description: "File parsing error"
       x-swagger-router-controller: "swagger_server.controllers.build_controller"
-  /train:
+  /train/control:
     put:
       tags:
       - "train"
@@ -177,7 +187,50 @@ paths:
         200:
           description: "Train status updated"
       x-swagger-router-controller: "swagger_server.controllers.train_controller"
-  /visualize:
+  /train/currentANNImages/{setSize}:
+    get:
+      tags:
+      - "train"
+      summary: "returns a subset of the current train images and the corresponding\
+        \ latent representation and output"
+      description: ""
+      operationId: "get_current_ann_images"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "setSize"
+        in: "path"
+        description: "size of the image subset"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Train images updated"
+          schema:
+            $ref: "#/definitions/CurrentTrainImages"
+      x-swagger-router-controller: "swagger_server.controllers.train_controller"
+  /train/currentTrainStatus:
+    get:
+      tags:
+      - "train"
+      summary: "returns the next batch of scalar train variables"
+      description: "as dict of lists"
+      operationId: "get_current_train_status"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Train images updated"
+          schema:
+            $ref: "#/definitions/CurrentTrainStatus"
+      x-swagger-router-controller: "swagger_server.controllers.train_controller"
+  /visualize/clustering:
     get:
       tags:
       - "visualize"
@@ -189,12 +242,11 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "dimension"
+      - name: "algorithm"
         in: "query"
-        description: "dimension of the latent representation"
+        description: "determines the clutering algorithm"
         required: false
-        type: "integer"
-        format: "int32"
+        type: "string"
       responses:
         200:
           description: "Operation successful"
@@ -262,6 +314,11 @@ paths:
         required: true
         type: "integer"
         format: "int32"
+      - name: "sortBy"
+        in: "query"
+        description: "defines the sorting of the output images"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Images successfully returned"
@@ -296,6 +353,11 @@ paths:
         required: false
         type: "integer"
         format: "int32"
+      - name: "sortBy"
+        in: "query"
+        description: "defines the sorting of the output images"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Images successfully returned"
@@ -637,6 +699,7 @@ definitions:
         format: "int32"
   TrainStatus:
     type: "string"
+    example: "\\\"start\\\""
     enum:
     - "start"
     - "pause"
@@ -938,3 +1001,31 @@ definitions:
       loadPrevSession:
         type: "boolean"
         example: false
+  CurrentTrainImages:
+    type: "object"
+    properties:
+      inputLayer:
+        type: "array"
+        items:
+          $ref: "#/definitions/Image"
+      latentLayer:
+        type: "array"
+        items:
+          $ref: "#/definitions/Image"
+      outputLayer:
+        type: "array"
+        items:
+          $ref: "#/definitions/Image"
+  CurrentTrainStatus:
+    type: "object"
+    properties:
+      cost:
+        type: "array"
+        items:
+          type: "number"
+          format: "double"
+      currentLearningRate:
+        type: "array"
+        items:
+          type: "number"
+          format: "double"

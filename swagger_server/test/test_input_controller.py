@@ -19,7 +19,8 @@ class TestInputController(BaseTestCase):
         """
         query_string = [('datasetname', 'datasetname_example'),
                         ('startIndex', 56),
-                        ('endIndex', 56)]
+                        ('endIndex', 56),
+                        ('sortBy', 'sortBy_example')]
         response = self.client.open('/v2/input/getImages',
                                     method='GET',
                                     content_type='application/json',
@@ -33,7 +34,8 @@ class TestInputController(BaseTestCase):
         returns the next batch of input images
         """
         query_string = [('datasetname', 'datasetname_example'),
-                        ('batchSize', 56)]
+                        ('batchSize', 56),
+                        ('sortBy', 'sortBy_example')]
         response = self.client.open('/v2/input/getImageBatch',
                                     method='GET',
                                     content_type='application/json',

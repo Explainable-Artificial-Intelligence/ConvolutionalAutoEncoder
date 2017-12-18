@@ -1,6 +1,8 @@
 import threading
 
 import connexion
+from swagger_server.models.current_train_images import CurrentTrainImages
+from swagger_server.models.current_train_status import CurrentTrainStatus
 from swagger_server.models.train_status import TrainStatus
 from datetime import date, datetime
 from typing import List, Dict
@@ -32,20 +34,34 @@ def control_training(trainStatus):
             # start training:
             cae_thread.start()
             return "Training started", 200
-
         if trainStatus == "stop":
             # get cae
             cae = Storage.get_cae()
             # abort background thread:
             cae.update_ann_status("stop")
-            #cae_thread = Storage.get_cae_thread()
-            #cae_thread.cancel()
+            # cae_thread = Storage.get_cae_thread()
+            # cae_thread.cancel()
 
             return "Training aborted", 200
 
-            # save output
-            #output_data = cae.predict(input_data)
-            #Storage.set_output_train_data(output_data)
 
-        return "hello", 200
+def get_current_ann_images(setSize):
+    """
+    returns a subset of the current train images and the corresponding latent representation and output
+    
+    :param setSize: size of the image subset
+    :type setSize: int
+
+    :rtype: CurrentTrainImages
+    """
+    return 'do some magic!'
+
+
+def get_current_train_status():
+    """
+    returns the next batch of scalar train variables
+    as dict of lists
+
+    :rtype: CurrentTrainStatus
+    """
     return 'do some magic!'
