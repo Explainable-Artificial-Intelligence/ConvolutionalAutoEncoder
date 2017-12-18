@@ -504,6 +504,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
                                         global_step=self.global_step)
                 print("model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
+            # mark model as trained:
+            self.model_is_trained = True
             print(self.ann_status.eval(self.tf_session))
             if not self.ann_status.eval(self.tf_session) == b'training':
                 break
@@ -584,9 +586,18 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param latent_variable:
         :return:
         """
-        return self.tf_session.run(self.latent_representation, feed_dict={self.input_images: input_data})
+        if self.model_is_trained:
+            # reopen session (if model is saved to disk):
+            self._load_session()
+            self._print_training_warning()
+            latent_representation = self.tf_session.run(self.latent_representation, feed_dict={self.input_images: input_data})
+            # close session (if possible):
+            self._close_session()
+            return latent_representation
+        else:
+            raise RuntimeError("You must train transformer before predicting data!")
 
-    # TODO: reopen session
+
     def predict(self, X, y=None):
         """
 

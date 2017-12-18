@@ -65,8 +65,19 @@ def read_image_folder(folderpath):
                 # convert to numpy array and save the array to the list
                 image_array_list.append(np.array(image))
 
-    #TODO: no hard coded reshape
-    return np.array(image_array_list).reshape([55000, 28, 28, 1])
+    # create a np array for all images
+    image_array = np.array(image_array_list)
+
+    # reshape b/w image_array to 4D array
+    array_shape = image_array.shape
+    if len(array_shape) < 4:
+        new_shape = [1] * 4
+        for i in range(0,len(array_shape)):
+            new_shape[i] = array_shape[i]
+        return image_array.reshape(new_shape)
+
+    # return final array
+    return image_array
 
 
 def download_test_data():
