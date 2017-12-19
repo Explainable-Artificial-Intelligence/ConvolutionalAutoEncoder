@@ -200,6 +200,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         self._build_ann()
 
+        # init train status variables
+        self._init_train_status_variables()
+
         # create tensorflow session
         self.tf_session = tf.Session()
 
@@ -221,7 +224,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self._init_tensorboard_file_writer()
 
     def _load_session(self):
-        if self.session_saver_path is not None:
+        if self.session_saver_path is not None or not self.ann_status.eval(self.tf_session) == b'training':
             self._build_ann()
             prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
             self.tf_session = tf.Session()
@@ -566,6 +569,11 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             train_cost, _, step = self.tf_session.run(
                 [self.cost_function, self.final_optimizer, self.global_step],
                 feed_dict={self.input_images: current_batch})
+
+        # save train status
+        self.train_status["train_cost"].append(float(train_cost))
+        self.train_status["learning_rate"].append(self.learning_rate)
+
         if self.verbose:
             print(str(step) + ": " + str(train_cost))
 
@@ -590,13 +598,13 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # reopen session (if model is saved to disk):
             self._load_session()
             self._print_training_warning()
-            latent_representation = self.tf_session.run(self.latent_representation, feed_dict={self.input_images: input_data})
+            latent_representation = self.tf_session.run(self.latent_representation,
+                                                        feed_dict={self.input_images: input_data})
             # close session (if possible):
             self._close_session()
             return latent_representation
         else:
             raise RuntimeError("You must train transformer before predicting data!")
-
 
     def predict(self, X, y=None):
         """
@@ -640,7 +648,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
 
         """
-        if self.session_saver_path is not None:
+        if self.session_saver_path is not None or not self.ann_status.eval(self.tf_session) == b'training':
             self.tf_session.close()
             tf.reset_default_graph()
 
@@ -652,3 +660,41 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         if not self.ann_status.eval(self.tf_session) == b'completely trained':
             print("WARNING: The ANN is not completely trained", file=sys.stderr)
+
+    def _init_train_status_variables(self):
+        """
+
+        :return:
+        """
+        self.train_status = {"train_cost": [], "learning_rate": []}
+
+    def get_train_status(self, start_idx=None, end_idx=None):
+        """
+        returns the current train status (train_cost, learning rate) as dict
+
+        :param start_idx:
+        :param end_idx:
+        :return:
+        """
+        if start_idx is None:
+            if end_idx is None:
+                # return the complete lists of status variables
+                return self.train_status
+            else:
+                # return the status variables up to the end index
+                sliced_train_status = {"train_cost": self.train_status["train_cost"][:end_idx],
+                                       "learning_rate": self.train_status["learning_rate"][:end_idx]}
+                return sliced_train_status
+        else:
+            if end_idx is None:
+                # return the status variables after the start index
+                sliced_train_status = {"train_cost": self.train_status["train_cost"][start_idx:],
+                                       "learning_rate": self.train_status["learning_rate"][start_idx:]}
+                return sliced_train_status
+            else:
+                # return the status variables in a given range
+                sliced_train_status = {"train_cost": self.train_status["train_cost"][start_idx:end_idx],
+                                       "learning_rate": self.train_status["learning_rate"][start_idx:end_idx]}
+                return sliced_train_status
+
+

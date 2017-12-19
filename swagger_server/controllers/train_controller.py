@@ -3,6 +3,7 @@ import threading
 import connexion
 import numpy as np
 
+from swagger_server.models import Image
 from swagger_server.models.current_train_images import CurrentTrainImages
 from swagger_server.models.current_train_status import CurrentTrainStatus
 from swagger_server.models.train_status import TrainStatus
@@ -65,21 +66,27 @@ def get_current_ann_images(setSize=10, datasetname="train_data"):
         np.random.choice(Storage.get_dataset_length(datasetname, "input"), setSize, replace=False)]
 
     # store the images of the current subset
-    current_train_images.input_layer = [
-        convert_image_array_to_byte_string(input_image, channels=input_subset.shape[3], normalize=True) for
-        input_image in input_subset]
+    current_train_images.input_layer = []
+    for image_array in input_subset:
+        img = Image()
+        img.bytestring = convert_image_array_to_byte_string(image_array, channels=input_subset.shape[3], normalize=True)
+        img.id = 100
+        current_train_images.input_layer.append(img)
 
     # generate the output images of the current subset
     cae = Storage.get_cae()
     output_subset = cae.predict(input_subset)
 
     # store the images of the current output
-    current_train_images.output_layer = [
-        convert_image_array_to_byte_string(output_image, channels=output_subset.shape[3], normalize=True) for
-        output_image in output_subset]
+    current_train_images.output_layer = []
+    for image_array in output_subset:
+        img = Image()
+        img.bytestring = convert_image_array_to_byte_string(image_array, channels=input_subset.shape[3], normalize=True)
+        img.id = 100
+        current_train_images.output_layer.append(img)
 
     # return image subset
-    return current_train_images
+    return current_train_images, 200
 
 
 def get_current_train_status():
@@ -89,4 +96,25 @@ def get_current_train_status():
 
     :rtype: CurrentTrainStatus
     """
-    return 'do some magic!'
+    # get Convolutional Auto Encoder
+    cae = Storage.get_cae()
+
+    # get previous training step:
+    prev_step = Storage.get_prev_training_step()
+
+    # get current training status:
+    current_train_status = cae.get_train_status(start_idx=prev_step)
+
+    # update previous training step:
+    Storage.update_prev_training_step(len(current_train_status["train_cost"]))
+
+    # build up response object and return it
+    current_train_status_object = CurrentTrainStatus()
+    current_train_status_object.cost = current_train_status["train_cost"]
+    current_train_status_object.current_learning_rate = current_train_status["learning_rate"]
+    #current_train_status_object.cost = [1.5]
+    #current_train_status_object.current_learning_rate = [1.5, 3.0, 25.5]
+
+    return current_train_status_object, 200
+
+

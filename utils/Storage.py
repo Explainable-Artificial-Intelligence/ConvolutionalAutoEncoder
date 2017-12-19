@@ -13,6 +13,7 @@ class Storage(object):
     cae = object()
     parameter_set = {}
     cae_thread = threading.Thread()
+    train_step = 0
 
     @classmethod
     def set_input_data(cls, train_data, dataset_name="train_data"):
@@ -86,6 +87,14 @@ class Storage(object):
     def get_output_image_by_id(cls, datasetname, id):
         dataset = cls.output_data[datasetname]
         return dataset[id]
+
+    @classmethod
+    def get_prev_training_step(cls):
+        return cls.train_step
+
+    @classmethod
+    def update_prev_training_step(cls, set_size):
+        cls.train_step += set_size
 
 
 
