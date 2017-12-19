@@ -33,4 +33,4 @@ def convert_image_array_to_byte_string(image_array, channels=1, normalize=True):
     image_byte_array = image_byte_array.getvalue()
 
     # return byte string
-    return base64.b64encode(image_byte_array)
+    return str(base64.b64encode(image_byte_array))
