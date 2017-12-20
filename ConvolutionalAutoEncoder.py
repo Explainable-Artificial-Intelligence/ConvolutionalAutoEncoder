@@ -62,7 +62,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                  rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=-.5, rw_maxval=.5,
                  rw_seed=None, random_function_for_biases="zeros", rb_alpha=0.5, rb_beta=None, rb_mean=0.0,
                  rb_stddev=1.0, rb_lam=0.5, rb_minval=-.5, rb_maxval=.5, rb_seed=None, session_saver_path='./save/',
-                 load_prev_session=False):
+                 load_prev_session=False, session_save_duration=5):
         """
         Calls when initializing the transformer
 
@@ -106,6 +106,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param rb_maxval:
         :param rb_seed:
         :param session_saver_path:
+        :param session_save_duration:
         """
 
         # reset currently active tf graph
@@ -132,7 +133,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self.lr_decay_steps = lr_decay_steps
             self.lr_decay_rate = lr_decay_rate
             self.lr_staircase = lr_staircase
-            # convert boun
+            # convert boundaries into float64
             self.lr_boundaries = [tf.cast(value, dtype=tf.float64) for value in lr_boundaries]
             self.lr_values = [tf.cast(value, dtype=tf.float64) for value in lr_values]
             self.lr_end_learning_rate = lr_end_learning_rate
@@ -208,6 +209,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # initialize session saver:
         self.session_saver_path = session_saver_path
+        self.session_save_duration = session_save_duration
         self.load_prev_session = load_prev_session
         self.tf_session.run(tf.global_variables_initializer())
         if self.session_saver_path is not None:
@@ -500,10 +502,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # Fit all training data
         start_epoch = self.trained_epochs.eval(self.tf_session)
         for epoch_i in range(start_epoch, self.n_epochs):
+            # mark model as trained:
+            self.model_is_trained = True
+
             self._train_model_single_epoch(epoch_i, train_data)
             # save session  after each epoch
-            # TODO: modifiable num epochs
-            if self.session_saver_path is not None and epoch_i % 5 == 0:
+            if self.session_saver_path is not None and epoch_i % self.session_save_duration == 0:
                 self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
                                         global_step=self.global_step)
                 print("model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
@@ -515,8 +519,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # set number of trained epochs:
             self.tf_session.run(self.trained_epochs.assign_add(1))
 
-        # mark model as trained:
-        self.model_is_trained = True
+
 
         # set new ann status:
 
@@ -588,10 +591,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
     def get_latent_representation(self, input_data):
         """
 
-        :param ANN_topology:
-        :param X_variable:
-        :param data:
-        :param latent_variable:
+        :param input_data:
         :return:
         """
         if self.model_is_trained:

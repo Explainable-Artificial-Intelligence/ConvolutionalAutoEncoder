@@ -114,7 +114,7 @@ def get_output_images(startIndex, endIndex, datasetname="train_data", sortBy=Non
         image = Image()
         image.id = i
         # TODO : use byte array
-        image.bytestring = str(convert_image_array_to_byte_string(output_data[i], channels=output_data.shape[3]))
+        image.bytestring = convert_image_array_to_byte_string(output_data[i], channels=output_data.shape[3])
         output_images.images.append(image)
 
     return output_images, 200

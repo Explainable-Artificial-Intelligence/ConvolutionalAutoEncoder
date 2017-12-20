@@ -53,7 +53,7 @@ def get_input_images(startIndex, endIndex, datasetname="train_data", sortBy=None
         image = Image()
         image.id = i
         # TODO : use byte array
-        image.bytestring = str(convert_image_array_to_byte_string(train_data[i], channels=train_data.shape[3]))
+        image.bytestring = convert_image_array_to_byte_string(train_data[i], channels=train_data.shape[3])
         input_images.images.append(image)
 
     # save train data
