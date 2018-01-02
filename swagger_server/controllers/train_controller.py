@@ -54,32 +54,31 @@ def get_current_ann_images(setSize=10, datasetname="train_data"):
     """
     # create response object
     current_train_images = CurrentTrainImages()
-
-    # generate random indices:
-    indices = np.random.randint(0, Storage.get_dataset_length(datasetname, "input"), size=setSize)
-
-    # generate random subset of input images:
-    input_subset = Storage.get_input_data(datasetname)[indices]
-
-    # store the images of the current subset
     current_train_images.input_layer = []
-    for image_array, idx in zip(input_subset, indices):
-        img = Image()
-        img.bytestring = convert_image_array_to_byte_string(image_array, channels=input_subset.shape[3], normalize=True)
-        img.id = idx
-        current_train_images.input_layer.append(img)
-
-    # generate the output images of the current subset
-    cae = Storage.get_cae()
-    output_subset = cae.predict(input_subset)
-
-    # store the images of the current output
     current_train_images.output_layer = []
-    for image_array, idx in zip(output_subset, indices):
-        img = Image()
-        img.bytestring = convert_image_array_to_byte_string(image_array, channels=input_subset.shape[3], normalize=True)
-        img.id = idx
-        current_train_images.output_layer.append(img)
+    current_train_images.latent_layer = []
+
+    # get status images
+    cae = Storage.get_cae()
+    status_images = cae.get_current_status_images(setSize)
+
+    # get num of channels
+    channels = status_images["input_images"].shape[3]
+
+    # generate CurrentTrainImages object
+    for i in range(len(status_images["indices"])):
+        # generate input image
+        input_img = Image()
+        input_img.bytestring = convert_image_array_to_byte_string(status_images["input_images"][i], channels=channels,
+                                                                  normalize=True)
+        input_img.id = int(status_images["indices"][i])
+        current_train_images.input_layer.append(input_img)
+
+        output_img = Image()
+        output_img.bytestring = convert_image_array_to_byte_string(status_images["output_images"][i], channels=channels,
+                                                                   normalize=True)
+        output_img.id = int(status_images["indices"][i])
+        current_train_images.output_layer.append(output_img)
 
     # return image subset
     return current_train_images, 200
@@ -110,5 +109,3 @@ def get_current_train_status():
     current_train_status_object.current_learning_rate = current_train_status["learning_rate"]
 
     return current_train_status_object, 200
-
-

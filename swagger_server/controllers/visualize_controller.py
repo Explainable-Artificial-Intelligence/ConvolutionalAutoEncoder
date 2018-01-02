@@ -6,12 +6,13 @@ from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
 
+from utils.Clustering import perform_kmeans_clustering
 from utils.ImageProcessing import convert_image_array_to_byte_string
 from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
 
 
-def get_clustering(algorithm=None):
+def get_clustering(algorithm="kmeans", datasetname="train_data"):
     """
     returns the clustering of the latent representation
     
@@ -20,7 +21,18 @@ def get_clustering(algorithm=None):
 
     :rtype: Clustering
     """
-    return 'do some magic!'
+    # get cae
+    cae = Storage.get_cae()
+
+    # get latent representation
+    input_data = Storage.get_input_data(dataset_name=datasetname)
+    latent_representation = cae.get_latent_representation(input_data)
+
+    # perform clustering
+    kmeans_clustering = perform_kmeans_clustering(latent_representation, n_clusters=8, init="k-means++", n_init=10,
+                                               max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0,
+                                               random_state=None, copy_x=True, n_jobs=-1, algorithm="auto")
+    labels = kmeans_clustering.predict(input_data)
 
 
 def get_next_output_image_batch(datasetname=None, batchSize=100, sortBy=None):

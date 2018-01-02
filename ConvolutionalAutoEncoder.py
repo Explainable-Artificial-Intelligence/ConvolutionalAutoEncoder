@@ -62,7 +62,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                  rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=-.5, rw_maxval=.5,
                  rw_seed=None, random_function_for_biases="zeros", rb_alpha=0.5, rb_beta=None, rb_mean=0.0,
                  rb_stddev=1.0, rb_lam=0.5, rb_minval=-.5, rb_maxval=.5, rb_seed=None, session_saver_path='./save/',
-                 load_prev_session=False, session_save_duration=5):
+                 load_prev_session=False, session_save_duration=5, num_test_pictures=100):
         """
         Calls when initializing the transformer
 
@@ -107,6 +107,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param rb_seed:
         :param session_saver_path:
         :param session_save_duration:
+        :param num_test_pictures:
         """
 
         # reset currently active tf graph
@@ -206,6 +207,13 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # create tensorflow session
         self.tf_session = tf.Session()
+
+        # init status images
+        self.num_test_pictures = num_test_pictures
+        self.current_sample_indices = []
+        self.current_input_image_sample = []
+        self.current_latent_image_sample = []
+        self.current_output_image_sample = []
 
         # initialize session saver:
         self.session_saver_path = session_saver_path
@@ -519,11 +527,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # set number of trained epochs:
             self.tf_session.run(self.trained_epochs.assign_add(1))
 
-
+            # evaluate current train status:
+            self._evaluate_current_ann_status(train_data)
 
         # set new ann status:
-
-
         if self.tf_session.run(self.trained_epochs) == self.n_epochs:
             self.tf_session.run(self.ann_status.assign("completely trained"))
         else:
@@ -579,6 +586,28 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         if self.verbose:
             print(str(step) + ": " + str(train_cost))
+
+    def _evaluate_current_ann_status(self, train_data):
+        """
+
+
+        """
+
+        # get random subset of train images
+        subset_indices = np.random.randint(0, len(train_data), size=self.num_test_pictures)
+
+        # get input image subset:
+        input_subset = train_data[subset_indices]
+
+        # get latent representation and output images of the current subset
+        output_subset, latent_subset = self.tf_session.run([self.output_images, self.latent_representation],
+                                                           feed_dict={self.input_images: input_subset})
+
+        # store current status images:
+        self.current_input_image_sample = input_subset
+        self.current_latent_image_sample = latent_subset
+        self.current_output_image_sample = output_subset
+        self.current_sample_indices = subset_indices
 
     def update_ann_status(self, status):
         """
@@ -697,4 +726,15 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                                        "learning_rate": self.train_status["learning_rate"][start_idx:end_idx]}
                 return sliced_train_status
 
+    def get_current_status_images(self, size):
+        """
+        returns the input, output and latent representation of a random subset of train images (using the current ANN train status)
 
+        :param size: number of samples
+        :return:
+        """
+
+        return {"input_images": self.current_input_image_sample[:min(self.num_test_pictures, size)],
+                "latent_representation": self.current_latent_image_sample[:min(self.num_test_pictures, size)],
+                "output_images": self.current_output_image_sample[:min(self.num_test_pictures, size)],
+                "indices": self.current_sample_indices[:min(self.num_test_pictures, size)]}
