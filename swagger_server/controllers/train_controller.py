@@ -7,6 +7,7 @@ from swagger_server.models import Image
 from swagger_server.models.current_train_images import CurrentTrainImages
 from swagger_server.models.current_train_status import CurrentTrainStatus
 from swagger_server.models.train_status import TrainStatus
+from utils.DimensionReduction import perform_dimension_reduction
 
 from utils.ImageProcessing import convert_image_array_to_byte_string
 from utils.Storage import Storage
@@ -65,6 +66,8 @@ def get_current_ann_images(setSize=10, datasetname="train_data"):
     # get num of channels
     channels = status_images["input_images"].shape[3]
 
+    print(status_images["latent_representation"].shape)
+
     # generate CurrentTrainImages object
     for i in range(len(status_images["indices"])):
         # generate input image
@@ -79,6 +82,16 @@ def get_current_ann_images(setSize=10, datasetname="train_data"):
                                                                    normalize=True)
         output_img.id = int(status_images["indices"][i])
         current_train_images.output_layer.append(output_img)
+
+        latent_img = Image()
+        # perform dim reduction to create image
+        shape = status_images["latent_representation"][i].shape
+        new_shape = [shape[0], shape[1]*shape[2]]
+        latent_img.bytestring = convert_image_array_to_byte_string(
+            perform_dimension_reduction(status_images["latent_representation"][i].reshape(new_shape)), channels=1,
+            normalize=True)
+        latent_img.id = int(status_images["indices"][i])
+        current_train_images.latent_layer.append(latent_img)
 
     # return image subset
     return current_train_images, 200
