@@ -66,48 +66,68 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         Calls when initializing the transformer
 
-        :param input_shape:
-        :param number_of_stacks:
-        :param filter_sizes:
-        :param mirror_weights:
-        :param activation_function:
-        :param batch_size:
-        :param n_epochs:
-        :param use_tensorboard:
-        :param verbose:
-        :param learning_rate_function:
-        :param lr_initial_learning_rate:
-        :param lr_decay_steps:
-        :param lr_decay_rate:
-        :param lr_staircase:
-        :param lr_boundaries:
-        :param lr_values:
-        :param lr_end_learning_rate:
-        :param lr_power:
-        :param lr_cycle:
-        :param optimizer:
-        :param momentum:
-        :param random_function_for_weights:
-        :param rw_alpha:
-        :param rw_beta:
-        :param rw_mean:
-        :param rw_stddev:
-        :param rw_lam:
-        :param rw_minval:
-        :param rw_maxval:
-        :param rw_seed:
-        :param random_function_for_biases:
-        :param rb_alpha:
-        :param rb_beta:
-        :param rb_mean:
-        :param rb_stddev:
-        :param rb_lam:
-        :param rb_minval:
-        :param rb_maxval:
-        :param rb_seed:
-        :param session_saver_path:
-        :param session_save_duration:
-        :param num_test_pictures:
+        :param input_shape: list of  the dimensions of the input (and output) data
+        :param number_of_stacks: list with the number of stacks of each hidden layer
+        :param filter_sizes: defines the sizes of the filters of the hidden layer
+        :param mirror_weights: if true the weights of the decoder are the same as the encoder
+        :param activation_function: defines the activation function of the CAE
+        :param batch_size: defines the batch size for the training
+        :param n_epochs: defines the number of epochs in the training
+        :param use_tensorboard: if true the tensorboard summary function on port 6006 is used
+        :param verbose: activates a verbose console output
+        :param learning_rate_function: defines the learning rate function used during training
+        :param lr_initial_learning_rate: learning rate parameter: defines the initial learningrate
+        :param lr_decay_steps: learning rate parameter: defines the number of steps which triggers a learning rate decay
+        :param lr_decay_rate: learning rate parameter: defines the decay rate
+        :param lr_staircase: learning rate parameter: determines if the learningrate decays smoothly or stepwise
+        :param lr_boundaries: learning rate parameter: defines the boundaries for the different learning rates
+                of lr_values
+        :param lr_values: learning rate parameter: defines a list of different learing rates
+                (for the different boundaries of lr_boundaries)
+        :param lr_end_learning_rate: learning rate parameter:
+        :param lr_power: learning rate parameter: defines the power of the polynomial of the polynomial decaying
+                learning rate
+        :param lr_cycle: learning rate parameter: A boolean, whether or not it should cycle beyond decay_steps.
+        :param optimizer: defines the optimizer for the training
+        :param momentum: defines the momentum for the momentum optimizer
+        :param random_function_for_weights: defines the random function, which is used to generate the initial weights
+        :param rw_alpha: parameter for the random function of the initial weights: defines the alpha value for a gamma
+                distribution
+        :param rw_beta: parameter for the random function of the initial weights: defines the beta value for a gamma
+                distribution
+        :param rw_mean: parameter for the random function of the initial weights: defines the mean value for a normal
+                distribution
+        :param rw_stddev: parameter for the random function of the initial weights: defines the standard deviation for
+                a normal distribution
+        :param rw_lam: parameter for the random function of the initial weights: defines the rate parameter of a
+                Poisson distribution
+        :param rw_minval: parameter for the random function of the initial weights: defines the minimum value for a
+                uniform distribution
+        :param rw_maxval: parameter for the random function of the initial weights:  defines the maximum value for a
+                uniform distribution
+        :param rw_seed: parameter for the random function of the initial weights: defines a seed for a random
+                initialisation
+        :param random_function_for_biases: defines the random function, which is used to generate the initial biases
+        :param rb_alpha:  parameter for the random function of the initial biases: defines the alpha value for a gamma
+                distribution
+        :param rb_beta: parameter for the random function of the initial biases: defines the beta value for a gamma
+                distribution
+        :param rb_mean: parameter for the random function of the initial biases: defines the mean value for a normal
+                distribution
+        :param rb_stddev: parameter for the random function of the initial biases: defines the standard deviation for
+                a normal distribution
+        :param rb_lam: parameter for the random function of the initial biases:  defines the rate parameter of a
+                Poisson distribution
+        :param rb_minval: parameter for the random function of the initial biases: defines the minimum value for a
+                uniform distribution
+        :param rb_maxval: parameter for the random function of the initial biases: defines the maximum value for a
+                uniform distribution
+        :param rb_seed: parameter for the random function of the initial biases: defines a seed for a random
+                initialisation
+        :param session_saver_path: defines a folder where the training progress is saved (None deactivates the saving)
+        :param session_save_duration: defines the number of epochs after the current training state is saved to disk
+        :param num_test_pictures: defines the number of train images in each epoch which can be used to visualize the
+                current training state
         """
 
         # reset currently active tf graph
@@ -210,10 +230,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # init status images
         self.num_test_pictures = num_test_pictures
-        self.current_sample_indices = []
-        self.current_input_image_sample = []
-        self.current_latent_image_sample = []
-        self.current_output_image_sample = []
+        self.current_sample_indices = np.array([])
+        self.current_input_image_sample = np.array([])
+        self.current_latent_image_sample = np.array([])
+        self.current_output_image_sample = np.array([])
 
         # initialize session saver:
         self.session_saver_path = session_saver_path

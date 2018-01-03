@@ -54,7 +54,7 @@ def get_current_ann_images(setSize=10, datasetname="train_data"):
     :rtype: CurrentTrainImages
     """
     # create response object
-    current_train_images = CurrentTrainImages()
+    current_train_images = CurrentTrainImages([])
     current_train_images.input_layer = []
     current_train_images.output_layer = []
     current_train_images.latent_layer = []
@@ -62,6 +62,11 @@ def get_current_ann_images(setSize=10, datasetname="train_data"):
     # get status images
     cae = Storage.get_cae()
     status_images = cae.get_current_status_images(setSize)
+
+    # special case: training is still in first epoch (no pictures available)
+    if len(status_images["input_images"].shape) < 4:
+        # return an empty response object
+        return current_train_images, 200
 
     # get num of channels
     channels = status_images["input_images"].shape[3]
