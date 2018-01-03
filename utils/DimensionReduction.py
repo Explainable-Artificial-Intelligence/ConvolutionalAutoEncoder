@@ -1,6 +1,7 @@
 """
 Function performing dim reduction
 """
+import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
@@ -102,3 +103,21 @@ def perform_dimension_reduction(high_dim_data, algorithm="t-SNE", n_dimensions=2
                                              svd_solver=svd_solver, tol=tol, iterated_power=iterated_power,
                                              random_state=random_state)
         return low_dim_data
+
+
+def reshape_into_2D_array(input_array):
+    """
+    reshapes a multidim numpy array into a 2D feature array
+
+    :param input_array: n-dim. numpy array
+    :return: 2D numpy array
+    """
+
+    # determine new array shape:
+    old_shape = input_array.shape
+    new_shape = [old_shape[0], np.prod(np.array(old_shape[1:]))]
+
+    # reshape array
+    reshaped_array = input_array.reshape(new_shape)
+
+    return reshaped_array

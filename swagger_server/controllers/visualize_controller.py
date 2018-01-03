@@ -1,4 +1,7 @@
 import connexion
+import numpy as np
+
+from swagger_server.models import Model2DPoint
 from swagger_server.models.clustering import Clustering
 from swagger_server.models.image import Image
 from swagger_server.models.input_data import InputData
@@ -7,12 +10,13 @@ from typing import List, Dict
 from six import iteritems
 
 from utils.Clustering import perform_kmeans_clustering
+from utils.DimensionReduction import reshape_into_2D_array, perform_dimension_reduction
 from utils.ImageProcessing import convert_image_array_to_byte_string
 from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
 
 
-def get_clustering(algorithm="kmeans", datasetname="train_data"):
+def get_clustering(algorithm="kmeans", datasetname="train_data", dim_reduction="PCA"):
     """
     returns the clustering of the latent representation
     
@@ -28,11 +32,36 @@ def get_clustering(algorithm="kmeans", datasetname="train_data"):
     input_data = Storage.get_input_data(dataset_name=datasetname)
     latent_representation = cae.get_latent_representation(input_data)
 
+    # convert array into feature table
+    flat_latent_representation = reshape_into_2D_array(latent_representation)
+
     # perform clustering
-    kmeans_clustering = perform_kmeans_clustering(latent_representation, n_clusters=8, init="k-means++", n_init=10,
-                                               max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0,
-                                               random_state=None, copy_x=True, n_jobs=-1, algorithm="auto")
-    labels = kmeans_clustering.predict(input_data)
+    kmeans_clustering = perform_kmeans_clustering(flat_latent_representation, n_clusters=8, init="k-means++", n_init=10,
+                                                  max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0,
+                                                  random_state=None, copy_x=True, n_jobs=-1, algorithm="auto")
+    labels = kmeans_clustering.predict(flat_latent_representation)
+
+    # perform dimension reduction
+    latent_representation_2D = perform_dimension_reduction(flat_latent_representation, algorithm=dim_reduction,
+                                                           n_dimensions=2)
+
+    # create Clustering object
+    clustering = Clustering()
+
+    # transfer properties
+    clustering.n_clusters = 10
+    clustering.min_x = float(np.min(latent_representation_2D[:, 0]))
+    clustering.max_x = float(np.max(latent_representation_2D[:, 0]))
+    clustering.min_y = float(np.min(latent_representation_2D[:, 1]))
+    clustering.max_y = float(np.max(latent_representation_2D[:, 1]))
+    clustering.points = []
+
+    # generate cluster points:
+    for i in range(latent_representation_2D.shape[0]):
+        point = Model2DPoint(x=float(latent_representation_2D[i, 0]), y=float(latent_representation_2D[i, 1]),
+                             cluster=int(labels[i]))
+        clustering.points.append(point)
+    return clustering, 200
 
 
 def get_next_output_image_batch(datasetname=None, batchSize=100, sortBy=None):
