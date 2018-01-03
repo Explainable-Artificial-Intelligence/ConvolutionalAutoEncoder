@@ -104,6 +104,8 @@ def perform_dimension_reduction(high_dim_data, algorithm="t-SNE", n_dimensions=2
                                              random_state=random_state)
         return low_dim_data
 
+    # TODO: add error message
+
 
 def reshape_into_2D_array(input_array):
     """

@@ -147,7 +147,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                                self._activation_functions.keys())
 
         # parse learning rate parameters
-
         if learning_rate_function in self._decaying_learning_rate.keys():
             self.learning_rate_function = learning_rate_function
             self.lr_initial_learning_rate = lr_initial_learning_rate
@@ -265,7 +264,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _build_ann(self):
         """
-
+        Wrapper function to build the complete ANN topology and define all required session variables
+        (important for loading previous session)
         """
         # build ANN
         self._build_network_topology()
@@ -278,7 +278,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _build_network_topology(self):
         """
-        Builds the ANN topology for a convolutional autoencoder
+        Builds the ANN topology for a Convolutional Autencoder
         """
         # create placeholder for input images
         self.input_images = tf.placeholder(tf.float32, self.input_shape, name="Input_Images")
@@ -292,7 +292,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _build_encoder(self):
         """
-
+        Builds the encoder part of the Convolutional Autencoder
         """
         # construct the encoder
         self.encoder_weights = []
@@ -312,11 +312,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _build_encoder_layer(self, current_input, layer_i, n_output):
         """
+        Builds a single encoder layer
 
-        :param current_input:
-        :param layer_i:
-        :param n_output:
-        :return:
+        :param current_input: input from a previous encoder layer
+        :param layer_i: index of the new layer
+        :param n_output: number of output stacks
+        :return: output of the new layer
         """
         number_of_input_layers = current_input.get_shape().as_list()[3]
         self.encoder_shapes.append(current_input.get_shape().as_list())
@@ -335,11 +336,13 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _create_random_layer_weights(self, shape, name=""):
         """
+        creates a tensor of random variables in a given shape and given random distribution
 
-        :param names:
-        :param shape:
-        :return:
+        :param shape: shape of the generating tensor
+        :param names: optional varable names
+        :return: tensor with random weight varaibles
         """
+
         if self.random_function_for_weights == "zeros":
             return tf.Variable(tf.zeros(shape), name=name)
         if self.random_function_for_weights == "gamma":
