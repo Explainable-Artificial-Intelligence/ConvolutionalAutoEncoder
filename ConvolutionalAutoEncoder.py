@@ -522,7 +522,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _train_model(self, train_data):
         """
-
+        performs a complete training of the ANN
         """
         # reopen a previous training:
         if self.model_is_trained:
@@ -571,8 +571,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _train_model_single_epoch(self, epoch_i, train_data):
         """
+        trains the ANN for one single epoch
 
-        :param epoch_i:
+        :param epoch_i: current epoch
         :return:
         """
         for batch_index in range(len(train_data) // self.batch_size):
@@ -697,6 +698,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
     def _close_session(self):
         """
         closes the tf.session if the trained model is saved to disk
+
         :return:
 
         """
@@ -707,6 +709,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
     def _print_training_warning(self):
         """
         prints a warning if a prediction/scoring is done without a completly trained ANN
+
         :return:
         """
 
@@ -751,13 +754,15 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def get_current_status_images(self, size):
         """
-        returns the input, output and latent representation of a random subset of train images (using the current ANN train status)
+        returns the input, output and latent representation of a random subset of train images (using the current ANN
+            train status)
 
         :param size: number of samples
         :return:
         """
 
-        return {"input_images": self.current_input_image_sample[:min(self.num_test_pictures, size)],
-                "latent_representation": self.current_latent_image_sample[:min(self.num_test_pictures, size)],
-                "output_images": self.current_output_image_sample[:min(self.num_test_pictures, size)],
-                "indices": self.current_sample_indices[:min(self.num_test_pictures, size)]}
+        max_idx = min(self.num_test_pictures, size)
+        return {"input_images": self.current_input_image_sample[:max_idx],
+                "latent_representation": self.current_latent_image_sample[:max_idx],
+                "output_images": self.current_output_image_sample[:max_idx],
+                "indices": self.current_sample_indices[:max_idx]}

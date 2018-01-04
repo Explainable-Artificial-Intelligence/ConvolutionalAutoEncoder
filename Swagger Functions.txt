@@ -1,0 +1,165 @@
+﻿Swagger Functions
+Load:
+        loadFile
+                params:
+                        filename
+                        datasetname
+                        read_labels
+                        data_type = “auto”
+                
+        getInputImages:
+                params:
+                        start_idx
+                        end_idx
+                        datasetname
+                        sort_by: e.g. class, color hue, brightness
+                        filter: e.g. class, color hue, brightness
+                        (io: input/output)
+                returns: Input as png (ImageData)
+                
+        getInputImageBatch
+                params:
+                        batch_size: next x pictures
+                        datasetname
+                        sort_by: e.g. class, color hue, brightness
+                        filter: e.g. class, color hue, brightness
+                        (io: input/output)
+                returns: Input as png (ImageData)
+        
+        getRandomInputImages:
+                params:
+                        num_images
+                        datasetname
+                        sort_by: e.g. class, color hue, brightness
+                        filter: e.g. class, color hue, brightness
+                        (io: input/output)
+                returns: Input as png (ImagetData)
+        
+getImageByID
+        params:
+                id
+datasetname
+        retruns: Image
+
+
+        (getLabels:
+                params:
+                        
+                returns)
+
+
+
+
+
+
+
+
+
+
+
+
+Build:
+        buildANN
+                params:
+                        ParameterList
+                
+
+
+Train:
+        controlTraining
+                params:
+                        TrainSignal 
+
+
+        getProcessedImageData → new name
+                params:
+                        setSize
+                returns: ProcessedImageData → new name
+                                        
+        getTrainPerformance
+                params:
+                        batched = “true”
+                returns: TrainPerformance: array of dicts (?): [{epoch: 1,
+                      loss: 0.2572,
+                   learningRate: 0.00123456789,
+                  sample_distribution: (?), (probably better to write a separate function for returning the sample distribution)
+  }, ..]
+                
+
+
+Visualize:
+        getLatentClustering
+                params:
+                        algorithm
+                        cluster_parameter
+                returns Clustering
+
+
+        (getOutputImages
+                params:
+                        start_idx
+                        end_index
+                        datasetname
+                        sort_by: e.g. class, color hue, brightness
+                        filter: e.g. class, color hue, brightness
+                returns: Input as png (ImageData)
+
+
+        getOutputImageBatch
+                params:
+                        batch_size: next x pictures
+                        datasetname
+                        sort_by: e.g. class, color hue, brightness
+                        filter: e.g. class, color hue, brightness
+                returns: Input as png (ImageData)
+        
+        getRandomOutputImages:
+                params:
+                        num_images
+                        datasetname
+                        sort_by: e.g. class, color hue, brightness
+                        filter: e.g. class, color hue, brightness
+                returns: Input as png (ImageData))
+
+
+        getTrainPerformance (same as in Train)
+        predictSinglePoint:
+                params:
+                        2D point from sample distribution
+                returns: decoder output
+
+
+
+
+Tune:
+        buildGridSearchANN
+                params:
+                        ParameterList
+        controlTuning
+                params:
+                        TrainSignal 
+        
+getTrainPerformance
+
+
+
+
+Definitions:
+        ImageData
+(ParameterSet)
+Clustering
+        min_x
+        max_x
+        min_y
+        max_y
+        n_clusters
+        points:
+                array of 2DPoint
+2DPoint
+TrainSignal
+Image
+        labels?
+ParameterList: (for gridsearch) one for CAE, one for AAE
+        -> equal names
+ProcessedImageData → new name
+TrainPerformance
