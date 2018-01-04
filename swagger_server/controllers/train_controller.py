@@ -89,6 +89,7 @@ def get_current_ann_images(setSize=10, datasetname="train_data"):
         current_train_images.output_layer.append(output_img)
 
         latent_img = Image()
+        # TODO: find better way to display latent representation as image
         # perform dim reduction to create image
         shape = status_images["latent_representation"][i].shape
         new_shape = [shape[0], shape[1]*shape[2]]

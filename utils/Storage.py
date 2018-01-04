@@ -96,6 +96,14 @@ class Storage(object):
     def update_prev_training_step(cls, set_size):
         cls.train_step += set_size
 
+    @classmethod
+    def get_parameter_list(cls):
+        return cls.parameter_set
+
+    @classmethod
+    def set_parameter_list(cls, parameter_set):
+        cls.parameter_set = parameter_set
+
 
 
 

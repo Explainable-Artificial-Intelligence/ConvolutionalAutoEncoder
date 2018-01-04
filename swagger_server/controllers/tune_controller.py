@@ -4,6 +4,8 @@ from swagger_server.models.train_status import TrainStatus
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
+
+from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
 
 
@@ -32,4 +34,19 @@ def pass_ann_parameter_lists(inputParameterLists):
     """
     if connexion.request.is_json:
         inputParameterLists = ParameterLists.from_dict(connexion.request.get_json())
+
+
+        # generate parameter set:
+        parameter_set = {}
+
+        # transfer all list parameters:
+        for key in inputParameterLists.__dict__.keys():
+            if key.startswith("_"):
+                if key.endswith("_list"):
+                    parameter_set[key[1:-5]] = inputParameterLists.__dict__[key]
+                else:
+                    parameter_set[key[1:]] = inputParameterLists.__dict__[key]
+
+        Storage.set_parameter_list(parameter_set)
+
     return 'do some magic!'
