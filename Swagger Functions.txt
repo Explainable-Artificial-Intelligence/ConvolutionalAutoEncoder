@@ -7,7 +7,7 @@ Load:
                         read_labels
                         data_type = “auto”
                 
-        getInputImages:
+        getImages:
                 params:
                         start_idx
                         end_idx
@@ -17,7 +17,7 @@ Load:
                         (io: input/output)
                 returns: Input as png (ImageData)
                 
-        getInputImageBatch
+        getImageBatch
                 params:
                         batch_size: next x pictures
                         datasetname
@@ -26,7 +26,8 @@ Load:
                         (io: input/output)
                 returns: Input as png (ImageData)
         
-        getRandomInputImages:
+        getRandomImages:
+        #TODO: equal representation of classes
                 params:
                         num_images
                         datasetname
@@ -35,11 +36,12 @@ Load:
                         (io: input/output)
                 returns: Input as png (ImagetData)
         
-getImageByID
-        params:
-                id
-datasetname
-        retruns: Image
+        getImageByID
+                params:
+                    id
+                    datasetname
+                    (io: input/output)
+                returns: Image
 
 
         (getLabels:
@@ -61,7 +63,7 @@ datasetname
 Build:
         buildANN
                 params:
-                        ParameterList
+                        ParameterList (list of dictionaries)
                 
 
 
@@ -75,6 +77,8 @@ Train:
                 params:
                         setSize
                 returns: ProcessedImageData → new name
+
+
                                         
         getTrainPerformance
                 params:
@@ -88,10 +92,11 @@ Train:
 
 
 Visualize:
-        getLatentClustering
+        getHiddenLayerLatentClustering
                 params:
                         algorithm
                         cluster_parameter
+                        layer
                 returns Clustering
 
 
@@ -123,7 +128,8 @@ Visualize:
 
 
         getTrainPerformance (same as in Train)
-        predictSinglePoint:
+
+        generateImageFromSinglePoint:
                 params:
                         2D point from sample distribution
                 returns: decoder output
@@ -139,7 +145,7 @@ Tune:
                 params:
                         TrainSignal 
         
-getTrainPerformance
+        getTrainPerformance
 
 
 
@@ -156,7 +162,12 @@ Clustering
         points:
                 array of 2DPoint
 2DPoint
+    x
+    y
+    cluster_name
+
 TrainSignal
+    enum
 Image
         labels?
 ParameterList: (for gridsearch) one for CAE, one for AAE

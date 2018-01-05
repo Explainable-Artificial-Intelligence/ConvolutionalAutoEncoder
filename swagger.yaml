@@ -12,7 +12,7 @@ info:
 host: 'localhost:8080'
 basePath: /v2
 tags:
-  - name: input
+  - name: load
     description: All methods corresponding to the input data
   - name: build
     description: All methods corresponding to the learning parameters
@@ -25,13 +25,13 @@ tags:
 schemes:
   - http
 paths:
-  /input/loadFile:
+  /load/loadFile:
     post:
       tags:
-        - input
-      summary: Load a train data file
-      description: Load a train data file in numpy array data format
-      operationId: loadTrainData
+        - load
+      summary: Load a train/test data file
+      description: Load a data file in different data formats
+      operationId: loadFile
       consumes:
         - application/json
       produces:
@@ -48,6 +48,17 @@ paths:
           required: false
           type: string
           format: string
+        - name: read_labels
+          in: query
+          description: true to read labels
+          required: false
+          type: boolean
+        - name: data_type
+          in: query
+          description: determines the data format of the input file
+          required: false
+          type: string
+          format: string
       responses:
         '200':
           description: file successful loaded
@@ -55,95 +66,211 @@ paths:
           description: File not found
         '415':
           description: File parsing error
-  /input/getImages:
+  /load/getImages:
     get:
       tags:
-        - input
-      summary: returns a subset of input images
+        - load
+      summary: returns a subset of input/output images
       description: images are encoded as png byte strings
-      operationId: getInputImages
+      operationId: getImages
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: start_idx
+          in: query
+          description: name for dataset on the server
+          required: true
+          type: integer
+          format: int32
+        - name: end_idx
+          in: query
+          description: name for dataset on the server
+          required: true
+          type: integer
+          format: int32
         - name: datasetname
           in: query
           description: name for dataset on the server
           required: false
           type: string
           format: string
-        - name: startIndex
-          in: query
-          description: name for dataset on the server
-          required: true
-          type: integer
-          format: int32
-        - name: endIndex
-          in: query
-          description: name for dataset on the server
-          required: true
-          type: integer
-          format: int32
-        - name: sortBy
+        - name: sort_by
           in: query
           description: defines the sorting of the input images
           required: false
           type: string
+        - name: filter
+          in: query
+          description: the values which should be filtered (whitelist)
+          required: false
+          type: string
+        - name: output
+          in: query
+          description: if true returns AE output Images instead of input Images
+          required: false
+          type: boolean
       responses:
         '200':
           description: Images successfully returned
           schema:
-            $ref: '#/definitions/InputData'
+            $ref: '#/definitions/ImageData'
         '404':
           description: No data found
         '415':
           description: Index out of bounds
-  /input/getImageBatch:
+  /load/getImageBatch:
     get:
       tags:
-        - input
-      summary: returns the next batch of input images
+        - load
+      summary: returns the next batch of input/output images
       description: images are encoded as png byte strings
-      operationId: getNextInputImageBatch
+      operationId: getImageBatch
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
+        - name: batch_bize
+          in: query
+          description: defines the number of return images
+          required: false
+          type: integer
+          format: int32
         - name: datasetname
           in: query
           description: name for dataset on the server
           required: false
           type: string
           format: string
-        - name: batchSize
-          in: query
-          description: name for dataset on the server
-          required: false
-          type: integer
-          format: int32
-        - name: sortBy
+        - name: sort_by
           in: query
           description: defines the sorting of the input images
           required: false
           type: string
+        - name: filter
+          in: query
+          description: the values which should be filtered (whitelist)
+          required: false
+          type: string
+        - name: output
+          in: query
+          description: if true returns AE output Images instead of input Images
+          required: false
+          type: boolean
       responses:
         '200':
           description: Images successfully returned
           schema:
-            $ref: '#/definitions/InputData'
+            $ref: '#/definitions/ImageData'
         '404':
           description: No data found
         '415':
           description: Index out of bounds
-  /build:
+  /load/getRandomImages:
+    get:
+      tags:
+        - load
+      summary: returns the next batch of input/output images
+      description: images are encoded as png byte strings
+      operationId: getRandomImages
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: batch_bize
+          in: query
+          description: defines the number of return images
+          required: false
+          type: integer
+          format: int32
+        - name: datasetname
+          in: query
+          description: name for dataset on the server
+          required: false
+          type: string
+          format: string
+        - name: sort_by
+          in: query
+          description: defines the sorting of the input images
+          required: false
+          type: string
+        - name: filter
+          in: query
+          description: the values which should be filtered (whitelist)
+          required: false
+          type: string
+        - name: output
+          in: query
+          description: if true returns AE output Images instead of input Images
+          required: false
+          type: boolean
+      responses:
+        '200':
+          description: Images successfully returned
+          schema:
+            $ref: '#/definitions/ImageData'
+        '404':
+          description: No data found
+        '415':
+          description: Index out of bounds
+  /load/getImageById:
+    get:
+      tags:
+        - load
+      summary: returns a single input/output image
+      description: images are encoded as png byte strings
+      operationId: getImageById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: defines the id of the images
+          required: false
+          type: integer
+          format: int32
+        - name: datasetname
+          in: query
+          description: name for dataset on the server
+          required: false
+          type: string
+          format: string
+        - name: sort_by
+          in: query
+          description: defines the sorting of the input images
+          required: false
+          type: string
+        - name: filter
+          in: query
+          description: the values which should be filtered (whitelist)
+          required: false
+          type: string
+        - name: output
+          in: query
+          description: if true returns AE output Images instead of input Images
+          required: false
+          type: boolean
+      responses:
+        '200':
+          description: Images successfully returned
+          schema:
+            $ref: '#/definitions/ImageData'
+        '404':
+          description: No data found
+        '415':
+          description: Index out of bounds
+  /build/buildANN:
     post:
       tags:
         - build
       summary: passes all learning and ANN parameters to the server
       description: Includes learning parameters and ANN topology
-      operationId: passANNParameters
+      operationId: buildANN
       consumes:
         - application/json
       produces:
@@ -154,18 +281,18 @@ paths:
           description: object with all tunable parameters
           required: true
           schema:
-            $ref: '#/definitions/ParameterSet'
+            $ref: '#/definitions/ParameterList'
       responses:
         '202':
           description: Parameters successfully commited
         '415':
           description: File parsing error
-  /train/control:
+  /train/controlTraining:
     put:
       tags:
         - train
       summary: 'starts, pauses and stops the training'
-      description: ''
+      description: uses a string enum
       operationId: controlTraining
       consumes:
         - application/json
@@ -181,7 +308,7 @@ paths:
       responses:
         '200':
           description: Train status updated
-  '/train/currentANNImages/{setSize}':
+  /train/getProcessedImageData:
     get:
       tags:
         - train
@@ -189,14 +316,14 @@ paths:
         returns a subset of the current train images and the corresponding
         latent representation and output
       description: ''
-      operationId: getCurrentANNImages
+      operationId: getProcessedImageData
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
         - name: setSize
-          in: path
+          in: query
           description: size of the image subset
           required: true
           type: integer
@@ -205,30 +332,30 @@ paths:
         '200':
           description: Train images updated
           schema:
-            $ref: '#/definitions/CurrentTrainImages'
-  /train/currentTrainStatus:
+            $ref: '#/definitions/ProcessedImageData'
+  /train/getTrainPerformance:
     get:
       tags:
         - train
       summary: returns the next batch of scalar train variables
-      description: as dict of lists
-      operationId: getCurrentTrainStatus
+      description: as list of dicts
+      operationId: getTrainPerformance
       consumes:
         - application/json
       produces:
         - application/json
       responses:
         '200':
-          description: Train images updated
+          description: Train status recieved
           schema:
-            $ref: '#/definitions/CurrentTrainStatus'
-  /visualize/clustering:
+            $ref: '#/definitions/TrainPerformance'
+  /visualize/getHiddenLayerLatentClustering:
     get:
       tags:
         - visualize
-      summary: returns the clustering of the latent representation
+      summary: returns the clustering of the latent representation of a hidden layer
       description: ''
-      operationId: getClustering
+      operationId: getHiddenLayerLatentClustering
       consumes:
         - application/json
       produces:
@@ -239,172 +366,47 @@ paths:
           description: determines the clutering algorithm
           required: false
           type: string
+        - name: cluster_parameters
+          in: body
+          description: determines the clutering parameters
+          required: false
+          schema:
+            $ref: '#/definitions/ClusterParameters'
+        - name: layer
+          in: query
+          description: determines the hidden layer
+          required: false
+          type: integer
+          format: int32
       responses:
         '200':
           description: Operation successful
           schema:
             $ref: '#/definitions/Clustering'
-  /visualize/loadFile:
-    post:
-      tags:
-        - visualize
-      summary: Load a train data file
-      description: Load a train data file in numpy array data format
-      operationId: loadAdditionalData
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: filename
-          in: query
-          required: true
-          type: string
-          format: string
-        - name: datasetname
-          in: query
-          description: name for dataset on the server
-          required: false
-          type: string
-          format: string
-      responses:
-        '200':
-          description: file successful loaded
-        '404':
-          description: File not found
-        '415':
-          description: File parsing error
-  /visualize/getOutputImages:
+  /visualize/generateImageFromSinglePoint:
     get:
       tags:
         - visualize
-      summary: returns a subset of input images
-      description: images are encoded as png byte strings
-      operationId: getOutputImages
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: datasetname
-          in: query
-          description: name for dataset on the server
-          required: false
-          type: string
-          format: string
-        - name: startIndex
-          in: query
-          description: start position of the image set
-          required: true
-          type: integer
-          format: int32
-        - name: endIndex
-          in: query
-          description: end position of the image set
-          required: true
-          type: integer
-          format: int32
-        - name: sortBy
-          in: query
-          description: defines the sorting of the output images
-          required: false
-          type: string
-      responses:
-        '200':
-          description: Images successfully returned
-          schema:
-            $ref: '#/definitions/InputData'
-        '404':
-          description: No data found
-        '415':
-          description: Index out of bounds
-  /visualize/getOutputImageBatch:
-    get:
-      tags:
-        - visualize
-      summary: returns the next batch of input images
-      description: images are encoded as png byte strings
-      operationId: getNextOutputImageBatch
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: datasetname
-          in: query
-          description: name for dataset on the server
-          required: false
-          type: string
-          format: string
-        - name: batchSize
-          in: query
-          description: number of images for the next set
-          required: false
-          type: integer
-          format: int32
-        - name: sortBy
-          in: query
-          description: defines the sorting of the output images
-          required: false
-          type: string
-      responses:
-        '200':
-          description: Images successfully returned
-          schema:
-            $ref: '#/definitions/InputData'
-        '404':
-          description: No data found
-        '415':
-          description: Index out of bounds
-  '/visualize/{imageID}':
-    get:
-      tags:
-        - visualize
-      summary: returns the ANN output for a given input image ID
+      summary: generates the AE output from a given point of the sample distribution
       description: ''
-      operationId: getOutputImage
+      operationId: generateImageFromSinglePoint
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - name: imageID
-          in: path
-          description: id (position) of the input image
+        - name: point_2D
+          in: body
+          description: 2D Point of the sample distribution
           required: true
-          type: integer
-          format: int32
+          schema:
+            $ref: '#/definitions/Point2D'
       responses:
         '200':
           description: Operation successful
           schema:
             $ref: '#/definitions/Image'
-  '/visualize/load/{filename}':
-    post:
-      tags:
-        - visualize
-      summary: Load a test data file
-      description: Load a test data file in numpy array data format
-      operationId: loadTestData
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: filename
-          in: path
-          description: retruns the test data images for a given file path
-          required: true
-          type: string
-          format: string
-      responses:
-        '200':
-          description: file successful loaded
-        '404':
-          description: File not found
-        '415':
-          description: File parsing error
-  /tune:
+  /tune/buildGridSearchANN:
     post:
       tags:
         - tune
@@ -421,13 +423,13 @@ paths:
           description: object with all tunable parameter lists
           required: true
           schema:
-            $ref: '#/definitions/ParameterLists'
+            $ref: '#/definitions/ParameterList'
       responses:
         '202':
           description: Parameters successfully commited
         '415':
           description: File parsing error
-  /tune/control:
+  /tune/controlTuning:
     put:
       tags:
         - tune
@@ -449,7 +451,7 @@ paths:
         '200':
           description: Train status updated
 definitions:
-  InputData:
+  ImageData:
     type: object
     properties:
       numImages:
@@ -465,188 +467,49 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Image'
-  ParameterSet:
+  ClusterParameters:
     type: object
     properties:
-      inputShape:
-        type: array
-        items:
-          type: integer
-          format: int32
-        example:
-          - 0
-          - 28
-          - 28
-          - 1
-      numberOfStacks:
-        type: array
-        items:
-          type: integer
-          format: int32
-        example:
-          - 12
-          - 8
-          - 8
-          - 4
-      filterSizes:
-        type: array
-        items:
-          type: integer
-          format: int32
-        example:
-          - 5
-          - 5
-          - 3
-          - 3
-      mirrorWeights:
-        type: boolean
-        example: false
-      activationFunction:
+      n_clusters:
+        type: integer
+        format: int32
+        example: 10
+      init:
         type: string
-        example: relu
-      batchSize:
+        example: k-means++
+      n_init:
         type: integer
         format: int32
-        example: 100
-      nEpochs:
+        example: 10
+      max_iter:
         type: integer
         format: int32
-        example: 50
-      useTensorboard:
-        type: boolean
-        example: false
+        example: 300
+      tol:
+        type: number
+        format: float
+        example: 0.0001
+      precompute_distances:
+        type: string
+        example: auto
       verbose:
+        type: integer
+        format: int32
+        example: 0
+      random_state:
+        type: integer
+        format: int32
+        example: undefined
+      copy_x:
         type: boolean
         example: true
-      learningRateFunction:
-        type: string
-        example: static
-      lrInitialLearningRate:
-        type: number
-        format: double
-        example: 0.01
-      lrDecaySteps:
+      n_jobs:
         type: integer
         format: int32
-        example: 1000
-      lrDecayRate:
-        type: number
-        format: double
-        example: 0.9
-      lrStaircase:
-        type: boolean
-        example: false
-      lrBoundaries:
-        type: array
-        items:
-          type: integer
-          format: int32
-        example:
-          - 10000
-          - 20000
-      lrValues:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 1
-          - 0.5
-          - 0.1
-      lrEndLearningRate:
-        type: number
-        format: double
-        example: 0.0001
-      lrPower:
-        type: number
-        format: double
-        example: 1
-      lrCycle:
-        type: boolean
-        example: false
-      opimizer:
-        type: string
-        example: AdamOptimizer
-      momentum:
-        type: number
-        format: double
-        example: 0.9
-      randomFunctionForWeights:
-        type: string
-        example: uniform
-      rwAlpha:
-        type: number
-        format: double
-        example: 0.5
-      rwBeta:
-        type: number
-        format: double
-        example: 0
-      rwMean:
-        type: number
-        format: double
-        example: 0
-      rwStddev:
-        type: number
-        format: double
-        example: 1
-      rwLam:
-        type: number
-        format: double
-        example: 0.5
-      rwMinval:
-        type: number
-        format: double
         example: -1
-      rwMaxval:
-        type: number
-        format: double
-        example: 1
-      rwSeed:
-        type: integer
-        format: int32
-        example: 0
-      randomFunctionForBiases:
+      algorithm:
         type: string
-        example: zeros
-      rbAlpha:
-        type: number
-        format: double
-        example: 0.5
-      rbBeta:
-        type: number
-        format: double
-        example: 0
-      rbMean:
-        type: number
-        format: double
-        example: 0
-      rbStddev:
-        type: number
-        format: double
-        example: 1
-      rbLam:
-        type: number
-        format: double
-        example: 0.5
-      rbMinval:
-        type: number
-        format: double
-        example: 0
-      rbMaxval:
-        type: number
-        format: double
-        example: 1
-      rbSeed:
-        type: integer
-        format: int32
-        example: 0
-      sessionSaverPath:
-        type: string
-        example: ./save/
-      loadPrevSession:
-        type: boolean
-        example: false
+        example: auto
   Clustering:
     type: object
     properties:
@@ -668,8 +531,8 @@ definitions:
       points:
         type: array
         items:
-          $ref: '#/definitions/2DPoint'
-  2DPoint:
+          $ref: '#/definitions/Point2D'
+  Point2D:
     type: object
     properties:
       x:
@@ -697,10 +560,10 @@ definitions:
       id:
         type: integer
         format: int32
-  ParameterLists:
+  ParameterList:
     type: object
     properties:
-      inputShapeList:
+      input_shape:
         type: array
         items:
           type: array
@@ -708,11 +571,11 @@ definitions:
             type: integer
             format: int32
         example:
-          - - 0
+          - - undefined
             - 28
             - 28
             - 1
-      numberOfStacksList:
+      number_of_stacks:
         type: array
         items:
           type: array
@@ -724,7 +587,7 @@ definitions:
             - 8
             - 8
             - 4
-      filterSizeList:
+      filter_sizes:
         type: array
         items:
           type: array
@@ -736,72 +599,72 @@ definitions:
             - 5
             - 3
             - 3
-      mirrorWeightList:
+      mirror_weights:
         type: array
         items:
           type: boolean
         example:
           - false
-      activationFunctionList:
+      activation_function:
         type: array
         items:
           type: string
         example:
           - relu
-      batchSizeList:
+      batch_size:
         type: array
         items:
           type: integer
           format: int32
         example:
           - 100
-      nEpochList:
+      n_epochs:
         type: array
         items:
           type: integer
           format: int32
         example:
           - 50
-      useTensorboard:
+      use_tensorboard:
         type: boolean
         example: true
       verbose:
         type: boolean
         example: true
-      learningRateFunctionList:
+      learning_rate_function:
         type: array
         items:
           type: string
         example:
           - static
-      lrInitialLearningRateList:
+      lr_initial_learning_rate:
         type: array
         items:
           type: number
           format: double
         example:
           - 0.01
-      lrDecayStepList:
+      lr_decay_steps:
         type: array
         items:
           type: integer
           format: int32
         example:
           - 1000
-      lrDecayRateList:
+      lr_decay_rate:
         type: array
         items:
           type: number
           format: double
         example:
           - 0.9
-      lrStaircaseList:
+      lr_staircase:
         type: array
         items:
           type: boolean
         example:
           - false
-      lrBoundaryList:
+      lr_boundaries:
         type: array
         items:
           type: array
@@ -811,7 +674,7 @@ definitions:
         example:
           - - 10000
             - 20000
-      lrValueList:
+      lr_values:
         type: array
         items:
           type: array
@@ -822,170 +685,184 @@ definitions:
           - - 1
             - 0.5
             - 0.1
-      lrEndLearningRateList:
+      lr_end_learning_rate:
         type: array
         items:
           type: number
           format: double
         example:
           - 0.0001
-      lrPowerList:
+      lr_power:
         type: array
         items:
           type: number
           format: double
         example:
           - 1
-      lrCycleList:
+      lr_cycle:
         type: array
         items:
           type: boolean
         example:
           - false
-      opimizerList:
+      opimizer:
         type: array
         items:
           type: string
         example:
           - AdamOptimizer
-      momentumList:
+      momentum:
         type: array
         items:
           type: number
           format: double
         example:
           - 0.9
-      randomFunctionForWeightsList:
+      random_function_for_weights:
         type: array
         items:
           type: string
         example:
           - uniform
-      rwAlphaList:
+      rw_alpha:
         type: array
         items:
           type: number
           format: double
         example:
           - 0.5
-      rwBetaList:
+      rw_beta:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - undefined
+      rw_mean:
         type: array
         items:
           type: number
           format: double
         example:
           - 0
-      rwMeanList:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0
-      rwStddevList:
+      rw_stddev:
         type: array
         items:
           type: number
           format: double
         example:
           - 1
-      rwLamList:
+      rw_lam:
         type: array
         items:
           type: number
           format: double
         example:
           - 0.5
-      rwMinvalList:
+      rw_minval:
         type: array
         items:
           type: number
           format: double
         example:
           - 0
-      rwMaxvalList:
+      rw_maxval:
         type: array
         items:
           type: number
           format: double
         example:
           - 1
-      rwSeedList:
+      rw_seed:
         type: array
         items:
           type: integer
           format: int32
         example:
-          - 0
-      randomFunctionForBiasesList:
+          - undefined
+      random_function_for_biases:
         type: array
         items:
           type: string
         example:
           - zeros
-      rbAlphaList:
+      rb_alpha:
         type: array
         items:
           type: number
           format: double
         example:
           - 0.5
-      rbBetaList:
+      rb_beta:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - undefined
+      rb_mean:
         type: array
         items:
           type: number
           format: double
         example:
           - 0
-      rbMeanList:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0
-      rbStddevList:
+      rb_stddev:
         type: array
         items:
           type: number
           format: double
         example:
           - 1
-      rbLamList:
+      rb_lam:
         type: array
         items:
           type: number
           format: double
         example:
           - 0.5
-      rbMinvalList:
+      rb_minval:
         type: array
         items:
           type: number
           format: double
         example:
           - 0
-      rbMaxvalList:
+      rb_maxval:
         type: array
         items:
           type: number
           format: double
         example:
           - 1
-      rbSeedList:
+      rb_seed:
         type: array
         items:
           type: integer
           format: int32
         example:
-          - 0
-      sessionSaverPath:
+          - undefined
+      session_saver_path:
         type: string
         example: ./save/
-      loadPrevSession:
+      load_prev_session:
         type: boolean
         example: false
-  CurrentTrainImages:
+      session_save_duration:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 5
+      num_test_pictures:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 100
+  ProcessedImageData:
     type: object
     properties:
       inputLayer:
@@ -1000,7 +877,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Image'
-  CurrentTrainStatus:
+  TrainPerformance:
     type: object
     properties:
       cost:
