@@ -13,7 +13,7 @@ info:
 host: "localhost:8080"
 basePath: "/v2"
 tags:
-- name: "input"
+- name: "load"
   description: "All methods corresponding to the input data"
 - name: "build"
   description: "All methods corresponding to the learning parameters"
@@ -26,13 +26,13 @@ tags:
 schemes:
 - "http"
 paths:
-  /input/loadFile:
+  /load/loadFile:
     post:
       tags:
-      - "input"
-      summary: "Load a train data file"
-      description: "Load a train data file in numpy array data format"
-      operationId: "load_train_data"
+      - "load"
+      summary: "Load a train/test data file"
+      description: "Load a data file in different data formats"
+      operationId: "load_file"
       consumes:
       - "application/json"
       produces:
@@ -49,6 +49,17 @@ paths:
         required: false
         type: "string"
         format: "string"
+      - name: "read_labels"
+        in: "query"
+        description: "true to read labels"
+        required: false
+        type: "boolean"
+      - name: "data_type"
+        in: "query"
+        description: "determines the data format of the input file"
+        required: false
+        type: "string"
+        format: "string"
       responses:
         200:
           description: "file successful loaded"
@@ -56,98 +67,216 @@ paths:
           description: "File not found"
         415:
           description: "File parsing error"
-      x-swagger-router-controller: "swagger_server.controllers.input_controller"
-  /input/getImages:
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/getImages:
     get:
       tags:
-      - "input"
-      summary: "returns a subset of input images"
+      - "load"
+      summary: "returns a subset of input/output images"
       description: "images are encoded as png byte strings"
-      operationId: "get_input_images"
+      operationId: "get_images"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
+      - name: "start_idx"
+        in: "query"
+        description: "name for dataset on the server"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "end_idx"
+        in: "query"
+        description: "name for dataset on the server"
+        required: true
+        type: "integer"
+        format: "int32"
       - name: "datasetname"
         in: "query"
         description: "name for dataset on the server"
         required: false
         type: "string"
         format: "string"
-      - name: "startIndex"
-        in: "query"
-        description: "name for dataset on the server"
-        required: true
-        type: "integer"
-        format: "int32"
-      - name: "endIndex"
-        in: "query"
-        description: "name for dataset on the server"
-        required: true
-        type: "integer"
-        format: "int32"
-      - name: "sortBy"
+      - name: "sort_by"
         in: "query"
         description: "defines the sorting of the input images"
         required: false
         type: "string"
+      - name: "filter"
+        in: "query"
+        description: "the values which should be filtered (whitelist)"
+        required: false
+        type: "string"
+      - name: "output"
+        in: "query"
+        description: "if true returns AE output Images instead of input Images"
+        required: false
+        type: "boolean"
       responses:
         200:
           description: "Images successfully returned"
           schema:
-            $ref: "#/definitions/InputData"
+            $ref: "#/definitions/ImageData"
         404:
           description: "No data found"
         415:
           description: "Index out of bounds"
-      x-swagger-router-controller: "swagger_server.controllers.input_controller"
-  /input/getImageBatch:
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/getImageBatch:
     get:
       tags:
-      - "input"
-      summary: "returns the next batch of input images"
+      - "load"
+      summary: "returns the next batch of input/output images"
       description: "images are encoded as png byte strings"
-      operationId: "get_next_input_image_batch"
+      operationId: "get_image_batch"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
+      - name: "batch_size"
+        in: "query"
+        description: "defines the number of return images"
+        required: false
+        type: "integer"
+        format: "int32"
       - name: "datasetname"
         in: "query"
         description: "name for dataset on the server"
         required: false
         type: "string"
         format: "string"
-      - name: "batchSize"
-        in: "query"
-        description: "name for dataset on the server"
-        required: false
-        type: "integer"
-        format: "int32"
-      - name: "sortBy"
+      - name: "sort_by"
         in: "query"
         description: "defines the sorting of the input images"
         required: false
         type: "string"
+      - name: "filter"
+        in: "query"
+        description: "the values which should be filtered (whitelist)"
+        required: false
+        type: "string"
+      - name: "output"
+        in: "query"
+        description: "if true returns AE output Images instead of input Images"
+        required: false
+        type: "boolean"
       responses:
         200:
           description: "Images successfully returned"
           schema:
-            $ref: "#/definitions/InputData"
+            $ref: "#/definitions/ImageData"
         404:
           description: "No data found"
         415:
           description: "Index out of bounds"
-      x-swagger-router-controller: "swagger_server.controllers.input_controller"
-  /build:
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/getRandomImages:
+    get:
+      tags:
+      - "load"
+      summary: "returns the next batch of input/output images"
+      description: "images are encoded as png byte strings"
+      operationId: "get_random_images"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "batch_size"
+        in: "query"
+        description: "defines the number of return images"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "datasetname"
+        in: "query"
+        description: "name for dataset on the server"
+        required: false
+        type: "string"
+        format: "string"
+      - name: "sort_by"
+        in: "query"
+        description: "defines the sorting of the input images"
+        required: false
+        type: "string"
+      - name: "filter"
+        in: "query"
+        description: "the values which should be filtered (whitelist)"
+        required: false
+        type: "string"
+      - name: "output"
+        in: "query"
+        description: "if true returns AE output Images instead of input Images"
+        required: false
+        type: "boolean"
+      responses:
+        200:
+          description: "Images successfully returned"
+          schema:
+            $ref: "#/definitions/ImageData"
+        404:
+          description: "No data found"
+        415:
+          description: "Index out of bounds"
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/getImageById:
+    get:
+      tags:
+      - "load"
+      summary: "returns a single input/output image"
+      description: "images are encoded as png byte strings"
+      operationId: "get_image_by_id"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "query"
+        description: "defines the id of the images"
+        required: false
+        type: "integer"
+        format: "int32"
+      - name: "datasetname"
+        in: "query"
+        description: "name for dataset on the server"
+        required: false
+        type: "string"
+        format: "string"
+      - name: "sort_by"
+        in: "query"
+        description: "defines the sorting of the input images"
+        required: false
+        type: "string"
+      - name: "filter"
+        in: "query"
+        description: "the values which should be filtered (whitelist)"
+        required: false
+        type: "string"
+      - name: "output"
+        in: "query"
+        description: "if true returns AE output Images instead of input Images"
+        required: false
+        type: "boolean"
+      responses:
+        200:
+          description: "Images successfully returned"
+          schema:
+            $ref: "#/definitions/ImageData"
+        404:
+          description: "No data found"
+        415:
+          description: "Index out of bounds"
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /build/buildANN:
     post:
       tags:
       - "build"
       summary: "passes all learning and ANN parameters to the server"
       description: "Includes learning parameters and ANN topology"
-      operationId: "pass_ann_parameters"
+      operationId: "build_ann"
       consumes:
       - "application/json"
       produces:
@@ -158,19 +287,19 @@ paths:
         description: "object with all tunable parameters"
         required: true
         schema:
-          $ref: "#/definitions/ParameterSet"
+          $ref: "#/definitions/ParameterList"
       responses:
         202:
           description: "Parameters successfully commited"
         415:
           description: "File parsing error"
       x-swagger-router-controller: "swagger_server.controllers.build_controller"
-  /train/control:
+  /train/controlTraining:
     put:
       tags:
       - "train"
       summary: "starts, pauses and stops the training"
-      description: ""
+      description: "uses a string enum"
       operationId: "control_training"
       consumes:
       - "application/json"
@@ -187,21 +316,21 @@ paths:
         200:
           description: "Train status updated"
       x-swagger-router-controller: "swagger_server.controllers.train_controller"
-  /train/currentANNImages/{setSize}:
+  /train/getProcessedImageData:
     get:
       tags:
       - "train"
       summary: "returns a subset of the current train images and the corresponding\
         \ latent representation and output"
       description: ""
-      operationId: "get_current_ann_images"
+      operationId: "get_processed_image_data"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
       - name: "setSize"
-        in: "path"
+        in: "query"
         description: "size of the image subset"
         required: true
         type: "integer"
@@ -210,15 +339,15 @@ paths:
         200:
           description: "Train images updated"
           schema:
-            $ref: "#/definitions/CurrentTrainImages"
+            $ref: "#/definitions/ProcessedImageData"
       x-swagger-router-controller: "swagger_server.controllers.train_controller"
-  /train/currentTrainStatus:
+  /train/getTrainPerformance:
     get:
       tags:
       - "train"
       summary: "returns the next batch of scalar train variables"
-      description: "as dict of lists"
-      operationId: "get_current_train_status"
+      description: "as list of dicts"
+      operationId: "get_train_performance"
       consumes:
       - "application/json"
       produces:
@@ -226,17 +355,17 @@ paths:
       parameters: []
       responses:
         200:
-          description: "Train images updated"
+          description: "Train status recieved"
           schema:
-            $ref: "#/definitions/CurrentTrainStatus"
+            $ref: "#/definitions/TrainPerformance"
       x-swagger-router-controller: "swagger_server.controllers.train_controller"
-  /visualize/clustering:
+  /visualize/getHiddenLayerLatentClustering:
     get:
       tags:
       - "visualize"
-      summary: "returns the clustering of the latent representation"
+      summary: "returns the clustering of the latent representation of a hidden layer"
       description: ""
-      operationId: "get_clustering"
+      operationId: "get_hidden_layer_latent_clustering"
       consumes:
       - "application/json"
       produces:
@@ -247,178 +376,54 @@ paths:
         description: "determines the clutering algorithm"
         required: false
         type: "string"
+      - name: "dimension_reduction"
+        in: "query"
+        description: "determines the algorithm for dim reduction"
+        required: false
+        type: "string"
+      - in: "body"
+        name: "cluster_parameters"
+        description: "determines the clutering parameters"
+        required: false
+        schema:
+          $ref: "#/definitions/ClusterParameters"
+      - name: "layer"
+        in: "query"
+        description: "determines the hidden layer"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Operation successful"
           schema:
             $ref: "#/definitions/Clustering"
       x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
-  /visualize/loadFile:
-    post:
-      tags:
-      - "visualize"
-      summary: "Load a train data file"
-      description: "Load a train data file in numpy array data format"
-      operationId: "load_additional_data"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "filename"
-        in: "query"
-        required: true
-        type: "string"
-        format: "string"
-      - name: "datasetname"
-        in: "query"
-        description: "name for dataset on the server"
-        required: false
-        type: "string"
-        format: "string"
-      responses:
-        200:
-          description: "file successful loaded"
-        404:
-          description: "File not found"
-        415:
-          description: "File parsing error"
-      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
-  /visualize/getOutputImages:
+  /visualize/generateImageFromSinglePoint:
     get:
       tags:
       - "visualize"
-      summary: "returns a subset of input images"
-      description: "images are encoded as png byte strings"
-      operationId: "get_output_images"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "datasetname"
-        in: "query"
-        description: "name for dataset on the server"
-        required: false
-        type: "string"
-        format: "string"
-      - name: "startIndex"
-        in: "query"
-        description: "start position of the image set"
-        required: true
-        type: "integer"
-        format: "int32"
-      - name: "endIndex"
-        in: "query"
-        description: "end position of the image set"
-        required: true
-        type: "integer"
-        format: "int32"
-      - name: "sortBy"
-        in: "query"
-        description: "defines the sorting of the output images"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "Images successfully returned"
-          schema:
-            $ref: "#/definitions/InputData"
-        404:
-          description: "No data found"
-        415:
-          description: "Index out of bounds"
-      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
-  /visualize/getOutputImageBatch:
-    get:
-      tags:
-      - "visualize"
-      summary: "returns the next batch of input images"
-      description: "images are encoded as png byte strings"
-      operationId: "get_next_output_image_batch"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "datasetname"
-        in: "query"
-        description: "name for dataset on the server"
-        required: false
-        type: "string"
-        format: "string"
-      - name: "batchSize"
-        in: "query"
-        description: "number of images for the next set"
-        required: false
-        type: "integer"
-        format: "int32"
-      - name: "sortBy"
-        in: "query"
-        description: "defines the sorting of the output images"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "Images successfully returned"
-          schema:
-            $ref: "#/definitions/InputData"
-        404:
-          description: "No data found"
-        415:
-          description: "Index out of bounds"
-      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
-  /visualize/{imageID}:
-    get:
-      tags:
-      - "visualize"
-      summary: "returns the ANN output for a given input image ID"
+      summary: "generates the AE output from a given point of the sample distribution"
       description: ""
-      operationId: "get_output_image"
+      operationId: "generate_image_from_single_point"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: "imageID"
-        in: "path"
-        description: "id (position) of the input image"
+      - in: "body"
+        name: "point_2D"
+        description: "2D Point of the sample distribution"
         required: true
-        type: "integer"
-        format: "int32"
+        schema:
+          $ref: "#/definitions/Point2D"
       responses:
         200:
           description: "Operation successful"
           schema:
             $ref: "#/definitions/Image"
       x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
-  /visualize/load/{filename}:
-    post:
-      tags:
-      - "visualize"
-      summary: "Load a test data file"
-      description: "Load a test data file in numpy array data format"
-      operationId: "load_test_data"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "filename"
-        in: "path"
-        description: "retruns the test data images for a given file path"
-        required: true
-        type: "string"
-        format: "string"
-      responses:
-        200:
-          description: "file successful loaded"
-        404:
-          description: "File not found"
-        415:
-          description: "File parsing error"
-      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
-  /tune:
+  /tune/buildGridSearchANN:
     post:
       tags:
       - "tune"
@@ -435,14 +440,14 @@ paths:
         description: "object with all tunable parameter lists"
         required: true
         schema:
-          $ref: "#/definitions/ParameterLists"
+          $ref: "#/definitions/ParameterList"
       responses:
         202:
           description: "Parameters successfully commited"
         415:
           description: "File parsing error"
       x-swagger-router-controller: "swagger_server.controllers.tune_controller"
-  /tune/control:
+  /tune/controlTuning:
     put:
       tags:
       - "tune"
@@ -465,7 +470,7 @@ paths:
           description: "Train status updated"
       x-swagger-router-controller: "swagger_server.controllers.tune_controller"
 definitions:
-  InputData:
+  ImageData:
     type: "object"
     properties:
       numImages:
@@ -481,188 +486,49 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Image"
-  ParameterSet:
+  ClusterParameters:
     type: "object"
     properties:
-      inputShape:
-        type: "array"
-        example:
-        - 0
-        - 28
-        - 28
-        - 1
-        items:
-          type: "integer"
-          format: "int32"
-      numberOfStacks:
-        type: "array"
-        example:
-        - 12
-        - 8
-        - 8
-        - 4
-        items:
-          type: "integer"
-          format: "int32"
-      filterSizes:
-        type: "array"
-        example:
-        - 5
-        - 5
-        - 3
-        - 3
-        items:
-          type: "integer"
-          format: "int32"
-      mirrorWeights:
-        type: "boolean"
-        example: false
-      activationFunction:
+      n_clusters:
+        type: "integer"
+        format: "int32"
+        example: 10
+      init:
         type: "string"
-        example: "relu"
-      batchSize:
+        example: "k-means++"
+      n_init:
         type: "integer"
         format: "int32"
-        example: 100
-      nEpochs:
+        example: 10
+      max_iter:
         type: "integer"
         format: "int32"
-        example: 50
-      useTensorboard:
-        type: "boolean"
-        example: false
+        example: 300
+      tol:
+        type: "number"
+        format: "float"
+        example: 1.0E-4
+      precompute_distances:
+        type: "string"
+        example: "auto"
       verbose:
+        type: "integer"
+        format: "int32"
+        example: 0
+      random_state:
+        type: "integer"
+        format: "int32"
+        example: "undefined"
+      copy_x:
         type: "boolean"
         example: true
-      learningRateFunction:
-        type: "string"
-        example: "static"
-      lrInitialLearningRate:
-        type: "number"
-        format: "double"
-        example: 0.01000000000000000020816681711721685132943093776702880859375
-      lrDecaySteps:
+      n_jobs:
         type: "integer"
         format: "int32"
-        example: 1000
-      lrDecayRate:
-        type: "number"
-        format: "double"
-        example: 0.90000000000000002220446049250313080847263336181640625
-      lrStaircase:
-        type: "boolean"
-        example: false
-      lrBoundaries:
-        type: "array"
-        example:
-        - 10000
-        - 20000
-        items:
-          type: "integer"
-          format: "int32"
-      lrValues:
-        type: "array"
-        example:
-        - 1
-        - 0.5
-        - 0.1
-        items:
-          type: "number"
-          format: "double"
-      lrEndLearningRate:
-        type: "number"
-        format: "double"
-        example: 0.000100000000000000004792173602385929598312941379845142364501953125
-      lrPower:
-        type: "number"
-        format: "double"
-        example: 1
-      lrCycle:
-        type: "boolean"
-        example: false
-      opimizer:
-        type: "string"
-        example: "AdamOptimizer"
-      momentum:
-        type: "number"
-        format: "double"
-        example: 0.90000000000000002220446049250313080847263336181640625
-      randomFunctionForWeights:
-        type: "string"
-        example: "uniform"
-      rwAlpha:
-        type: "number"
-        format: "double"
-        example: 0.5
-      rwBeta:
-        type: "number"
-        format: "double"
-        example: 0
-      rwMean:
-        type: "number"
-        format: "double"
-        example: 0
-      rwStddev:
-        type: "number"
-        format: "double"
-        example: 1
-      rwLam:
-        type: "number"
-        format: "double"
-        example: 0.5
-      rwMinval:
-        type: "number"
-        format: "double"
         example: -1
-      rwMaxval:
-        type: "number"
-        format: "double"
-        example: 1
-      rwSeed:
-        type: "integer"
-        format: "int32"
-        example: 0
-      randomFunctionForBiases:
+      algorithm:
         type: "string"
-        example: "zeros"
-      rbAlpha:
-        type: "number"
-        format: "double"
-        example: 0.5
-      rbBeta:
-        type: "number"
-        format: "double"
-        example: 0
-      rbMean:
-        type: "number"
-        format: "double"
-        example: 0
-      rbStddev:
-        type: "number"
-        format: "double"
-        example: 1
-      rbLam:
-        type: "number"
-        format: "double"
-        example: 0.5
-      rbMinval:
-        type: "number"
-        format: "double"
-        example: 0
-      rbMaxval:
-        type: "number"
-        format: "double"
-        example: 1
-      rbSeed:
-        type: "integer"
-        format: "int32"
-        example: 0
-      sessionSaverPath:
-        type: "string"
-        example: "./save/"
-      loadPrevSession:
-        type: "boolean"
-        example: false
+        example: "auto"
   Clustering:
     type: "object"
     properties:
@@ -684,8 +550,8 @@ definitions:
       points:
         type: "array"
         items:
-          $ref: "#/definitions/2DPoint"
-  2DPoint:
+          $ref: "#/definitions/Point2D"
+  Point2D:
     type: "object"
     properties:
       x:
@@ -713,13 +579,13 @@ definitions:
       id:
         type: "integer"
         format: "int32"
-  ParameterLists:
+  ParameterList:
     type: "object"
     properties:
-      inputShapeList:
+      input_shape:
         type: "array"
         example:
-        - - 0
+        - - -1
           - 28
           - 28
           - 1
@@ -728,7 +594,7 @@ definitions:
           items:
             type: "integer"
             format: "int32"
-      numberOfStacksList:
+      number_of_stacks:
         type: "array"
         example:
         - - 12
@@ -740,7 +606,7 @@ definitions:
           items:
             type: "integer"
             format: "int32"
-      filterSizeList:
+      filter_sizes:
         type: "array"
         example:
         - - 5
@@ -752,72 +618,72 @@ definitions:
           items:
             type: "integer"
             format: "int32"
-      mirrorWeightList:
+      mirror_weights:
         type: "array"
         example:
         - false
         items:
           type: "boolean"
-      activationFunctionList:
+      activation_function:
         type: "array"
         example:
         - "relu"
         items:
           type: "string"
-      batchSizeList:
+      batch_size:
         type: "array"
         example:
         - 100
         items:
           type: "integer"
           format: "int32"
-      nEpochList:
+      n_epochs:
         type: "array"
         example:
         - 50
         items:
           type: "integer"
           format: "int32"
-      useTensorboard:
+      use_tensorboard:
         type: "boolean"
         example: true
       verbose:
         type: "boolean"
         example: true
-      learningRateFunctionList:
+      learning_rate_function:
         type: "array"
         example:
         - "static"
         items:
           type: "string"
-      lrInitialLearningRateList:
+      lr_initial_learning_rate:
         type: "array"
         example:
         - 0.01
         items:
           type: "number"
           format: "double"
-      lrDecayStepList:
+      lr_decay_steps:
         type: "array"
         example:
         - 1000
         items:
           type: "integer"
           format: "int32"
-      lrDecayRateList:
+      lr_decay_rate:
         type: "array"
         example:
         - 0.9
         items:
           type: "number"
           format: "double"
-      lrStaircaseList:
+      lr_staircase:
         type: "array"
         example:
         - false
         items:
           type: "boolean"
-      lrBoundaryList:
+      lr_boundaries:
         type: "array"
         example:
         - - 10000
@@ -827,7 +693,7 @@ definitions:
           items:
             type: "integer"
             format: "int32"
-      lrValueList:
+      lr_values:
         type: "array"
         example:
         - - 1
@@ -838,170 +704,184 @@ definitions:
           items:
             type: "number"
             format: "double"
-      lrEndLearningRateList:
+      lr_end_learning_rate:
         type: "array"
         example:
         - 1.0E-4
         items:
           type: "number"
           format: "double"
-      lrPowerList:
+      lr_power:
         type: "array"
         example:
         - 1
         items:
           type: "number"
           format: "double"
-      lrCycleList:
+      lr_cycle:
         type: "array"
         example:
         - false
         items:
           type: "boolean"
-      opimizerList:
+      opimizer:
         type: "array"
         example:
         - "AdamOptimizer"
         items:
           type: "string"
-      momentumList:
+      momentum:
         type: "array"
         example:
         - 0.9
         items:
           type: "number"
           format: "double"
-      randomFunctionForWeightsList:
+      random_function_for_weights:
         type: "array"
         example:
         - "uniform"
         items:
           type: "string"
-      rwAlphaList:
+      rw_alpha:
         type: "array"
         example:
         - 0.5
         items:
           type: "number"
           format: "double"
-      rwBetaList:
-        type: "array"
-        example:
-        - 0
-        items:
-          type: "number"
-          format: "double"
-      rwMeanList:
-        type: "array"
-        example:
-        - 0
-        items:
-          type: "number"
-          format: "double"
-      rwStddevList:
+      rw_beta:
         type: "array"
         example:
         - 1
         items:
           type: "number"
           format: "double"
-      rwLamList:
+      rw_mean:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "number"
+          format: "double"
+      rw_stddev:
+        type: "array"
+        example:
+        - 1
+        items:
+          type: "number"
+          format: "double"
+      rw_lam:
         type: "array"
         example:
         - 0.5
         items:
           type: "number"
           format: "double"
-      rwMinvalList:
+      rw_minval:
         type: "array"
         example:
         - 0
         items:
           type: "number"
           format: "double"
-      rwMaxvalList:
+      rw_maxval:
         type: "array"
         example:
         - 1
         items:
           type: "number"
           format: "double"
-      rwSeedList:
+      rw_seed:
         type: "array"
         example:
-        - 0
+        - -1
         items:
           type: "integer"
           format: "int32"
-      randomFunctionForBiasesList:
+      random_function_for_biases:
         type: "array"
         example:
         - "zeros"
         items:
           type: "string"
-      rbAlphaList:
+      rb_alpha:
         type: "array"
         example:
         - 0.5
         items:
           type: "number"
           format: "double"
-      rbBetaList:
-        type: "array"
-        example:
-        - 0
-        items:
-          type: "number"
-          format: "double"
-      rbMeanList:
-        type: "array"
-        example:
-        - 0
-        items:
-          type: "number"
-          format: "double"
-      rbStddevList:
+      rb_beta:
         type: "array"
         example:
         - 1
         items:
           type: "number"
           format: "double"
-      rbLamList:
+      rb_mean:
+        type: "array"
+        example:
+        - 0
+        items:
+          type: "number"
+          format: "double"
+      rb_stddev:
+        type: "array"
+        example:
+        - 1
+        items:
+          type: "number"
+          format: "double"
+      rb_lam:
         type: "array"
         example:
         - 0.5
         items:
           type: "number"
           format: "double"
-      rbMinvalList:
+      rb_minval:
         type: "array"
         example:
         - 0
         items:
           type: "number"
           format: "double"
-      rbMaxvalList:
+      rb_maxval:
         type: "array"
         example:
         - 1
         items:
           type: "number"
           format: "double"
-      rbSeedList:
+      rb_seed:
         type: "array"
         example:
-        - 0
+        - -1
         items:
           type: "integer"
           format: "int32"
-      sessionSaverPath:
+      session_saver_path:
         type: "string"
         example: "./save/"
-      loadPrevSession:
+      load_prev_session:
         type: "boolean"
         example: false
-  CurrentTrainImages:
+      session_save_duration:
+        type: "array"
+        example:
+        - 5
+        items:
+          type: "integer"
+          format: "int32"
+      num_test_pictures:
+        type: "array"
+        example:
+        - 100
+        items:
+          type: "integer"
+          format: "int32"
+  ProcessedImageData:
     type: "object"
     properties:
       inputLayer:
@@ -1016,7 +896,7 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Image"
-  CurrentTrainStatus:
+  TrainPerformance:
     type: "object"
     properties:
       cost:

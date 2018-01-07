@@ -1,5 +1,5 @@
 import connexion
-from swagger_server.models.parameter_lists import ParameterLists
+from swagger_server.models.parameter_list import ParameterList
 from swagger_server.models.train_status import TrainStatus
 from datetime import date, datetime
 from typing import List, Dict
@@ -33,10 +33,9 @@ def pass_ann_parameter_lists(inputParameterLists):
     :rtype: None
     """
     if connexion.request.is_json:
-        inputParameterLists = ParameterLists.from_dict(connexion.request.get_json())
+        inputParameterLists = ParameterList.from_dict(connexion.request.get_json())
 
-
-        # generate parameter set:
+	# generate parameter set:
         parameter_set = {}
 
         # transfer all list parameters:
@@ -48,5 +47,4 @@ def pass_ann_parameter_lists(inputParameterLists):
                     parameter_set[key[1:]] = inputParameterLists.__dict__[key]
 
         Storage.set_parameter_list(parameter_set)
-
     return 'do some magic!'

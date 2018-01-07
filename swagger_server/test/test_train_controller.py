@@ -2,8 +2,8 @@
 
 from __future__ import absolute_import
 
-from swagger_server.models.current_train_images import CurrentTrainImages
-from swagger_server.models.current_train_status import CurrentTrainStatus
+from swagger_server.models.processed_image_data import ProcessedImageData
+from swagger_server.models.train_performance import TrainPerformance
 from swagger_server.models.train_status import TrainStatus
 from . import BaseTestCase
 from six import BytesIO
@@ -20,30 +20,32 @@ class TestTrainController(BaseTestCase):
         starts, pauses and stops the training
         """
         trainStatus = TrainStatus()
-        response = self.client.open('/v2/train/control',
+        response = self.client.open('/v2/train/controlTraining',
                                     method='PUT',
                                     data=json.dumps(trainStatus),
                                     content_type='application/json')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
-    def test_get_current_ann_images(self):
+    def test_get_processed_image_data(self):
         """
-        Test case for get_current_ann_images
+        Test case for get_processed_image_data
 
         returns a subset of the current train images and the corresponding latent representation and output
         """
-        response = self.client.open('/v2/train/currentANNImages/{setSize}'.format(setSize=56),
+        query_string = [('setSize', 56)]
+        response = self.client.open('/v2/train/getProcessedImageData',
                                     method='GET',
-                                    content_type='application/json')
+                                    content_type='application/json',
+                                    query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
-    def test_get_current_train_status(self):
+    def test_get_train_performance(self):
         """
-        Test case for get_current_train_status
+        Test case for get_train_performance
 
         returns the next batch of scalar train variables
         """
-        response = self.client.open('/v2/train/currentTrainStatus',
+        response = self.client.open('/v2/train/getTrainPerformance',
                                     method='GET',
                                     content_type='application/json')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))

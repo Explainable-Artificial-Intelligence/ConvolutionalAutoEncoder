@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-from swagger_server.models.parameter_lists import ParameterLists
+from swagger_server.models.parameter_list import ParameterList
 from swagger_server.models.train_status import TrainStatus
 from . import BaseTestCase
 from six import BytesIO
@@ -19,7 +19,7 @@ class TestTuneController(BaseTestCase):
         starts, pauses and stops the tuning
         """
         trainStatus = TrainStatus()
-        response = self.client.open('/v2/tune/control',
+        response = self.client.open('/v2/tune/controlTuning',
                                     method='PUT',
                                     data=json.dumps(trainStatus),
                                     content_type='application/json')
@@ -31,8 +31,8 @@ class TestTuneController(BaseTestCase):
 
         passes all learning and ANN parameters to the server
         """
-        inputParameterLists = ParameterLists()
-        response = self.client.open('/v2/tune',
+        inputParameterLists = ParameterList()
+        response = self.client.open('/v2/tune/buildGridSearchANN',
                                     method='POST',
                                     data=json.dumps(inputParameterLists),
                                     content_type='application/json')

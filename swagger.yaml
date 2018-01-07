@@ -132,7 +132,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: batch_bize
+        - name: batch_size
           in: query
           description: defines the number of return images
           required: false
@@ -180,7 +180,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: batch_bize
+        - name: batch_size
           in: query
           description: defines the number of return images
           required: false
@@ -364,6 +364,11 @@ paths:
         - name: algorithm
           in: query
           description: determines the clutering algorithm
+          required: false
+          type: string
+        - name: dimension_reduction
+          in: query
+          description: determines the algorithm for dim reduction
           required: false
           type: string
         - name: cluster_parameters
@@ -571,7 +576,7 @@ definitions:
             type: integer
             format: int32
         example:
-          - - undefined
+          - - -1
             - 28
             - 28
             - 1
@@ -705,7 +710,7 @@ definitions:
           type: boolean
         example:
           - false
-      opimizer:
+      optimizer:
         type: array
         items:
           type: string
@@ -737,7 +742,7 @@ definitions:
           type: number
           format: double
         example:
-          - undefined
+          - 1
       rw_mean:
         type: array
         items:
@@ -779,7 +784,7 @@ definitions:
           type: integer
           format: int32
         example:
-          - undefined
+          - -1
       random_function_for_biases:
         type: array
         items:
@@ -799,7 +804,7 @@ definitions:
           type: number
           format: double
         example:
-          - undefined
+          - 1
       rb_mean:
         type: array
         items:
@@ -841,7 +846,7 @@ definitions:
           type: integer
           format: int32
         example:
-          - undefined
+          - -1
       session_saver_path:
         type: string
         example: ./save/

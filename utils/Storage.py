@@ -52,32 +52,29 @@ class Storage(object):
         return cls.cae_thread
 
     @classmethod
-    def get_current_batch_index(cls, dataset_name, dataset_type):
-        if dataset_type == "input":
-            if not dataset_name in cls.input_batch_indices.keys():
-                cls.input_batch_indices[dataset_name] = 0
-            return cls.input_batch_indices[dataset_name]
-        if dataset_type == "output":
+    def get_current_batch_index(cls, dataset_name, output):
+        if output:
             if not dataset_name in cls.output_batch_indices.keys():
                 cls.output_batch_indices[dataset_name] = 0
             return cls.output_batch_indices[dataset_name]
-
+        else:
+            if not dataset_name in cls.input_batch_indices.keys():
+                cls.input_batch_indices[dataset_name] = 0
+            return cls.input_batch_indices[dataset_name]
 
     @classmethod
-    def get_dataset_length(cls, dataset_name, dataset_type):
-        if dataset_type == "input":
-            return len(cls.input_data[dataset_name])
-        if dataset_type == "output":
+    def get_dataset_length(cls, dataset_name, output):
+        if output:
             return len(cls.output_data[dataset_name])
-
+        else:
+            return len(cls.input_data[dataset_name])
 
     @classmethod
-    def update_batch_index(cls, dataset_name, dataset_type, next_batch_index):
-        if dataset_type == "input":
-            cls.input_batch_indices[dataset_name] = next_batch_index
-        if dataset_type == "output":
+    def update_batch_index(cls, dataset_name, output, next_batch_index):
+        if output:
             cls.output_batch_indices[dataset_name] = next_batch_index
-
+        else:
+            cls.input_batch_indices[dataset_name] = next_batch_index
 
     @classmethod
     def output_images_computed(cls, datasetname):
@@ -103,8 +100,3 @@ class Storage(object):
     @classmethod
     def set_parameter_list(cls, parameter_set):
         cls.parameter_set = parameter_set
-
-
-
-
-

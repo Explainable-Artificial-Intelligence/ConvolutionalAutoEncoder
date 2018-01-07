@@ -1,7 +1,6 @@
 import connexion
-
+from swagger_server.models.parameter_list import ParameterList
 from ConvolutionalAutoEncoder import SklearnCAE
-from swagger_server.models.parameter_set import ParameterSet
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
@@ -10,7 +9,7 @@ from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
 
 
-def pass_ann_parameters(inputParameters):
+def build_ann(inputParameters):
     """
     passes all learning and ANN parameters to the server
     Includes learning parameters and ANN topology
@@ -20,26 +19,30 @@ def pass_ann_parameters(inputParameters):
     :rtype: None
     """
     if connexion.request.is_json:
-        inputParameters = ParameterSet.from_dict(connexion.request.get_json())
-        
+        inputParameters = ParameterList.from_dict(connexion.request.get_json())
+
+        # generate single parameter set
+        parameter_set = {}
+        for key in inputParameters.__dict__.keys():
+            if key.startswith('_'):
+
+                if type(inputParameters.__dict__[key]) is list:
+                    parameter_set[key[1:]] = inputParameters.__dict__[key][0]
+                else:
+                    parameter_set[key[1:]] = inputParameters.__dict__[key]
+
+        # set default values to None for input shape and seeds:
+        if parameter_set['input_shape'][0] == -1:
+            parameter_set['input_shape'][0] = None
+        if parameter_set['rw_seed'] == -1:
+            parameter_set['rw_seed'] = None
+        if parameter_set['rb_seed'] == -1:
+            parameter_set['rb_seed'] = None
+
         # create convolutional auto encoder:
-        input_shape = [None, inputParameters.input_shape[1], inputParameters.input_shape[2],
-                       inputParameters.input_shape[3]]
-        cae = SklearnCAE(input_shape, inputParameters.number_of_stacks, inputParameters.filter_sizes,
-                         inputParameters.mirror_weights, inputParameters.activation_function,
-                         inputParameters.batch_size, inputParameters.n_epochs, inputParameters.use_tensorboard,
-                         inputParameters.verbose, inputParameters.learning_rate_function,
-                         inputParameters.lr_initial_learning_rate, inputParameters.lr_decay_steps,
-                         inputParameters.lr_decay_rate, inputParameters.lr_staircase, inputParameters.lr_boundaries,
-                         inputParameters.lr_values, inputParameters.lr_end_learning_rate, inputParameters.lr_power,
-                         inputParameters.lr_cycle, inputParameters.opimizer, inputParameters.momentum,
-                         inputParameters.random_function_for_weights, inputParameters.rw_alpha, inputParameters.rw_beta,
-                         inputParameters.rw_mean, inputParameters.rw_stddev, inputParameters.rw_lam,
-                         inputParameters.rw_minval, inputParameters.rw_maxval, inputParameters.rw_seed,
-                         inputParameters.random_function_for_biases, inputParameters.rb_alpha, inputParameters.rb_beta,
-                         inputParameters.rb_mean, inputParameters.rb_stddev, inputParameters.rb_lam,
-                         inputParameters.rb_minval, inputParameters.rb_maxval, inputParameters.rb_seed,
-                         inputParameters.session_saver_path, inputParameters.load_prev_session)
+
+        cae = SklearnCAE(**parameter_set)
+
         # save CAE
         Storage.set_cae(cae)
 
