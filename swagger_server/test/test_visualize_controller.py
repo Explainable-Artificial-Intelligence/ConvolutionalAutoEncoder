@@ -35,6 +35,7 @@ class TestVisualizeController(BaseTestCase):
         """
         cluster_parameters = ClusterParameters()
         query_string = [('algorithm', 'algorithm_example'),
+                        ('dataset_name', 'train_data'),
                         ('dimension_reduction', 'dimension_reduction_example'),
                         ('layer', 56)]
         response = self.client.open('/v2/visualize/getHiddenLayerLatentClustering',

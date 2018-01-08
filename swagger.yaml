@@ -42,23 +42,27 @@ paths:
           required: true
           type: string
           format: string
+          default: data/mnist_train_data.npy
         - name: datasetname
           in: query
           description: name for dataset on the server
           required: false
           type: string
           format: string
+          default: train_data
         - name: read_labels
           in: query
           description: true to read labels
           required: false
           type: boolean
+          default: false
         - name: data_type
           in: query
           description: determines the data format of the input file
           required: false
           type: string
           format: string
+          default: auto
       responses:
         '200':
           description: file successful loaded
@@ -84,18 +88,21 @@ paths:
           required: true
           type: integer
           format: int32
+          default: 0
         - name: end_idx
           in: query
           description: name for dataset on the server
           required: true
           type: integer
           format: int32
+          default: 10
         - name: datasetname
           in: query
           description: name for dataset on the server
           required: false
           type: string
           format: string
+          default: train_data
         - name: sort_by
           in: query
           description: defines the sorting of the input images
@@ -111,6 +118,7 @@ paths:
           description: if true returns AE output Images instead of input Images
           required: false
           type: boolean
+          default: false
       responses:
         '200':
           description: Images successfully returned
@@ -138,12 +146,14 @@ paths:
           required: false
           type: integer
           format: int32
+          default: 100
         - name: datasetname
           in: query
           description: name for dataset on the server
           required: false
           type: string
           format: string
+          default: train_data
         - name: sort_by
           in: query
           description: defines the sorting of the input images
@@ -159,6 +169,7 @@ paths:
           description: if true returns AE output Images instead of input Images
           required: false
           type: boolean
+          default: false
       responses:
         '200':
           description: Images successfully returned
@@ -186,12 +197,14 @@ paths:
           required: false
           type: integer
           format: int32
+          default: 100
         - name: datasetname
           in: query
           description: name for dataset on the server
           required: false
           type: string
           format: string
+          default: train_data
         - name: sort_by
           in: query
           description: defines the sorting of the input images
@@ -207,6 +220,7 @@ paths:
           description: if true returns AE output Images instead of input Images
           required: false
           type: boolean
+          default: false
       responses:
         '200':
           description: Images successfully returned
@@ -231,7 +245,7 @@ paths:
         - name: id
           in: query
           description: defines the id of the images
-          required: false
+          required: true
           type: integer
           format: int32
         - name: datasetname
@@ -240,6 +254,7 @@ paths:
           required: false
           type: string
           format: string
+          default: train_data
         - name: sort_by
           in: query
           description: defines the sorting of the input images
@@ -255,6 +270,7 @@ paths:
           description: if true returns AE output Images instead of input Images
           required: false
           type: boolean
+          default: false
       responses:
         '200':
           description: Images successfully returned
@@ -366,6 +382,12 @@ paths:
           description: determines the clutering algorithm
           required: false
           type: string
+        - name: dataset_name
+          in: query
+          description: determines the dataset which should be clustered
+          required: false
+          type: string
+          default: train_data
         - name: dimension_reduction
           in: query
           description: determines the algorithm for dim reduction
@@ -556,7 +578,7 @@ definitions:
       - pause
       - stop
       - resume
-    example: \"start\"
+    example: '"start"'
   Image:
     type: object
     properties:
@@ -589,9 +611,9 @@ definitions:
             format: int32
         example:
           - - 12
-            - 8
-            - 8
-            - 4
+            - 10
+            - 10
+            - 6
       filter_sizes:
         type: array
         items:
@@ -600,10 +622,10 @@ definitions:
             type: integer
             format: int32
         example:
-          - - 5
-            - 5
+          - - 3
             - 3
-            - 3
+            - 2
+            - 2
       mirror_weights:
         type: array
         items:

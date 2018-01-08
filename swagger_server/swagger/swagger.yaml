@@ -42,23 +42,27 @@ paths:
         in: "query"
         required: true
         type: "string"
+        default: "data/mnist_train_data.npy"
         format: "string"
       - name: "datasetname"
         in: "query"
         description: "name for dataset on the server"
         required: false
         type: "string"
+        default: "train_data"
         format: "string"
       - name: "read_labels"
         in: "query"
         description: "true to read labels"
         required: false
         type: "boolean"
+        default: false
       - name: "data_type"
         in: "query"
         description: "determines the data format of the input file"
         required: false
         type: "string"
+        default: "auto"
         format: "string"
       responses:
         200:
@@ -85,18 +89,21 @@ paths:
         description: "name for dataset on the server"
         required: true
         type: "integer"
+        default: 0
         format: "int32"
       - name: "end_idx"
         in: "query"
         description: "name for dataset on the server"
         required: true
         type: "integer"
+        default: 10
         format: "int32"
       - name: "datasetname"
         in: "query"
         description: "name for dataset on the server"
         required: false
         type: "string"
+        default: "train_data"
         format: "string"
       - name: "sort_by"
         in: "query"
@@ -113,6 +120,7 @@ paths:
         description: "if true returns AE output Images instead of input Images"
         required: false
         type: "boolean"
+        default: false
       responses:
         200:
           description: "Images successfully returned"
@@ -140,12 +148,14 @@ paths:
         description: "defines the number of return images"
         required: false
         type: "integer"
+        default: 100
         format: "int32"
       - name: "datasetname"
         in: "query"
         description: "name for dataset on the server"
         required: false
         type: "string"
+        default: "train_data"
         format: "string"
       - name: "sort_by"
         in: "query"
@@ -162,6 +172,7 @@ paths:
         description: "if true returns AE output Images instead of input Images"
         required: false
         type: "boolean"
+        default: false
       responses:
         200:
           description: "Images successfully returned"
@@ -189,12 +200,14 @@ paths:
         description: "defines the number of return images"
         required: false
         type: "integer"
+        default: 100
         format: "int32"
       - name: "datasetname"
         in: "query"
         description: "name for dataset on the server"
         required: false
         type: "string"
+        default: "train_data"
         format: "string"
       - name: "sort_by"
         in: "query"
@@ -211,6 +224,7 @@ paths:
         description: "if true returns AE output Images instead of input Images"
         required: false
         type: "boolean"
+        default: false
       responses:
         200:
           description: "Images successfully returned"
@@ -236,7 +250,7 @@ paths:
       - name: "id"
         in: "query"
         description: "defines the id of the images"
-        required: false
+        required: true
         type: "integer"
         format: "int32"
       - name: "datasetname"
@@ -244,6 +258,7 @@ paths:
         description: "name for dataset on the server"
         required: false
         type: "string"
+        default: "train_data"
         format: "string"
       - name: "sort_by"
         in: "query"
@@ -260,6 +275,7 @@ paths:
         description: "if true returns AE output Images instead of input Images"
         required: false
         type: "boolean"
+        default: false
       responses:
         200:
           description: "Images successfully returned"
@@ -376,6 +392,12 @@ paths:
         description: "determines the clutering algorithm"
         required: false
         type: "string"
+      - name: "dataset_name"
+        in: "query"
+        description: "determines the dataset which should be clustered"
+        required: false
+        type: "string"
+        default: "train_data"
       - name: "dimension_reduction"
         in: "query"
         description: "determines the algorithm for dim reduction"
@@ -565,7 +587,7 @@ definitions:
         format: "int32"
   TrainStatus:
     type: "string"
-    example: "\\\"start\\\""
+    example: "\"start\""
     enum:
     - "start"
     - "pause"
@@ -598,9 +620,9 @@ definitions:
         type: "array"
         example:
         - - 12
-          - 8
-          - 8
-          - 4
+          - 10
+          - 10
+          - 6
         items:
           type: "array"
           items:
@@ -609,10 +631,10 @@ definitions:
       filter_sizes:
         type: "array"
         example:
-        - - 5
-          - 5
+        - - 3
           - 3
-          - 3
+          - 2
+          - 2
         items:
           type: "array"
           items:
@@ -724,7 +746,7 @@ definitions:
         - false
         items:
           type: "boolean"
-      opimizer:
+      optimizer:
         type: "array"
         example:
         - "AdamOptimizer"

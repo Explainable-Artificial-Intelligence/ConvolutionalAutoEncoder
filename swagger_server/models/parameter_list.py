@@ -54,7 +54,7 @@ class ParameterList(Model):
         :type lr_power: List[float]
         :param lr_cycle: The lr_cycle of this ParameterList.
         :type lr_cycle: List[bool]
-        :param optimizer: The opimizer of this ParameterList.
+        :param optimizer: The optimizer of this ParameterList.
         :type optimizer: List[str]
         :param momentum: The momentum of this ParameterList.
         :type momentum: List[float]
@@ -651,21 +651,21 @@ class ParameterList(Model):
         self._lr_cycle = lr_cycle
 
     @property
-    def opimizer(self) -> List[str]:
+    def optimizer(self) -> List[str]:
         """
-        Gets the opimizer of this ParameterList.
+        Gets the optimizer of this ParameterList.
 
-        :return: The opimizer of this ParameterList.
+        :return: The optimizer of this ParameterList.
         :rtype: List[str]
         """
-        return self._opimizer
+        return self._optimizer
 
-    @opimizer.setter
+    @optimizer.setter
     def optimizer(self, optimizer: List[str]):
         """
         Sets the optimizer of this ParameterList.
 
-        :param optimizer: The opimizer of this ParameterList.
+        :param optimizer: The optimizer of this ParameterList.
         :type optimizer: List[str]
         """
 

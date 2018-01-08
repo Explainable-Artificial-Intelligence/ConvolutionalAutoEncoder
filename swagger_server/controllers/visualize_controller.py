@@ -31,12 +31,14 @@ def generate_image_from_single_point(point_2D):
     return 'do some magic!'
 
 
-def get_hidden_layer_latent_clustering(algorithm=None, dimension_reduction=None, cluster_parameters=None, layer=None):
+def get_hidden_layer_latent_clustering(algorithm=None, dataset_name=None, dimension_reduction=None, cluster_parameters=None, layer=None):
     """
     returns the clustering of the latent representation of a hidden layer
     
     :param algorithm: determines the clutering algorithm
     :type algorithm: str
+    :param dataset_name: determines the dataset which should be clustered
+    :type dataset_name: str
     :param dimension_reduction: determines the algorithm for dim reduction
     :type dimension_reduction: str
     :param cluster_parameters: determines the clutering parameters
@@ -67,8 +69,8 @@ def get_hidden_layer_latent_clustering(algorithm=None, dimension_reduction=None,
         labels = kmeans_clustering.predict(flat_latent_representation)
 
         # perform dimension reduction
-        latent_representation_2D = perform_dimension_reduction(flat_latent_representation, algorithm=dim_reduction,
-                                                               n_dimensions=2)
+        latent_representation_2D = perform_dimension_reduction(flat_latent_representation,
+                                                               algorithm=dimension_reduction, n_dimensions=2)
 
         # create Clustering object
         clustering = Clustering()
@@ -84,7 +86,7 @@ def get_hidden_layer_latent_clustering(algorithm=None, dimension_reduction=None,
         # generate cluster points:
         for i in range(latent_representation_2D.shape[0]):
             point = Point2D(x=float(latent_representation_2D[i, 0]), y=float(latent_representation_2D[i, 1]),
-                                 cluster=int(labels[i]))
+                            cluster=int(labels[i]))
             clustering.points.append(point)
         return clustering, 200
 
