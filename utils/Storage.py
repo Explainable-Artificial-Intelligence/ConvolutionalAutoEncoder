@@ -15,6 +15,8 @@ class Storage(object):
     cae_thread = threading.Thread()
     train_step = 0
 
+    tuning_ANNs = []
+
     @classmethod
     def set_input_data(cls, train_data, dataset_name="train_data"):
         cls.input_data[dataset_name] = train_data
