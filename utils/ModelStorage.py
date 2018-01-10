@@ -17,6 +17,7 @@ class ModelStorage(object):
     ann = object()
     cae_thread = threading.Thread()
     train_step = 0
+    final_score = 0
 
     def __init__(self, parameter_set, id):
         self.parameter_set = parameter_set

@@ -1,3 +1,4 @@
+import threading
 import uuid
 
 import connexion
@@ -12,6 +13,7 @@ from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
 
+from utils.ANNHelperFunctions import TuningQueue
 from utils.ModelStorage import ModelStorage
 from utils.Storage import Storage
 from ..util import deserialize_date, deserialize_datetime
@@ -28,6 +30,24 @@ def control_tuning(trainStatus):
     """
     if connexion.request.is_json:
         trainStatus = TrainStatus.from_dict(connexion.request.get_json())
+
+        if trainStatus == "start":
+            # get tuning queue and train data
+            tuning_queue = TuningQueue()
+            train_data = Storage.get_input_data()
+            # define background thread:
+            tuning_thread = threading.Thread(target=tuning_queue.run_tuning, args=(train_data,))
+            # store object in global storage class
+            Storage.tuning_queue = tuning_queue
+            Storage.tuning_thread = tuning_thread
+            # start training:
+            tuning_thread.start()
+            return "Training started", 200
+        if trainStatus == "stop":
+            # get get tuning queue and abort background thread:
+            Storage.tuning_queue.stop_tuning()
+
+            return "Training aborted", 200
     return 'do some magic!'
 
 
@@ -35,6 +55,7 @@ def pass_ann_parameter_lists(inputParameterLists):
     """
     passes all learning and ANN parameters to the server
     Includes learning parameters and ANN topology as lists
+
     :param inputParameterLists: object with all tunable parameter lists
     :type inputParameterLists: dict | bytes
 

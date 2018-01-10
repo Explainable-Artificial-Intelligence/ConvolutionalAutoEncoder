@@ -688,10 +688,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # reopen session (if model is saved to disk):
             self._load_session()
             self._print_training_warning()
-            prediction = self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
+            cost = self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
             # close session (if possible):
             self._close_session()
-            return prediction
+            return cost
         else:
             raise RuntimeError("You must train transformer before scoring data!")
 

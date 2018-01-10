@@ -16,6 +16,8 @@ class Storage(object):
     train_step = 0
 
     tuning_ANNs = []
+    tuning_thread = threading.Thread()
+    tuning_queue = object()
 
     @classmethod
     def set_input_data(cls, train_data, dataset_name="train_data"):
