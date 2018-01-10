@@ -6,8 +6,11 @@ import connexion
 
 from ConvolutionalAutoEncoder import SklearnCAE
 from swagger_server.models.parameter_list import ParameterList
+from swagger_server.models.processed_image_data import ProcessedImageData
+from swagger_server.models.train_performance import TrainPerformance
 from swagger_server.models.train_status import TrainStatus
-from utils.ANNHelperFunctions import TuningQueue
+from utils.ANNHelperFunctions import TuningQueue, generate_parameter_combination_list, \
+    generate_status_image_object_from_status_images
 from utils.ModelStorage import ModelStorage
 from utils.Storage import Storage
 
@@ -39,9 +42,47 @@ def control_tuning(trainStatus):
         if trainStatus == "stop":
             # get get tuning queue and abort background thread:
             Storage.tuning_queue.stop_tuning()
-
             return "Training aborted", 200
     return 'do some magic!'
+
+
+def get_processed_image_data_of_current_tuning(setSize):
+    """
+    returns a subset of the current train images and the corresponding latent representation and output
+    
+    :param setSize: size of the image subset
+    :type setSize: int
+
+    :rtype: ProcessedImageData
+    """
+    # get status images
+    status_images = Storage.tuning_queue.get_processed_image_data(setSize)
+
+    # generate ProcessedImageData object from status images
+    processed_image_data = generate_status_image_object_from_status_images(status_images)
+
+    # return image subset
+    return processed_image_data, 200
+
+
+def get_train_performance_of_current_tuning():
+    """
+    returns the next batch of scalar train variables
+    as list of dicts
+
+    :rtype: TrainPerformance
+    """
+
+    # get current training status:
+    current_train_performance = Storage.tuning_queue.get_training_performance()
+
+    # build up response object and return it
+    train_performance_object = TrainPerformance()
+    train_performance_object.cost = current_train_performance["train_cost"]
+    train_performance_object.current_learning_rate = current_train_performance["learning_rate"]
+    train_performance_object.model_id = Storage.tuning_queue.current_running_model.id
+
+    return train_performance_object, 200
 
 
 def pass_ann_parameter_lists(inputParameterLists):
@@ -84,6 +125,3 @@ def pass_ann_parameter_lists(inputParameterLists):
         anns = Storage.tuning_ANNs
 
     return 'CAEs created', 200
-
-
-

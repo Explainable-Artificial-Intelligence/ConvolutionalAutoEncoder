@@ -67,13 +67,13 @@ class TuningQueue(object):
         cae = self.current_running_model.ann
 
         # get previous training step:
-        prev_step = self.current_running_model.trainstep
+        prev_step = self.current_running_model.train_step
 
         # get current training status:
         current_train_performance = cae.get_train_status(start_idx=prev_step)
 
         # update previous training step:
-        self.current_running_model.trainstep += len(current_train_performance["train_cost"])
+        self.current_running_model.train_step += len(current_train_performance["train_cost"])
 
         return current_train_performance
 
@@ -95,14 +95,8 @@ def generate_parameter_combination_list(input_parameter_list: object):
         if input_shape[0] == -1:
             input_shape[0] = None
     # set default seed to None if -1 is given
-    for seed_init in parameter_list['rw_seed']:
-        # replace first dim (-1) with None (variable size):
-        if seed_init == -1:
-            seed_init = None
-    for seed_init in parameter_list['rb_seed']:
-        # replace first dim (-1) with None (variable size):
-        if seed_init == -1:
-            seed_init = None
+    parameter_list['rw_seed'] = [None if seed == -1 else seed for seed in parameter_list['rw_seed']]
+    parameter_list['rb_seed'] = [None if seed == -1 else seed for seed in parameter_list['rb_seed']]
 
     # split parameter list in static and variable parameters:
     static_parameter_list = {}

@@ -491,6 +491,49 @@ paths:
         200:
           description: "Train status updated"
       x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/getProcessedImageDataOfCurrentTuning:
+    get:
+      tags:
+      - "tune"
+      summary: "returns a subset of the current train images and the corresponding\
+        \ latent representation and output"
+      description: ""
+      operationId: "get_processed_image_data_of_current_tuning"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "setSize"
+        in: "query"
+        description: "size of the image subset"
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        200:
+          description: "Train images updated"
+          schema:
+            $ref: "#/definitions/ProcessedImageData"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/getTrainPerformanceOfCurrentTuning:
+    get:
+      tags:
+      - "tune"
+      summary: "returns the next batch of scalar train variables"
+      description: "as list of dicts"
+      operationId: "get_train_performance_of_current_tuning"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Train status recieved"
+          schema:
+            $ref: "#/definitions/TrainPerformance"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
 definitions:
   ImageData:
     type: "object"
@@ -540,7 +583,7 @@ definitions:
       random_state:
         type: "integer"
         format: "int32"
-        example: "undefined"
+        example: -1
       copy_x:
         type: "boolean"
         example: true
@@ -921,6 +964,8 @@ definitions:
   TrainPerformance:
     type: "object"
     properties:
+      model_id:
+        type: "string"
       cost:
         type: "array"
         items:

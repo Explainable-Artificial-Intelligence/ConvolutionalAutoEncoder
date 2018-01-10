@@ -477,6 +477,47 @@ paths:
       responses:
         '200':
           description: Train status updated
+  /tune/getProcessedImageDataOfCurrentTuning:
+    get:
+      tags:
+        - tune
+      summary: >-
+        returns a subset of the current train images and the corresponding
+        latent representation and output
+      description: ''
+      operationId: getProcessedImageDataOfCurrentTuning
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: setSize
+          in: query
+          description: size of the image subset
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Train images updated
+          schema:
+            $ref: '#/definitions/ProcessedImageData'
+  /tune/getTrainPerformanceOfCurrentTuning:
+    get:
+      tags:
+        - tune
+      summary: returns the next batch of scalar train variables
+      description: as list of dicts
+      operationId: getTrainPerformanceOfCurrentTuning
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Train status recieved
+          schema:
+            $ref: '#/definitions/TrainPerformance'
 definitions:
   ImageData:
     type: object
@@ -526,7 +567,7 @@ definitions:
       random_state:
         type: integer
         format: int32
-        example: undefined
+        example: -1
       copy_x:
         type: boolean
         example: true
@@ -907,6 +948,8 @@ definitions:
   TrainPerformance:
     type: object
     properties:
+      model_id:
+        type: string
       cost:
         type: array
         items:

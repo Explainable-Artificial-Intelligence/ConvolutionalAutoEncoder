@@ -2,11 +2,11 @@
 
 from __future__ import absolute_import
 
+from flask import json
+
 from swagger_server.models.parameter_list import ParameterList
 from swagger_server.models.train_status import TrainStatus
 from . import BaseTestCase
-from six import BytesIO
-from flask import json
 
 
 class TestTuneController(BaseTestCase):
@@ -22,6 +22,30 @@ class TestTuneController(BaseTestCase):
         response = self.client.open('/v2/tune/controlTuning',
                                     method='PUT',
                                     data=json.dumps(trainStatus),
+                                    content_type='application/json')
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_get_processed_image_data_of_current_tuning(self):
+        """
+        Test case for get_processed_image_data_of_current_tuning
+
+        returns a subset of the current train images and the corresponding latent representation and output
+        """
+        query_string = [('setSize', 56)]
+        response = self.client.open('/v2/tune/getProcessedImageDataOfCurrentTuning',
+                                    method='GET',
+                                    content_type='application/json',
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_get_train_performance_of_current_tuning(self):
+        """
+        Test case for get_train_performance_of_current_tuning
+
+        returns the next batch of scalar train variables
+        """
+        response = self.client.open('/v2/tune/getTrainPerformanceOfCurrentTuning',
+                                    method='GET',
                                     content_type='application/json')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 

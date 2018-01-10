@@ -4,6 +4,7 @@ import connexion
 
 from swagger_server.models.processed_image_data import ProcessedImageData
 from swagger_server.models.train_performance import TrainPerformance
+from utils.ANNHelperFunctions import generate_status_image_object_from_status_images
 from utils.Storage import Storage
 
 
