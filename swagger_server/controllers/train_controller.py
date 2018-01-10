@@ -1,18 +1,10 @@
 import threading
-from utils.DimensionReduction import perform_dimension_reduction
-
-from utils.ImageProcessing import convert_image_array_to_byte_string
-from utils.Storage import Storage
 
 import connexion
-from swagger_server.models import Image
+
 from swagger_server.models.processed_image_data import ProcessedImageData
 from swagger_server.models.train_performance import TrainPerformance
-from swagger_server.models.train_status import TrainStatus
-from datetime import date, datetime
-from typing import List, Dict
-from six import iteritems
-from ..util import deserialize_date, deserialize_datetime
+from utils.Storage import Storage
 
 
 def control_training(trainStatus):
@@ -53,51 +45,13 @@ def get_processed_image_data(setSize):
 
     :rtype: ProcessedImageData
     """
-    # create response object
-    processed_image_data = ProcessedImageData([])
-    processed_image_data.input_layer = []
-    processed_image_data.output_layer = []
-    processed_image_data.latent_layer = []
 
     # get status images
     cae = Storage.get_cae()
     status_images = cae.get_current_status_images(setSize)
 
-    # special case: training is still in first epoch (no pictures available)
-    if len(status_images["input_images"].shape) < 4:
-        # return an empty response object
-        return processed_image_data, 200
-
-    # get num of channels
-    channels = status_images["input_images"].shape[3]
-
-    print(status_images["latent_representation"].shape)
-
-    # generate CurrentTrainImages object
-    for i in range(len(status_images["indices"])):
-        # generate input image
-        input_img = Image()
-        input_img.bytestring = convert_image_array_to_byte_string(status_images["input_images"][i], channels=channels,
-                                                                  normalize=True)
-        input_img.id = int(status_images["indices"][i])
-        processed_image_data.input_layer.append(input_img)
-
-        output_img = Image()
-        output_img.bytestring = convert_image_array_to_byte_string(status_images["output_images"][i], channels=channels,
-                                                                   normalize=True)
-        output_img.id = int(status_images["indices"][i])
-        processed_image_data.output_layer.append(output_img)
-
-        latent_img = Image()
-        # TODO: find better way to display latent representation as image
-        # perform dim reduction to create image
-        shape = status_images["latent_representation"][i].shape
-        new_shape = [shape[0], shape[1]*shape[2]]
-        latent_img.bytestring = convert_image_array_to_byte_string(
-            perform_dimension_reduction(status_images["latent_representation"][i].reshape(new_shape)), channels=1,
-            normalize=True)
-        latent_img.id = int(status_images["indices"][i])
-        processed_image_data.latent_layer.append(latent_img)
+    # generate ProcessedImageData object from status images
+    processed_image_data = generate_status_image_object_from_status_images(status_images)
 
     # return image subset
     return processed_image_data, 200
