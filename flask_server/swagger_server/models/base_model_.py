@@ -2,7 +2,8 @@ from pprint import pformat
 from typing import TypeVar, Type
 
 from six import iteritems
-from swagger_server.util import deserialize_model
+
+from flask_server.swagger_server.util import deserialize_model
 
 T = TypeVar('T')
 

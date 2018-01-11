@@ -4,9 +4,8 @@ from __future__ import absolute_import
 
 from typing import List
 
-from swagger_server.models.point2_d import Point2D
-from swagger_server.util import deserialize_model
-
+from flask_server.swagger_server.models.point2_d import Point2D
+from flask_server.swagger_server.util import deserialize_model
 from .base_model_ import Model
 
 

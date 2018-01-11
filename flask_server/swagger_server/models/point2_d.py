@@ -2,8 +2,7 @@
 
 from __future__ import absolute_import
 
-from swagger_server.util import deserialize_model
-
+from flask_server.swagger_server.util import deserialize_model
 from .base_model_ import Model
 
 
