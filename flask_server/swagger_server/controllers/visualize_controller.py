@@ -1,12 +1,12 @@
 import connexion
 import numpy as np
-from swagger_server.models.cluster_parameters import ClusterParameters
-from swagger_server.models.clustering import Clustering
-from swagger_server.models.point2_d import Point2D
 
-from utils.Clustering import perform_kmeans_clustering
-from utils.DimensionReduction import reshape_into_2D_array, perform_dimension_reduction
-from utils.Storage import Storage
+from flask_server.swagger_server.models.cluster_parameters import ClusterParameters
+from flask_server.swagger_server.models.clustering import Clustering
+from flask_server.swagger_server.models.point2_d import Point2D
+from flask_server.utils.Clustering import perform_kmeans_clustering
+from flask_server.utils.DimensionReduction import reshape_into_2D_array, perform_dimension_reduction
+from flask_server.utils.Storage import Storage
 
 
 def generate_image_from_single_point(point_2D):

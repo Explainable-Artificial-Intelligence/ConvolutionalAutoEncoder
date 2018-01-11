@@ -3,10 +3,11 @@ Helper functions to handle the communication between Storage and ANN
 """
 import itertools
 
-from swagger_server.models import ProcessedImageData, Image
-from utils.DimensionReduction import perform_dimension_reduction
-from utils.ImageProcessing import convert_image_array_to_byte_string
-from utils.Storage import Storage
+from flask_server.swagger_server.models.image import Image
+from flask_server.swagger_server.models.processed_image_data import ProcessedImageData
+from flask_server.utils.DimensionReduction import perform_dimension_reduction
+from flask_server.utils.ImageProcessing import convert_image_array_to_byte_string
+from flask_server.utils.Storage import Storage
 
 
 def compute_output_images(datasetname):

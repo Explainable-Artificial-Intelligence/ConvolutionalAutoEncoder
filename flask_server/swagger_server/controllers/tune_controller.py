@@ -3,14 +3,15 @@ import threading
 import uuid
 
 import connexion
-from ConvolutionalAutoEncoder import SklearnCAE
-from swagger_server.models.parameter_list import ParameterList
-from swagger_server.models.train_performance import TrainPerformance
-from swagger_server.models.train_status import TrainStatus
-from utils.ANNHelperFunctions import TuningQueue, generate_parameter_combination_list, \
-    generate_status_image_object_from_status_images
-from utils.ModelStorage import ModelStorage
-from utils.Storage import Storage
+
+from flask_server.ConvolutionalAutoEncoder import SklearnCAE
+from flask_server.swagger_server.models.parameter_list import ParameterList
+from flask_server.swagger_server.models.train_performance import TrainPerformance
+from flask_server.swagger_server.models.train_status import TrainStatus
+from flask_server.utils.ANNHelperFunctions import TuningQueue, generate_status_image_object_from_status_images, \
+    generate_parameter_combination_list
+from flask_server.utils.ModelStorage import ModelStorage
+from flask_server.utils.Storage import Storage
 
 
 def control_tuning(trainStatus):
@@ -101,6 +102,7 @@ def pass_ann_parameter_lists(inputParameterLists):
         # generate model for each combination
         for parameter_combination in all_parameter_combinations:
             # generate model object
+            # TODO: integrate timestamp to uuid
             unique_id = str(uuid.uuid1())
             ann_model = ModelStorage(parameter_combination, unique_id)
 

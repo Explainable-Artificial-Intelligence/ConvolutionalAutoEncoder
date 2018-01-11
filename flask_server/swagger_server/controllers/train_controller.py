@@ -1,9 +1,10 @@
 import threading
 
 import connexion
-from swagger_server.models.train_performance import TrainPerformance
-from utils.ANNHelperFunctions import generate_status_image_object_from_status_images
-from utils.Storage import Storage
+
+from flask_server.swagger_server.models.train_performance import TrainPerformance
+from flask_server.utils.ANNHelperFunctions import generate_status_image_object_from_status_images
+from flask_server.utils.Storage import Storage
 
 
 def control_training(trainStatus):

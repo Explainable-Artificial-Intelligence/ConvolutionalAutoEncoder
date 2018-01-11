@@ -1,7 +1,8 @@
 import connexion
-from ConvolutionalAutoEncoder import SklearnCAE
-from swagger_server.models.parameter_list import ParameterList
-from utils.Storage import Storage
+
+from flask_server.ConvolutionalAutoEncoder import SklearnCAE
+from flask_server.swagger_server.models.parameter_list import ParameterList
+from flask_server.utils.Storage import Storage
 
 
 def build_ann(inputParameters):
