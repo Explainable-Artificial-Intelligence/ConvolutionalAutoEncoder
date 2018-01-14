@@ -1,4 +1,4 @@
-# convolutional_autoencoder
+npm# convolutional_autoencoder
 
 ConvolutionalAutoencoder - JavaScript client for convolutional_autoencoder
 WebUI to build, train and tune a Convolutional Autoencoder
