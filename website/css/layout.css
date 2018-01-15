@@ -10,15 +10,22 @@ li {
 }
 
 input{
-    background-color: #1a1a1a;
+    background-color: #5a5a5a;
     border-color: orange;
+    color: orange;
 }
 
 select{
     background-color: #1a1a1a;
     border-color: orange;
     scrollbar-highlight-color: #2a2a2a;
+    border-radius: 1px;
     color: orange;
+}
+
+section{
+    background-color: #3a3a3a;
+    border-color: orange;
 }
 
 

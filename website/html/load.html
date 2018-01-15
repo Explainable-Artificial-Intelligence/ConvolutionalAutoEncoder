@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Load</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="../../swagger_client/API/Client/Image.js"></script>
+    <script src="../../swagger_client/API/Client/ImageData.js"></script>
+    <script src="../../swagger_client/API/Client/LoadApi.js"></script>
+    <script src="../js/load.js"></script>
+
 
 
 
@@ -25,23 +31,25 @@
 <aside id="sidebar">
     <section id="widget_1">
         Input File: <br>
-        <input id="inputFilePath" type="file" multiple> <br>
+        <input id="inputFilePath" type="file"> <br>
         <br>
         Dataset name:<br>
         <input id="inputDatasetName"><br>
         <br>
         Data type: <br>
-        <select name="dataType" size="1">
-            <option>auto</option>
-            <option>npy (numpy array format)</option>
-            <option>png (Image files)</option>
+        <select id="dataType" size="1">
+            <option value="auto">auto</option>
+            <option value="npy">npy (numpy array format)</option>
+            <option value="png">png (Image files)</option>
         </select><br>
         <br>
         Read Labels: <br>
-        <select name="readLabels" size="1">
+        <select id="readLabels" size="1">
             <option>true</option>
             <option>false</option>
         </select> <br>
+
+        <button id="loadBtn" onclick="loadFile();">Load</button>
 
 
         <br>
