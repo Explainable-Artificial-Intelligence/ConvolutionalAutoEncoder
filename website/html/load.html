@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <title>Load</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script src="../../swagger_client/API/Client/Image.js"></script>
-    <script src="../../swagger_client/API/Client/ImageData.js"></script>
-    <script src="../../swagger_client/API/Client/LoadApi.js"></script>
-    <script src="../js/load.js"></script>
-
 
 
 
@@ -31,10 +25,10 @@
 <aside id="sidebar">
     <section id="widget_1">
         Input File: <br>
-        <input id="inputFilePath" type="file"> <br>
+        <input id="inputFilePath" value="../data/mnist_train_data.npy"> <br>
         <br>
         Dataset name:<br>
-        <input id="inputDatasetName"><br>
+        <input id="inputDatasetName" value="train_data"><br>
         <br>
         Data type: <br>
         <select id="dataType" size="1">
@@ -49,7 +43,9 @@
             <option>false</option>
         </select> <br>
 
-        <button id="loadBtn" onclick="loadFile();">Load</button>
+        <button id="loadBtn">Load</button>
+
+
 
 
         <br>
@@ -61,12 +57,19 @@
         Dataset statistics
     </section>
     <section id="widget_2">
-        test2
+        <button id="showImagesBtn">Show Images</button>
     </section>
-    <section id="widget_3">
-        test3
-    </section>
+
 </aside>
 
+    <div id="content">
+        <div id="imageGrid">
+
+        </div>
+    </div>
+
+
+
+    <script src="../js/load_bundle.js"></script>
 </body>
 </html>
