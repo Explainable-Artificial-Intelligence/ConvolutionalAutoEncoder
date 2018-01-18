@@ -28,6 +28,30 @@ section{
     border-color: orange;
 }
 
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: orange;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
 
 #navigationBar {
     padding: 15px;
@@ -55,4 +79,14 @@ section{
     padding: 15px;
     margin: 15px;
     background-color: #2a2a2a;
+}
+
+.imageThumbnail:hover{
+    border-color: orange;
+    width: 200%;
+}
+
+.imageThumbnail{
+    border-color: black;
+    width: 100%;
 }

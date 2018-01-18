@@ -1,3 +1,6 @@
+/*
+check if client and server are running correctly
+ */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
 var api = new ConvolutionalAutoencoder.LoadApi()
@@ -48,6 +51,14 @@ var appendImages = function () {
                 var newImage = document.createElement("img");
                 newImage.id = "Image_" + data.images[i].id;
                 newImage.src = "data:image/png;base64," + data.images[i].bytestring.substring(2, data.images[i].bytestring.length - 1);
+                newImage.class = "imageThumbnail";
+                // add eventListener
+                // change preview view
+                newImage.addEventListener("click", function () {
+                    console.log(this.id);
+                    document.getElementById("imagePreview").src = this.src;
+                });
+
 
                 // append new image to image grid
                 imageGrid.appendChild(newImage);
@@ -55,22 +66,7 @@ var appendImages = function () {
         }
     };
 
-    api.getImageBatch({batch_size:1000}, callback);
-
-    //console.log(request);
-
-
-    /*request.onreadystatechange = function () {
-        if (request.readyState === 4) {
-            var responseHeaders = request.responseHeaders;
-            console.log(responseHeaders);
-            var responseText = request.responseText;
-            console.log(responseText);
-
-        }
-    };*/
-    /* */
-
+    api.getImageBatch({batch_size: 1000}, callback);
 
 };
 
