@@ -8,7 +8,7 @@ var api = new ConvolutionalAutoencoder.BuildApi()
 var inputParameters = new ConvolutionalAutoencoder.ParameterList(); // {ParameterList} object with all tunable parameters
 
 
-var callback = function(error, data, response) {
+var callback = function (error, data, response) {
     if (error) {
         console.error(error);
     } else {
@@ -70,3 +70,109 @@ var readLearningParameter = function () {
 
     return inputParameterList;
 };
+
+
+/*
+Convolutional Auto Encoder topology
+ */
+
+/*
+Helper functions
+ */
+var addLayer = function () {
+    /*
+    get current ANN topology information
+     */
+
+    // get encoder count
+    var encoderCount = document.getElementById("encoder").children.length - 1; // one child is input layer
+
+    /*
+    append Encoder layer
+    */
+    console.log("add encoder");
+
+    // generate div
+    var encoderDiv = document.createElement("div");
+    encoderDiv.id = "encoderLayer_" + (encoderCount + 1);
+
+    // generate input fields:
+    var filtersizeInput = document.createElement("input");
+    filtersizeInput.type = "number";
+    filtersizeInput.value = "2";
+    filtersizeInput.style.width = "30px";
+    filtersizeInput.id = "filtersizeEL" + (encoderCount + 1);
+
+    var numStacksInput = document.createElement("input");
+    numStacksInput.type = "number";
+    numStacksInput.value = "4";
+    numStacksInput.style.width = "30px";
+    numStacksInput.id = "numStacksEL" + (encoderCount + 1);
+
+    // generate remove button:
+    var removeButton = document.createElement("button");
+    removeButton.id = "removeEL" + (encoderCount + 1);
+    removeButton.textContent = "-";
+
+    // append elements to div:
+    encoderDiv.append("Encoder Layer " + (encoderCount + 1) + ": Filtersize: ");
+    encoderDiv.appendChild(filtersizeInput);
+    encoderDiv.append(" Number of Stacks: ");
+    encoderDiv.appendChild(numStacksInput);
+    encoderDiv.appendChild(removeButton);
+
+    //append to DOM
+    document.getElementById("encoder").appendChild(encoderDiv);
+
+
+    /*
+    decoder Encoder layer
+    */
+    console.log("add decoder");
+
+    // generate div
+    var decoderDiv = document.createElement("div");
+    decoderDiv.id = "decoderLayer_" + (encoderCount + 1);
+
+    // generate labels:
+    var filtersizeLabel = document.createElement("label");
+    filtersizeLabel.textContent = "2";
+    filtersizeLabel.id = "filtersizeDL" + (encoderCount + 1);
+
+    var numStacksLabel = document.createElement("label");
+    numStacksLabel.textContent = "4";
+    numStacksLabel.id = "numStacksDL" + (encoderCount + 1);
+
+    // append elements to div:
+    decoderDiv.append("Decoder Layer " + (encoderCount + 1) + ": Filtersize: ");
+    decoderDiv.appendChild(filtersizeLabel);
+    decoderDiv.append(" Number of Stacks: ");
+    decoderDiv.appendChild(numStacksLabel);
+
+    //append to DOM
+    document.getElementById("decoder").insertBefore(decoderDiv, document.getElementById("decoder").firstChild);
+
+    /*
+    link input fields
+     */
+    filtersizeInput.addEventListener("change", function () {
+        filtersizeLabel.textContent = filtersizeInput.value;
+    });
+    numStacksInput.addEventListener("change", function () {
+        numStacksLabel.textContent = numStacksInput.value;
+    });
+    
+    /*
+    attach remove button
+     */
+    removeButton.addEventListener("click", function () {
+        document.getElementById("encoder").removeChild(encoderDiv);
+        document.getElementById("decoder").removeChild(decoderDiv);
+        console.log("layer removed");
+    })
+};
+
+/*
+Event Listener
+ */
+document.getElementById("addLayer").addEventListener("click", addLayer);
