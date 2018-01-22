@@ -90,3 +90,9 @@ li a:hover {
     border-color: black;
     width: 100%;
 }
+
+.ANNLayer{
+    margin: 10px;
+    padding: 10px;
+    background-color: #3a3a3a;
+}

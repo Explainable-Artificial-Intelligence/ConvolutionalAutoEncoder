@@ -3,7 +3,7 @@ check if client and server are running correctly
  */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
-var api = new ConvolutionalAutoencoder.BuildApi()
+/*var api = new ConvolutionalAutoencoder.BuildApi();
 
 var inputParameters = new ConvolutionalAutoencoder.ParameterList(); // {ParameterList} object with all tunable parameters
 
@@ -14,8 +14,8 @@ var callback = function (error, data, response) {
     } else {
         console.log('API called successfully.');
     }
-};
-api.buildANN(inputParameters, callback);
+};*/
+//api.buildANN(inputParameters, callback);
 
 
 var readLearningParameter = function () {
@@ -24,48 +24,48 @@ var readLearningParameter = function () {
 
     inputParameterList.mirror_weights = [document.getElementById("mirrorWeights").checked];
     inputParameterList.activation_function = [document.getElementById("activationFunction").options[document.getElementById("activationFunction").selectedIndex].value];
-    inputParameterList.batch_size = [document.getElementById("batchSize").value];
-    inputParameterList.n_epochs = [document.getElementById("nEpochs").value];
+    inputParameterList.batch_size = [Number(document.getElementById("batchSize").value)];
+    inputParameterList.n_epochs = [Number(document.getElementById("nEpochs").value)];
     inputParameterList.use_tensorboard = document.getElementById("useTensorboard").checked;
     inputParameterList.verbose = document.getElementById("verbose").checked;
 
     inputParameterList.learning_rate_function = [document.getElementById("learningRateFunction").options[document.getElementById("learningRateFunction").selectedIndex].value];
-    inputParameterList.lr_initial_learning_rate = [document.getElementById("lrInitialLearningRate").value];
-    inputParameterList.lr_decay_steps = [document.getElementById("lrDecaySteps").value];
-    inputParameterList.lr_decay_rate = [document.getElementById("lrDecayRate").value];
+    inputParameterList.lr_initial_learning_rate = [Number(document.getElementById("lrInitialLearningRate").value)];
+    inputParameterList.lr_decay_steps = [Number(document.getElementById("lrDecaySteps").value)];
+    inputParameterList.lr_decay_rate = [Number(document.getElementById("lrDecayRate").value)];
     inputParameterList.lr_staircase = [document.getElementById("lrStaircase").checked];
-    inputParameterList.lr_boundaries = [document.getElementById("lrBoundaries").value];
-    inputParameterList.lr_values = [document.getElementById("lrValues").value];
-    inputParameterList.lr_end_learning_rate = [document.getElementById("lrEndLearningRate").value];
-    inputParameterList.lr_power = [document.getElementById("lrPower").value];
+    inputParameterList.lr_boundaries = [JSON.parse(document.getElementById("lrBoundaries").value)];
+    inputParameterList.lr_values = [JSON.parse(document.getElementById("lrValues").value)];
+    inputParameterList.lr_end_learning_rate = [Number(document.getElementById("lrEndLearningRate").value)];
+    inputParameterList.lr_power = [Number(document.getElementById("lrPower").value)];
     inputParameterList.lr_cycle = [document.getElementById("lrCycle").checked];
 
     inputParameterList.optimizer = [document.getElementById("Optimizer").options[document.getElementById("Optimizer").selectedIndex].value];
-    inputParameterList.momentum = [document.getElementById("Momentum").value];
+    inputParameterList.momentum = [Number(document.getElementById("Momentum").value)];
 
     inputParameterList.random_function_for_weights = [document.getElementById("randomFunctionForWeights").options[document.getElementById("randomFunctionForWeights").selectedIndex].value];
-    inputParameterList.rw_alpha = [document.getElementById("rwAlpha").value];
-    inputParameterList.rw_beta = [document.getElementById("rwBeta").value];
-    inputParameterList.rw_mean = [document.getElementById("rwMean").value];
-    inputParameterList.rw_stddev = [document.getElementById("rwStddev").value];
-    inputParameterList.rw_lam = [document.getElementById("rwLam").value];
-    inputParameterList.rw_minval = [document.getElementById("rwMinval").value];
-    inputParameterList.rw_maxval = [document.getElementById("rwMaxval").value];
-    inputParameterList.rw_seed = [document.getElementById("rwSeed").value];
+    inputParameterList.rw_alpha = [Number(document.getElementById("rwAlpha").value)];
+    inputParameterList.rw_beta = [Number(document.getElementById("rwBeta").value)];
+    inputParameterList.rw_mean = [Number(document.getElementById("rwMean").value)];
+    inputParameterList.rw_stddev = [Number(document.getElementById("rwStddev").value)];
+    inputParameterList.rw_lam = [Number(document.getElementById("rwLam").value)];
+    inputParameterList.rw_minval = [Number(document.getElementById("rwMinval").value)];
+    inputParameterList.rw_maxval = [Number(document.getElementById("rwMaxval").value)];
+    inputParameterList.rw_seed = [Number(document.getElementById("rwSeed").value)];
 
     inputParameterList.random_function_for_biases = [document.getElementById("randomFunctionForBiases").options[document.getElementById("randomFunctionForBiases").selectedIndex].value];
-    inputParameterList.rb_alpha = [document.getElementById("rbAlpha").value];
-    inputParameterList.rb_beta = [document.getElementById("rbBeta").value];
-    inputParameterList.rb_mean = [document.getElementById("rbMean").value];
-    inputParameterList.rb_stddev = [document.getElementById("rbStddev").value];
-    inputParameterList.rb_lam = [document.getElementById("rbLam").value];
-    inputParameterList.rb_minval = [document.getElementById("rbMinval").value];
-    inputParameterList.rb_maxval = [document.getElementById("rbMaxval").value];
-    inputParameterList.rb_seed = [document.getElementById("rbSeed").value];
+    inputParameterList.rb_alpha = [Number(document.getElementById("rbAlpha").value)];
+    inputParameterList.rb_beta = [Number(document.getElementById("rbBeta").value)];
+    inputParameterList.rb_mean = [Number(document.getElementById("rbMean").value)];
+    inputParameterList.rb_stddev = [Number(document.getElementById("rbStddev").value)];
+    inputParameterList.rb_lam = [Number(document.getElementById("rbLam").value)];
+    inputParameterList.rb_minval = [Number(document.getElementById("rbMinval").value)];
+    inputParameterList.rb_maxval = [Number(document.getElementById("rbMaxval").value)];
+    inputParameterList.rb_seed = [Number(document.getElementById("rbSeed").value)];
 
-    inputParameterList.session_saver_path = document.getElementById("sessionSaverPath");
-    inputParameterList.session_save_duration = document.getElementById("sessionSaveDuration");
-    inputParameterList.num_test_pictures = document.getElementById("numTestPictures");
+    inputParameterList.session_saver_path = document.getElementById("sessionSaverPath").value;
+    inputParameterList.session_save_duration = [Number(document.getElementById("sessionSaveDuration").value)];
+    inputParameterList.num_test_pictures = [Number(document.getElementById("numTestPictures").value)];
 
 
     return inputParameterList;
@@ -76,10 +76,67 @@ var readLearningParameter = function () {
 Convolutional Auto Encoder topology
  */
 
+
+
+
 /*
 Helper functions
  */
-var addLayer = function () {
+// get input (output) dimensions
+var getInputDimensions = function () {
+
+    /*
+        TODO: Replace with input dim return function
+     */
+    var loadApi = new ConvolutionalAutoencoder.LoadApi();
+
+    var imageCallback = function (error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            //console.log('API called successfully.');
+            //console.log(response);
+            console.log(data);
+
+            /*
+            adjust input and output dimensions of ANN topology
+             */
+            //get resolution
+            var resX = data.resX;
+            var resY = data.resY;
+            // TODO: Not hardcoded
+            var channels = 1;
+
+            console.log([ -1, resX, resY, channels]);
+
+            //update input shape:
+            inputShape = [ -1, resX, resY, channels];
+
+            // update topology input output layers:
+            updateInputOutputLayer(resX, resY, channels);
+
+        }
+    };
+
+    loadApi.getImageBatch({batch_size: 1000}, imageCallback);
+};
+
+var updateInputOutputLayer = function (resX, resY, channels) {
+    //update view:
+    document.getElementById("resXLabel").textContent = resX;
+    document.getElementById("resXLabel2").textContent = resX;
+    document.getElementById("resYLabel").textContent = resY;
+    document.getElementById("resYLabel2").textContent = resY;
+    document.getElementById("channelLabel").textContent = channels;
+    document.getElementById("channelLabel2").textContent = channels;
+
+};
+
+//
+var addLayer = function (filtersize, numStacks) {
+    //read parameters:
+    filtersize = filtersize || 2;
+    numStacks = numStacks || 4;
     /*
     get current ANN topology information
      */
@@ -95,17 +152,18 @@ var addLayer = function () {
     // generate div
     var encoderDiv = document.createElement("div");
     encoderDiv.id = "encoderLayer_" + (encoderCount + 1);
+    encoderDiv.className = "ANNLayer";
 
     // generate input fields:
     var filtersizeInput = document.createElement("input");
     filtersizeInput.type = "number";
-    filtersizeInput.value = "2";
+    filtersizeInput.value = filtersize;
     filtersizeInput.style.width = "30px";
     filtersizeInput.id = "filtersizeEL" + (encoderCount + 1);
 
     var numStacksInput = document.createElement("input");
     numStacksInput.type = "number";
-    numStacksInput.value = "4";
+    numStacksInput.value = numStacks;
     numStacksInput.style.width = "30px";
     numStacksInput.id = "numStacksEL" + (encoderCount + 1);
 
@@ -115,7 +173,10 @@ var addLayer = function () {
     removeButton.textContent = "-";
 
     // append elements to div:
-    encoderDiv.append("Encoder Layer " + (encoderCount + 1) + ": Filtersize: ");
+    encoderDiv.append("Encoder Layer " + (encoderCount + 1) + ": ");
+    encoderDiv.appendChild(document.createElement('br'));
+    encoderDiv.appendChild(document.createElement('br'));
+    encoderDiv.append("Filtersize: ");
     encoderDiv.appendChild(filtersizeInput);
     encoderDiv.append(" Number of Stacks: ");
     encoderDiv.appendChild(numStacksInput);
@@ -133,6 +194,7 @@ var addLayer = function () {
     // generate div
     var decoderDiv = document.createElement("div");
     decoderDiv.id = "decoderLayer_" + (encoderCount + 1);
+    decoderDiv.className = "ANNLayer";
 
     // generate labels:
     var filtersizeLabel = document.createElement("label");
@@ -144,7 +206,10 @@ var addLayer = function () {
     numStacksLabel.id = "numStacksDL" + (encoderCount + 1);
 
     // append elements to div:
-    decoderDiv.append("Decoder Layer " + (encoderCount + 1) + ": Filtersize: ");
+    decoderDiv.append("Decoder Layer " + (encoderCount + 1) + ": ");
+    decoderDiv.appendChild(document.createElement('br'));
+    decoderDiv.appendChild(document.createElement('br'));
+    decoderDiv.append("Filtersize: ");
     decoderDiv.appendChild(filtersizeLabel);
     decoderDiv.append(" Number of Stacks: ");
     decoderDiv.appendChild(numStacksLabel);
@@ -172,7 +237,85 @@ var addLayer = function () {
     })
 };
 
+var buildANN = function () {
+    // get ANN topology:
+    var filterSizes = [];
+    var numStacks = [];
+    var numEncoderLayers = document.getElementById("encoder").childElementCount;
+    console.log(numEncoderLayers);
+    for (var i = 1; i < numEncoderLayers; i++) {
+        // get filtersize of current layer:
+        filterSizes.push(Number(document.getElementById("filtersizeEL" + i).value));
+        // get number of Stacks of current layer
+        numStacks.push(Number(document.getElementById("numStacksEL" + i).value));
+    }
+
+    console.log(inputShape);
+    console.log(filterSizes);
+    console.log(numStacks);
+    // get learning parameters (sidebar):
+    var inputParameters = readLearningParameter();
+
+    // save topology information
+    inputParameters.input_shape = [inputShape];
+    inputParameters.filter_sizes = [filterSizes];
+    inputParameters.number_of_stacks = [numStacks];
+
+    console.log(inputParameters);
+
+
+    /*
+        initialize API call
+     */
+
+    var buildApi = new ConvolutionalAutoencoder.BuildApi();
+
+
+    var callback = function (error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(response);
+            console.log(data);
+            document.getElementById("responseLabel").textContent = response.text;
+        }
+    };
+    buildApi.buildANN(inputParameters, callback);
+
+
+
+};
+
+/*
+Global variables
+ */
+
+var inputShape = [-1, -1, -1, -1];
+
+
+
 /*
 Event Listener
  */
 document.getElementById("addLayer").addEventListener("click", addLayer);
+document.getElementById("buildANN").addEventListener("click", buildANN);
+
+
+
+/*
+on load
+ */
+
+getInputDimensions();
+
+// add sample ANN
+addLayer(3, 12);
+addLayer(3, 10);
+addLayer(2,10);
+addLayer(2, 6);
+
+
+
+
+
+

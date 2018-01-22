@@ -3,7 +3,7 @@ check if client and server are running correctly
  */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
-var api = new ConvolutionalAutoencoder.LoadApi()
+var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
 
 var callback = function (error, data, response) {
@@ -13,7 +13,7 @@ var callback = function (error, data, response) {
         console.log('API called successfully.');
     }
 };
-api.getImageBatch(10, callback);
+loadApi.getImageBatch(10, callback);
 
 
 var loadFile = function () {
@@ -35,9 +35,9 @@ var appendImages = function () {
     var imageGrid = document.getElementById("imageGrid");
 
     // load next Image batch through swagger client
-    var api = new ConvolutionalAutoencoder.LoadApi();
+    //var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
-    var callback = function (error, data, response) {
+    var imageCallback = function (error, data, response) {
         if (error) {
             console.error(error);
         } else {
@@ -66,7 +66,7 @@ var appendImages = function () {
         }
     };
 
-    api.getImageBatch({batch_size: 1000}, callback);
+    loadApi.getImageBatch({batch_size: 1000}, imageCallback);
 
 };
 
