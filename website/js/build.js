@@ -118,7 +118,7 @@ var getInputDimensions = function () {
         }
     };
 
-    loadApi.getImageBatch({batch_size: 1000}, imageCallback);
+    loadApi.getImageBatch("1", imageCallback);
 };
 
 var updateInputOutputLayer = function (resX, resY, channels) {

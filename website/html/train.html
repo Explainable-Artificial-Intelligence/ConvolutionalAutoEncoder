@@ -5,33 +5,49 @@
     <title>Train</title>
 
 
-
+    <link rel="stylesheet" type="text/css" href="../css/layout.css">
 </head>
 
-<link rel="stylesheet" type="text/css" href="../css/layout.css">
+
 
 <body>
-<header>
-    <ul>
-        <li><a href="load.html">Load</a></li>
-        <li><a href="build.html">Build</a></li>
-        <li><a href="train.html">Train</a></li>
-        <li><a href="visualize.html">Visualize</a></li>
-        <li><a href="tune.html">Tuning</a></li>
-    </ul>
-</header>
+    <header>
+        <ul>
+            <li><a href="load.html">Load</a></li>
+            <li><a href="build.html">Build</a></li>
+            <li><a href="train.html">Train</a></li>
+            <li><a href="visualize.html">Visualize</a></li>
+            <li><a href="tune.html">Tuning</a></li>
+        </ul>
+    </header>
 
-<aside id="sidebar">
-    <section id="widget_1">
-        test
-    </section>
-    <section id="widget_2">
-        test2
-    </section>
-    <section id="widget_3">
-        test3
-    </section>
-</aside>
+    <aside id="sidebar">
+        <br>
+        <br>
+        <button id="startTraining">Start Training</button>
+        <button id="stopTraining">Stop Training</button>
+        <br>
+        <br>
+        <label id="responseLabel"></label>
+        <br>
+        <br>
+    </aside>
 
+    <div id="content">
+        <div id="charts">
+
+        </div>
+
+        <div id="sampleImages">
+            <div id="imageGrid">
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../js/train_bundle.js"></script>
 </body>
+
+
 </html>
