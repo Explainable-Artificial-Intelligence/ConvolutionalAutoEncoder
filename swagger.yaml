@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: 'WebUI to build, train and tune a Convolutional Autoencoder'
-  version: 1.0.5
+  version: 1.0.7
   title: Convolutional Autoencoder
   termsOfService: 'http://swagger.io/terms/'
   contact:
@@ -280,6 +280,34 @@ paths:
           description: No data found
         '415':
           description: Index out of bounds
+  /build/getInputShape:
+    get:
+      tags:
+        - build
+      summary: returns the input shape of the train data
+      description: returns the input shape of the train data
+      operationId: getInputShape
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: dataset_name
+          in: query
+          description: name of the dataset
+          required: false
+          type: string
+          default: train_data
+      responses:
+        '202':
+          description: Input shape
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+        '404':
+          description: Dataset not found
   /build/buildANN:
     post:
       tags:
@@ -304,7 +332,7 @@ paths:
         '415':
           description: File parsing error
   /train/controlTraining:
-    put:
+    post:
       tags:
         - train
       summary: 'starts, pauses and stops the training'

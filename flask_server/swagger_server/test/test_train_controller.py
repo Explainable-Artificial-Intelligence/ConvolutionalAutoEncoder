@@ -2,10 +2,12 @@
 
 from __future__ import absolute_import
 
-from flask import json
+from swagger_server.models.processed_image_data import ProcessedImageData
+from swagger_server.models.train_performance import TrainPerformance
 from swagger_server.models.train_status import TrainStatus
-
 from . import BaseTestCase
+from six import BytesIO
+from flask import json
 
 
 class TestTrainController(BaseTestCase):
@@ -19,7 +21,7 @@ class TestTrainController(BaseTestCase):
         """
         trainStatus = TrainStatus()
         response = self.client.open('/v2/train/controlTraining',
-                                    method='PUT',
+                                    method='POST',
                                     data=json.dumps(trainStatus),
                                     content_type='application/json')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))

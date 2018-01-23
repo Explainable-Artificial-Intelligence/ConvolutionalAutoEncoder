@@ -6,17 +6,18 @@ var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
 
-var callback = function (error, data, response) {
+function callback(error, data, response) {
     if (error) {
         console.error(error);
     } else {
         console.log('API called successfully.');
     }
-};
-loadApi.getImageBatch(10, callback);
+}
+
+loadApi.getImageBatch({"batchSize": 1}, callback);
 
 
-var loadFile = function () {
+function loadFile() {
 
     // get all input fields
     var filename = document.getElementById("inputFilePath").value;
@@ -28,16 +29,16 @@ var loadFile = function () {
     var api = new ConvolutionalAutoencoder.LoadApi();
     console.log(api.loadFile(filename, datasetname, readLabels, dataType));
 
-};
+}
 
-var appendImages = function () {
+function appendImages() {
     // get image grid
     var imageGrid = document.getElementById("imageGrid");
 
     // load next Image batch through swagger client
     //var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
-    var imageCallback = function (error, data, response) {
+    function imageCallback(error, data, response) {
         if (error) {
             console.error(error);
         } else {
@@ -64,11 +65,11 @@ var appendImages = function () {
                 imageGrid.appendChild(newImage);
             }
         }
-    };
+    }
 
-    loadApi.getImageBatch({batch_size: 1000}, imageCallback);
+    loadApi.getImageBatch({"batchSize": 300}, imageCallback);
 
-};
+}
 
 /*
 Attach button events

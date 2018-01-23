@@ -2,7 +2,10 @@
 
 from __future__ import absolute_import
 
+from swagger_server.models.image_data import ImageData
 from . import BaseTestCase
+from six import BytesIO
+from flask import json
 
 
 class TestLoadController(BaseTestCase):

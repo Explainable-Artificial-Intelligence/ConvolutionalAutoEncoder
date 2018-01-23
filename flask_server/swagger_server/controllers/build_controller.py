@@ -21,7 +21,6 @@ def build_ann(inputParameters):
         parameter_set = {}
         for key in inputParameters.__dict__.keys():
             if key.startswith('_'):
-
                 if type(inputParameters.__dict__[key]) is list:
                     parameter_set[key[1:]] = inputParameters.__dict__[key][0]
                 else:
@@ -44,3 +43,17 @@ def build_ann(inputParameters):
 
         return "CAE created", 202
     return 'parameter parsing error', 415
+
+
+def get_input_shape(dataset_name="train_data"):
+    """
+    returns the input shape of the train data
+    returns the input shape of the train data
+    :param dataset_name: name of the dataset
+    :type dataset_name: str
+
+    :rtype: List[int]
+    """
+    input_shape = Storage.input_data[dataset_name].shape
+    print(input_shape)
+    return input_shape, 200

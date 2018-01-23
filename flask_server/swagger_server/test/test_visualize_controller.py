@@ -2,11 +2,13 @@
 
 from __future__ import absolute_import
 
-from flask import json
 from swagger_server.models.cluster_parameters import ClusterParameters
+from swagger_server.models.clustering import Clustering
+from swagger_server.models.image import Image
 from swagger_server.models.point2_d import Point2D
-
 from . import BaseTestCase
+from six import BytesIO
+from flask import json
 
 
 class TestVisualizeController(BaseTestCase):

@@ -1,6 +1,6 @@
 {
   "name": "convolutional_autoencoder",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "WebUI_to_build_train_and_tune_a_Convolutional_Autoencoder",
   "license": "Unlicense",
   "main": "src/index.js",

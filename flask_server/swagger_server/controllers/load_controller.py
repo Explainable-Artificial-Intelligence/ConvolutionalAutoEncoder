@@ -29,7 +29,7 @@ def get_image_batch(batch_size=100, datasetname="train_data", sort_by=None, filt
 
     next_batch_index = min(current_batch_index + batch_size, Storage.get_dataset_length(datasetname, output))
 
-    result = get_images(current_batch_index, next_batch_index, datasetname, output)
+    result = get_images(current_batch_index, next_batch_index, datasetname, output=output)
 
     # if operation successful, update batch index
     if result[1] == 200:

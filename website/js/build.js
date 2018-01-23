@@ -3,22 +3,20 @@ check if client and server are running correctly
  */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
-/*var api = new ConvolutionalAutoencoder.BuildApi();
+var buildApi = new ConvolutionalAutoencoder.BuildApi();
 
-var inputParameters = new ConvolutionalAutoencoder.ParameterList(); // {ParameterList} object with all tunable parameters
-
-
-var callback = function (error, data, response) {
+// check API functionality
+function callback(error, data, response) {
     if (error) {
         console.error(error);
     } else {
         console.log('API called successfully.');
     }
-};*/
-//api.buildANN(inputParameters, callback);
+}
+buildApi.getInputShape([], callback);
 
 
-var readLearningParameter = function () {
+function readLearningParameter() {
 
     var inputParameterList = new ConvolutionalAutoencoder.ParameterList();
 
@@ -69,7 +67,7 @@ var readLearningParameter = function () {
 
 
     return inputParameterList;
-};
+}
 
 
 /*
@@ -77,20 +75,14 @@ Convolutional Auto Encoder topology
  */
 
 
-
-
 /*
 Helper functions
  */
 // get input (output) dimensions
-var getInputDimensions = function () {
+function getInputDimensions() {
 
-    /*
-        TODO: Replace with input dim return function
-     */
-    var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
-    var imageCallback = function (error, data, response) {
+    function inputShapeCallback(error, data, response) {
         if (error) {
             console.error(error);
         } else {
@@ -98,30 +90,23 @@ var getInputDimensions = function () {
             //console.log(response);
             console.log(data);
 
-            /*
-            adjust input and output dimensions of ANN topology
-             */
-            //get resolution
-            var resX = data.resX;
-            var resY = data.resY;
-            // TODO: Not hardcoded
-            var channels = 1;
-
-            console.log([ -1, resX, resY, channels]);
 
             //update input shape:
-            inputShape = [ -1, resX, resY, channels];
+            inputShape = data;
+
+            // add placeholder for first dim:
+            inputShape[0] = -1;
 
             // update topology input output layers:
-            updateInputOutputLayer(resX, resY, channels);
+            updateInputOutputLayer(inputShape[1], inputShape[2], inputShape[3]);
 
         }
-    };
+    }
+    console.log("test");
+    buildApi.getInputShape([], inputShapeCallback)
+}
 
-    loadApi.getImageBatch("1", imageCallback);
-};
-
-var updateInputOutputLayer = function (resX, resY, channels) {
+function updateInputOutputLayer(resX, resY, channels) {
     //update view:
     document.getElementById("resXLabel").textContent = resX;
     document.getElementById("resXLabel2").textContent = resX;
@@ -130,10 +115,10 @@ var updateInputOutputLayer = function (resX, resY, channels) {
     document.getElementById("channelLabel").textContent = channels;
     document.getElementById("channelLabel2").textContent = channels;
 
-};
+}
 
 //
-var addLayer = function (filtersize, numStacks) {
+function addLayer(filtersize, numStacks) {
     //read parameters:
     filtersize = filtersize || 2;
     numStacks = numStacks || 4;
@@ -226,7 +211,7 @@ var addLayer = function (filtersize, numStacks) {
     numStacksInput.addEventListener("change", function () {
         numStacksLabel.textContent = numStacksInput.value;
     });
-    
+
     /*
     attach remove button
      */
@@ -235,9 +220,9 @@ var addLayer = function (filtersize, numStacks) {
         document.getElementById("decoder").removeChild(decoderDiv);
         console.log("layer removed");
     })
-};
+}
 
-var buildANN = function () {
+function buildANN() {
     // get ANN topology:
     var filterSizes = [];
     var numStacks = [];
@@ -271,7 +256,7 @@ var buildANN = function () {
     var buildApi = new ConvolutionalAutoencoder.BuildApi();
 
 
-    var callback = function (error, data, response) {
+    function callback(error, data, response) {
         if (error) {
             console.error(error);
         } else {
@@ -279,12 +264,11 @@ var buildANN = function () {
             console.log(data);
             document.getElementById("responseLabel").textContent = response.text;
         }
-    };
+    }
     buildApi.buildANN(inputParameters, callback);
 
 
-
-};
+}
 
 /*
 Global variables
@@ -293,13 +277,11 @@ Global variables
 var inputShape = [-1, -1, -1, -1];
 
 
-
 /*
 Event Listener
  */
 document.getElementById("addLayer").addEventListener("click", addLayer);
 document.getElementById("buildANN").addEventListener("click", buildANN);
-
 
 
 /*
@@ -311,7 +293,7 @@ getInputDimensions();
 // add sample ANN
 addLayer(3, 12);
 addLayer(3, 10);
-addLayer(2,10);
+addLayer(2, 10);
 addLayer(2, 6);
 
 

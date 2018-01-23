@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost:8080/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**controlTraining**](TrainApi.md#controlTraining) | **PUT** /train/controlTraining | starts, pauses and stops the training
+[**controlTraining**](TrainApi.md#controlTraining) | **POST** /train/controlTraining | starts, pauses and stops the training
 [**getProcessedImageData**](TrainApi.md#getProcessedImageData) | **GET** /train/getProcessedImageData | returns a subset of the current train images and the corresponding latent representation and output
 [**getTrainPerformance**](TrainApi.md#getTrainPerformance) | **GET** /train/getTrainPerformance | returns the next batch of scalar train variables
 

@@ -1,12 +1,11 @@
 # coding: utf-8
 
 from __future__ import absolute_import
-
-from typing import List
-
 from flask_server.swagger_server.models.image import Image
-from flask_server.swagger_server.util import deserialize_model
 from .base_model_ import Model
+from datetime import date, datetime
+from typing import List, Dict
+from ..util import deserialize_model
 
 
 class ProcessedImageData(Model):
