@@ -81,6 +81,10 @@ li a:hover {
     background-color: #2a2a2a;
 }
 
+#sampleImages {
+    float: right;
+}
+
 .imageThumbnail:hover{
     border-color: orange;
     width: 200%;
@@ -95,4 +99,12 @@ li a:hover {
     margin: 10px;
     padding: 10px;
     background-color: #3a3a3a;
+}
+
+#charts {
+    float: left;
+}
+
+#sampleImages {
+    float: right;
 }

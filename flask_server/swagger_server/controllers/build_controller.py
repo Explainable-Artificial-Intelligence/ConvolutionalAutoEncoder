@@ -41,6 +41,9 @@ def build_ann(inputParameters):
         # save CAE
         Storage.set_cae(cae)
 
+        # reset train indices
+        Storage.train_step = 0
+
         return "CAE created", 202
     return 'parameter parsing error', 415
 

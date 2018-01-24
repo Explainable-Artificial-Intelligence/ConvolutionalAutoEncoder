@@ -9,13 +9,22 @@ Global variables
 var trainApi = new ConvolutionalAutoencoder.TrainApi();
 var trainTimer;
 
+/*
+Charts
+ */
+
+var costChart = new LineChart("charts", 500, 500, "cost");
+var learningRateChart = new LineChart("charts", 500, 500, "learning rate");
+
+console.log(costChart.parentNodeID);
+
 function updateTrainImages() {
     var callback = function (error, data, response) {
         if (error) {
             console.error(error);
         } else {
-            console.log(response);
-            console.log(data);
+            //console.log(response);
+            //console.log(data);
 
             //get image pane
             var imageGrid = document.getElementById("imageGrid");
@@ -63,10 +72,35 @@ function updateTrainImages() {
     trainApi.getProcessedImageData(9, callback);
 }
 
+function updateTrainStatistics() {
+    var callback = function (error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(response);
+            console.log(data);
+
+            //update cost diagram
+            if (data.cost.length > 0) {
+                costChart.appendData(data.cost);
+                learningRateChart.appendData(data.currentLearningRate)
+            }
+
+        }
+
+
+    };
+
+    trainApi.getTrainPerformance(callback);
+}
+
 function updateView() {
     console.log("tick");
     // update train images:
     updateTrainImages();
+
+    // update charts:
+    updateTrainStatistics();
 }
 
 function startTraining() {
@@ -83,6 +117,7 @@ function startTraining() {
             trainTimer = setInterval(updateView, 5000);
         }
     }
+
     trainApi.controlTraining('"start"', callback);
 }
 
@@ -101,6 +136,7 @@ function stopTraining() {
             clearInterval(trainTimer);
         }
     }
+
     trainApi.controlTraining('"stop"', callback);
 }
 
@@ -111,3 +147,6 @@ attach Event Listener
 
 document.getElementById("startTraining").addEventListener("click", startTraining);
 document.getElementById("stopTraining").addEventListener("click", stopTraining);
+
+
+
