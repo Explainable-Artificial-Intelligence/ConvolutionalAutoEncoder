@@ -108,3 +108,12 @@ li a:hover {
 #sampleImages {
     float: right;
 }
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: orange;
+    shape-rendering: crispEdges;}
+.axis text {
+    fill: orange;
+}

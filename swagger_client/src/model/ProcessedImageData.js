@@ -14,85 +14,80 @@
  *
  */
 
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/Image'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('./Image'));
-  } else {
-    // Browser globals (root is window)
-    if (!root.ConvolutionalAutoencoder) {
-      root.ConvolutionalAutoencoder = {};
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['ApiClient', 'model/Image'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // CommonJS-like environments that support module.exports, like Node.
+        module.exports = factory(require('../ApiClient'), require('./Image'));
+    } else {
+        // Browser globals (root is window)
+        if (!root.ConvolutionalAutoencoder) {
+            root.ConvolutionalAutoencoder = {};
+        }
+        root.ConvolutionalAutoencoder.ProcessedImageData = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.Image);
     }
-    root.ConvolutionalAutoencoder.ProcessedImageData = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.Image);
-  }
-}(this, function(ApiClient, Image) {
-  'use strict';
+}(this, function (ApiClient, Image) {
+    'use strict';
 
 
+    /**
+     * The ProcessedImageData model module.
+     * @module model/ProcessedImageData
+     * @version 1.0.7
+     */
+
+    /**
+     * Constructs a new <code>ProcessedImageData</code>.
+     * @alias module:model/ProcessedImageData
+     * @class
+     */
+    var exports = function () {
+        var _this = this;
 
 
-  /**
-   * The ProcessedImageData model module.
-   * @module model/ProcessedImageData
-   * @version 1.0.7
-   */
+    };
 
-  /**
-   * Constructs a new <code>ProcessedImageData</code>.
-   * @alias module:model/ProcessedImageData
-   * @class
-   */
-  var exports = function() {
-    var _this = this;
+    /**
+     * Constructs a <code>ProcessedImageData</code> from a plain JavaScript object, optionally creating a new instance.
+     * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
+     * @param {Object} data The plain JavaScript object bearing properties of interest.
+     * @param {module:model/ProcessedImageData} obj Optional instance to populate.
+     * @return {module:model/ProcessedImageData} The populated <code>ProcessedImageData</code> instance.
+     */
+    exports.constructFromObject = function (data, obj) {
+        if (data) {
+            obj = obj || new exports();
 
-
-
-
-  };
-
-  /**
-   * Constructs a <code>ProcessedImageData</code> from a plain JavaScript object, optionally creating a new instance.
-   * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
-   * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/ProcessedImageData} obj Optional instance to populate.
-   * @return {module:model/ProcessedImageData} The populated <code>ProcessedImageData</code> instance.
-   */
-  exports.constructFromObject = function(data, obj) {
-    if (data) {
-      obj = obj || new exports();
-
-      if (data.hasOwnProperty('inputLayer')) {
-        obj['inputLayer'] = ApiClient.convertToType(data['inputLayer'], [Image]);
-      }
-      if (data.hasOwnProperty('latentLayer')) {
-        obj['latentLayer'] = ApiClient.convertToType(data['latentLayer'], [Image]);
-      }
-      if (data.hasOwnProperty('outputLayer')) {
-        obj['outputLayer'] = ApiClient.convertToType(data['outputLayer'], [Image]);
-      }
+            if (data.hasOwnProperty('inputLayer')) {
+                obj['inputLayer'] = ApiClient.convertToType(data['inputLayer'], [Image]);
+            }
+            if (data.hasOwnProperty('latentLayer')) {
+                obj['latentLayer'] = ApiClient.convertToType(data['latentLayer'], [Image]);
+            }
+            if (data.hasOwnProperty('outputLayer')) {
+                obj['outputLayer'] = ApiClient.convertToType(data['outputLayer'], [Image]);
+            }
+        }
+        return obj;
     }
-    return obj;
-  }
 
-  /**
-   * @member {Array.<module:model/Image>} inputLayer
-   */
-  exports.prototype['inputLayer'] = undefined;
-  /**
-   * @member {Array.<module:model/Image>} latentLayer
-   */
-  exports.prototype['latentLayer'] = undefined;
-  /**
-   * @member {Array.<module:model/Image>} outputLayer
-   */
-  exports.prototype['outputLayer'] = undefined;
+    /**
+     * @member {Array.<module:model/Image>} inputLayer
+     */
+    exports.prototype['inputLayer'] = undefined;
+    /**
+     * @member {Array.<module:model/Image>} latentLayer
+     */
+    exports.prototype['latentLayer'] = undefined;
+    /**
+     * @member {Array.<module:model/Image>} outputLayer
+     */
+    exports.prototype['outputLayer'] = undefined;
 
 
-
-  return exports;
+    return exports;
 }));
 
 

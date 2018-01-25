@@ -14,85 +14,80 @@
  *
  */
 
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['ApiClient'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'));
-  } else {
-    // Browser globals (root is window)
-    if (!root.ConvolutionalAutoencoder) {
-      root.ConvolutionalAutoencoder = {};
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['ApiClient'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // CommonJS-like environments that support module.exports, like Node.
+        module.exports = factory(require('../ApiClient'));
+    } else {
+        // Browser globals (root is window)
+        if (!root.ConvolutionalAutoencoder) {
+            root.ConvolutionalAutoencoder = {};
+        }
+        root.ConvolutionalAutoencoder.TrainPerformance = factory(root.ConvolutionalAutoencoder.ApiClient);
     }
-    root.ConvolutionalAutoencoder.TrainPerformance = factory(root.ConvolutionalAutoencoder.ApiClient);
-  }
-}(this, function(ApiClient) {
-  'use strict';
+}(this, function (ApiClient) {
+    'use strict';
 
 
+    /**
+     * The TrainPerformance model module.
+     * @module model/TrainPerformance
+     * @version 1.0.7
+     */
+
+    /**
+     * Constructs a new <code>TrainPerformance</code>.
+     * @alias module:model/TrainPerformance
+     * @class
+     */
+    var exports = function () {
+        var _this = this;
 
 
-  /**
-   * The TrainPerformance model module.
-   * @module model/TrainPerformance
-   * @version 1.0.7
-   */
+    };
 
-  /**
-   * Constructs a new <code>TrainPerformance</code>.
-   * @alias module:model/TrainPerformance
-   * @class
-   */
-  var exports = function() {
-    var _this = this;
+    /**
+     * Constructs a <code>TrainPerformance</code> from a plain JavaScript object, optionally creating a new instance.
+     * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
+     * @param {Object} data The plain JavaScript object bearing properties of interest.
+     * @param {module:model/TrainPerformance} obj Optional instance to populate.
+     * @return {module:model/TrainPerformance} The populated <code>TrainPerformance</code> instance.
+     */
+    exports.constructFromObject = function (data, obj) {
+        if (data) {
+            obj = obj || new exports();
 
-
-
-
-  };
-
-  /**
-   * Constructs a <code>TrainPerformance</code> from a plain JavaScript object, optionally creating a new instance.
-   * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
-   * @param {Object} data The plain JavaScript object bearing properties of interest.
-   * @param {module:model/TrainPerformance} obj Optional instance to populate.
-   * @return {module:model/TrainPerformance} The populated <code>TrainPerformance</code> instance.
-   */
-  exports.constructFromObject = function(data, obj) {
-    if (data) {
-      obj = obj || new exports();
-
-      if (data.hasOwnProperty('model_id')) {
-        obj['model_id'] = ApiClient.convertToType(data['model_id'], 'String');
-      }
-      if (data.hasOwnProperty('cost')) {
-        obj['cost'] = ApiClient.convertToType(data['cost'], ['Number']);
-      }
-      if (data.hasOwnProperty('currentLearningRate')) {
-        obj['currentLearningRate'] = ApiClient.convertToType(data['currentLearningRate'], ['Number']);
-      }
+            if (data.hasOwnProperty('model_id')) {
+                obj['model_id'] = ApiClient.convertToType(data['model_id'], 'String');
+            }
+            if (data.hasOwnProperty('cost')) {
+                obj['cost'] = ApiClient.convertToType(data['cost'], ['Number']);
+            }
+            if (data.hasOwnProperty('currentLearningRate')) {
+                obj['currentLearningRate'] = ApiClient.convertToType(data['currentLearningRate'], ['Number']);
+            }
+        }
+        return obj;
     }
-    return obj;
-  }
 
-  /**
-   * @member {String} model_id
-   */
-  exports.prototype['model_id'] = undefined;
-  /**
-   * @member {Array.<Number>} cost
-   */
-  exports.prototype['cost'] = undefined;
-  /**
-   * @member {Array.<Number>} currentLearningRate
-   */
-  exports.prototype['currentLearningRate'] = undefined;
+    /**
+     * @member {String} model_id
+     */
+    exports.prototype['model_id'] = undefined;
+    /**
+     * @member {Array.<Number>} cost
+     */
+    exports.prototype['cost'] = undefined;
+    /**
+     * @member {Array.<Number>} currentLearningRate
+     */
+    exports.prototype['currentLearningRate'] = undefined;
 
 
-
-  return exports;
+    return exports;
 }));
 
 

@@ -31,7 +31,14 @@ function LineChart(parentNodeID, width, height, yAxisName) {
 
     //storage for datapoints:
     var data = [];
+    var line;
     var step = 0;
+
+    //set initial min/max values:
+    var xmin = 0;
+    var xmax = 1;
+    var ymin = 0;
+    var ymax = 0.0001;
 
 
     //create plot pane:
@@ -41,19 +48,13 @@ function LineChart(parentNodeID, width, height, yAxisName) {
         .attr("height", height);
 
     //create inner panel:
-    var panelWidth = width - 50;
+    var panelWidth = width - 100;
     var panelHeight = height - 50;
-    var panel = plot.append("svg");
-    panel.attr("transform", "translate(12.5, 12.5)")
+    var panel = plot.append("g");
+    panel.attr("transform", "translate(52.5, 12.5)")
         .attr("width", panelWidth)
         .attr("height", panelHeight);
 
-
-    //set initial min/max values:
-    var xmin = 0;
-    var xmax = 1;
-    var ymin = 0;
-    var ymax = 1;
 
     //set Scales
     var xScale = d3.scaleLinear();
@@ -64,14 +65,24 @@ function LineChart(parentNodeID, width, height, yAxisName) {
     yScale.range([panelHeight, 0]);
 
     //axis:
-    var xAxis = d3.axisBottom(xScale);
-    var yAxis = d3.axisLeft(yScale);
+    var xAxis = d3.axisBottom(xScale).ticks(5);
+    var yAxis = d3.axisLeft(yScale).ticks(5);
 
     //TODO: move styling in css
-    panel.append("g")
+
+    plot.append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(0,0)")
+        .attr("id", "yAxis")
+        .attr("transform", "translate(52.5, 12.5 )")
+        .attr("fill", "orange")
         .call(yAxis);
+
+    plot.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(52.5," + (panelHeight + 12.5) + ")")
+        .attr("id", "xAxis")
+        .call(xAxis);
+
     plot.append("text")
         .attr("x", 10)
         .attr("y", 10)
@@ -79,31 +90,60 @@ function LineChart(parentNodeID, width, height, yAxisName) {
         .text(yAxisName)
         .attr("fill", "orange");
 
-    panel.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + (panelHeight - 5) + ")")
-        .call(xAxis);
+
     plot.append("text")
-        .attr("x", panelWidth / 2)
-        .attr("y", panelHeight + 15)
+        .attr("x", width / 2)
+        .attr("y", panelHeight + 40)
         .attr("font-size", "12px")
         .text("steps")
         .attr("fill", "orange");
 
-    //draw points:
-    var points;
-    /* var points = panel.selectAll(".points")
-         .data(data)
-         .enter()
-         .append("circle")
-         .attr("r", 3.5)
-         .attr("cx", function (d) {
-             return xScale(step++);
-         })
-         .attr("cy", function (d) {
-             return yScale(d);
-         })
-         .style("fill", "orange");*/
+    //draw line:
+
+
+    //line helper function
+    var lineSegment = d3.line()
+        .x(function (d, i) {
+            return xScale(i);
+        })
+        .y(function (d) {
+            return yScale(d);
+        });
+
+    function updateAxis() {
+        xAxis = d3.axisBottom(xScale).ticks(5);
+        yAxis = d3.axisLeft(yScale).ticks(5);
+        //panel.select(".x").call(xAxis);
+        //panel.select(".y").call(yAxis);
+        // update axis
+        plot.selectAll(".axis").remove();
+        //panel.select("#yAxis").remove();
+        plot.append("g")
+            .attr("class", "axis")
+            .attr("id", "yAxis")
+            .attr("transform", "translate(52.5, 12.5 )")
+            .attr("fill", "orange")
+            .call(yAxis);
+
+        plot.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(52.5," + (panelHeight + 12.5) + ")")
+            .attr("id", "xAxis")
+            .call(xAxis);
+
+        /*panel.append("g")
+            .attr("class", "axis")
+            .attr("id", "yAxis")
+            .attr("transform", "translate(1,0)")
+            .attr("fill", "orange")
+            .call(yAxis);
+
+        panel.append("g")
+            .attr("class", "axis")
+            .attr("id", "xAxis")
+            .attr("transform", "translate(0," + (panelHeight - 5) + ")")
+            .call(xAxis);*/
+    }
 
 
     this.appendData = function (additionalData) {
@@ -118,15 +158,17 @@ function LineChart(parentNodeID, width, height, yAxisName) {
         if (ymax < d3.max(data) || ymin > d3.min(data)) {
             ymax = d3.max(data);
             ymin = d3.min(data);
-            yScale.domain([(ymin - 5) * 0.9, ymax * 1.1]);
+            yScale.domain([ymin * 0.9, ymax * 1.1]);
         }
-        console.log([ymin - 100, ymax * 1.1]);
 
-        //remove old points:
-        panel.selectAll("circle").remove();
+        //update axis
+        updateAxis();
 
-        /*//update old points
-        points.data(data)
+        //remove old line:
+        panel.selectAll("path").remove();
+
+        /*//update old line
+        line.data(data)
             .transition()
             .duration(1000)
             .attr("r", 3.5)
@@ -139,25 +181,18 @@ function LineChart(parentNodeID, width, height, yAxisName) {
             })
             .style("fill", "red");*/
 
-        //console.log(points);
+        //console.log(line);
 
-        // add new points
-        points = panel.selectAll(".points")
-            .append()
-            .data(data)
-            .enter()
-            .append("circle")
-            .attr("r", 1.5)
-            .attr("cx", function (d, i) {
-                return xScale(i);
-            })
-            .attr("cy", function (d) {
-                return yScale(d);
-            })
-            .style("fill", "orange");
+        // add new line
+        line = panel.append('path')
+            .datum(data)
+            .attr('d', lineSegment)
+            .attr('stroke', 'lightblue')
+            .attr('stroke-width', 1)
+            .attr('fill', 'none');
         //console.log(step);
 
-        //points = panel.selectAll(".points");
+        //line = panel.selectAll(".line");
 
 
         //console.log(data);

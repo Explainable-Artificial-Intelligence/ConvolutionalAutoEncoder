@@ -14,83 +14,83 @@
  *
  */
 
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD.
-    define(['expect.js', '../../src/index'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // CommonJS-like environments that support module.exports, like Node.
-    factory(require('expect.js'), require('../../src/index'));
-  } else {
-    // Browser globals (root is window)
-    factory(root.expect, root.ConvolutionalAutoencoder);
-  }
-}(this, function(expect, ConvolutionalAutoencoder) {
-  'use strict';
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD.
+        define(['expect.js', '../../src/index'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // CommonJS-like environments that support module.exports, like Node.
+        factory(require('expect.js'), require('../../src/index'));
+    } else {
+        // Browser globals (root is window)
+        factory(root.expect, root.ConvolutionalAutoencoder);
+    }
+}(this, function (expect, ConvolutionalAutoencoder) {
+    'use strict';
 
-  var instance;
+    var instance;
 
-  beforeEach(function() {
-    instance = new ConvolutionalAutoencoder.TuneApi();
-  });
-
-  var getProperty = function(object, getter, property) {
-    // Use getter method if present; otherwise, get the property directly.
-    if (typeof object[getter] === 'function')
-      return object[getter]();
-    else
-      return object[property];
-  }
-
-  var setProperty = function(object, setter, property, value) {
-    // Use setter method if present; otherwise, set the property directly.
-    if (typeof object[setter] === 'function')
-      object[setter](value);
-    else
-      object[property] = value;
-  }
-
-  describe('TuneApi', function() {
-    describe('controlTuning', function() {
-      it('should call controlTuning successfully', function(done) {
-        //uncomment below and update the code to test controlTuning
-        //instance.controlTuning(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+    beforeEach(function () {
+        instance = new ConvolutionalAutoencoder.TuneApi();
     });
-    describe('getProcessedImageDataOfCurrentTuning', function() {
-      it('should call getProcessedImageDataOfCurrentTuning successfully', function(done) {
-        //uncomment below and update the code to test getProcessedImageDataOfCurrentTuning
-        //instance.getProcessedImageDataOfCurrentTuning(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+
+    var getProperty = function (object, getter, property) {
+        // Use getter method if present; otherwise, get the property directly.
+        if (typeof object[getter] === 'function')
+            return object[getter]();
+        else
+            return object[property];
+    }
+
+    var setProperty = function (object, setter, property, value) {
+        // Use setter method if present; otherwise, set the property directly.
+        if (typeof object[setter] === 'function')
+            object[setter](value);
+        else
+            object[property] = value;
+    }
+
+    describe('TuneApi', function () {
+        describe('controlTuning', function () {
+            it('should call controlTuning successfully', function (done) {
+                //uncomment below and update the code to test controlTuning
+                //instance.controlTuning(function(error) {
+                //  if (error) throw error;
+                //expect().to.be();
+                //});
+                done();
+            });
+        });
+        describe('getProcessedImageDataOfCurrentTuning', function () {
+            it('should call getProcessedImageDataOfCurrentTuning successfully', function (done) {
+                //uncomment below and update the code to test getProcessedImageDataOfCurrentTuning
+                //instance.getProcessedImageDataOfCurrentTuning(function(error) {
+                //  if (error) throw error;
+                //expect().to.be();
+                //});
+                done();
+            });
+        });
+        describe('getTrainPerformanceOfCurrentTuning', function () {
+            it('should call getTrainPerformanceOfCurrentTuning successfully', function (done) {
+                //uncomment below and update the code to test getTrainPerformanceOfCurrentTuning
+                //instance.getTrainPerformanceOfCurrentTuning(function(error) {
+                //  if (error) throw error;
+                //expect().to.be();
+                //});
+                done();
+            });
+        });
+        describe('passANNParameterLists', function () {
+            it('should call passANNParameterLists successfully', function (done) {
+                //uncomment below and update the code to test passANNParameterLists
+                //instance.passANNParameterLists(function(error) {
+                //  if (error) throw error;
+                //expect().to.be();
+                //});
+                done();
+            });
+        });
     });
-    describe('getTrainPerformanceOfCurrentTuning', function() {
-      it('should call getTrainPerformanceOfCurrentTuning successfully', function(done) {
-        //uncomment below and update the code to test getTrainPerformanceOfCurrentTuning
-        //instance.getTrainPerformanceOfCurrentTuning(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-    describe('passANNParameterLists', function() {
-      it('should call passANNParameterLists successfully', function(done) {
-        //uncomment below and update the code to test passANNParameterLists
-        //instance.passANNParameterLists(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-  });
 
 }));

@@ -13,6 +13,7 @@ function callback(error, data, response) {
         console.log('API called successfully.');
     }
 }
+
 buildApi.getInputShape([], callback);
 
 
@@ -78,6 +79,7 @@ Convolutional Auto Encoder topology
 /*
 Helper functions
  */
+
 // get input (output) dimensions
 function getInputDimensions() {
 
@@ -102,6 +104,7 @@ function getInputDimensions() {
 
         }
     }
+
     console.log("test");
     buildApi.getInputShape([], inputShapeCallback)
 }
@@ -118,7 +121,7 @@ function updateInputOutputLayer(resX, resY, channels) {
 }
 
 //
-function addLayer(filtersize, numStacks) {
+function addLayer(event, filtersize, numStacks) {
     //read parameters:
     filtersize = filtersize || 2;
     numStacks = numStacks || 4;
@@ -172,7 +175,7 @@ function addLayer(filtersize, numStacks) {
 
 
     /*
-    decoder Encoder layer
+    append decoder layer
     */
     console.log("add decoder");
 
@@ -183,11 +186,11 @@ function addLayer(filtersize, numStacks) {
 
     // generate labels:
     var filtersizeLabel = document.createElement("label");
-    filtersizeLabel.textContent = "2";
+    filtersizeLabel.textContent = filtersize;
     filtersizeLabel.id = "filtersizeDL" + (encoderCount + 1);
 
     var numStacksLabel = document.createElement("label");
-    numStacksLabel.textContent = "4";
+    numStacksLabel.textContent = numStacks;
     numStacksLabel.id = "numStacksDL" + (encoderCount + 1);
 
     // append elements to div:
@@ -265,6 +268,7 @@ function buildANN() {
             document.getElementById("responseLabel").textContent = response.text;
         }
     }
+
     buildApi.buildANN(inputParameters, callback);
 
 
@@ -291,10 +295,10 @@ on load
 getInputDimensions();
 
 // add sample ANN
-addLayer(3, 12);
-addLayer(3, 10);
-addLayer(2, 10);
-addLayer(2, 6);
+addLayer(null, 3, 12);
+addLayer(null, 3, 10);
+addLayer(null, 2, 10);
+addLayer(null, 2, 6);
 
 
 

@@ -14,67 +14,67 @@
  *
  */
 
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD.
-    define(['expect.js', '../../src/index'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // CommonJS-like environments that support module.exports, like Node.
-    factory(require('expect.js'), require('../../src/index'));
-  } else {
-    // Browser globals (root is window)
-    factory(root.expect, root.ConvolutionalAutoencoder);
-  }
-}(this, function(expect, ConvolutionalAutoencoder) {
-  'use strict';
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD.
+        define(['expect.js', '../../src/index'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // CommonJS-like environments that support module.exports, like Node.
+        factory(require('expect.js'), require('../../src/index'));
+    } else {
+        // Browser globals (root is window)
+        factory(root.expect, root.ConvolutionalAutoencoder);
+    }
+}(this, function (expect, ConvolutionalAutoencoder) {
+    'use strict';
 
-  var instance;
+    var instance;
 
-  beforeEach(function() {
-    instance = new ConvolutionalAutoencoder.TrainPerformance();
-  });
-
-  var getProperty = function(object, getter, property) {
-    // Use getter method if present; otherwise, get the property directly.
-    if (typeof object[getter] === 'function')
-      return object[getter]();
-    else
-      return object[property];
-  }
-
-  var setProperty = function(object, setter, property, value) {
-    // Use setter method if present; otherwise, set the property directly.
-    if (typeof object[setter] === 'function')
-      object[setter](value);
-    else
-      object[property] = value;
-  }
-
-  describe('TrainPerformance', function() {
-    it('should create an instance of TrainPerformance', function() {
-      // uncomment below and update the code to test TrainPerformance
-      //var instane = new ConvolutionalAutoencoder.TrainPerformance();
-      //expect(instance).to.be.a(ConvolutionalAutoencoder.TrainPerformance);
+    beforeEach(function () {
+        instance = new ConvolutionalAutoencoder.TrainPerformance();
     });
 
-    it('should have the property modelId (base name: "model_id")', function() {
-      // uncomment below and update the code to test the property modelId
-      //var instane = new ConvolutionalAutoencoder.TrainPerformance();
-      //expect(instance).to.be();
-    });
+    var getProperty = function (object, getter, property) {
+        // Use getter method if present; otherwise, get the property directly.
+        if (typeof object[getter] === 'function')
+            return object[getter]();
+        else
+            return object[property];
+    }
 
-    it('should have the property cost (base name: "cost")', function() {
-      // uncomment below and update the code to test the property cost
-      //var instane = new ConvolutionalAutoencoder.TrainPerformance();
-      //expect(instance).to.be();
-    });
+    var setProperty = function (object, setter, property, value) {
+        // Use setter method if present; otherwise, set the property directly.
+        if (typeof object[setter] === 'function')
+            object[setter](value);
+        else
+            object[property] = value;
+    }
 
-    it('should have the property currentLearningRate (base name: "currentLearningRate")', function() {
-      // uncomment below and update the code to test the property currentLearningRate
-      //var instane = new ConvolutionalAutoencoder.TrainPerformance();
-      //expect(instance).to.be();
-    });
+    describe('TrainPerformance', function () {
+        it('should create an instance of TrainPerformance', function () {
+            // uncomment below and update the code to test TrainPerformance
+            //var instane = new ConvolutionalAutoencoder.TrainPerformance();
+            //expect(instance).to.be.a(ConvolutionalAutoencoder.TrainPerformance);
+        });
 
-  });
+        it('should have the property modelId (base name: "model_id")', function () {
+            // uncomment below and update the code to test the property modelId
+            //var instane = new ConvolutionalAutoencoder.TrainPerformance();
+            //expect(instance).to.be();
+        });
+
+        it('should have the property cost (base name: "cost")', function () {
+            // uncomment below and update the code to test the property cost
+            //var instane = new ConvolutionalAutoencoder.TrainPerformance();
+            //expect(instance).to.be();
+        });
+
+        it('should have the property currentLearningRate (base name: "currentLearningRate")', function () {
+            // uncomment below and update the code to test the property currentLearningRate
+            //var instane = new ConvolutionalAutoencoder.TrainPerformance();
+            //expect(instance).to.be();
+        });
+
+    });
 
 }));
