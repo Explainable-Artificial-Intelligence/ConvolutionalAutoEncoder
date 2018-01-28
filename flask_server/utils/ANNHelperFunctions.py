@@ -151,14 +151,14 @@ def generate_status_image_object_from_status_images(status_images):
         output_img.id = int(status_images["indices"][i])
         processed_image_data.output_layer.append(output_img)
 
-        latent_img = Image()
-        # TODO: find better way to display latent representation as image
-        # perform dim reduction to create image
-        shape = status_images["latent_representation"][i].shape
-        new_shape = [shape[0], shape[1] * shape[2]]
-        latent_img.bytestring = convert_image_array_to_byte_string(
-            perform_dimension_reduction(status_images["latent_representation"][i].reshape(new_shape)), channels=1,
-            normalize=True)
-        latent_img.id = int(status_images["indices"][i])
-        processed_image_data.latent_layer.append(latent_img)
+        # latent_img = Image()
+        # # TODO: find better way to display latent representation as image
+        # # perform dim reduction to create image
+        # shape = status_images["latent_representation"][i].shape
+        # new_shape = [shape[0], shape[1] * shape[2]]
+        # latent_img.bytestring = convert_image_array_to_byte_string(
+        #     perform_dimension_reduction(status_images["latent_representation"][i].reshape(new_shape)), channels=1,
+        #     normalize=True)
+        # latent_img.id = int(status_images["indices"][i])
+        # processed_image_data.latent_layer.append(latent_img)
     return processed_image_data

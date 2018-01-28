@@ -116,4 +116,20 @@ li a:hover {
     shape-rendering: crispEdges;}
 .axis text {
     fill: orange;
+
+}
+
+#imageRibbon{
+    white-space: nowrap;
+}
+
+
+.imageRibbonThumbnail{
+    width: 50px;
+    margin-left: -30px;
+}
+
+.imageRibbonThumbnail:hover{
+    border: dashed red;
+    width: 150px;
 }
