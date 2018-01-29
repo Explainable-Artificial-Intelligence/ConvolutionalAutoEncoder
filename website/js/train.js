@@ -58,6 +58,9 @@ function updateTrainImages() {
                 newOutputImage.style.width = "80px";
                 newOutputImage.class = "imageThumbnail";
 
+                console.log(newOutputImage.id);
+                console.log(data.outputLayer[i].bytestring.substring(2, data.outputLayer[i].bytestring.length - 1));
+
                 // append new image to image grid
                 imageGrid.appendChild(newOutputImage);
 

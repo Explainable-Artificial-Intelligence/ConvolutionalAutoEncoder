@@ -18,9 +18,9 @@ def compute_output_images(datasetname):
         # get CAE
         cae = Storage.get_cae()
         # predict train images
-        output_images = cae.predict(Storage.get_input_data(datasetname))
+        output_images = cae.predict(Storage.input_data[datasetname])
         # save prediction
-        Storage.set_output_data(datasetname, output_images)
+        Storage.output_data[datasetname] = output_images
 
 
 class TuningQueue(object):

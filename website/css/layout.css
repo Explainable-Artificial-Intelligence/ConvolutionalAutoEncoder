@@ -124,6 +124,18 @@ li a:hover {
 }
 
 
+.leftColumn{
+    float:left;
+
+}
+
+.rightColumn{
+    float: right;
+
+}
+
+
+/*
 .imageRibbonThumbnail{
     width: 50px;
     margin-left: -30px;
@@ -132,4 +144,4 @@ li a:hover {
 .imageRibbonThumbnail:hover{
     border: dashed red;
     width: 150px;
-}
+}*/

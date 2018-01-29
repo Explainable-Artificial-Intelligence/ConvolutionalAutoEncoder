@@ -1,49 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Visualize</title>
-
-
-
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <title>Visualize</title>
 
     <link rel="stylesheet" type="text/css" href="../css/layout.css">
-
-    <body>
-        <header>
-            <ul>
-                <li><a href="load.html">Load</a></li>
-                <li><a href="build.html">Build</a></li>
-                <li><a href="train.html">Train</a></li>
-                <li><a href="visualize.html">Visualize</a></li>
-                <li><a href="tune.html">Tuning</a></li>
-            </ul>
-        </header>
-
-        <aside id="sidebar">
-            <section id="widget_1">
-                test
-            </section>
-            <section id="widget_2">
-                test2
-            </section>
-            <section id="widget_3">
-                test3
-            </section>
-        </aside>
-
-        <div id="content">
-            <div id="imageRibbon">
-
-            </div>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
 
 
+</head>
 
+
+<body>
+<header>
+    <ul>
+        <li><a href="load.html">Load</a></li>
+        <li><a href="build.html">Build</a></li>
+        <li><a href="train.html">Train</a></li>
+        <li><a href="visualize.html">Visualize</a></li>
+        <li><a href="tune.html">Tuning</a></li>
+    </ul>
+</header>
+
+<aside id="sidebar">
+    <section id="widget_1">
+        test
+    </section>
+    <section id="widget_2">
+        test2
+    </section>
+    <section id="widget_3">
+        test3
+    </section>
+</aside>
+
+<div id="content">
+    <div id="imageRibbon" class="slick">
+
+    </div>
+    <div id="imagePreviewView">
+        <div class="leftColumn">
+            <img src="" id="inputPreview" width="400px">
+        </div>
+        <div class="rightColumn">
+            <img src="" id="outputPreview" width="400px">
         </div>
 
-        <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
-        <!--<script src="../js/lineChart.js"></script>-->
-        <script src="../js/visualize_bundle.js"></script>
-    </body>
+    </div>
+
+</div>
+
+<!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
+<!--<script src="../js/lineChart.js"></script>-->
+
+<script type="text/javascript" src="../js/jquery-3.3.1.slim.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
+<script src="../js/visualize_slick.js"></script>
+<script src="../js/visualize_bundle.js"></script>
+
+</body>
 </html>

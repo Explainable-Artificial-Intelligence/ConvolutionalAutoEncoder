@@ -68,7 +68,7 @@ def get_image_by_id(id=None, datasetname="train_data", sort_by=None, filter=None
     # create Image
     image = Image()
     image.id = id
-    image.bytestring = str(convert_image_array_to_byte_string(image_array, channels=image_array.shape[2]))
+    image.bytestring = convert_image_array_to_byte_string(image_array, channels=image_array.shape[2])
 
     return image, 200
 

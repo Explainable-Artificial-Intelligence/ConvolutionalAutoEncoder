@@ -16,6 +16,7 @@ def convert_image_array_to_byte_string(image_array, channels=1, normalize=True):
     :return:
     """
 
+
     if normalize:
         image_array = (image_array - image_array.min()) / (image_array.max() - image_array.min()) * 255
 

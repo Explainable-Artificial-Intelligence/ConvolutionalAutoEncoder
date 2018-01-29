@@ -664,9 +664,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # reopen session (if model is saved to disk):
             self._load_session()
             self._print_training_warning()
-            prediction = self.tf_session.run(self.output_images, feed_dict={self.input_images: X})
+            prediction, _ = self.tf_session.run([self.output_images, self.latent_representation], feed_dict={self.input_images: X})
             # close session (if possible):
             self._close_session()
+
             return prediction
         else:
             raise RuntimeError("You must train transformer before predicting data!")

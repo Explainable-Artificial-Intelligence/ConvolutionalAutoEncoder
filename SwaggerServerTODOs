@@ -1,0 +1,12 @@
+## Load:
+
+- add resetBatchIndex
+- implement file upload
+
+
+## Train:
+
+- return epochs in trainImages and trainStatistics
+- return progress
+
+
