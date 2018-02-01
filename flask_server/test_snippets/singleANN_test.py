@@ -1,9 +1,12 @@
-import ConvolutionalAutoEncoder
 import numpy as np
 
+from flask_server import ConvolutionalAutoEncoder
+
 # extract train/test data
-train_data = np.load("../data/mnist_train_data.npy")
-test_data = np.load("../data/mnist_test_data.npy")
+
+
+train_data = np.load("../../data/mnist_train_data.npy")
+test_data = np.load("../../data/mnist_test_data.npy")
 
 cae_test = ConvolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4], [5, 5, 3, 3], n_epochs=5,
                                                use_tensorboard=False, verbose=True,

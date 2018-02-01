@@ -229,6 +229,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.current_output_image_sample = np.array([])
 
         # initialize session saver:
+        # session_saver_path = None
         self.session_saver_path = session_saver_path
         self.session_save_duration = session_save_duration
         self.load_prev_session = load_prev_session
@@ -246,31 +247,49 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self._define_summary_variables()
             self._init_tensorboard_file_writer()
 
+    # Todo: fix!
     def _load_session(self):
-        if self.session_saver_path is not None or not self.ann_status.eval(self.tf_session) == b'training':
-            self._build_ann()
-            prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
+        if self.session_saver_path is not None:
+            # if not self.ann_status.eval(self.tf_session) == b'training':
+
+            # reset currently active tf graph
+            tf.reset_default_graph()
             self.tf_session = tf.Session()
-            self.tf_session.run(tf.global_variables_initializer())
+
+            prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
+
+            self.session_saver = tf.train.import_meta_graph(prev_session.model_checkpoint_path + '.meta')
+
             self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
+
+            self._build_ann(restore=True)
+
+            # TODO remove
+            # print(self.tf_session.run(self.encoder_weights[0][0][0]))
+            # print(self.tf_session.run(self.decoder_weights))
+
             if self.verbose:
                 print("session restored!")
 
-    def _build_ann(self):
+    def _restore_variables_from_checkpoint(self):
+        # get trained variables from file:
+        self.global_step = tf.get_default_graph().get_tensor_by_name("global_step:0")
+
+    def _build_ann(self, restore=False):
         """
         Wrapper function to build the complete ANN topology and define all required session variables
         (important for loading previous session)
         """
         # build ANN
-        self._build_network_topology()
+        self._build_network_topology(restore)
         # define cost function
         self._define_cost_function()
         # define learning rate function
         self._define_learning_rate_function()
         # define optimizer
-        self._define_optimizer()
+        self._define_optimizer(restore)
 
-    def _build_network_topology(self):
+    def _build_network_topology(self, restore=False):
         """
         Builds the ANN topology for a Convolutional Autencoder
         """
@@ -279,12 +298,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # define model topology
         # encoder part
-        self._build_encoder()
+        self._build_encoder(restore)
 
         # decoder part
-        self._build_decoder()
+        self._build_decoder(restore)
 
-    def _build_encoder(self):
+    def _build_encoder(self, restore=False):
         """
         Builds the encoder part of the Convolutional Autencoder
         """
@@ -297,17 +316,18 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.layers.append(self.input_images)
         # iterate over all encoder layer
         for layer_i, n_output in enumerate(self.number_of_stacks):
-            output = self._build_encoder_layer(current_input, layer_i, n_output)
+            output = self._build_encoder_layer(current_input, layer_i, n_output, restore)
             self.layers.append(output)
             current_input = output
 
         # save latent representation
         self.latent_representation = output
 
-    def _build_encoder_layer(self, current_input, layer_i, n_output):
+    def _build_encoder_layer(self, current_input, layer_i, n_output, restore=False):
         """
         Builds a single encoder layer
 
+        :param restore:
         :param current_input: input from a previous encoder layer
         :param layer_i: index of the new layer
         :param n_output: number of output stacks
@@ -315,11 +335,16 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         number_of_input_layers = current_input.get_shape().as_list()[3]
         self.encoder_shapes.append(current_input.get_shape().as_list())
-        weights_of_layer_i = self._create_random_layer_weights(
-            [self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output],
-            "encoder_weights_layer_" + str(layer_i))
+        if restore:
+            weights_of_layer_i = tf.get_default_graph().get_tensor_by_name(
+                "encoder_weights_layer_" + str(layer_i) + ":0")
+            bias_of_layer_i = tf.get_default_graph().get_tensor_by_name("encoder_biases_layer_" + str(layer_i) + ":0")
+        else:
+            weights_of_layer_i = self._create_random_layer_weights(
+                [self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output],
+                "encoder_weights_layer_" + str(layer_i))
+            bias_of_layer_i = self._create_layer_biases([n_output], "encoder_biases_layer_" + str(layer_i))
         print([self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output])
-        bias_of_layer_i = self._create_layer_biases([n_output], "encoder_biases_layer_" + str(layer_i))
         self.encoder_weights.append(weights_of_layer_i)
         self.encoder_biases.append(bias_of_layer_i)
         # TODO: understand strides /padding
@@ -365,7 +390,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         else:
             return tf.Variable(tf.random_uniform(shape, self.rw_minval, self.rw_maxval, seed=self.rw_seed), name=name)
 
-    def _build_decoder(self):
+    def _build_decoder(self, restore=False):
         """
         Builds the decoder of the Convolutional Autoencoder
         """
@@ -378,13 +403,13 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # iterate over all encoder layer
         for layer_i, shape in enumerate(self.decoder_shapes):
-            output = self._build_decoder_layer(current_input, layer_i, shape)
+            output = self._build_decoder_layer(current_input, layer_i, shape, restore)
             self.layers.append(output)
             current_input = output
 
         self.output_images = output
 
-    def _build_decoder_layer(self, current_input, layer_i, shape):
+    def _build_decoder_layer(self, current_input, layer_i, shape, restore=False):
         """
 
         :param current_input:
@@ -399,11 +424,17 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.mirror_weights:
             weights_of_layer_i = reversed_encoder_weights[layer_i]
         else:
-            weights_of_layer_i = self._create_random_layer_weights(
-                reversed_encoder_weights[layer_i].get_shape().as_list(), "decoder_weights_layer_" + str(layer_i))
+            if restore:
+                weights_of_layer_i = tf.get_default_graph().get_tensor_by_name(
+                    "decoder_weights_layer_" + str(layer_i) + ":0")
+                biases_of_layer_i = tf.get_default_graph().get_tensor_by_name(
+                    "decoder_biases_layer_" + str(layer_i) + ":0")
+            else:
+                weights_of_layer_i = self._create_random_layer_weights(
+                    reversed_encoder_weights[layer_i].get_shape().as_list(), "decoder_weights_layer_" + str(layer_i))
 
-        biases_of_layer_i = self._create_layer_biases(weights_of_layer_i.get_shape().as_list()[2],
-                                                      "decoder_biases_layer_" + str(layer_i))
+                biases_of_layer_i = self._create_layer_biases(weights_of_layer_i.get_shape().as_list()[2],
+                                                              "decoder_biases_layer_" + str(layer_i))
 
         self.decoder_weights.append(weights_of_layer_i)
         self.decoder_biases.append(biases_of_layer_i)
@@ -458,26 +489,34 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                                                                                        self.lr_decay_rate,
                                                                                        self.lr_staircase)
 
-    def _define_optimizer(self):
+    def _define_optimizer(self, restore=False):
         """
 
         :return:
         """
+        # on loading: get optimizer from file:
+        if restore:
+            self.final_optimizer = tf.get_collection("optimizer")[0]
+            return
+
         # special cases:
         # AdagradDAOptimizer:
         if self.optimizer == tf.train.AdagradDAOptimizer:
             self.final_optimizer = self.optimizer(self.learning_rate, self.global_step).minimize(
                 self.cost_function, self.global_step)
+            tf.add_to_collection("optimizer", self.final_optimizer)
             return
         # MomentumOptimizer:
         if self.optimizer == tf.train.MomentumOptimizer:
             self.final_optimizer = self.optimizer(self.learning_rate, self.momentum).minimize(
                 self.cost_function, self.global_step)
+            tf.add_to_collection("optimizer", self.final_optimizer)
             return
 
         # optimizer with std. parameters
         self.final_optimizer = self.optimizer(self.learning_rate).minimize(
             self.cost_function, self.global_step)
+        tf.add_to_collection("optimizer", self.final_optimizer)
 
     def _define_summary_variables(self):
         """
@@ -531,7 +570,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self.model_is_trained = True
 
             self._train_model_single_epoch(epoch_i, train_data)
-            # save session  after each epoch
+            # save session  after each x epochs
             if self.session_saver_path is not None and epoch_i % self.session_save_duration == 0:
                 self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
                                         global_step=self.global_step)
@@ -556,11 +595,26 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # close session
             # self.tf_session.close()
 
+        # TODO: use SavedModelBuilder:
         # save final train status
         if self.session_saver_path is not None:
-            self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session.bak'),
+            # # using SavedModelBuilder
+            #
+            # # remove previous folder
+            # if os.path.exists(self.session_saver_path + '/final/'):
+            #     shutil.rmtree(self.session_saver_path + '/final/', ignore_errors=True)
+            #
+            # # save the model
+            # builder = tf.saved_model.builder.SavedModelBuilder(self.session_saver_path + '/final/')
+            # builder.add_meta_graph_and_variables(self.tf_session, [tf.saved_model.tag_constants.SERVING])
+            # builder.save()
+
+            self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session_final.bak'),
                                     global_step=self.global_step)
-            print("final model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
+            print("final model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session_final.bak')))
+            # TODO remove
+            print(self.tf_session.run(self.encoder_weights[0][0][0]))
+            # print(self.tf_session.run(self.decoder_weights))
             self._close_session()
 
     def _train_model_single_epoch(self, epoch_i, train_data):
@@ -663,8 +717,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.model_is_trained:
             # reopen session (if model is saved to disk):
             self._load_session()
-            self._print_training_warning()
-            prediction, _ = self.tf_session.run([self.output_images, self.latent_representation], feed_dict={self.input_images: X})
+            # self._print_training_warning()
+            # TODO remove
+            print(self.tf_session.run(self.encoder_weights))
+            print(self.tf_session.run(self.decoder_weights))
+            prediction, _ = self.tf_session.run([self.output_images, self.latent_representation],
+                                                feed_dict={self.input_images: X})
             # close session (if possible):
             self._close_session()
 
@@ -682,7 +740,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.model_is_trained:
             # reopen session (if model is saved to disk):
             self._load_session()
-            self._print_training_warning()
+            # self._print_training_warning()
             cost = self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
             # close session (if possible):
             self._close_session()
