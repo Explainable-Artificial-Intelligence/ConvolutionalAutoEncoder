@@ -96,6 +96,31 @@ class TestLoadController(BaseTestCase):
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
+    def test_reset_all_batch_indices(self):
+        """
+        Test case for reset_all_batch_indices
+
+        resets all batch indices of all image sets
+        """
+        response = self.client.open('/v2/load/resetAllBatchIndices',
+                                    method='POST',
+                                    content_type='application/json')
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_reset_batch_index(self):
+        """
+        Test case for reset_batch_index
+
+        resets the batch index of the image set
+        """
+        query_string = [('dataset_name', 'train_data'),
+                        ('output', false)]
+        response = self.client.open('/v2/load/resetBatchIndex',
+                                    method='POST',
+                                    content_type='application/json',
+                                    query_string=query_string)
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
 
 if __name__ == '__main__':
     import unittest

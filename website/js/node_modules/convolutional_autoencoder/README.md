@@ -124,6 +124,8 @@ Class | Method | HTTP request | Description
 *ConvolutionalAutoencoder.LoadApi* | [**getImages**](docs/LoadApi.md#getImages) | **GET** /load/getImages | returns a subset of input/output images
 *ConvolutionalAutoencoder.LoadApi* | [**getRandomImages**](docs/LoadApi.md#getRandomImages) | **GET** /load/getRandomImages | returns the next batch of input/output images
 *ConvolutionalAutoencoder.LoadApi* | [**loadFile**](docs/LoadApi.md#loadFile) | **POST** /load/loadFile | Load a train/test data file
+*ConvolutionalAutoencoder.LoadApi* | [**resetAllBatchIndices**](docs/LoadApi.md#resetAllBatchIndices) | **POST** /load/resetAllBatchIndices | resets all batch indices of all image sets
+*ConvolutionalAutoencoder.LoadApi* | [**resetBatchIndex**](docs/LoadApi.md#resetBatchIndex) | **POST** /load/resetBatchIndex | resets the batch index of the image set
 *ConvolutionalAutoencoder.TrainApi* | [**controlTraining**](docs/TrainApi.md#controlTraining) | **POST** /train/controlTraining | starts, pauses and stops the training
 *ConvolutionalAutoencoder.TrainApi* | [**getProcessedImageData**](docs/TrainApi.md#getProcessedImageData) | **GET** /train/getProcessedImageData | returns a subset of the current train images and the corresponding latent representation and output
 *ConvolutionalAutoencoder.TrainApi* | [**getTrainPerformance**](docs/TrainApi.md#getTrainPerformance) | **GET** /train/getTrainPerformance | returns the next batch of scalar train variables

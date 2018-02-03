@@ -14,158 +14,169 @@
  *
  */
 
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['ApiClient', 'model/ProcessedImageData', 'model/TrainPerformance', 'model/TrainStatus'], factory);
-    } else if (typeof module === 'object' && module.exports) {
-        // CommonJS-like environments that support module.exports, like Node.
-        module.exports = factory(require('../ApiClient'), require('../model/ProcessedImageData'), require('../model/TrainPerformance'), require('../model/TrainStatus'));
-    } else {
-        // Browser globals (root is window)
-        if (!root.ConvolutionalAutoencoder) {
-            root.ConvolutionalAutoencoder = {};
-        }
-        root.ConvolutionalAutoencoder.TrainApi = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.ProcessedImageData, root.ConvolutionalAutoencoder.TrainPerformance, root.ConvolutionalAutoencoder.TrainStatus);
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['ApiClient', 'model/ProcessedImageData', 'model/TrainPerformance', 'model/TrainStatus'], factory);
+  } else if (typeof module === 'object' && module.exports) {
+    // CommonJS-like environments that support module.exports, like Node.
+    module.exports = factory(require('../ApiClient'), require('../model/ProcessedImageData'), require('../model/TrainPerformance'), require('../model/TrainStatus'));
+  } else {
+    // Browser globals (root is window)
+    if (!root.ConvolutionalAutoencoder) {
+      root.ConvolutionalAutoencoder = {};
     }
-}(this, function (ApiClient, ProcessedImageData, TrainPerformance, TrainStatus) {
-    'use strict';
+    root.ConvolutionalAutoencoder.TrainApi = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.ProcessedImageData, root.ConvolutionalAutoencoder.TrainPerformance, root.ConvolutionalAutoencoder.TrainStatus);
+  }
+}(this, function(ApiClient, ProcessedImageData, TrainPerformance, TrainStatus) {
+  'use strict';
+
+  /**
+   * Train service.
+   * @module api/TrainApi
+   * @version 1.0.7
+   */
+
+  /**
+   * Constructs a new TrainApi. 
+   * @alias module:api/TrainApi
+   * @class
+   * @param {module:ApiClient} apiClient Optional API client implementation to use,
+   * default to {@link module:ApiClient#instance} if unspecified.
+   */
+  var exports = function(apiClient) {
+    this.apiClient = apiClient || ApiClient.instance;
+
 
     /**
-     * Train service.
-     * @module api/TrainApi
-     * @version 1.0.7
+     * Callback function to receive the result of the controlTraining operation.
+     * @callback module:api/TrainApi~controlTrainingCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
      */
 
     /**
-     * Constructs a new TrainApi.
-     * @alias module:api/TrainApi
-     * @class
-     * @param {module:ApiClient} apiClient Optional API client implementation to use,
-     * default to {@link module:ApiClient#instance} if unspecified.
+     * starts, pauses and stops the training
+     * uses a string enum
+     * @param {module:model/TrainStatus} trainStatus new status for training
+     * @param {module:api/TrainApi~controlTrainingCallback} callback The callback function, accepting three arguments: error, data, response
      */
-    var exports = function (apiClient) {
-        this.apiClient = apiClient || ApiClient.instance;
+    this.controlTraining = function(trainStatus, callback) {
+      var postBody = trainStatus;
+
+      // verify the required parameter 'trainStatus' is set
+      if (trainStatus === undefined || trainStatus === null) {
+        throw new Error("Missing the required parameter 'trainStatus' when calling controlTraining");
+      }
 
 
-        /**
-         * Callback function to receive the result of the controlTraining operation.
-         * @callback module:api/TrainApi~controlTrainingCallback
-         * @param {String} error Error message, if any.
-         * @param data This operation does not return a value.
-         * @param {String} response The complete HTTP response.
-         */
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-        /**
-         * starts, pauses and stops the training
-         * uses a string enum
-         * @param {module:model/TrainStatus} trainStatus new status for training
-         * @param {module:api/TrainApi~controlTrainingCallback} callback The callback function, accepting three arguments: error, data, response
-         */
-        this.controlTraining = function (trainStatus, callback) {
-            var postBody = trainStatus;
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = null;
 
-            // verify the required parameter 'trainStatus' is set
-            if (trainStatus === undefined || trainStatus === null) {
-                throw new Error("Missing the required parameter 'trainStatus' when calling controlTraining");
-            }
+      return this.apiClient.callApi(
+        '/train/controlTraining', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
+    /**
+     * Callback function to receive the result of the getProcessedImageData operation.
+     * @callback module:api/TrainApi~getProcessedImageDataCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ProcessedImageData} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-            var pathParams = {};
-            var queryParams = {};
-            var headerParams = {};
-            var formParams = {};
+    /**
+     * returns a subset of the current train images and the corresponding latent representation and output
+     * 
+     * @param {Number} setSize size of the image subset
+     * @param {module:api/TrainApi~getProcessedImageDataCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ProcessedImageData}
+     */
+    this.getProcessedImageData = function(setSize, callback) {
+      var postBody = null;
 
-            var authNames = [];
-            var contentTypes = ['application/json'];
-            var accepts = ['application/json'];
-            var returnType = null;
-
-            return this.apiClient.callApi(
-                '/train/controlTraining', 'POST',
-                pathParams, queryParams, headerParams, formParams, postBody,
-                authNames, contentTypes, accepts, returnType, callback
-            );
-        }
-
-        /**
-         * Callback function to receive the result of the getProcessedImageData operation.
-         * @callback module:api/TrainApi~getProcessedImageDataCallback
-         * @param {String} error Error message, if any.
-         * @param {module:model/ProcessedImageData} data The data returned by the service call.
-         * @param {String} response The complete HTTP response.
-         */
-
-        /**
-         * returns a subset of the current train images and the corresponding latent representation and output
-         *
-         * @param {Number} setSize size of the image subset
-         * @param {module:api/TrainApi~getProcessedImageDataCallback} callback The callback function, accepting three arguments: error, data, response
-         * data is of type: {@link module:model/ProcessedImageData}
-         */
-        this.getProcessedImageData = function (setSize, callback) {
-            var postBody = null;
-
-            // verify the required parameter 'setSize' is set
-            if (setSize === undefined || setSize === null) {
-                throw new Error("Missing the required parameter 'setSize' when calling getProcessedImageData");
-            }
+      // verify the required parameter 'setSize' is set
+      if (setSize === undefined || setSize === null) {
+        throw new Error("Missing the required parameter 'setSize' when calling getProcessedImageData");
+      }
 
 
-            var pathParams = {};
-            var queryParams = {
-                'setSize': setSize
-            };
-            var headerParams = {};
-            var formParams = {};
+      var pathParams = {
+      };
+      var queryParams = {
+        'setSize': setSize
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-            var authNames = [];
-            var contentTypes = ['application/json'];
-            var accepts = ['application/json'];
-            var returnType = ProcessedImageData;
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = ProcessedImageData;
 
-            return this.apiClient.callApi(
-                '/train/getProcessedImageData', 'GET',
-                pathParams, queryParams, headerParams, formParams, postBody,
-                authNames, contentTypes, accepts, returnType, callback
-            );
-        }
+      return this.apiClient.callApi(
+        '/train/getProcessedImageData', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
-        /**
-         * Callback function to receive the result of the getTrainPerformance operation.
-         * @callback module:api/TrainApi~getTrainPerformanceCallback
-         * @param {String} error Error message, if any.
-         * @param {module:model/TrainPerformance} data The data returned by the service call.
-         * @param {String} response The complete HTTP response.
-         */
+    /**
+     * Callback function to receive the result of the getTrainPerformance operation.
+     * @callback module:api/TrainApi~getTrainPerformanceCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/TrainPerformance} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-        /**
-         * returns the next batch of scalar train variables
-         * as list of dicts
-         * @param {module:api/TrainApi~getTrainPerformanceCallback} callback The callback function, accepting three arguments: error, data, response
-         * data is of type: {@link module:model/TrainPerformance}
-         */
-        this.getTrainPerformance = function (callback) {
-            var postBody = null;
+    /**
+     * returns the next batch of scalar train variables
+     * as list of dicts
+     * @param {module:api/TrainApi~getTrainPerformanceCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/TrainPerformance}
+     */
+    this.getTrainPerformance = function(callback) {
+      var postBody = null;
 
 
-            var pathParams = {};
-            var queryParams = {};
-            var headerParams = {};
-            var formParams = {};
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-            var authNames = [];
-            var contentTypes = ['application/json'];
-            var accepts = ['application/json'];
-            var returnType = TrainPerformance;
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = TrainPerformance;
 
-            return this.apiClient.callApi(
-                '/train/getTrainPerformance', 'GET',
-                pathParams, queryParams, headerParams, formParams, postBody,
-                authNames, contentTypes, accepts, returnType, callback
-            );
-        }
-    };
+      return this.apiClient.callApi(
+        '/train/getTrainPerformance', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+  };
 
-    return exports;
+  return exports;
 }));

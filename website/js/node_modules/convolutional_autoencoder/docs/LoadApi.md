@@ -9,6 +9,8 @@ Method | HTTP request | Description
 [**getImages**](LoadApi.md#getImages) | **GET** /load/getImages | returns a subset of input/output images
 [**getRandomImages**](LoadApi.md#getRandomImages) | **GET** /load/getRandomImages | returns the next batch of input/output images
 [**loadFile**](LoadApi.md#loadFile) | **POST** /load/loadFile | Load a train/test data file
+[**resetAllBatchIndices**](LoadApi.md#resetAllBatchIndices) | **POST** /load/resetAllBatchIndices | resets all batch indices of all image sets
+[**resetBatchIndex**](LoadApi.md#resetBatchIndex) | **POST** /load/resetBatchIndex | resets the batch index of the image set
 
 
 <a name="getImageBatch"></a>
@@ -276,6 +278,95 @@ Name | Type | Description  | Notes
  **datasetname** | **String**| name for dataset on the server | [optional] [default to train_data]
  **readLabels** | **Boolean**| true to read labels | [optional] [default to false]
  **dataType** | **String**| determines the data format of the input file | [optional] [default to auto]
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="resetAllBatchIndices"></a>
+# **resetAllBatchIndices**
+> resetAllBatchIndices()
+
+resets all batch indices of all image sets
+
+resets all batch indices of all image sets
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.LoadApi();
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+apiInstance.resetAllBatchIndices(callback);
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="resetBatchIndex"></a>
+# **resetBatchIndex**
+> resetBatchIndex(opts)
+
+resets the batch index of the image set
+
+resets the batch index of the image set
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.LoadApi();
+
+var opts = { 
+  'datasetName': "train_data", // String | name for dataset on the server
+  'output': false // Boolean | reset output image batch index instead of input images
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+apiInstance.resetBatchIndex(opts, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **datasetName** | **String**| name for dataset on the server | [optional] [default to train_data]
+ **output** | **Boolean**| reset output image batch index instead of input images | [optional] [default to false]
 
 ### Return type
 

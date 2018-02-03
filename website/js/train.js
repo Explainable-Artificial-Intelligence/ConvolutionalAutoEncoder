@@ -7,7 +7,21 @@ var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 Global variables
  */
 var trainApi = new ConvolutionalAutoencoder.TrainApi();
+var loadApi = new ConvolutionalAutoencoder.LoadApi();
+
 var trainTimer;
+
+/*
+API test
+ */
+function callback(error, data, response) {
+    if (error) {
+        console.error(error);
+    } else {
+        console.log('API called successfully.');
+    }
+}
+loadApi.resetAllBatchIndices(callback);
 
 /*
 Charts

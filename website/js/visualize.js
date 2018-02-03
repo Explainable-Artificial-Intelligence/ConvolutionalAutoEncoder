@@ -15,7 +15,7 @@ function callback(error, data, response) {
     }
 }
 
-loadApi.getImageBatch({"batchSize": 1}, callback);
+loadApi.resetAllBatchIndices(callback);
 
 
 function appendImages(batchSize) {

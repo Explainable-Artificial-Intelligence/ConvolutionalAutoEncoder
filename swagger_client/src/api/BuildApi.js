@@ -14,120 +14,127 @@
  *
  */
 
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['ApiClient', 'model/ParameterList'], factory);
-    } else if (typeof module === 'object' && module.exports) {
-        // CommonJS-like environments that support module.exports, like Node.
-        module.exports = factory(require('../ApiClient'), require('../model/ParameterList'));
-    } else {
-        // Browser globals (root is window)
-        if (!root.ConvolutionalAutoencoder) {
-            root.ConvolutionalAutoencoder = {};
-        }
-        root.ConvolutionalAutoencoder.BuildApi = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.ParameterList);
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['ApiClient', 'model/ParameterList'], factory);
+  } else if (typeof module === 'object' && module.exports) {
+    // CommonJS-like environments that support module.exports, like Node.
+    module.exports = factory(require('../ApiClient'), require('../model/ParameterList'));
+  } else {
+    // Browser globals (root is window)
+    if (!root.ConvolutionalAutoencoder) {
+      root.ConvolutionalAutoencoder = {};
     }
-}(this, function (ApiClient, ParameterList) {
-    'use strict';
+    root.ConvolutionalAutoencoder.BuildApi = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.ParameterList);
+  }
+}(this, function(ApiClient, ParameterList) {
+  'use strict';
+
+  /**
+   * Build service.
+   * @module api/BuildApi
+   * @version 1.0.7
+   */
+
+  /**
+   * Constructs a new BuildApi. 
+   * @alias module:api/BuildApi
+   * @class
+   * @param {module:ApiClient} apiClient Optional API client implementation to use,
+   * default to {@link module:ApiClient#instance} if unspecified.
+   */
+  var exports = function(apiClient) {
+    this.apiClient = apiClient || ApiClient.instance;
+
 
     /**
-     * Build service.
-     * @module api/BuildApi
-     * @version 1.0.7
+     * Callback function to receive the result of the buildANN operation.
+     * @callback module:api/BuildApi~buildANNCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
      */
 
     /**
-     * Constructs a new BuildApi.
-     * @alias module:api/BuildApi
-     * @class
-     * @param {module:ApiClient} apiClient Optional API client implementation to use,
-     * default to {@link module:ApiClient#instance} if unspecified.
+     * passes all learning and ANN parameters to the server
+     * Includes learning parameters and ANN topology
+     * @param {module:model/ParameterList} inputParameters object with all tunable parameters
+     * @param {module:api/BuildApi~buildANNCallback} callback The callback function, accepting three arguments: error, data, response
      */
-    var exports = function (apiClient) {
-        this.apiClient = apiClient || ApiClient.instance;
+    this.buildANN = function(inputParameters, callback) {
+      var postBody = inputParameters;
+
+      // verify the required parameter 'inputParameters' is set
+      if (inputParameters === undefined || inputParameters === null) {
+        throw new Error("Missing the required parameter 'inputParameters' when calling buildANN");
+      }
 
 
-        /**
-         * Callback function to receive the result of the buildANN operation.
-         * @callback module:api/BuildApi~buildANNCallback
-         * @param {String} error Error message, if any.
-         * @param data This operation does not return a value.
-         * @param {String} response The complete HTTP response.
-         */
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-        /**
-         * passes all learning and ANN parameters to the server
-         * Includes learning parameters and ANN topology
-         * @param {module:model/ParameterList} inputParameters object with all tunable parameters
-         * @param {module:api/BuildApi~buildANNCallback} callback The callback function, accepting three arguments: error, data, response
-         */
-        this.buildANN = function (inputParameters, callback) {
-            var postBody = inputParameters;
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = null;
 
-            // verify the required parameter 'inputParameters' is set
-            if (inputParameters === undefined || inputParameters === null) {
-                throw new Error("Missing the required parameter 'inputParameters' when calling buildANN");
-            }
+      return this.apiClient.callApi(
+        '/build/buildANN', 'POST',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
+    /**
+     * Callback function to receive the result of the getInputShape operation.
+     * @callback module:api/BuildApi~getInputShapeCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<'Number'>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-            var pathParams = {};
-            var queryParams = {};
-            var headerParams = {};
-            var formParams = {};
-
-            var authNames = [];
-            var contentTypes = ['application/json'];
-            var accepts = ['application/json'];
-            var returnType = null;
-
-            return this.apiClient.callApi(
-                '/build/buildANN', 'POST',
-                pathParams, queryParams, headerParams, formParams, postBody,
-                authNames, contentTypes, accepts, returnType, callback
-            );
-        }
-
-        /**
-         * Callback function to receive the result of the getInputShape operation.
-         * @callback module:api/BuildApi~getInputShapeCallback
-         * @param {String} error Error message, if any.
-         * @param {Array.<'Number'>} data The data returned by the service call.
-         * @param {String} response The complete HTTP response.
-         */
-
-        /**
-         * returns the input shape of the train data
-         * returns the input shape of the train data
-         * @param {Object} opts Optional parameters
-         * @param {String} opts.datasetName name of the dataset (default to train_data)
-         * @param {module:api/BuildApi~getInputShapeCallback} callback The callback function, accepting three arguments: error, data, response
-         * data is of type: {@link Array.<'Number'>}
-         */
-        this.getInputShape = function (opts, callback) {
-            opts = opts || {};
-            var postBody = null;
+    /**
+     * returns the input shape of the train data
+     * returns the input shape of the train data
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.datasetName name of the dataset (default to train_data)
+     * @param {module:api/BuildApi~getInputShapeCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<'Number'>}
+     */
+    this.getInputShape = function(opts, callback) {
+      opts = opts || {};
+      var postBody = null;
 
 
-            var pathParams = {};
-            var queryParams = {
-                'dataset_name': opts['datasetName']
-            };
-            var headerParams = {};
-            var formParams = {};
+      var pathParams = {
+      };
+      var queryParams = {
+        'dataset_name': opts['datasetName']
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-            var authNames = [];
-            var contentTypes = ['application/json'];
-            var accepts = ['application/json'];
-            var returnType = ['Number'];
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = ['Number'];
 
-            return this.apiClient.callApi(
-                '/build/getInputShape', 'GET',
-                pathParams, queryParams, headerParams, formParams, postBody,
-                authNames, contentTypes, accepts, returnType, callback
-            );
-        }
-    };
+      return this.apiClient.callApi(
+        '/build/getInputShape', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+  };
 
-    return exports;
+  return exports;
 }));

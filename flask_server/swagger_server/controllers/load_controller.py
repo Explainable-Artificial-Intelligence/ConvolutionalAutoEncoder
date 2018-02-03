@@ -171,3 +171,42 @@ def load_file(filename, datasetname="train_data", read_labels=None, data_type=No
         # save train data
         Storage.set_input_data(input_data, datasetname)
     return response, response_code
+
+
+def reset_all_batch_indices():
+    """
+    resets all batch indices of all image sets
+    resets all batch indices of all image sets
+
+    :rtype: None
+    """
+
+    # reset input and output batch indices
+    Storage.input_batch_indices = {key: 0 for key in Storage.input_batch_indices.keys()}
+    Storage.output_batch_indices = {key: 0 for key in Storage.output_batch_indices.keys()}
+
+    # reset train step:
+    Storage.train_step = 0
+
+    return 'All batch indices successfully reset', 200
+
+
+def reset_batch_index(dataset_name=None, output=None):
+    """
+    resets the batch index of the image set
+    resets the batch index of the image set
+    :param dataset_name: name for dataset on the server
+    :type dataset_name: str
+    :param output: reset output image batch index instead of input images
+    :type output: bool
+
+    :rtype: None
+    """
+    try:
+        if output:
+            Storage.output_batch_indices[dataset_name] = 0
+        else:
+            Storage.input_batch_indices[dataset_name] = 0
+        return 'Batch index reset', 200
+    except KeyError:
+        return 'dataset not found', 404

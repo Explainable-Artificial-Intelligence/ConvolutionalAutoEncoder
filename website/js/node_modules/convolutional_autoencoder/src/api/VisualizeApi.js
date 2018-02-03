@@ -14,128 +14,135 @@
  *
  */
 
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['ApiClient', 'model/ClusterParameters', 'model/Clustering', 'model/Image', 'model/Point2D'], factory);
-    } else if (typeof module === 'object' && module.exports) {
-        // CommonJS-like environments that support module.exports, like Node.
-        module.exports = factory(require('../ApiClient'), require('../model/ClusterParameters'), require('../model/Clustering'), require('../model/Image'), require('../model/Point2D'));
-    } else {
-        // Browser globals (root is window)
-        if (!root.ConvolutionalAutoencoder) {
-            root.ConvolutionalAutoencoder = {};
-        }
-        root.ConvolutionalAutoencoder.VisualizeApi = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.ClusterParameters, root.ConvolutionalAutoencoder.Clustering, root.ConvolutionalAutoencoder.Image, root.ConvolutionalAutoencoder.Point2D);
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['ApiClient', 'model/ClusterParameters', 'model/Clustering', 'model/Image', 'model/Point2D'], factory);
+  } else if (typeof module === 'object' && module.exports) {
+    // CommonJS-like environments that support module.exports, like Node.
+    module.exports = factory(require('../ApiClient'), require('../model/ClusterParameters'), require('../model/Clustering'), require('../model/Image'), require('../model/Point2D'));
+  } else {
+    // Browser globals (root is window)
+    if (!root.ConvolutionalAutoencoder) {
+      root.ConvolutionalAutoencoder = {};
     }
-}(this, function (ApiClient, ClusterParameters, Clustering, Image, Point2D) {
-    'use strict';
+    root.ConvolutionalAutoencoder.VisualizeApi = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.ClusterParameters, root.ConvolutionalAutoencoder.Clustering, root.ConvolutionalAutoencoder.Image, root.ConvolutionalAutoencoder.Point2D);
+  }
+}(this, function(ApiClient, ClusterParameters, Clustering, Image, Point2D) {
+  'use strict';
+
+  /**
+   * Visualize service.
+   * @module api/VisualizeApi
+   * @version 1.0.7
+   */
+
+  /**
+   * Constructs a new VisualizeApi. 
+   * @alias module:api/VisualizeApi
+   * @class
+   * @param {module:ApiClient} apiClient Optional API client implementation to use,
+   * default to {@link module:ApiClient#instance} if unspecified.
+   */
+  var exports = function(apiClient) {
+    this.apiClient = apiClient || ApiClient.instance;
+
 
     /**
-     * Visualize service.
-     * @module api/VisualizeApi
-     * @version 1.0.7
+     * Callback function to receive the result of the generateImageFromSinglePoint operation.
+     * @callback module:api/VisualizeApi~generateImageFromSinglePointCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/Image} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
      */
 
     /**
-     * Constructs a new VisualizeApi.
-     * @alias module:api/VisualizeApi
-     * @class
-     * @param {module:ApiClient} apiClient Optional API client implementation to use,
-     * default to {@link module:ApiClient#instance} if unspecified.
+     * generates the AE output from a given point of the sample distribution
+     * 
+     * @param {module:model/Point2D} point2D 2D Point of the sample distribution
+     * @param {module:api/VisualizeApi~generateImageFromSinglePointCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/Image}
      */
-    var exports = function (apiClient) {
-        this.apiClient = apiClient || ApiClient.instance;
+    this.generateImageFromSinglePoint = function(point2D, callback) {
+      var postBody = point2D;
+
+      // verify the required parameter 'point2D' is set
+      if (point2D === undefined || point2D === null) {
+        throw new Error("Missing the required parameter 'point2D' when calling generateImageFromSinglePoint");
+      }
 
 
-        /**
-         * Callback function to receive the result of the generateImageFromSinglePoint operation.
-         * @callback module:api/VisualizeApi~generateImageFromSinglePointCallback
-         * @param {String} error Error message, if any.
-         * @param {module:model/Image} data The data returned by the service call.
-         * @param {String} response The complete HTTP response.
-         */
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-        /**
-         * generates the AE output from a given point of the sample distribution
-         *
-         * @param {module:model/Point2D} point2D 2D Point of the sample distribution
-         * @param {module:api/VisualizeApi~generateImageFromSinglePointCallback} callback The callback function, accepting three arguments: error, data, response
-         * data is of type: {@link module:model/Image}
-         */
-        this.generateImageFromSinglePoint = function (point2D, callback) {
-            var postBody = point2D;
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = Image;
 
-            // verify the required parameter 'point2D' is set
-            if (point2D === undefined || point2D === null) {
-                throw new Error("Missing the required parameter 'point2D' when calling generateImageFromSinglePoint");
-            }
+      return this.apiClient.callApi(
+        '/visualize/generateImageFromSinglePoint', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
+    /**
+     * Callback function to receive the result of the getHiddenLayerLatentClustering operation.
+     * @callback module:api/VisualizeApi~getHiddenLayerLatentClusteringCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/Clustering} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-            var pathParams = {};
-            var queryParams = {};
-            var headerParams = {};
-            var formParams = {};
-
-            var authNames = [];
-            var contentTypes = ['application/json'];
-            var accepts = ['application/json'];
-            var returnType = Image;
-
-            return this.apiClient.callApi(
-                '/visualize/generateImageFromSinglePoint', 'GET',
-                pathParams, queryParams, headerParams, formParams, postBody,
-                authNames, contentTypes, accepts, returnType, callback
-            );
-        }
-
-        /**
-         * Callback function to receive the result of the getHiddenLayerLatentClustering operation.
-         * @callback module:api/VisualizeApi~getHiddenLayerLatentClusteringCallback
-         * @param {String} error Error message, if any.
-         * @param {module:model/Clustering} data The data returned by the service call.
-         * @param {String} response The complete HTTP response.
-         */
-
-        /**
-         * returns the clustering of the latent representation of a hidden layer
-         *
-         * @param {Object} opts Optional parameters
-         * @param {String} opts.algorithm determines the clutering algorithm
-         * @param {String} opts.datasetName determines the dataset which should be clustered (default to train_data)
-         * @param {String} opts.dimensionReduction determines the algorithm for dim reduction
-         * @param {module:model/ClusterParameters} opts.clusterParameters determines the clutering parameters
-         * @param {Number} opts.layer determines the hidden layer
-         * @param {module:api/VisualizeApi~getHiddenLayerLatentClusteringCallback} callback The callback function, accepting three arguments: error, data, response
-         * data is of type: {@link module:model/Clustering}
-         */
-        this.getHiddenLayerLatentClustering = function (opts, callback) {
-            opts = opts || {};
-            var postBody = opts['clusterParameters'];
+    /**
+     * returns the clustering of the latent representation of a hidden layer
+     * 
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.algorithm determines the clutering algorithm
+     * @param {String} opts.datasetName determines the dataset which should be clustered (default to train_data)
+     * @param {String} opts.dimensionReduction determines the algorithm for dim reduction
+     * @param {module:model/ClusterParameters} opts.clusterParameters determines the clutering parameters
+     * @param {Number} opts.layer determines the hidden layer
+     * @param {module:api/VisualizeApi~getHiddenLayerLatentClusteringCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/Clustering}
+     */
+    this.getHiddenLayerLatentClustering = function(opts, callback) {
+      opts = opts || {};
+      var postBody = opts['clusterParameters'];
 
 
-            var pathParams = {};
-            var queryParams = {
-                'algorithm': opts['algorithm'],
-                'dataset_name': opts['datasetName'],
-                'dimension_reduction': opts['dimensionReduction'],
-                'layer': opts['layer']
-            };
-            var headerParams = {};
-            var formParams = {};
+      var pathParams = {
+      };
+      var queryParams = {
+        'algorithm': opts['algorithm'],
+        'dataset_name': opts['datasetName'],
+        'dimension_reduction': opts['dimensionReduction'],
+        'layer': opts['layer']
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-            var authNames = [];
-            var contentTypes = ['application/json'];
-            var accepts = ['application/json'];
-            var returnType = Clustering;
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = Clustering;
 
-            return this.apiClient.callApi(
-                '/visualize/getHiddenLayerLatentClustering', 'GET',
-                pathParams, queryParams, headerParams, formParams, postBody,
-                authNames, contentTypes, accepts, returnType, callback
-            );
-        }
-    };
+      return this.apiClient.callApi(
+        '/visualize/getHiddenLayerLatentClustering', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+  };
 
-    return exports;
+  return exports;
 }));

@@ -128,6 +128,49 @@ paths:
           description: No data found
         '415':
           description: Index out of bounds
+  /load/resetAllBatchIndices:
+    post:
+      tags:
+        - load
+      summary: resets all batch indices of all image sets
+      description: resets all batch indices of all image sets
+      operationId: resetAllBatchIndices
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: All batch indices reset
+  /load/resetBatchIndex:
+    post:
+      tags:
+        - load
+      summary: resets the batch index of the image set
+      description: resets the batch index of the image set
+      operationId: resetBatchIndex
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: dataset_name
+          in: query
+          description: name for dataset on the server
+          required: false
+          type: string
+          default: train_data
+        - name: output
+          in: query
+          description: reset output image batch index instead of input images
+          required: false
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Batch index reset
+        '404':
+          description: dataset not found
   /load/getImageBatch:
     get:
       tags:
@@ -306,6 +349,7 @@ paths:
             items:
               type: integer
               format: int32
+          
         '404':
           description: Dataset not found
   /build/buildANN:

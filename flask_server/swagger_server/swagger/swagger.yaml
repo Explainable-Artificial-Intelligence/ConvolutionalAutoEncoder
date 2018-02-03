@@ -131,6 +131,52 @@ paths:
         415:
           description: "Index out of bounds"
       x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/resetAllBatchIndices:
+    post:
+      tags:
+      - "load"
+      summary: "resets all batch indices of all image sets"
+      description: "resets all batch indices of all image sets"
+      operationId: "reset_all_batch_indices"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "All batch indices reset"
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/resetBatchIndex:
+    post:
+      tags:
+      - "load"
+      summary: "resets the batch index of the image set"
+      description: "resets the batch index of the image set"
+      operationId: "reset_batch_index"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dataset_name"
+        in: "query"
+        description: "name for dataset on the server"
+        required: false
+        type: "string"
+        default: "train_data"
+      - name: "output"
+        in: "query"
+        description: "reset output image batch index instead of input images"
+        required: false
+        type: "boolean"
+        default: false
+      responses:
+        200:
+          description: "Batch index reset"
+        404:
+          description: "dataset not found"
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
   /load/getImageBatch:
     get:
       tags:
