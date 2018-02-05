@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import
 
-from swagger_server.models.cluster_parameters import ClusterParameters
 from swagger_server.models.clustering import Clustering
 from swagger_server.models.image import Image
 from swagger_server.models.point2_d import Point2D
@@ -33,14 +32,12 @@ class TestVisualizeController(BaseTestCase):
 
         returns the clustering of the latent representation of a hidden layer
         """
-        cluster_parameters = ClusterParameters()
         query_string = [('algorithm', 'algorithm_example'),
                         ('dataset_name', 'train_data'),
                         ('dimension_reduction', 'dimension_reduction_example'),
                         ('layer', 56)]
         response = self.client.open('/v2/visualize/getHiddenLayerLatentClustering',
                                     method='GET',
-                                    data=json.dumps(cluster_parameters),
                                     content_type='application/json',
                                     query_string=query_string)
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))

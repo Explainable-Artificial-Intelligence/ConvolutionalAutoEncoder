@@ -58,7 +58,7 @@ function LineChart(parentNodeID, width, height, yAxisName) {
 
     //set Scales
     var xScale = d3.scaleLinear();
-    xScale.domain([xmin - 10, xmax + 10]);
+    xScale.domain([xmin, xmax]);
     xScale.range([0, panelWidth]);
     var yScale = d3.scaleLinear();
     yScale.domain([ymin * 0.9, ymax * 1.1]);

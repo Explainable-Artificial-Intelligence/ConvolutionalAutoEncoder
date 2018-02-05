@@ -698,7 +698,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.model_is_trained:
             # reopen session (if model is saved to disk):
             self._load_session()
-            self._print_training_warning()
+            #self._print_training_warning()
             latent_representation = self.tf_session.run(self.latent_representation,
                                                         feed_dict={self.input_images: input_data})
             # close session (if possible):

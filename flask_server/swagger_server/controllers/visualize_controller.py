@@ -24,7 +24,7 @@ def generate_image_from_single_point(point_2D):
     return 'do some magic!'
 
 
-def get_hidden_layer_latent_clustering(algorithm=None, dataset_name=None, dimension_reduction=None, cluster_parameters=None, layer=None):
+def get_hidden_layer_latent_clustering(algorithm=None, dataset_name=None, dimension_reduction=None, layer=None):
     """
     returns the clustering of the latent representation of a hidden layer
     
@@ -34,13 +34,13 @@ def get_hidden_layer_latent_clustering(algorithm=None, dataset_name=None, dimens
     :type dataset_name: str
     :param dimension_reduction: determines the algorithm for dim reduction
     :type dimension_reduction: str
-    :param cluster_parameters: determines the clutering parameters
-    :type cluster_parameters: dict | bytes
     :param layer: determines the hidden layer
     :type layer: int
 
     :rtype: Clustering
     """
+
+    print("At least to this point")
     if connexion.request.is_json:
         cluster_parameters = ClusterParameters.from_dict(connexion.request.get_json())
 

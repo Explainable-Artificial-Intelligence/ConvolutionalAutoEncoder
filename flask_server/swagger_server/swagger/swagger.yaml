@@ -455,7 +455,8 @@ paths:
       tags:
       - "visualize"
       summary: "returns the clustering of the latent representation of a hidden layer"
-      description: ""
+      description: "returns the clustering of the latent representation of a hidden\
+        \ layer"
       operationId: "get_hidden_layer_latent_clustering"
       consumes:
       - "application/json"
@@ -478,12 +479,6 @@ paths:
         description: "determines the algorithm for dim reduction"
         required: false
         type: "string"
-      - in: "body"
-        name: "cluster_parameters"
-        description: "determines the clutering parameters"
-        required: false
-        schema:
-          $ref: "#/definitions/ClusterParameters"
       - name: "layer"
         in: "query"
         description: "determines the hidden layer"
