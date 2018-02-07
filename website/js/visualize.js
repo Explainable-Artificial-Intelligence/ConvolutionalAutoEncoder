@@ -145,7 +145,7 @@ function ClusterChart(parentNodeID, width, height, colorMap, clustering) {
         .data(clustering.points)
         .enter().append("circle")
         .attr("class", "dot")
-        .attr("r", 1)
+        .attr("r", 1.5)
         .attr("cx", function (d) {
             return xScale(d.x);
         })
@@ -163,7 +163,7 @@ function ClusterChart(parentNodeID, width, height, colorMap, clustering) {
             d3.select(this)
                 .transition()
                 .duration(20)
-                .attr("r", 3);
+                .attr("r", 5);
         })
         .on("mouseout", function (d) {
             d3.select(this)
@@ -244,7 +244,7 @@ function updatePreviewImages(id) {
 }
 
 
-appendImages(30);
+appendImages(70);
 drawClustering();
 
 
@@ -252,7 +252,7 @@ drawClustering();
 $(document).ready(function () {
     $('.slick').slick({
         lazyLoad: 'ondemand',
-        slidesToShow: 25,
+        slidesToShow: 50,
         slidesToScroll: 10,
     });
 });

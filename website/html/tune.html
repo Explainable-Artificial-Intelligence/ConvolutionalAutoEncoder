@@ -5,7 +5,6 @@
     <title>Tune</title>
 
 
-
 </head>
 
 <link rel="stylesheet" type="text/css" href="../css/layout.css">
@@ -21,17 +20,184 @@
     </ul>
 </header>
 
-    <aside id="sidebar">
-        <section id="widget_1">
-            test
+<aside id="sidebar">
+    <div id="BuildColumn">
+        <h4>Learning Parameters:</h4>
+        <br>
+
+        <label>Mirror weights</label>
+        <select id="mirrorWeights" size="1">
+            <option value="true">true</option>
+            <option value="false">false</option>
+            <option value="both">test both</option>
+        </select><br>
+        <br>
+
+        Activation Fuction: <br>
+        <select id="activationFunction" size="3" multiple>
+            <option value="relu">relu</option>
+            <option value="relu6">relu6</option>
+            <option value="elu">elu</option>
+            <option value="softplus">softplus</option>
+            <option value="softsign">softsign</option>
+            <option value="sigmoid">sigmoid</option>
+            <option value="tanh">tanh</option>
+        </select><br>
+        <br>
+
+        Batch Size: <br>
+        <input id="batchSize" value="[100]"><br>
+        <br>
+
+        Number of Epochs <br>
+        <input id="nEpochs" value="[50]"><br>
+        <br>
+
+        <label>Use Tensorboard Visualisation <input id="useTensorboard" type="checkbox" checked></label><br>
+        <br>
+
+        <label>Activate verbose console output <input id="verbose" type="checkbox" checked></label><br>
+        <br>
+
+        Learning Rate Function: <br>
+        <select id="learningRateFunction" size="3" multiple>
+            <option value="static">static</option>
+            <option value="exponential_decay">exponential_decay</option>
+            <option value="inverse_time_decay">inverse_time_decay</option>
+            <option value="natural_exp_decay">natural_exp_decay</option>
+            <option value="piecewise_constant">piecewise_constant</option>
+            <option value="polynomial_decay">polynomial_decay</option>
+        </select><br>
+        <br>
+        <section id="advancedLearningParameters">
+            Initial Learning Rate <br>
+            <input id="lrInitialLearningRate" value="[0.01]"><br>
+            <br>
+            Decay Steps <br>
+            <input id="lrDecaySteps" value="[1000]"> <br>
+            <br>
+            Decay Rate <br>
+            <input id="lrDecayRate" value="[0.9]"><br>
+            <br>
+            <label>Use stepwise decay </label>
+            <select id="stepwiseDecay" size="1">
+                <option value="true">true</option>
+                <option value="false">false</option>
+                <option value="both">test both</option>
+            </select>
+            <br>
+            Boundaries <br>
+            <input id="lrBoundaries" value="[[10000, 20000]]"> <br>
+            <br>
+            Boundary Values <br>
+            <input id="lrValues" value="[[1.0, 0.5, 0.1]]"><br>
+            <br>
+            End Learning Rate <br>
+            <input id="lrEndLearningRate" value="[0.0001]"><br>
+            <br>
+            Power <br>
+            <input id="lrPower" value="[1.0]"><br>
+            <br>
+            <label>Cycle Beyond decay_steps </label>
+            <select id="lrCycle" size="1">
+                <option value="true">true</option>
+                <option value="false">false</option>
+                <option value="both">test both</option>
+            </select>
+            <br>
         </section>
-        <section id="widget_2">
-            test2
+        Optimizer: <br>
+        <select id="Optimizer" size="3" multiple>
+            <option value="GradientDescentOptimizer">GradientDescentOptimizer</option>
+            <option value="AdadeltaOptimizer">AdadeltaOptimizer</option>
+            <option value="AdagradOptimizer">AdagradOptimizer</option>
+            <option value="AdagradDAOptimizer">AdagradDAOptimizer</option>
+            <option value="MomentumOptimizer">MomentumOptimizer</option>
+            <option value="AdamOptimizer" selected>AdamOptimizer</option>
+            <option value="FtrlOptimizer">FtrlOptimizer</option>
+            <option value="ProximalGradientDescentOptimizer">ProximalGradientDescentOptimizer</option>
+            <option value="ProximalAdagradOptimizer">ProximalAdagradOptimizer</option>
+            <option value="RMSPropOptimizer">RMSPropOptimizer</option>
+        </select><br>
+        <br>
+        Momentum <br>
+        <input id="Momentum" value="[0.9]"><br>
+        <br>
+
+        Random functions for weights: <br>
+        <select id="randomFunctionForWeights" size="3" multiple>
+            <option value="zeros">zeros</option>
+            <option value="gamma">gamma</option>
+            <option value="normal">normal</option>
+            <option value="poisson">poisson</option>
+            <option value="uniform" selected>uniform</option>
+        </select><br>
+        <br>
+        <section id="advancedWeightParameters">
+            Alpha: <br>
+            <input id="rwAlpha" value="[0.5]"><br>
+            <br>
+            Beta: <br>
+            <input id="rwBeta" value="[1.0]"><br>
+            <br>
+            Mean: <br>
+            <input id="rwMean" value="[0.0]"><br>
+            <br>
+            Standard deviation: <br>
+            <input id="rwStddev" value="[1.0]"><br>
+            <br>
+            Rate parameter: <br>
+            <input id="rwLam" value="[0.5]"><br>
+            <br>
+            Minimum value: <br>
+            <input id="rwMinval" value="[-0.5]"><br>
+            <br>
+            Maximum value: <br>
+            <input id="rwMaxval" value="[0.5]"><br>
+            <br>
+            Seed: <br>
+            <input id="rwSeed" value="[-1]"><br>
+            <br>
+
         </section>
-        <section id="widget_3">
-            test3
+
+        Random functions for biases: <br>
+        <select id="randomFunctionForBiases" size="3" multiple>
+            <option value="zeros" selected>zeros</option>
+            <option value="gamma">gamma</option>
+            <option value="normal">normal</option>
+            <option value="poisson">poisson</option>
+            <option value="uniform">uniform</option>
+        </select><br>
+        <br>
+        <section id="advancedBiasParameters">
+            Alpha: <br>
+            <input id="rbAlpha" value="[0.5]"><br>
+            <br>
+            Beta: <br>
+            <input id="rbBeta" value="[1.0]"><br>
+            <br>
+            Mean: <br>
+            <input id="rbMean" value="[0.0]"><br>
+            <br>
+            Standard deviation: <br>
+            <input id="rbStddev" value="[1.0]"><br>
+            <br>
+            Rate parameter: <br>
+            <input id="rbLam" value="[0.5]"><br>
+            <br>
+            Minimum value: <br>
+            <input id="rbMinval" value="[-0.5]"><br>
+            <br>
+            Maximum value: <br>
+            <input id="rbMaxval" value="[0.5]"><br>
+            <br>
+            Seed: <br>
+            <input id="rbSeed" value="[-1]"> <br>
+            <br>
         </section>
-    </aside>
+    </div>
+</aside>
 
 </body>
 </html>

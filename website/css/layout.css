@@ -9,13 +9,13 @@ li {
     display: inline;
 }
 
-input{
+input {
     background-color: #5a5a5a;
     border-color: orange;
     color: orange;
 }
 
-select{
+select {
     background-color: #1a1a1a;
     border-color: orange;
     scrollbar-highlight-color: #2a2a2a;
@@ -23,7 +23,7 @@ select{
     color: orange;
 }
 
-section{
+section {
     background-color: #3a3a3a;
     border-color: orange;
 }
@@ -51,7 +51,6 @@ li a {
 li a:hover {
     background-color: #111;
 }
-
 
 #navigationBar {
     padding: 15px;
@@ -85,17 +84,17 @@ li a:hover {
     float: right;
 }
 
-.imageThumbnail:hover{
+.imageThumbnail:hover {
     border-color: orange;
     width: 200%;
 }
 
-.imageThumbnail{
+.imageThumbnail {
     border-color: black;
     width: 100%;
 }
 
-.ANNLayer{
+.ANNLayer {
     margin: 10px;
     padding: 10px;
     background-color: #3a3a3a;
@@ -113,27 +112,31 @@ li a:hover {
 .axis line {
     fill: none;
     stroke: orange;
-    shape-rendering: crispEdges;}
+    shape-rendering: crispEdges;
+}
+
 .axis text {
     fill: orange;
 
 }
 
-#imageRibbon{
+#imageRibbon {
     white-space: nowrap;
 }
 
-
-.leftColumn{
-    float:left;
+.leftColumn {
+    float: left;
+    margin: 20px;
+    padding: 15px;
 
 }
 
-.rightColumn{
+.rightColumn {
     float: right;
+    margin: 20px;
+    padding: 15px;
 
 }
-
 
 /*
 .imageRibbonThumbnail{
