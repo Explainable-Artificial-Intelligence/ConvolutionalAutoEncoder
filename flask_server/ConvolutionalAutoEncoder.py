@@ -455,6 +455,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         # TODO: allow predefined cost functions
         self.cost_function = tf.reduce_sum(tf.square(self.output_images - self.input_images))
+        # cost = MultiScaleSSIM(self.input_images, self.output_images)
 
     def _define_learning_rate_function(self):
         """

@@ -25,7 +25,7 @@
         <h4>Learning Parameters:</h4>
         <br>
 
-        <label>Mirror weights</label>
+        <label for="mirrorWeights">Mirror weights</label>
         <select id="mirrorWeights" size="1">
             <option value="true">true</option>
             <option value="false">false</option>
@@ -34,7 +34,7 @@
         <br>
 
         Activation Fuction: <br>
-        <select id="activationFunction" size="3" multiple>
+        <select id="activationFunction" size="7" multiple>
             <option value="relu">relu</option>
             <option value="relu6">relu6</option>
             <option value="elu">elu</option>
@@ -60,7 +60,7 @@
         <br>
 
         Learning Rate Function: <br>
-        <select id="learningRateFunction" size="3" multiple>
+        <select id="learningRateFunction" size="6" multiple>
             <option value="static">static</option>
             <option value="exponential_decay">exponential_decay</option>
             <option value="inverse_time_decay">inverse_time_decay</option>
@@ -70,44 +70,62 @@
         </select><br>
         <br>
         <section id="advancedLearningParameters">
-            Initial Learning Rate <br>
-            <input id="lrInitialLearningRate" value="[0.01]"><br>
-            <br>
-            Decay Steps <br>
-            <input id="lrDecaySteps" value="[1000]"> <br>
-            <br>
-            Decay Rate <br>
-            <input id="lrDecayRate" value="[0.9]"><br>
-            <br>
-            <label>Use stepwise decay </label>
-            <select id="stepwiseDecay" size="1">
-                <option value="true">true</option>
-                <option value="false">false</option>
-                <option value="both">test both</option>
-            </select>
-            <br>
-            Boundaries <br>
-            <input id="lrBoundaries" value="[[10000, 20000]]"> <br>
-            <br>
-            Boundary Values <br>
-            <input id="lrValues" value="[[1.0, 0.5, 0.1]]"><br>
-            <br>
-            End Learning Rate <br>
-            <input id="lrEndLearningRate" value="[0.0001]"><br>
-            <br>
-            Power <br>
-            <input id="lrPower" value="[1.0]"><br>
-            <br>
-            <label>Cycle Beyond decay_steps </label>
-            <select id="lrCycle" size="1">
-                <option value="true">true</option>
-                <option value="false">false</option>
-                <option value="both">test both</option>
-            </select>
-            <br>
+            <div id="lrInitialLearningRateDiv" style="display:none">
+                Initial Learning Rate <br>
+                <input id="lrInitialLearningRate" value="[0.01]"><br>
+                <br>
+            </div>
+            <div id="lrDecayStepsDiv" style="display:none">
+                Decay Steps <br>
+                <input id="lrDecaySteps" value="[1000]"> <br>
+                <br>
+            </div>
+            <div id="lrDecayRateDiv" style="display:none">
+                Decay Rate <br>
+                <input id="lrDecayRate" value="[0.9]"><br>
+                <br>
+            </div>
+            <div id="lrStaircaseDiv" style="display:none">
+                <label for="stepwiseDecay">Use stepwise decay</label>
+                <select id="stepwiseDecay" size="1">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                    <option value="both">test both</option>
+                </select>
+                <br>
+            </div>
+            <div id="lrBoundariesDiv" style="display:none">
+                Boundaries <br>
+                <input id="lrBoundaries" value="[[10000, 20000]]"> <br>
+                <br>
+            </div>
+            <div id="lrValuesDiv" style="display:none">
+                Boundary Values <br>
+                <input id="lrValues" value="[[1.0, 0.5, 0.1]]"><br>
+                <br>
+            </div>
+            <div id="lrEndLearningRateDiv" style="display:none">
+                End Learning Rate <br>
+                <input id="lrEndLearningRate" value="[0.0001]"><br>
+                <br>
+            </div>
+            <div id="lrPowerDiv" style="display:none">
+                Power <br>
+                <input id="lrPower" value="[1.0]"><br>
+                <br>
+            </div>
+            <div id="lrCycleDiv" style="display:none">
+                <label for="lrCycle">Cycle Beyond decay_steps</label>
+                <select id="lrCycle" size="1">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                    <option value="both">test both</option>
+                </select>
+                <br>
+            </div>
         </section>
         Optimizer: <br>
-        <select id="Optimizer" size="3" multiple>
+        <select id="Optimizer" size="5" multiple>
             <option value="GradientDescentOptimizer">GradientDescentOptimizer</option>
             <option value="AdadeltaOptimizer">AdadeltaOptimizer</option>
             <option value="AdagradOptimizer">AdagradOptimizer</option>
@@ -120,12 +138,14 @@
             <option value="RMSPropOptimizer">RMSPropOptimizer</option>
         </select><br>
         <br>
-        Momentum <br>
-        <input id="Momentum" value="[0.9]"><br>
-        <br>
+        <div id="MomentumDiv" style="display:none">
+            Momentum <br>
+            <input id="Momentum" value="[0.9]"><br>
+            <br>
+        </div>
 
-        Random functions for weights: <br>
-        <select id="randomFunctionForWeights" size="3" multiple>
+        <label for="randomFunctionForWeights">Random functions for weights:</label>
+        <select id="randomFunctionForWeights" size="5" multiple>
             <option value="zeros">zeros</option>
             <option value="gamma">gamma</option>
             <option value="normal">normal</option>
@@ -134,70 +154,153 @@
         </select><br>
         <br>
         <section id="advancedWeightParameters">
-            Alpha: <br>
-            <input id="rwAlpha" value="[0.5]"><br>
-            <br>
-            Beta: <br>
-            <input id="rwBeta" value="[1.0]"><br>
-            <br>
-            Mean: <br>
-            <input id="rwMean" value="[0.0]"><br>
-            <br>
-            Standard deviation: <br>
-            <input id="rwStddev" value="[1.0]"><br>
-            <br>
-            Rate parameter: <br>
-            <input id="rwLam" value="[0.5]"><br>
-            <br>
-            Minimum value: <br>
-            <input id="rwMinval" value="[-0.5]"><br>
-            <br>
-            Maximum value: <br>
-            <input id="rwMaxval" value="[0.5]"><br>
-            <br>
-            Seed: <br>
-            <input id="rwSeed" value="[-1]"><br>
-            <br>
+            <div id="rwAlphaDiv" style="display: none">
+                Alpha: <br>
+                <input id="rwAlpha" value="[0.5]"><br>
+                <br>
+            </div>
+            <div id="rwBetaDiv" style="display: none">
+                Beta: <br>
+                <input id="rwBeta" value="[1.0]"><br>
+                <br>
+            </div>
+            <div id="rwMeanDiv" style="display: none">
+                Mean: <br>
+                <input id="rwMean" value="[0.0]"><br>
+                <br>
+            </div>
+            <div id="rwStddevDiv" style="display: none">
+                Standard deviation: <br>
+                <input id="rwStddev" value="[1.0]"><br>
+                <br>
+            </div>
+            <div id="rwLamDiv" style="display: none">
+                Rate parameter: <br>
+                <input id="rwLam" value="[0.5]"><br>
+                <br>
+            </div>
+            <div id="rwMinvalDiv" style="display: none">
+                Minimum value: <br>
+                <input id="rwMinval" value="[-0.5]"><br>
+                <br>
+            </div>
+            <div id="rwMaxvalDiv" style="display: none">
+                Maximum value: <br>
+                <input id="rwMaxval" value="[0.5]"><br>
+                <br>
+            </div>
+            <div id="rwSeedDiv" style="display: none">
+                Seed: <br>
+                <input id="rwSeed" value="[-1]"><br>
+                <br>
+            </div>
 
         </section>
 
-        Random functions for biases: <br>
-        <select id="randomFunctionForBiases" size="3" multiple>
+        <label for="randomFunctionForBiases">Random functions for biases:</label>
+        <select id="randomFunctionForBiases" size="5" multiple>
             <option value="zeros" selected>zeros</option>
             <option value="gamma">gamma</option>
             <option value="normal">normal</option>
             <option value="poisson">poisson</option>
             <option value="uniform">uniform</option>
-        </select><br>
+        </select>
+        <br>
         <br>
         <section id="advancedBiasParameters">
-            Alpha: <br>
-            <input id="rbAlpha" value="[0.5]"><br>
-            <br>
-            Beta: <br>
-            <input id="rbBeta" value="[1.0]"><br>
-            <br>
-            Mean: <br>
-            <input id="rbMean" value="[0.0]"><br>
-            <br>
-            Standard deviation: <br>
-            <input id="rbStddev" value="[1.0]"><br>
-            <br>
-            Rate parameter: <br>
-            <input id="rbLam" value="[0.5]"><br>
-            <br>
-            Minimum value: <br>
-            <input id="rbMinval" value="[-0.5]"><br>
-            <br>
-            Maximum value: <br>
-            <input id="rbMaxval" value="[0.5]"><br>
-            <br>
-            Seed: <br>
-            <input id="rbSeed" value="[-1]"> <br>
-            <br>
+            <div id="rbAlphaDiv" style="display: none">
+                Alpha: <br>
+                <input id="rbAlpha" value="[0.5]"><br>
+                <br>
+            </div>
+            <div id="rbBetaDiv" style="display: none">
+                Beta: <br>
+                <input id="rbBeta" value="[1.0]"><br>
+                <br>
+            </div>
+            <div id="rbMeanDiv" style="display: none">
+                Mean: <br>
+                <input id="rbMean" value="[0.0]"><br>
+                <br>
+            </div>
+            <div id="rbStddevDiv" style="display: none">
+                Standard deviation: <br>
+                <input id="rbStddev" value="[1.0]"><br>
+                <br>
+            </div>
+            <div id="rbLamDiv" style="display: none">
+                Rate parameter: <br>
+                <input id="rbLam" value="[0.5]"><br>
+                <br>
+            </div>
+            <div id="rbMinvalDiv" style="display: none">
+                Minimum value: <br>
+                <input id="rbMinval" value="[-0.5]"><br>
+                <br>
+            </div>
+            <div id="rbMaxvalDiv" style="display: none">
+                Maximum value: <br>
+                <input id="rbMaxval" value="[0.5]"><br>
+                <br>
+            </div>
+            <div id="rbSeedDiv" style="display: none">
+                Seed: <br>
+                <input id="rbSeed" value="[-1]"><br>
+                <br>
+            </div>
+
         </section>
     </div>
+    <label for="sessionSaverPath">Path for session saving:</label>
+    <br>
+    <input id="sessionSaverPath" value="./save/"><br>
+    <br>
+
+    Duration of session saving:<br>
+    <input id="sessionSaveDuration" type="number" value="5"><br>
+    <br>
+
+    Number of test images during train evaluation: <br>
+    <input id="numTestPictures" type="number" value="100"><br>
+            <br>
+
 </aside>
 
+
+<div id="content">
+    <div id="ConvolutionalAutoEncoder">
+        <div id="encoder">
+            <div id="inputLayer" class="ANNLayer">
+                Input Layer:
+                <br>
+                <br>
+                Resolution:
+                <label id="resXLabel">?</label> x <label id="resYLabel">?</label>
+                Channels:
+                <label id="channelLabel">?</label>
+            </div>
+        </div>
+        <button id="addLayer">add Layer</button>
+        <div id="decoder">
+            <div id="outputLayer" class="ANNLayer">
+                Output Layer:
+                <br>
+                <br>
+                Resolution:
+                <label id="resXLabel2">?</label> x <label id="resYLabel2">?</label>
+                Channels: <label id="channelLabel2">?</label>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:right;">
+        <button id="buildANN">Build ANN</button>
+        <br>
+        <label id="responseLabel"></label>
+    </div>
+
+</div>
+
+<script src="../js/build_bundle.js"></script>
+<script src="../js/hideAndShowBuildParameters.js"></script>
 </body>
 </html>
