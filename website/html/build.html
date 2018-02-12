@@ -232,23 +232,23 @@
                 <input id="rbSeed" type="number" value="-1"><br>
                 <br>
             </div>
-
-
-            Path for session saving: <br>
-            <!--<input id="sessionSaverPath" type="file" webkitdirectory directory value="./save/"><br>-->
-            <input id="sessionSaverPath" value="./save/"><br>
-            <br>
-
-            Duration of session saving:<br>
-            <input id="sessionSaveDuration" type="number" value="5"><br>
-            <br>
-
-            Number of test images during train evaluation: <br>
-            <input id="numTestPictures" type="number" value="100"><br>
-            <br>
         </section>
 
     </div>
+
+    Path for session saving: <br>
+    <!--<input id="sessionSaverPath" type="file" webkitdirectory directory value="./save/"><br>-->
+    <input id="sessionSaverPath" value="./save/"><br>
+    <br>
+
+    Duration of session saving:<br>
+    <input id="sessionSaveDuration" type="number" value="5"><br>
+    <br>
+
+    Number of test images during train evaluation: <br>
+    <input id="numTestPictures" type="number" value="100"><br>
+    <br>
+
 </aside>
 
 <div id="content">
@@ -282,11 +282,18 @@
         <label id="responseLabel"></label>
     </div>
 
+    <div id="testCAE">
+        <button id="testBtn">add Stack</button>
+
+    </div>
+
 </div>
 
 
 <script src="../js/build_bundle.js"></script>
 <script src="../js/hideAndShowBuildParameters.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../js/layerVisualisation.js"></script>
 </body>
 </html>
 
