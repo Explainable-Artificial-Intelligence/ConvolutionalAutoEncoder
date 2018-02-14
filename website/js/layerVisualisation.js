@@ -5,6 +5,7 @@ Functions to create interactive
 
 function createANNLayer(width, height, layerWidth, layerHeight, stackCount, parentNodeID) {
     //create plot pane:
+    var plusButtonGroup;
     var plot = d3.select("#" + parentNodeID)
         .append("svg")
         .attr("width", width)
@@ -67,26 +68,52 @@ function createANNLayer(width, height, layerWidth, layerHeight, stackCount, pare
         .style("text-anchor", "middle")
         .style("font-size", "12px")
         .text('stacks: ' + stackCount);
-    var plusButton = plot.append("circle")
-        .attr('r', 7)
-        .attr('cx', -10)
+
+    plusButtonGroup = plot.append("g")
         .attr("class", "stack_button")
         .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
             (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)')
-        .style('stroke-width', 1)
-        .style('stroke', "orange")
-        .style('fill', '#3a3a3a')
-        .text('stacks: ' + stackCount);
-    var minusButton = plot.append("circle")
+        .on('click', function () {
+            console.log("click");
+            addStack();
+        });
+    plusButtonGroup.append("circle")
         .attr('r', 7)
         .attr('cx', 10)
         .attr("class", "stack_button")
-        .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-            (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)')
         .style('stroke-width', 1)
         .style('stroke', "orange")
-        .style('fill', '#3a3a3a')
-        .text('stacks: ' + stackCount);
+        .style('fill', '#3a3a3a');
+
+    plusButtonGroup.append('text')
+        .attr('x', 10)
+        .attr('y', 4)
+        .style('fill', "orange")
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "bold")
+        .text('+');
+
+    var minusButtonGroup = plot.append("g")
+        .attr("class", "stack_button")
+        .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
+            (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)');
+    minusButtonGroup.append("circle")
+        .attr('r', 7)
+        .attr('cx', -10)
+        .attr("class", "stack_button")
+        .style('stroke-width', 1)
+        .style('stroke', "orange")
+        .style('fill', '#3a3a3a');
+
+    minusButtonGroup.append('text')
+        .attr('x', -10)
+        .attr('y', 4)
+        .style('fill', "orange")
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "bold")
+        .text('-');
 
     // print console output:
     console.log("layerWidth: " + layerWidth);
@@ -94,7 +121,9 @@ function createANNLayer(width, height, layerWidth, layerHeight, stackCount, pare
     console.log("layerWidth scaled: " + xScale(layerWidth));
     console.log("Width text position: " + (xScale(layerWidth) / 2 + 20));
 
-    this.addStack = function () {
+
+
+    function addStack() {
         // update stack count
         stackCount += 1;
 
