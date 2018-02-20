@@ -33,6 +33,8 @@ def build_ann(inputParameters):
             parameter_set['rw_seed'] = None
         if parameter_set['rb_seed'] == -1:
             parameter_set['rb_seed'] = None
+        if parameter_set['cf_weights'] == [0.0]:
+            parameter_set['cf_weights'] = None
 
         # create convolutional auto encoder:
 

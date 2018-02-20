@@ -859,6 +859,56 @@ definitions:
         - false
         items:
           type: "boolean"
+      cf_cost_function:
+        type: "array"
+        example:
+        - "squared_pixel_distance"
+        items:
+          type: "string"
+      cf_max_val:
+        type: "array"
+        example:
+        - 255
+        items:
+          type: "number"
+          format: "float"
+      cf_filter_size:
+        type: "array"
+        example:
+        - 11
+        items:
+          type: "number"
+          format: "int32"
+      cf_filter_sigma:
+        type: "array"
+        example:
+        - 1.5
+        items:
+          type: "number"
+          format: "float"
+      cf_k1:
+        type: "array"
+        example:
+        - 0.01
+        items:
+          type: "number"
+          format: "float"
+      cf_k2:
+        type: "array"
+        example:
+        - 0.03
+        items:
+          type: "number"
+          format: "float"
+      cf_weights:
+        type: "array"
+        example:
+        - - 0
+        items:
+          type: "array"
+          items:
+            type: "number"
+            format: "float"
       optimizer:
         type: "array"
         example:

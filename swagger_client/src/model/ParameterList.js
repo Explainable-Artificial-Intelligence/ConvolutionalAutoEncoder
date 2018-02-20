@@ -49,48 +49,6 @@
     var _this = this;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   };
 
   /**
@@ -161,6 +119,27 @@
       if (data.hasOwnProperty('lr_cycle')) {
         obj['lr_cycle'] = ApiClient.convertToType(data['lr_cycle'], ['Boolean']);
       }
+        if (data.hasOwnProperty('cf_cost_function')) {
+            obj['cf_cost_function'] = ApiClient.convertToType(data['cf_cost_function'], ['String']);
+        }
+        if (data.hasOwnProperty('cf_max_val')) {
+            obj['cf_max_val'] = ApiClient.convertToType(data['cf_max_val'], ['Number']);
+        }
+        if (data.hasOwnProperty('cf_filter_size')) {
+            obj['cf_filter_size'] = ApiClient.convertToType(data['cf_filter_size'], ['Number']);
+        }
+        if (data.hasOwnProperty('cf_filter_sigma')) {
+            obj['cf_filter_sigma'] = ApiClient.convertToType(data['cf_filter_sigma'], ['Number']);
+        }
+        if (data.hasOwnProperty('cf_k1')) {
+            obj['cf_k1'] = ApiClient.convertToType(data['cf_k1'], ['Number']);
+        }
+        if (data.hasOwnProperty('cf_k2')) {
+            obj['cf_k2'] = ApiClient.convertToType(data['cf_k2'], ['Number']);
+        }
+        if (data.hasOwnProperty('cf_weights')) {
+            obj['cf_weights'] = ApiClient.convertToType(data['cf_weights'], [['Number']]);
+        }
       if (data.hasOwnProperty('optimizer')) {
         obj['optimizer'] = ApiClient.convertToType(data['optimizer'], ['String']);
       }
@@ -314,9 +293,37 @@
    */
   exports.prototype['lr_cycle'] = undefined;
   /**
-   * @member {Array.<String>} optimizer
+   * @member {Array.<String>} cf_cost_function
    */
-  exports.prototype['optimizer'] = undefined;
+  exports.prototype['cf_cost_function'] = undefined;
+    /**
+     * @member {Array.<Number>} cf_max_val
+     */
+    exports.prototype['cf_max_val'] = undefined;
+    /**
+     * @member {Array.<Number>} cf_filter_size
+     */
+    exports.prototype['cf_filter_size'] = undefined;
+    /**
+     * @member {Array.<Number>} cf_filter_sigma
+     */
+    exports.prototype['cf_filter_sigma'] = undefined;
+    /**
+     * @member {Array.<Number>} cf_k1
+     */
+    exports.prototype['cf_k1'] = undefined;
+    /**
+     * @member {Array.<Number>} cf_k2
+     */
+    exports.prototype['cf_k2'] = undefined;
+    /**
+     * @member {Array.<Array.<Number>>} cf_weights
+     */
+    exports.prototype['cf_weights'] = undefined;
+    /**
+     * @member {Array.<String>} optimizer
+     */
+    exports.prototype['optimizer'] = undefined;
   /**
    * @member {Array.<Number>} momentum
    */

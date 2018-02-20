@@ -5,6 +5,8 @@ import numpy as np
 import tensorflow as tf
 from sklearn.base import BaseEstimator, TransformerMixin
 
+from flask_server.utils.msssim import MultiScaleSSIM
+
 
 class SklearnCAE(BaseEstimator, TransformerMixin):
     """Convolutional Auto Encoder as sklearn class"""
@@ -48,12 +50,16 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         "uniform": tf.random_uniform
     }
 
+    _cost_functions = ["squared_pixel_distance", "pixel_distance", "msssim"]
+
     def __init__(self, input_shape, number_of_stacks, filter_sizes, mirror_weights=False, activation_function="relu",
                  batch_size=100, n_epochs=50, use_tensorboard=True, verbose=True, learning_rate_function="static",
                  lr_initial_learning_rate=0.01, lr_decay_steps=1000, lr_decay_rate=0.9, lr_staircase=False,
                  lr_boundaries=[10000, 20000], lr_values=[1.0, 0.5, 0.1], lr_end_learning_rate=0.0001, lr_power=1.0,
-                 lr_cycle=False, optimizer='AdamOptimizer', momentum=0.9, random_function_for_weights="uniform",
-                 rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0, rw_lam=0.5, rw_minval=-.5, rw_maxval=.5,
+                 lr_cycle=False, optimizer='AdamOptimizer', momentum=0.9, cf_cost_function="squared_pixel_distance",
+                 cf_max_val=255, cf_filter_size=11, cf_filter_sigma=1.5, cf_k1=0.01, cf_k2=0.03, cf_weights=None,
+                 random_function_for_weights="uniform", rw_alpha=0.5, rw_beta=None, rw_mean=0.0, rw_stddev=1.0,
+                 rw_lam=0.5, rw_minval=-.5, rw_maxval=.5,
                  rw_seed=None, random_function_for_biases="zeros", rb_alpha=0.5, rb_beta=None, rb_mean=0.0,
                  rb_stddev=1.0, rb_lam=0.5, rb_minval=-.5, rb_maxval=.5, rb_seed=None, session_saver_path='./save/',
                  load_prev_session=False, session_save_duration=5, num_test_pictures=100):
@@ -84,6 +90,13 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :param lr_cycle: learning rate parameter: A boolean, whether or not it should cycle beyond decay_steps.
         :param optimizer: defines the optimizer for the training
         :param momentum: defines the momentum for the momentum optimizer
+        :param cf_cost_function:
+        :param cf_max_val:
+        :param cf_filter_size:
+        :param cf_filter_sigma:
+        :param cf_k1:
+        :param cf_k2:
+        :param cf_weights:
         :param random_function_for_weights: defines the random function, which is used to generate the initial weights
         :param rw_alpha: parameter for the random function of the initial weights: defines the alpha value for a gamma
                 distribution
@@ -198,6 +211,15 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 "Please define a valid random function for the initial biases. \nValid values are:\n",
                 self._random_functions.keys())
 
+        # parse cost function parameters
+        self.cf_cost_function = cf_cost_function
+        self.cf_filter_size = cf_filter_size
+        self.cf_max_val = cf_max_val
+        self.cf_filter_sigma = cf_filter_sigma
+        self.cf_k1 = cf_k1
+        self.cf_k2 = cf_k2
+        self.cf_weights = cf_weights
+
         # parse train parameters
         self.batch_size = batch_size
         self.n_epochs = n_epochs
@@ -295,6 +317,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         # create placeholder for input images
         self.input_images = tf.placeholder(tf.float32, self.input_shape, name="Input_Images")
+
 
         # define model topology
         # encoder part
@@ -408,6 +431,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             current_input = output
 
         self.output_images = output
+        # tf.reshape(self.output_images, self.input_images.get_shape())
 
     def _build_decoder_layer(self, current_input, layer_i, shape, restore=False):
         """
@@ -453,9 +477,31 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         :return:
         """
-        # TODO: allow predefined cost functions
-        self.cost_function = tf.reduce_sum(tf.square(self.output_images - self.input_images))
-        # cost = MultiScaleSSIM(self.input_images, self.output_images)
+
+        # check if correct cost function is provided
+        if self.cf_cost_function not in self._cost_functions:
+            print("No supported cost function provided, using squard_pixel_distances")
+            self.cf_cost_function = "squared_pixel_distance"
+
+        # define correct cost function:
+        if self.cf_cost_function == "squard_pixel_distance":
+            self.cost_function = tf.reduce_sum(tf.square(self.output_images - self.input_images))
+            return
+        if self.cf_cost_function == "pixel_distance":
+            self.cost_function = tf.reduce_sum(tf.abs(self.output_images - self.input_images))
+            return
+        if self.cf_cost_function == "msssim":
+            print(self.output_images.get_shape())
+            print(self.input_images.get_shape())
+            # self.cost_function = tf.reduce_sum(tf.map_fn(
+            #     lambda x: MultiScaleSSIM(x[0], x[1], self.cf_max_val, self.cf_filter_size, self.cf_filter_sigma,
+            #                              self.cf_k1, self.cf_k2, self.cf_weights),
+            #     (self.input_images, self.output_images)))
+
+            self.cost_function = MultiScaleSSIM(self.input_images, self.output_images, self.cf_max_val,
+                                                self.cf_filter_size, self.cf_filter_sigma, self.cf_k1, self.cf_k2,
+                                                self.cf_weights)
+            return
 
     def _define_learning_rate_function(self):
         """
@@ -596,20 +642,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # close session
             # self.tf_session.close()
 
-        # TODO: use SavedModelBuilder:
         # save final train status
         if self.session_saver_path is not None:
-            # # using SavedModelBuilder
-            #
-            # # remove previous folder
-            # if os.path.exists(self.session_saver_path + '/final/'):
-            #     shutil.rmtree(self.session_saver_path + '/final/', ignore_errors=True)
-            #
-            # # save the model
-            # builder = tf.saved_model.builder.SavedModelBuilder(self.session_saver_path + '/final/')
-            # builder.add_meta_graph_and_variables(self.tf_session, [tf.saved_model.tag_constants.SERVING])
-            # builder.save()
-
             self.session_saver.save(self.tf_session, os.path.join(self.session_saver_path, 'tf_session_final.bak'),
                                     global_step=self.global_step)
             print("final model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session_final.bak')))
@@ -699,7 +733,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.model_is_trained:
             # reopen session (if model is saved to disk):
             self._load_session()
-            #self._print_training_warning()
+            # self._print_training_warning()
             latent_representation = self.tf_session.run(self.latent_representation,
                                                         feed_dict={self.input_images: input_data})
             # close session (if possible):

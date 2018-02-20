@@ -116,6 +116,25 @@ function hideAndShowAdvancedRandomParameters(prefix) {
     }
 }
 
+function hideAndShowMSSSIMOptions() {
+    // get selected optimizer
+    var selectedOptions = [];
+    var selectionFieldOptions = document.getElementById("CostFunctions").options;
+    for (var i = 0; i < selectionFieldOptions.length; i++) {
+        if (selectionFieldOptions[i].selected) {
+            selectedOptions.push(selectionFieldOptions[i].value)
+        }
+    }
+    console.log(selectedOptions);
+
+    if (selectedOptions.indexOf("msssim") !== -1) {
+        document.getElementById("MsssimDiv").style.display = 'block';
+    } else {
+        document.getElementById("MsssimDiv").style.display = 'none';
+    }
+
+}
+
 
 /*
 link Event Listener
@@ -129,6 +148,7 @@ document.getElementById("randomFunctionForWeights").addEventListener("change", f
 document.getElementById("randomFunctionForBiases").addEventListener("change", function () {
     hideAndShowAdvancedRandomParameters("rb");
 });
+document.getElementById("CostFunctions").addEventListener("change", hideAndShowMSSSIMOptions);
 
 
 /*

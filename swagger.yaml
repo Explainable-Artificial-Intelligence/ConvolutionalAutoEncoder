@@ -442,7 +442,7 @@ paths:
       tags:
         - visualize
       summary: returns the clustering of the latent representation of a hidden layer
-      description: ''
+      description: returns the clustering of the latent representation of a hidden layer
       operationId: getHiddenLayerLatentClustering
       consumes:
         - application/json
@@ -465,12 +465,12 @@ paths:
           description: determines the algorithm for dim reduction
           required: false
           type: string
-        - name: cluster_parameters
-          in: body
-          description: determines the clutering parameters
-          required: false
-          schema:
-            $ref: '#/definitions/ClusterParameters'
+        #- name: cluster_parameters
+        #  in: body
+        #  description: determines the clutering parameters
+        #  required: false
+        #  schema:
+        #    $ref: '#/definitions/ClusterParameters'
         - name: layer
           in: query
           description: determines the hidden layer
@@ -845,6 +845,56 @@ definitions:
           type: boolean
         example:
           - false
+      cf_cost_function:
+        type: array
+        items:
+          type: string
+        example:
+          - squared_pixel_distance
+      cf_max_val:
+        type: array
+        items:
+          type: number
+          format: float
+        example:
+          - 255
+      cf_filter_size:
+        type: array
+        items:
+          type: number
+          format: int32
+        example:
+          - 11
+      cf_filter_sigma:
+        type: array
+        items:
+          type: number
+          format: float
+        example:
+          - 1.5
+      cf_k1:
+        type: array
+        items:
+          type: number
+          format: float
+        example:
+          - 0.01
+      cf_k2:
+        type: array
+        items:
+          type: number
+          format: float
+        example:
+          - 0.03
+      cf_weights: 
+        type: array
+        items:
+          type: array
+          items:
+            type: number
+            format: float
+        example:
+          - - 0.0
       optimizer:
         type: array
         items:

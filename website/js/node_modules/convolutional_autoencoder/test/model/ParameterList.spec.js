@@ -171,6 +171,48 @@
       //expect(instance).to.be();
     });
 
+      it('should have the property cfCostFunction (base name: "cf_cost_function")', function () {
+          // uncomment below and update the code to test the property cfCostFunction
+          //var instane = new ConvolutionalAutoencoder.ParameterList();
+          //expect(instance).to.be();
+      });
+
+      it('should have the property cfMaxVal (base name: "cf_max_val")', function () {
+          // uncomment below and update the code to test the property cfMaxVal
+          //var instane = new ConvolutionalAutoencoder.ParameterList();
+          //expect(instance).to.be();
+      });
+
+      it('should have the property cfFilterSize (base name: "cf_filter_size")', function () {
+          // uncomment below and update the code to test the property cfFilterSize
+          //var instane = new ConvolutionalAutoencoder.ParameterList();
+          //expect(instance).to.be();
+      });
+
+      it('should have the property cfFilterSigma (base name: "cf_filter_sigma")', function () {
+          // uncomment below and update the code to test the property cfFilterSigma
+          //var instane = new ConvolutionalAutoencoder.ParameterList();
+          //expect(instance).to.be();
+      });
+
+      it('should have the property cfK1 (base name: "cf_k1")', function () {
+          // uncomment below and update the code to test the property cfK1
+          //var instane = new ConvolutionalAutoencoder.ParameterList();
+          //expect(instance).to.be();
+      });
+
+      it('should have the property cfK2 (base name: "cf_k2")', function () {
+          // uncomment below and update the code to test the property cfK2
+          //var instane = new ConvolutionalAutoencoder.ParameterList();
+          //expect(instance).to.be();
+      });
+
+      it('should have the property cfWeights (base name: "cf_weights")', function () {
+          // uncomment below and update the code to test the property cfWeights
+          //var instane = new ConvolutionalAutoencoder.ParameterList();
+          //expect(instance).to.be();
+      });
+
     it('should have the property optimizer (base name: "optimizer")', function() {
       // uncomment below and update the code to test the property optimizer
       //var instane = new ConvolutionalAutoencoder.ParameterList();

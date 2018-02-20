@@ -128,6 +128,36 @@
             <br>
         </div>
 
+        Cost function: <br>
+        <select id="CostFunctions" size="1">
+
+            "squared_pixel_distance", "pixel_distance", "msssim"
+            <option value="squared_pixel_distance">squared pixel distance</option>
+            <option value="pixel_distance">pixel distance</option>
+            <option value="msssim">MS-SSIM</option>
+        </select><br>
+        <br>
+        <section id="MsssimDiv" style="display:none">
+            max. pixel value: <br>
+            <input id="cfMaxVal" type="number" value="255"><br>
+            <br>
+            filter size: <br>
+            <input id="cfFilterSize" type="number" value="11"><br>
+            <br>
+            filter sigma: <br>
+            <input id="cfFilterSigma" type="number" value="1.5"><br>
+            <br>
+            k1: <br>
+            <input id="cfK1" type="number" value="0.01"><br>
+            <br>
+            k2: <br>
+            <input id="cfK2" type="number" value="0.03"><br>
+            <br>
+            weights: <br>
+            <input id="cfWeights" value="[0]"><br>
+            <br>
+        </section>
+
         <label for="randomFunctionForWeights">Random functions for weights:</label>
         <select id="randomFunctionForWeights" size="1">
             <option value="zeros">zeros</option>
@@ -290,10 +320,11 @@
 </div>
 
 
-<script src="../js/build_bundle.js"></script>
-<script src="../js/hideAndShowBuildParameters.js"></script>
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="../js/layerVisualisation.js"></script>
+<script src="../js/build_bundle.js"></script>
+<script src="../js/hideAndShowBuildParameters.js"></script>
 </body>
 </html>
 
