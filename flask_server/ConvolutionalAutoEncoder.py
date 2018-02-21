@@ -5,8 +5,6 @@ import numpy as np
 import tensorflow as tf
 from sklearn.base import BaseEstimator, TransformerMixin
 
-from flask_server.utils.msssim import MultiScaleSSIM
-
 
 class SklearnCAE(BaseEstimator, TransformerMixin):
     """Convolutional Auto Encoder as sklearn class"""
@@ -50,7 +48,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         "uniform": tf.random_uniform
     }
 
-    _cost_functions = ["squared_pixel_distance", "pixel_distance", "msssim"]
+    _cost_functions = ["squared_pixel_distance", "pixel_distance"]  # , "msssim"]
 
     def __init__(self, input_shape, number_of_stacks, filter_sizes, mirror_weights=False, activation_function="relu",
                  batch_size=100, n_epochs=50, use_tensorboard=True, verbose=True, learning_rate_function="static",
@@ -269,7 +267,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self._define_summary_variables()
             self._init_tensorboard_file_writer()
 
-    # Todo: fix!
     def _load_session(self):
         if self.session_saver_path is not None:
             # if not self.ann_status.eval(self.tf_session) == b'training':
@@ -285,10 +282,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self.session_saver.restore(self.tf_session, prev_session.model_checkpoint_path)
 
             self._build_ann(restore=True)
-
-            # TODO remove
-            # print(self.tf_session.run(self.encoder_weights[0][0][0]))
-            # print(self.tf_session.run(self.decoder_weights))
 
             if self.verbose:
                 print("session restored!")
@@ -367,7 +360,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 [self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output],
                 "encoder_weights_layer_" + str(layer_i))
             bias_of_layer_i = self._create_layer_biases([n_output], "encoder_biases_layer_" + str(layer_i))
-        print([self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output])
+        print(weights_of_layer_i.get_shape())
         self.encoder_weights.append(weights_of_layer_i)
         self.encoder_biases.append(bias_of_layer_i)
         # TODO: understand strides /padding
@@ -480,28 +473,31 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # check if correct cost function is provided
         if self.cf_cost_function not in self._cost_functions:
-            print("No supported cost function provided, using squard_pixel_distances")
+            print("No supported cost function provided, using squared_pixel_distances")
             self.cf_cost_function = "squared_pixel_distance"
 
         # define correct cost function:
-        if self.cf_cost_function == "squard_pixel_distance":
+        if self.cf_cost_function == "squared_pixel_distance":
             self.cost_function = tf.reduce_sum(tf.square(self.output_images - self.input_images))
             return
         if self.cf_cost_function == "pixel_distance":
             self.cost_function = tf.reduce_sum(tf.abs(self.output_images - self.input_images))
             return
-        if self.cf_cost_function == "msssim":
-            print(self.output_images.get_shape())
-            print(self.input_images.get_shape())
-            # self.cost_function = tf.reduce_sum(tf.map_fn(
-            #     lambda x: MultiScaleSSIM(x[0], x[1], self.cf_max_val, self.cf_filter_size, self.cf_filter_sigma,
-            #                              self.cf_k1, self.cf_k2, self.cf_weights),
-            #     (self.input_images, self.output_images)))
 
-            self.cost_function = MultiScaleSSIM(self.input_images, self.output_images, self.cf_max_val,
-                                                self.cf_filter_size, self.cf_filter_sigma, self.cf_k1, self.cf_k2,
-                                                self.cf_weights)
-            return
+        print("Error parsing cost function!")
+
+        # if self.cf_cost_function == "msssim":
+        #     print(self.output_images.get_shape())
+        #     print(self.input_images.get_shape())
+        #     # self.cost_function = tf.reduce_sum(tf.map_fn(
+        #     #     lambda x: MultiScaleSSIM(x[0], x[1], self.cf_max_val, self.cf_filter_size, self.cf_filter_sigma,
+        #     #                              self.cf_k1, self.cf_k2, self.cf_weights),
+        #     #     (self.input_images, self.output_images)))
+        #
+        #     self.cost_function = MultiScaleSSIM(self.input_images, self.output_images, self.cf_max_val,
+        #                                         self.cf_filter_size, self.cf_filter_sigma, self.cf_k1, self.cf_k2,
+        #                                         self.cf_weights)
+        #     return
 
     def _define_learning_rate_function(self):
         """

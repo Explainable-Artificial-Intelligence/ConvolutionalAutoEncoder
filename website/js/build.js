@@ -2,7 +2,7 @@
 check if client and server are running correctly
  */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
-var d3 = require('d3');
+//var d3 = require('d3');
 
 var buildApi = new ConvolutionalAutoencoder.BuildApi();
 
@@ -127,6 +127,10 @@ function updateInputOutputLayer(resX, resY, channels) {
     document.getElementById("channelLabel").textContent = channels;
     document.getElementById("channelLabel2").textContent = channels;
 
+    //add visualisation:
+    var decoderVisualisation = new createANNLayer(250, 250, resX, resY, channels, 2, "outputLayer", false, false);
+    createANNLayer(300, 300, resX, resY, channels, 2, "inputLayer", true, false, decoderVisualisation);
+
 }
 
 //
@@ -142,52 +146,6 @@ function addLayer(event, filtersize, numStacks) {
     var encoderCount = document.getElementById("encoder").children.length - 1; // one child is input layer
 
     /*
-    append Encoder layer
-    */
-    console.log("add encoder");
-
-    // generate div
-    var encoderDiv = document.createElement("div");
-    encoderDiv.id = "encoderLayer_" + (encoderCount + 1);
-    encoderDiv.className = "ANNLayer";
-
-    // generate input fields:
-    var filtersizeInput = document.createElement("input");
-    filtersizeInput.type = "number";
-    filtersizeInput.value = filtersize;
-    filtersizeInput.style.width = "30px";
-    filtersizeInput.id = "filtersizeEL" + (encoderCount + 1);
-
-    var numStacksInput = document.createElement("input");
-    numStacksInput.type = "number";
-    numStacksInput.value = numStacks;
-    numStacksInput.style.width = "30px";
-    numStacksInput.id = "numStacksEL" + (encoderCount + 1);
-
-    // generate remove button:
-    var removeButton = document.createElement("button");
-    removeButton.id = "removeEL" + (encoderCount + 1);
-    removeButton.textContent = "-";
-
-    // append elements to div:
-    encoderDiv.append("Encoder Layer " + (encoderCount + 1) + ": ");
-    encoderDiv.appendChild(document.createElement('br'));
-    encoderDiv.appendChild(document.createElement('br'));
-    encoderDiv.append("Filtersize: ");
-    encoderDiv.appendChild(filtersizeInput);
-    encoderDiv.append(" Number of Stacks: ");
-    encoderDiv.appendChild(numStacksInput);
-    encoderDiv.appendChild(removeButton);
-
-    //add visualisation:
-    console.log("test");
-    createANNLayer(300, 300, 28, 28, numStacks, "encoderLayer_" + (encoderCount + 1));
-
-    //append to DOM
-    document.getElementById("encoder").appendChild(encoderDiv);
-
-
-    /*
     append decoder layer
     */
     console.log("add decoder");
@@ -197,39 +155,85 @@ function addLayer(event, filtersize, numStacks) {
     decoderDiv.id = "decoderLayer_" + (encoderCount + 1);
     decoderDiv.className = "ANNLayer";
 
-    // generate labels:
-    var filtersizeLabel = document.createElement("label");
-    filtersizeLabel.textContent = filtersize;
-    filtersizeLabel.id = "filtersizeDL" + (encoderCount + 1);
-
-    var numStacksLabel = document.createElement("label");
-    numStacksLabel.textContent = numStacks;
-    numStacksLabel.id = "numStacksDL" + (encoderCount + 1);
-
-    // append elements to div:
-    decoderDiv.append("Decoder Layer " + (encoderCount + 1) + ": ");
-    decoderDiv.appendChild(document.createElement('br'));
-    decoderDiv.appendChild(document.createElement('br'));
-    decoderDiv.append("Filtersize: ");
-    decoderDiv.appendChild(filtersizeLabel);
-    decoderDiv.append(" Number of Stacks: ");
-    decoderDiv.appendChild(numStacksLabel);
-
-    //add visualisation:
-    //createANNLayer(300, 300, 28, 28, numStacks, "decoderLayer_" + (encoderCount + 1));
+    // // generate labels:
+    // var filtersizeLabel = document.createElement("label");
+    // filtersizeLabel.textContent = filtersize;
+    // filtersizeLabel.id = "filtersizeDL" + (encoderCount + 1);
+    //
+    // var numStacksLabel = document.createElement("label");
+    // numStacksLabel.textContent = numStacks;
+    // numStacksLabel.id = "numStacksDL" + (encoderCount + 1);
 
     //append to DOM
     document.getElementById("decoder").insertBefore(decoderDiv, document.getElementById("decoder").firstChild);
 
+    // append elements to div:
+    decoderDiv.append("Decoder Layer " + (encoderCount + 1) + ": ");
+    decoderDiv.appendChild(document.createElement('br'));
+    // decoderDiv.appendChild(document.createElement('br'));
+    // decoderDiv.append("Filtersize: ");
+    // decoderDiv.appendChild(filtersizeLabel);
+    // decoderDiv.append(" Number of Stacks: ");
+    // decoderDiv.appendChild(numStacksLabel);
+
+    //add visualisation:
+    var decoderVisualisation = new createANNLayer(250, 250, 28, 28, numStacks, filtersize, "decoderLayer_" + (encoderCount + 1), false, false);
+
+
     /*
-    link input fields
-     */
-    filtersizeInput.addEventListener("change", function () {
-        filtersizeLabel.textContent = filtersizeInput.value;
-    });
-    numStacksInput.addEventListener("change", function () {
-        numStacksLabel.textContent = numStacksInput.value;
-    });
+    append Encoder layer
+    */
+    console.log("add encoder");
+
+    // generate div
+    var encoderDiv = document.createElement("div");
+    encoderDiv.id = "encoderLayer_" + (encoderCount + 1);
+    encoderDiv.className = "ANNLayer";
+
+    // // generate input fields:
+    // var filtersizeInput = document.createElement("input");
+    // filtersizeInput.type = "number";
+    // filtersizeInput.value = filtersize;
+    // filtersizeInput.style.width = "30px";
+    // filtersizeInput.id = "filtersizeEL" + (encoderCount + 1);
+    //
+    // var numStacksInput = document.createElement("input");
+    // numStacksInput.type = "number";
+    // numStacksInput.value = numStacks;
+    // numStacksInput.style.width = "30px";
+    // numStacksInput.id = "numStacksEL" + (encoderCount + 1);
+
+    // generate remove button:
+    var removeButton = document.createElement("button");
+    removeButton.id = "removeEL" + (encoderCount + 1);
+    removeButton.textContent = "-";
+
+    //append to DOM
+    document.getElementById("encoder").appendChild(encoderDiv);
+
+    // append elements to div:
+    encoderDiv.append("Encoder Layer " + (encoderCount + 1) + ": ");
+    encoderDiv.appendChild(document.createElement('br'));
+    // encoderDiv.appendChild(document.createElement('br'));
+    // encoderDiv.append("Filtersize: ");
+    // encoderDiv.appendChild(filtersizeInput);
+    // encoderDiv.append(" Number of Stacks: ");
+    // encoderDiv.appendChild(numStacksInput);
+    encoderDiv.appendChild(removeButton);
+
+    //add visualisation:
+    createANNLayer(250, 250, 28, 28, numStacks, filtersize, "encoderLayer_" + (encoderCount + 1), true, true, decoderVisualisation);
+
+
+    // /*
+    // link input fields
+    //  */
+    // filtersizeInput.addEventListener("change", function () {
+    //     filtersizeLabel.textContent = filtersizeInput.value;
+    // });
+    // numStacksInput.addEventListener("change", function () {
+    //     numStacksLabel.textContent = numStacksInput.value;
+    // });
 
     /*
     attach remove button
@@ -237,279 +241,84 @@ function addLayer(event, filtersize, numStacks) {
     removeButton.addEventListener("click", function () {
         document.getElementById("encoder").removeChild(encoderDiv);
         document.getElementById("decoder").removeChild(decoderDiv);
+        renumberLayers();
         console.log("layer removed");
     })
 }
 
-function createANNLayer(width, height, layerWidth, layerHeight, stackCount, parentNodeID) {
-    //create plot pane:
-    var plusButtonGroup;
-    var plot = d3.select("#" + parentNodeID)
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .style('background-color', '#3a3a3a')
-        .style('stroke-width', 1);
 
-    //Scales:
-    var xScale = d3.scaleLinear();
-    xScale.domain([0, layerWidth + 0.2 * stackCount * layerWidth]);
-    xScale.range([0, width - 20]);
-    var yScale = d3.scaleLinear();
-    yScale.domain([0, layerHeight + 0.2 * stackCount * layerHeight]);
-    yScale.range([0, height - 20]);
-
-    //helper variables:
-    var transitionFinished = true;
-
-    //TODO: move styling to css
-
-    // draw rectangles
-    //var rects = [];
-    for (var i = 1; i <= stackCount; i++) {
-        plot.append("rect")
-            .attr('class', 'stack_rect')
-            .attr("x", width - xScale(layerWidth) - i * 0.2 * xScale(layerWidth))
-            .attr("y", i * 0.2 * yScale(layerHeight))
-            .attr("width", xScale(layerWidth))
-            .attr("height", yScale(layerHeight))
-            .style('stroke-width', 1)
-            .style('stroke', "orange")
-            .style('fill', "orange")
-            .style('fill-opacity', 0.3);
-        //rects.push(rect);
-    }
-
-    // add description:
-    var xAxisDescription = plot.append("text")
-        .attr("class", "stack_description")
-        .attr('transform', 'translate(' + (width - (stackCount * 0.2 + 0.5) * xScale(layerWidth)) + ', ' +
-            ((stackCount * 0.2 + 1) * yScale(layerHeight) + 15) + ') ')
-        //.attr("x", (width - (stackCount * 0.2 + 0.5) * xScale(layerWidth)))
-        //.attr("y", (stackCount * 0.2 + 1) * yScale(layerHeight) + 15)
-        .style('fill', "orange")
-        .style("text-anchor", "middle")
-        .style("font-size", "12px")
-        .text(layerWidth + "px");
-    var yAxisDescription = plot.append("text")
-        .attr("class", "stack_description")
-        .attr('transform', 'translate(' + (width - (stackCount * 0.2 + 1) * xScale(layerWidth) - 7) + ', ' +
-            (stackCount * 0.2 + 0.5) * yScale(layerHeight) + ') rotate(270)')
-        //.attr("x", width - (stackCount * 0.2 + 1) * xScale(layerWidth) - 15)
-        //.attr("y", (stackCount * 0.2 + 0.5) * yScale(layerHeight))
-        .style('fill', "orange")
-        .style("text-anchor", "middle")
-        .style("font-size", "12px")
-        .text(layerWidth + "px");
-    var zAxisDescription = plot.append("text")
-        .attr("class", "stack_description")
-        .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth)) + ', ' +
-            (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 20) + ') rotate(315)')
-        .style('fill', "orange")
-        .style("text-anchor", "middle")
-        .style("font-size", "12px")
-        .text('stacks: ' + stackCount);
-
-    plusButtonGroup = plot.append("g")
-        .attr("class", "stack_button")
-        .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-            (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)')
-        .on('click', function () {
-            if (transitionFinished) {
-                console.log("click");
-                addStack();
+function renumberLayers() {
+    var layerDiv = document.getElementById("encoder").childNodes;
+    console.log(layerDiv);
+    var i = 1;
+    for (var child in layerDiv) {
+        if (layerDiv[child].tagName === 'DIV') {
+            if (layerDiv[child].id.startsWith("encoderLayer_")) {
+                layerDiv[child].id = "encoderLayer_" + i;
+                // adjust layer text:
+                console.log(layerDiv[child].childNodes[0]);
+                layerDiv[child].childNodes[0].textContent = "Encoder Layer " + i + ": ";
+                i++;
             }
-        });
-    plusButtonGroup.append("circle")
-        .attr('r', 7)
-        .attr('cx', 10)
-        .attr("class", "stack_button")
-        .style('stroke-width', 1)
-        .style('stroke', "orange")
-        .style('fill', '#3a3a3a');
-
-    plusButtonGroup.append('text')
-        .attr('x', 10)
-        .attr('y', 4)
-        .style('fill', "orange")
-        .style("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("font-weight", "bold")
-        .text('+')
-        .on("mouseover", function (d) {
-            d3.select(this).style("cursor", "default");
-        });
-
-    var minusButtonGroup = plot.append("g")
-        .attr("class", "stack_button")
-        .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-            (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)')
-        .on('click', function () {
-            if (transitionFinished) {
-                console.log("click");
-                removeStack();
-            }
-        });
-    minusButtonGroup.append("circle")
-        .attr('r', 7)
-        .attr('cx', -10)
-        .attr("class", "stack_button")
-        .style('stroke-width', 1)
-        .style('stroke', "orange")
-        .style('fill', '#3a3a3a');
-
-    minusButtonGroup.append('text')
-        .attr('x', -10)
-        .attr('y', 4)
-        .style('fill', "orange")
-        .style("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("font-weight", "bold")
-        .text('-')
-        .on("mouseover", function (d) {
-            d3.select(this).style("cursor", "default");
-        });
-
-    // print console output:
-    console.log("layerWidth: " + layerWidth);
-    console.log("last rect x pos: " + ((width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(layerWidth) / 2)));
-    console.log("layerWidth scaled: " + xScale(layerWidth));
-    console.log("Width text position: " + (xScale(layerWidth) / 2 + 20));
-
-
-    function rescaleChart() {
-        // rescale Scales:
-        xScale.domain([0, layerWidth + 0.2 * stackCount * layerWidth]);
-        yScale.domain([0, layerHeight + 0.2 * stackCount * layerHeight]);
-
-        // move description
-        xAxisDescription.transition()
-            .duration(500)
-            .attr('transform', 'translate(' + (width - (stackCount * 0.2 + 0.5) * xScale(layerWidth)) + ', ' +
-                ((stackCount * 0.2 + 1) * yScale(layerHeight) + 15) + ') ');
-        yAxisDescription.transition()
-            .duration(500)
-            .attr('transform', 'translate(' + (width - (stackCount * 0.2 + 1) * xScale(layerWidth) - 7) + ', ' +
-                (stackCount * 0.2 + 0.5) * yScale(layerHeight) + ') rotate(270)');
-        zAxisDescription.transition()
-            .duration(500)
-            .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth)) + ', ' +
-                (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 20) + ') rotate(315)')
-            .text('stacks: ' + stackCount);
-
-        // move +/- buttons:
-        minusButtonGroup.transition()
-            .duration(500)
-            .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-                (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)');
-        plusButtonGroup.transition()
-            .duration(500)
-            .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-                (((stackCount / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)');
-
-
-        // move existing stacks:
-        plot.selectAll(".stack_rect")
-            .transition()
-            .duration(500)
-            .attr("x", function (d, i) {
-                return width - xScale(layerWidth) - (i + 1) * 0.2 * xScale(layerWidth);
-            })
-            .attr("y", function (d, i) {
-                return (i + 1) * 0.2 * yScale(layerHeight);
-            })
-            .attr("width", function (d, i) {
-                return xScale(layerWidth);
-            })
-            .attr("height", function (d, i) {
-                return yScale(layerHeight);
-            });
-    }
-
-    function addStack() {
-        // start animation
-        transitionFinished = false;
-
-        // update stack count
-        stackCount += 1;
-        rescaleChart();
-
-
-        // add additional stack
-        plot.append("rect")
-            .transition()
-            .duration(500)
-            .attr('class', 'stack_rect')
-            .attr("x", width - xScale(layerWidth) - (stackCount) * 0.2 * xScale(layerWidth))
-            .attr("y", (stackCount) * 0.2 * yScale(layerHeight))
-            .attr("width", xScale(layerWidth))
-            .attr("height", yScale(layerHeight))
-            .style('stroke-width', 1)
-            .style('stroke', "lightBlue")
-            .style('fill', "lightBlue")
-            .style('fill-opacity', 0.3)
-            // fade out highlight color:
-            .transition()
-            .duration(500)
-            .style('stroke', "orange")
-            .style('fill', "orange")
-            .on("end", function () {
-                transitionFinished = true;
-                console.log("transition finished");
-            });
-
-    }
-
-    function removeStack() {
-        //abort if only on stack left
-        if (stackCount < 2) {
-            return;
         }
 
-        // start animation
-        transitionFinished = false;
-
-        // update stack count
-        stackCount -= 1;
-        rescaleChart();
-
-
-        // remove stack
-        plot.selectAll('.stack_rect')
-            .filter(function (d, i, list) {
-                return i === list.length - 1;
-            }).transition()
-            .duration(500).remove()
-            .on("end", function () {
-                transitionFinished = true;
-                console.log("transition finished");
-            });
-
+    }
+    i--;
+    layerDiv = document.getElementById("decoder").childNodes;
+    console.log(layerDiv);
+    for (var child in layerDiv) {
+        if (layerDiv[child].tagName === 'DIV') {
+            if (layerDiv[child].id.startsWith("decoderLayer_")) {
+                layerDiv[child].id = "decoderLayer_" + i;
+                // adjust layer text:
+                layerDiv[child].childNodes[0].textContent = "Decoder Layer " + i + ": ";
+                i--;
+            }
+        }
 
     }
-
-    this.addStack = function () {
-        addStack();
-    };
-
-    this.removeStack = function () {
-        removeStack();
-    };
-
+    // layerDiv = document.getElementById("decoder").childNodes;
+    // i = 1;
+    // for(var child in layerDiv){
+    //     layerDiv[child].id = "decoderLayer_" + i;
+    //     i++;
+    // }
 
 }
+
 
 function buildANN() {
     // get ANN topology:
     var filterSizes = [];
     var numStacks = [];
-    var numEncoderLayers = document.getElementById("encoder").childElementCount;
-    console.log(numEncoderLayers);
-    for (var i = 1; i < numEncoderLayers; i++) {
-        // get filtersize of current layer:
-        filterSizes.push(Number(document.getElementById("filtersizeEL" + i).value));
-        // get number of Stacks of current layer
-        numStacks.push(Number(document.getElementById("numStacksEL" + i).value));
+    // var numEncoderLayers = document.getElementById("encoder").childElementCount;
+    // console.log(numEncoderLayers);
+    // for (var i = 1; i < numEncoderLayers; i++) {
+    //     // get filtersize of current layer:
+    //     filterSizes.push(Number(document.getElementById("filtersizeEL" + i).value));
+    //     // get number of Stacks of current layer
+    //     numStacks.push(Number(document.getElementById("numStacksEL" + i).value));
+    // }
+
+    var layerDiv = document.getElementById("encoder").childNodes;
+    console.log(layerDiv);
+    var i = 1;
+    for (var child in layerDiv) {
+        if (layerDiv[child].tagName === 'DIV') {
+            // get filtersize of current layer:
+            console.log(layerDiv[child].getElementsByClassName("filter_description")[0]);
+            var filterSize = Number(layerDiv[child].getElementsByClassName("filter_description")[0].textContent
+                .split(':')[1]);
+            // get number of Stacks of current layer
+            var stackCount = Number(layerDiv[child].getElementsByClassName("stack_description")[0].textContent
+                .split(':')[1]);
+
+            // add current layer properties to arrays
+            filterSizes.push(filterSize);
+            numStacks.push(stackCount);
+
+        }
+
     }
 
     console.log(inputShape);
@@ -549,7 +358,6 @@ function buildANN() {
 }
 
 
-
 /*
 Global variables
  */
@@ -572,9 +380,12 @@ getInputDimensions();
 
 // add sample ANN
 addLayer(null, 3, 12);
-addLayer(null, 3, 10);
-addLayer(null, 2, 10);
+// addLayer(null, 3, 10);
+// addLayer(null, 2, 10);
 addLayer(null, 2, 6);
+
+
+//createANNLayer(400, 400, 28, 28, 2, 5, "encoderLayer_1");
 
 
 
