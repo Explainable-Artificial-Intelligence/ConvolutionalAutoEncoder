@@ -283,21 +283,27 @@
 
 <div id="content">
     <div id="ConvolutionalAutoEncoder">
+        <div id="inputLayer_old" class="ANNLayer">
+            Input Layer:
+            <br>
+            <br>
+            Resolution:
+            <label id="resXLabel">?</label> x <label id="resYLabel">?</label>
+            Channels:
+            <label id="channelLabel">?</label>
+            <br>
+        </div>
+        <div id="input">
+        </div>
         <div id="encoder">
-            <div id="inputLayer" class="ANNLayer">
-                Input Layer:
-                <br>
-                <br>
-                Resolution:
-                <label id="resXLabel">?</label> x <label id="resYLabel">?</label>
-                Channels:
-                <label id="channelLabel">?</label>
-                <br>
-            </div>
+        </div>
+        <div id="decoder">
+        </div>
+        <div id="output">
         </div>
         <button id="addLayer">add Layer</button>
-        <div id="decoder">
-            <div id="outputLayer" class="ANNLayer">
+
+        <div id="outputLayer" class="ANNLayer">
                 Output Layer:
                 <br>
                 <br>
@@ -306,7 +312,6 @@
                 Channels: <label id="channelLabel2">?</label>
                 <br>
             </div>
-        </div>
     </div>
     <div style="text-align:right;">
         <button id="buildANN">Build ANN</button>
@@ -320,7 +325,6 @@
     </div>
 
 </div>
-
 
 
 <script src="https://d3js.org/d3.v4.min.js"></script>

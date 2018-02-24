@@ -128,8 +128,10 @@ function updateInputOutputLayer(resX, resY, channels) {
     document.getElementById("channelLabel2").textContent = channels;
 
     //add visualisation:
-    var decoderVisualisation = new createANNLayer(250, 250, resX, resY, channels, 2, "outputLayer", false, false);
-    createANNLayer(300, 300, resX, resY, channels, 2, "inputLayer", true, false, decoderVisualisation);
+    //var decoderVisualisation = new createANNLayer(250, 250, resX, resY, channels, 2, "outputLayer", false, false);
+    var decoderVisualisation = new createANNLayerPreview(200, 200, 28, 28, channels, 2, "decoder", "Output Layer", null);
+    createANNLayerPreview(200, 200, 28, 28, channels, 2, "encoder", "Input Layer", decoderVisualisation);
+    //createANNLayer(500, 500, resX, resY, channels, 2, "inputLayer", true, false, decoderVisualisation);
 
 }
 
@@ -141,7 +143,6 @@ function addLayer(event, filtersize, numStacks) {
     /*
     get current ANN topology information
      */
-
     // get encoder count
     var encoderCount = document.getElementById("encoder").children.length - 1; // one child is input layer
 
@@ -149,101 +150,16 @@ function addLayer(event, filtersize, numStacks) {
     append decoder layer
     */
     console.log("add decoder");
-
-    // generate div
-    var decoderDiv = document.createElement("div");
-    decoderDiv.id = "decoderLayer_" + (encoderCount + 1);
-    decoderDiv.className = "ANNLayer";
-
-    // // generate labels:
-    // var filtersizeLabel = document.createElement("label");
-    // filtersizeLabel.textContent = filtersize;
-    // filtersizeLabel.id = "filtersizeDL" + (encoderCount + 1);
-    //
-    // var numStacksLabel = document.createElement("label");
-    // numStacksLabel.textContent = numStacks;
-    // numStacksLabel.id = "numStacksDL" + (encoderCount + 1);
-
-    //append to DOM
-    document.getElementById("decoder").insertBefore(decoderDiv, document.getElementById("decoder").firstChild);
-
-    // append elements to div:
-    decoderDiv.append("Decoder Layer " + (encoderCount + 1) + ": ");
-    decoderDiv.appendChild(document.createElement('br'));
-    // decoderDiv.appendChild(document.createElement('br'));
-    // decoderDiv.append("Filtersize: ");
-    // decoderDiv.appendChild(filtersizeLabel);
-    // decoderDiv.append(" Number of Stacks: ");
-    // decoderDiv.appendChild(numStacksLabel);
-
     //add visualisation:
-    var decoderVisualisation = new createANNLayer(250, 250, 28, 28, numStacks, filtersize, "decoderLayer_" + (encoderCount + 1), false, false);
-
+    var decoderVisualisation = new createANNLayerPreview(200, 200, 28, 28, numStacks, filtersize, "decoder", (encoderCount + 1), null);
 
     /*
     append Encoder layer
     */
     console.log("add encoder");
-
-    // generate div
-    var encoderDiv = document.createElement("div");
-    encoderDiv.id = "encoderLayer_" + (encoderCount + 1);
-    encoderDiv.className = "ANNLayer";
-
-    // // generate input fields:
-    // var filtersizeInput = document.createElement("input");
-    // filtersizeInput.type = "number";
-    // filtersizeInput.value = filtersize;
-    // filtersizeInput.style.width = "30px";
-    // filtersizeInput.id = "filtersizeEL" + (encoderCount + 1);
-    //
-    // var numStacksInput = document.createElement("input");
-    // numStacksInput.type = "number";
-    // numStacksInput.value = numStacks;
-    // numStacksInput.style.width = "30px";
-    // numStacksInput.id = "numStacksEL" + (encoderCount + 1);
-
-    // generate remove button:
-    var removeButton = document.createElement("button");
-    removeButton.id = "removeEL" + (encoderCount + 1);
-    removeButton.textContent = "-";
-
-    //append to DOM
-    document.getElementById("encoder").appendChild(encoderDiv);
-
-    // append elements to div:
-    encoderDiv.append("Encoder Layer " + (encoderCount + 1) + ": ");
-    encoderDiv.appendChild(document.createElement('br'));
-    // encoderDiv.appendChild(document.createElement('br'));
-    // encoderDiv.append("Filtersize: ");
-    // encoderDiv.appendChild(filtersizeInput);
-    // encoderDiv.append(" Number of Stacks: ");
-    // encoderDiv.appendChild(numStacksInput);
-    encoderDiv.appendChild(removeButton);
-
     //add visualisation:
-    createANNLayer(250, 250, 28, 28, numStacks, filtersize, "encoderLayer_" + (encoderCount + 1), true, true, decoderVisualisation);
+    createANNLayerPreview(200, 200, 28, 28, numStacks, filtersize, "encoder", (encoderCount + 1), decoderVisualisation);
 
-
-    // /*
-    // link input fields
-    //  */
-    // filtersizeInput.addEventListener("change", function () {
-    //     filtersizeLabel.textContent = filtersizeInput.value;
-    // });
-    // numStacksInput.addEventListener("change", function () {
-    //     numStacksLabel.textContent = numStacksInput.value;
-    // });
-
-    /*
-    attach remove button
-     */
-    removeButton.addEventListener("click", function () {
-        document.getElementById("encoder").removeChild(encoderDiv);
-        document.getElementById("decoder").removeChild(decoderDiv);
-        renumberLayers();
-        console.log("layer removed");
-    })
 }
 
 
