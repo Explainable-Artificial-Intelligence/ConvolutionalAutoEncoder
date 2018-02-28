@@ -286,35 +286,40 @@
         <div id="layerPreview">
 
         </div>
-        <div id="inputLayer_old" class="ANNLayer">
-            Input Layer:
-            <br>
-            <br>
-            Resolution:
-            <label id="resXLabel">?</label> x <label id="resYLabel">?</label>
-            Channels:
-            <label id="channelLabel">?</label>
-            <br>
-        </div>
-        <div id="input">
-        </div>
-        <div id="encoder">
-        </div>
-        <div id="decoder">
-        </div>
-        <div id="output">
-        </div>
         <button id="addLayer">add Layer</button>
-
-        <div id="outputLayer" class="ANNLayer">
-                Output Layer:
-                <br>
-                <br>
-                Resolution:
-                <label id="resXLabel2">?</label> x <label id="resYLabel2">?</label>
-                Channels: <label id="channelLabel2">?</label>
-                <br>
+        <!--<div id="inputLayer_old" class="ANNLayer">-->
+        <!--Input Layer:-->
+        <!--<br>-->
+        <!--<br>-->
+        <!--Resolution:-->
+        <!--<label id="resXLabel">?</label> x <label id="resYLabel">?</label>-->
+        <!--Channels:-->
+        <!--<label id="channelLabel">?</label>-->
+        <!--<br>-->
+        <!--</div>-->
+        <div class="horizontal-scroll">
+            <div id="input" class="layer-svg">
             </div>
+            <div id="encoder" class="layer-svg">
+            </div>
+        </div>
+        <div class="horizontal-scroll">
+            <div id="decoder" class="layer-svg">
+            </div>
+            <div id="output" class="layer-svg">
+            </div>
+        </div>
+
+
+        <!--<div id="outputLayer" class="ANNLayer">-->
+        <!--Output Layer:-->
+        <!--<br>-->
+        <!--<br>-->
+        <!--Resolution:-->
+        <!--<label id="resXLabel2">?</label> x <label id="resYLabel2">?</label>-->
+        <!--Channels: <label id="channelLabel2">?</label>-->
+        <!--<br>-->
+        <!--</div>-->
     </div>
     <div style="text-align:right;">
         <button id="buildANN">Build ANN</button>

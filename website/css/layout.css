@@ -138,6 +138,16 @@ li a:hover {
 
 }
 
+.horizontal-scroll {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.layer-svg {
+    display: inline-block;
+}
+
 /*
 .imageRibbonThumbnail{
     width: 50px;

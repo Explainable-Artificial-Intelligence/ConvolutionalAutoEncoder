@@ -688,6 +688,7 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         entry.plot.attr("id", entry.plot_id)
             .attr("width", width)
             .attr("height", height + 30)
+            .attr("class", "layer-svg")
             .style('background-color', '#3a3a3a')
             .style('stroke-width', 1)
             .on("click", toggleSelection)
