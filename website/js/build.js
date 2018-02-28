@@ -2,7 +2,6 @@
 check if client and server are running correctly
  */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
-//var d3 = require('d3');
 
 var buildApi = new ConvolutionalAutoencoder.BuildApi();
 
@@ -86,6 +85,12 @@ Convolutional Auto Encoder topology
 
 
 /*
+Global Variables
+ */
+
+// var previewLayer = new ANNLayerPreview(500, 500, 28, 28, 3, 3, null, true, false, null);
+
+/*
 Helper functions
  */
 
@@ -129,8 +134,8 @@ function updateInputOutputLayer(resX, resY, channels) {
 
     //add visualisation:
     //var decoderVisualisation = new createANNLayer(250, 250, resX, resY, channels, 2, "outputLayer", false, false);
-    var decoderVisualisation = new createANNLayerPreview(200, 200, 28, 28, channels, 2, "decoder", "Output Layer", null);
-    createANNLayerPreview(200, 200, 28, 28, channels, 2, "encoder", "Input Layer", decoderVisualisation);
+    var decoderVisualisation = new ANNLayerPreview(200, 200, 28, 28, channels, 2, "decoder", "Output Layer", null);
+    ANNLayerPreview(200, 200, 28, 28, channels, 2, "encoder", "Input Layer", decoderVisualisation);
     //createANNLayer(500, 500, resX, resY, channels, 2, "inputLayer", true, false, decoderVisualisation);
 
 }
@@ -151,14 +156,16 @@ function addLayer(event, filtersize, numStacks) {
     */
     console.log("add decoder");
     //add visualisation:
-    var decoderVisualisation = new createANNLayerPreview(200, 200, 28, 28, numStacks, filtersize, "decoder", (encoderCount + 1), null);
+    //var decoderVisualisation = new ANNLayerPreview(200, 200, 28, 28, numStacks, filtersize, "encoder_decoder_layer", (encoderCount + 1), null);
 
     /*
     append Encoder layer
     */
     console.log("add encoder");
     //add visualisation:
-    createANNLayerPreview(200, 200, 28, 28, numStacks, filtersize, "encoder", (encoderCount + 1), decoderVisualisation);
+    encoderDecoderLayerPairs.push(new ANNLayerPair(200, 200, 28, 28, numStacks, filtersize, "encoder_decoder_layer", (encoderCount + 1), null));
+
+    console.log(encoderDecoderLayerPairs);
 
 }
 
