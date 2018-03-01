@@ -134,9 +134,12 @@ function updateInputOutputLayer(resX, resY, channels) {
 
     //add visualisation:
     //var decoderVisualisation = new createANNLayer(250, 250, resX, resY, channels, 2, "outputLayer", false, false);
-    inputOutputLayerPair = new ANNLayerPair(200, 200, resX, resY, channels, 3, "input_output_layer", 0, null);
+    inputOutputLayerPair = new ANNLayerPair(200, 200, resX, resY, channels, 3);
     //ANNLayerPreview(200, 200, 28, 28, channels, 2, "encoder", "Input Layer", decoderVisualisation);
     //createANNLayer(500, 500, resX, resY, channels, 2, "inputLayer", true, false, decoderVisualisation);
+
+    // set input output layer as preview:
+    annLayerPreview.setLinkedLayer(0);
 
 }
 
@@ -212,8 +215,15 @@ function renumberLayers() {
 
 function buildANN() {
     // get ANN topology:
-    var filterSizes = [];
-    var numStacks = [];
+    var filterSizes = [inputOutputLayerPair.getFilterSize()];
+    var numStacks = [inputOutputLayerPair.getStackCount()];
+
+    console.log(inputOutputLayerPair.getFilterSize());
+
+    for (var i = 0; i < encoderDecoderLayerPairs.length; i++) {
+        filterSizes.push(encoderDecoderLayerPairs[i].getFilterSize());
+        numStacks.push(encoderDecoderLayerPairs[i].getStackCount());
+    }
     // var numEncoderLayers = document.getElementById("encoder").childElementCount;
     // console.log(numEncoderLayers);
     // for (var i = 1; i < numEncoderLayers; i++) {
@@ -223,26 +233,26 @@ function buildANN() {
     //     numStacks.push(Number(document.getElementById("numStacksEL" + i).value));
     // }
 
-    var layerDiv = document.getElementById("encoder").childNodes;
-    console.log(layerDiv);
-    var i = 1;
-    for (var child in layerDiv) {
-        if (layerDiv[child].tagName === 'DIV') {
-            // get filtersize of current layer:
-            console.log(layerDiv[child].getElementsByClassName("filter_description")[0]);
-            var filterSize = Number(layerDiv[child].getElementsByClassName("filter_description")[0].textContent
-                .split(':')[1]);
-            // get number of Stacks of current layer
-            var stackCount = Number(layerDiv[child].getElementsByClassName("stack_description")[0].textContent
-                .split(':')[1]);
-
-            // add current layer properties to arrays
-            filterSizes.push(filterSize);
-            numStacks.push(stackCount);
-
-        }
-
-    }
+    // var layerDiv = document.getElementById("encoder").childNodes;
+    // console.log(layerDiv);
+    // var i = 1;
+    // for (var child in layerDiv) {
+    //     if (layerDiv[child].tagName === 'DIV') {
+    //         // get filtersize of current layer:
+    //         console.log(layerDiv[child].getElementsByClassName("filter_description")[0]);
+    //         var filterSize = Number(layerDiv[child].getElementsByClassName("filter_description")[0].textContent
+    //             .split(':')[1]);
+    //         // get number of Stacks of current layer
+    //         var stackCount = Number(layerDiv[child].getElementsByClassName("stack_description")[0].textContent
+    //             .split(':')[1]);
+    //
+    //         // add current layer properties to arrays
+    //         filterSizes.push(filterSize);
+    //         numStacks.push(stackCount);
+    //
+    //     }
+    //
+    // }
 
     console.log(inputShape);
     console.log(filterSizes);

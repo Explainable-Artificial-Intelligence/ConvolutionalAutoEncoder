@@ -282,11 +282,53 @@
 </aside>
 
 <div id="content">
-    <div id="ConvolutionalAutoEncoder">
-        <div id="layerPreview">
 
-        </div>
-        <button id="addLayer">add Layer</button>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <div id="layerPreview">
+
+                    </div>
+                </td>
+                <td class="layerPreviewTableCell">
+
+                    <label for="filtersizeModifier">Filtersize:</label>
+                    <br>
+                    <input id="filtersizeModifier" type="number" value="3">
+                    <br>
+                    <br>
+                    <label for="stackCountModifier">Stack count:</label>
+                    <br>
+                    <input id="stackCountModifier" type="number" value="3">
+                    <br>
+                    <button id="applyLayerModification">apply</button>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <button id="addLayer">add Layer</button>
+                    <br>
+                    <button id="buildANN">Build ANN</button>
+                    <br>
+                    <label id="responseLabel"></label>
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+
+    <div id="ConvolutionalAutoEncoder">
+
+
         <!--<div id="inputLayer_old" class="ANNLayer">-->
         <!--Input Layer:-->
         <!--<br>-->
@@ -320,25 +362,15 @@
         <!--Channels: <label id="channelLabel2">?</label>-->
         <!--<br>-->
         <!--</div>-->
-    </div>
-    <div style="text-align:right;">
-        <button id="buildANN">Build ANN</button>
-        <br>
-        <label id="responseLabel"></label>
-    </div>
 
-    <div id="testCAE">
-        <button id="testBtn">add Stack</button>
 
     </div>
 
-</div>
 
-
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="../js/layerVisualisation.js"></script>
-<script src="../js/build_bundle.js"></script>
-<script src="../js/hideAndShowBuildParameters.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="../js/layerVisualisation.js"></script>
+    <script src="../js/build_bundle.js"></script>
+    <script src="../js/hideAndShowBuildParameters.js"></script>
 </body>
 </html>
 

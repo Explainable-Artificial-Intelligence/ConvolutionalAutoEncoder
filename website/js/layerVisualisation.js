@@ -3,17 +3,14 @@ Global variables
  */
 var encoderDecoderLayerPairs = [];
 var inputOutputLayerPair = null;
-var annLayerPreview = new ANNLayerPreview(500, 500, 28, 28, 3, 3, true, false, null);
-
-annLayerPreview.setStackCount(0);
+var annLayerPreview = new ANNLayerPreview(500, 500, 28, 28, 3, 3);
 
 
 /*
 Functions to create interactive ANN layer
  */
 
-function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, filtersize,
-                         modifiableFiltersize, modifiableStackCount, linkedLayer) {
+function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, filterSize) {
     //create plot pane:
     var plot = d3.select("#layerPreview")
         .append("svg")
@@ -55,8 +52,8 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         .attr('class', 'filter_rect')
         .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
         .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-        .attr("width", xScale(filtersize))
-        .attr("height", yScale(filtersize))
+        .attr("width", xScale(filterSize))
+        .attr("height", yScale(filterSize))
         .style('stroke-width', 2)
         .style('stroke', "red")
         .style('fill', "red")
@@ -88,147 +85,16 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         .style("font-size", "12px")
         .text('stacks: ' + stackCount);
 
-    // add +/- buttons
-    if (modifiableStackCount) {
-        var stackPlusButtonGroup = plot.append("g")
-            .attr("class", "stack_button")
-            .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-                (((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)')
-            .on('click', function () {
-                if (transitionFinished) {
-                    if (linkedLayer != null) {
-                        linkedLayer.addStack();
-                    }
-                    addStack();
-                }
-            });
-        stackPlusButtonGroup.append("circle")
-            .attr('r', 7)
-            .attr('cx', 10)
-            .attr("class", "stack_button")
-            .style('stroke-width', 1)
-            .style('stroke', "orange")
-            .style('fill', '#3a3a3a');
-
-        stackPlusButtonGroup.append('text')
-            .attr('x', 10)
-            .attr('y', 4)
-            .style('fill', "orange")
-            .style("text-anchor", "middle")
-            .style("font-size", "16px")
-            .style("font-weight", "bold")
-            .text('+')
-            .on("mouseover", function (d) {
-                d3.select(this).style("cursor", "default");
-            });
-
-        var stackMinusButtonGroup = plot.append("g")
-            .attr("class", "stack_button")
-            .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-                (((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)')
-            .on('click', function () {
-                if (transitionFinished) {
-                    if (linkedLayer != null) {
-                        linkedLayer.removeStack();
-                    }
-                    removeStack();
-                }
-            });
-        stackMinusButtonGroup.append("circle")
-            .attr('r', 7)
-            .attr('cx', -10)
-            .attr("class", "stack_button")
-            .style('stroke-width', 1)
-            .style('stroke', "orange")
-            .style('fill', '#3a3a3a');
-
-        stackMinusButtonGroup.append('text')
-            .attr('x', -10)
-            .attr('y', 4)
-            .style('fill', "orange")
-            .style("text-anchor", "middle")
-            .style("font-size", "16px")
-            .style("font-weight", "bold")
-            .text('-')
-            .on("mouseover", function (d) {
-                d3.select(this).style("cursor", "default");
-            });
-    }
-
 
     // add filtersize description and buttons:
-    var filtersizeDescription = plot.append("text")
+    var filterSizeDescription = plot.append("text")
         .attr("class", "filter_description")
         .attr('transform', 'translate(' + (width - (( stackCount / 2.0) * 0.2 + 1) * xScale(layerWidth) - 25) + ', ' +
             (((stackCount / 2.0) * 0.2) * yScale(layerHeight) - 5) + ') rotate(315)')
         .style('fill', "orange")
         .style("text-anchor", "middle")
         .style("font-size", "12px")
-        .text('Filtersize: ' + filtersize);
-
-    // add +/- buttons
-    if (modifiableFiltersize) {
-        var filterPlusButtonGroup = plot.append("g")
-            .attr("class", "filter_button")
-            .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2 + 1) * xScale(layerWidth) - 15) + ', ' +
-                (((stackCount / 2.0) * 0.2) * yScale(layerHeight)) + ') rotate(315)')
-            .on('click', function () {
-                if (transitionFinished) {
-                    increaseFiltersize();
-                }
-            });
-        filterPlusButtonGroup.append("circle")
-            .attr('r', 7)
-            .attr('cx', 10)
-            .attr("class", "filter_button")
-            .style('stroke-width', 1)
-            .style('stroke', "orange")
-            .style('fill', '#3a3a3a');
-
-        filterPlusButtonGroup.append('text')
-            .attr('x', 10)
-            .attr('y', 4)
-            .style('fill', "orange")
-            .style("text-anchor", "middle")
-            .style("font-size", "16px")
-            .style("font-weight", "bold")
-            .text('+')
-            .on("mouseover", function (d) {
-                d3.select(this).style("cursor", "default");
-            });
-
-        var filterMinusButtonGroup = plot.append("g")
-            .attr("class", "filter_button")
-            .attr('transform', 'translate(' + (width - ((stackCount / 2.0) * 0.2 + 1) * xScale(layerWidth) - 15) + ', ' +
-                (((stackCount / 2.0) * 0.2) * yScale(layerHeight)) + ') rotate(315)')
-            .on('click', function () {
-                if (transitionFinished) {
-                    if (linkedLayer != null) {
-                        linkedLayer.decreaseFiltersize();
-                    }
-                    decreaseFiltersize();
-                }
-            });
-        filterMinusButtonGroup.append("circle")
-            .attr('r', 7)
-            .attr('cx', -10)
-            .attr("class", "filter_button")
-            .style('stroke-width', 1)
-            .style('stroke', "orange")
-            .style('fill', '#3a3a3a');
-
-        filterMinusButtonGroup.append('text')
-            .attr('x', -10)
-            .attr('y', 4)
-            .style('fill', "orange")
-            .style("text-anchor", "middle")
-            .style("font-size", "16px")
-            .style("font-weight", "bold")
-            .text('-')
-            .on("mouseover", function (d) {
-                d3.select(this).style("cursor", "default");
-            });
-    }
+        .text('Filtersize: ' + filterSize);
 
 
     // print console output:
@@ -258,41 +124,12 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
                 (((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * yScale(layerHeight) + 20) + ') rotate(315)')
             .text('stacks: ' + stackCount);
 
-
-        // move stack +/- buttons:
-        if (modifiableStackCount) {
-            stackMinusButtonGroup.transition()
-                .duration(500)
-                .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-                    (((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)');
-            stackPlusButtonGroup.transition()
-                .duration(500)
-                .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2) * xScale(layerWidth) + 10) + ', ' +
-                    (((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * yScale(layerHeight) + 30) + ') rotate(315)');
-        }
-
-
         // move filtersize description
-        filtersizeDescription
+        filterSizeDescription
             .transition()
             .duration(500)
             .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * xScale(layerWidth) - 25)
                 + ', ' + (((Math.max(stackCount, 2) / 2.0) * 0.2) * yScale(layerHeight) - 5) + ') rotate(315)');
-
-        // move filtersize +/- buttons:
-        if (modifiableFiltersize) {
-            filterPlusButtonGroup
-                .transition()
-                .duration(500)
-                .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * xScale(layerWidth) - 15)
-                    + ', ' + (((Math.max(stackCount, 2) / 2.0) * 0.2) * yScale(layerHeight)) + ') rotate(315)');
-            filterMinusButtonGroup
-                .transition()
-                .duration(500)
-                .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * xScale(layerWidth) - 15)
-                    + ', ' + (((Math.max(stackCount, 2) / 2.0) * 0.2) * yScale(layerHeight)) + ') rotate(315)');
-        }
-
 
         // move existing stacks:
         plot.selectAll(".stack_rect")
@@ -317,8 +154,8 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
             .duration(500)
             .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
             .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-            .attr("width", xScale(filtersize))
-            .attr("height", yScale(filtersize));
+            .attr("width", xScale(filterSize))
+            .attr("height", yScale(filterSize));
     }
 
     function addStack() {
@@ -358,6 +195,9 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
             linkedLayer.addStack();
         }
 
+        // update input field:
+        document.getElementById("stackCountModifier").value = stackCount;
+
     }
 
     function removeStack() {
@@ -389,6 +229,9 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         if (linkedLayer !== null) {
             linkedLayer.removeStack();
         }
+
+        // update input field:
+        document.getElementById("stackCountModifier").value = stackCount;
     }
 
     function setStackCount(newStackCount) {
@@ -446,11 +289,14 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
             transitionFinished = true;
         }
 
+        // update input field:
+        document.getElementById("stackCountModifier").value = stackCount;
+
     }
 
-    function increaseFiltersize() {
+    function increaseFilterSize() {
         // return if filtersize equals layer size
-        if (filtersize === Math.min(layerWidth, layerWidth)) {
+        if (filterSize === Math.min(layerWidth, layerWidth)) {
             return
         }
 
@@ -459,19 +305,19 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
 
 
         // update filtersize
-        filtersize += 1;
+        filterSize += 1;
 
-        filtersizeDescription.text('Filtersize: ' + filtersize);
+        filterSizeDescription.text('Filtersize: ' + filterSize);
 
 
-        if ((Math.min(layerWidth, layerWidth) - filtersize) < 3) {
+        if ((Math.min(layerWidth, layerWidth) - filterSize) < 3) {
             plot.select(".filter_rect")
                 .transition()
                 .duration(500)
                 .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
                 .attr("y", stackCount * 0.2 * yScale(layerHeight))
-                .attr("width", xScale(filtersize))
-                .attr("height", yScale(filtersize))
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
                 .on("end", function () {
                     transitionFinished = true;
                     console.log("transition finished");
@@ -482,8 +328,8 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
                 .duration(500)
                 .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
                 .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-                .attr("width", xScale(filtersize))
-                .attr("height", yScale(filtersize))
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
                 .on("end", function () {
                     transitionFinished = true;
                     console.log("transition finished");
@@ -493,14 +339,17 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         // update linked layer
         if (linkedLayer !== null) {
             console.log(linkedLayer);
-            linkedLayer.increaseFiltersize();
+            linkedLayer.increaseFilterSize();
         }
+
+        // update input field:
+        document.getElementById("filtersizeModifier").value = filterSize;
 
     }
 
-    function decreaseFiltersize() {
+    function decreaseFilterSize() {
         // return if filtersize already 1
-        if (filtersize < 2) {
+        if (filterSize < 2) {
             return
         }
 
@@ -508,19 +357,19 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         transitionFinished = false;
 
         // update filtersize
-        filtersize -= 1;
+        filterSize -= 1;
 
-        filtersizeDescription.text('Filtersize: ' + filtersize);
+        filterSizeDescription.text('Filtersize: ' + filterSize);
 
 
-        if ((Math.min(layerWidth, layerWidth) - filtersize) < 3) {
+        if ((Math.min(layerWidth, layerWidth) - filterSize) < 3) {
             plot.select(".filter_rect")
                 .transition()
                 .duration(500)
                 .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
                 .attr("y", stackCount * 0.2 * yScale(layerHeight))
-                .attr("width", xScale(filtersize))
-                .attr("height", yScale(filtersize))
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
                 .on("end", function () {
                     transitionFinished = true;
                     console.log("transition finished");
@@ -531,8 +380,8 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
                 .duration(500)
                 .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
                 .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-                .attr("width", xScale(filtersize))
-                .attr("height", yScale(filtersize))
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
                 .on("end", function () {
                     transitionFinished = true;
                     console.log("transition finished");
@@ -541,14 +390,17 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         // update linked layer
         if (linkedLayer !== null) {
             console.log(linkedLayer);
-            linkedLayer.decreaseFiltersize();
+            linkedLayer.decreaseFilterSize();
         }
+
+        // update input field:
+        document.getElementById("filtersizeModifier").value = filterSize;
 
     }
 
-    function setFiltersize(newFiltersize) {
+    function setFilterSize(newFilterSize) {
         // return if new filtersize is greater than layer size
-        if (newFiltersize > Math.min(layerWidth, layerWidth) || newFiltersize < 1) {
+        if (newFilterSize > Math.min(layerWidth, layerWidth) || newFilterSize < 1) {
             console.log("Invalid filter size");
             return
         }
@@ -558,19 +410,19 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
 
 
         // update filtersize
-        filtersize = newFiltersize;
+        filterSize = newFilterSize;
 
-        filtersizeDescription.text('Filtersize: ' + filtersize);
+        filterSizeDescription.text('Filtersize: ' + filterSize);
 
 
-        if ((Math.min(layerWidth, layerWidth) - filtersize) < 3) {
+        if ((Math.min(layerWidth, layerWidth) - filterSize) < 3) {
             plot.select(".filter_rect")
                 .transition()
                 .duration(500)
                 .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
                 .attr("y", stackCount * 0.2 * yScale(layerHeight))
-                .attr("width", xScale(filtersize))
-                .attr("height", yScale(filtersize))
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
                 .on("end", function () {
                     transitionFinished = true;
                     console.log("transition finished");
@@ -581,8 +433,8 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
                 .duration(500)
                 .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
                 .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-                .attr("width", xScale(filtersize))
-                .attr("height", yScale(filtersize))
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
                 .on("end", function () {
                     transitionFinished = true;
                     console.log("transition finished");
@@ -591,8 +443,12 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         // update linked layer
         if (linkedLayer !== null) {
             console.log(linkedLayer);
-            linkedLayer.setFiltersize(newFiltersize);
+            linkedLayer.setFilterSize(newFilterSize);
         }
+
+        // update input field:
+        document.getElementById("filtersizeModifier").value = filterSize;
+
     }
 
     function setLayerDimension(newWidth, newHeight) {
@@ -615,12 +471,12 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         removeStack();
     };
 
-    this.increaseFiltersize = function () {
-        increaseFiltersize();
+    this.increaseFilterSize = function () {
+        increaseFilterSize();
     };
 
-    this.decreaseFiltersize = function () {
-        decreaseFiltersize();
+    this.decreaseFilterSize = function () {
+        decreaseFilterSize();
     };
 
     this.setLayerDimension = function (newWidth, newHeight) {
@@ -636,7 +492,7 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         }
 
         // set current layer values:
-        setFiltersize(linkedLayer.getFiltersize());
+        setFilterSize(linkedLayer.getFilterSize());
         setStackCount(linkedLayer.getStackCount());
 
     };
@@ -645,14 +501,14 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         setStackCount(newStackCount);
     }
 
-    this.setFiltersize = function (newFiltersize) {
-        setFiltersize(newFiltersize);
+    this.setFilterSize = function (newFiltersize) {
+        setFilterSize(newFiltersize);
     }
 
 
 }
 
-function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filtersize, layerType, linkedLayer) {
+function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filterSize, layerType, linkedLayer) {
     //create plot pane pair:
     var layerPair = [];
 
@@ -698,10 +554,10 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
 
     //Scales:
     var xScale = d3.scaleLinear();
-    xScale.domain([0, layerWidth + 0.2 * Math.max(stackCount, 2) * layerWidth]);
+    xScale.domain([0, layerWidth + 0.2 * stackCount * layerWidth]);
     xScale.range([0, width - 20]);
     var yScale = d3.scaleLinear();
-    yScale.domain([0, layerHeight + 0.2 * Math.max(stackCount, 2) * layerHeight]);
+    yScale.domain([0, layerHeight + 0.2 * stackCount * layerHeight]);
     yScale.range([0, height - 20]);
 
     //helper variables:
@@ -739,8 +595,8 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
             .attr('class', 'filter_rect')
             .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
             .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
-            .attr("width", xScale(filtersize))
-            .attr("height", yScale(filtersize))
+            .attr("width", xScale(filterSize))
+            .attr("height", yScale(filterSize))
             .style('stroke-width', 2)
             .style('stroke', "red")
             .style('fill', "red")
@@ -796,15 +652,15 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
             .style("font-size", "12px")
             .text('stacks: ' + stackCount);
 
-        // add filtersize description
-        entry.filtersizeDescription = entry.plot.append("text")
+        // add filterSize description
+        entry.filterSizeDescription = entry.plot.append("text")
             .attr("class", "filter_description")
             .attr('transform', 'translate(' + (width - (stackCount * 0.2 + 0.5) * xScale(layerWidth)) + ', ' +
                 ((stackCount * 0.2 + 1) * yScale(layerHeight) + 40) + ') ')
             .style('fill', "orange")
             .style("text-anchor", "middle")
             .style("font-size", "12px")
-            .text('Filtersize: ' + filtersize);
+            .text('Filtersize: ' + filterSize);
 
         // // print console output:
         // console.log("layerWidth: " + layerWidth);
@@ -830,8 +686,8 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                     ((stackCount * 0.2 + 1) * yScale(layerHeight) + 25) + ') ')
                 .text('stacks: ' + stackCount);
 
-            // move filtersize description
-            entry.filtersizeDescription
+            // move filterSize description
+            entry.filterSizeDescription
                 .transition()
                 .duration(500)
                 .attr('transform', 'translate(' + (width - (stackCount * 0.2 + 0.5) * xScale(layerWidth)) + ', ' +
@@ -860,8 +716,8 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                 .duration(500)
                 .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
                 .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
-                .attr("width", xScale(filtersize))
-                .attr("height", yScale(filtersize));
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize));
         });
     }
 
@@ -926,29 +782,29 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         });
     }
 
-    function increaseFiltersize() {
-        // return if filtersize equals layer size
-        if (filtersize === Math.min(layerWidth, layerWidth)) {
+    function increaseFilterSize() {
+        // return if filterSize equals layer size
+        if (filterSize === Math.min(layerWidth, layerWidth)) {
             return
         }
 
         // start animation
         transitionFinished = false;
 
-        // update filtersize
-        filtersize += 1;
-        console.log(filtersize);
+        // update filterSize
+        filterSize += 1;
+        console.log(filterSize);
 
         layerPair.forEach(function (entry) {
-            entry.filtersizeDescription.text('Filtersize: ' + filtersize);
-            if ((Math.min(layerWidth, layerHeight) - filtersize) < 3) {
+            entry.filterSizeDescription.text('Filtersize: ' + filterSize);
+            if ((Math.min(layerWidth, layerHeight) - filterSize) < 3) {
                 entry.plot.select(".filter_rect")
                     .transition()
                     .duration(500)
                     .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
-                    .attr("y", stackCount * 0.2 * yScale(layerHeight))
-                    .attr("width", xScale(filtersize))
-                    .attr("height", yScale(filtersize))
+                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + 10)
+                    .attr("width", xScale(filterSize))
+                    .attr("height", yScale(filterSize))
                     .on("end", function () {
                         transitionFinished = true;
                         console.log("transition finished");
@@ -958,9 +814,9 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                     .transition()
                     .duration(500)
                     .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
-                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-                    .attr("width", xScale(filtersize))
-                    .attr("height", yScale(filtersize))
+                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
+                    .attr("width", xScale(filterSize))
+                    .attr("height", yScale(filterSize))
                     .on("end", function () {
                         transitionFinished = true;
                         console.log("transition finished");
@@ -969,29 +825,29 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         });
     }
 
-    function decreaseFiltersize() {
-        // return if filtersize already 1
-        if (filtersize < 2) {
+    function decreaseFilterSize() {
+        // return if filterSize already 1
+        if (filterSize < 2) {
             return
         }
 
         // start animation
         transitionFinished = false;
 
-        // update filtersize
-        filtersize -= 1;
+        // update filterSize
+        filterSize -= 1;
 
         layerPair.forEach(function (entry) {
-            entry.filtersizeDescription.text('Filtersize: ' + filtersize);
+            entry.filterSizeDescription.text('Filtersize: ' + filterSize);
 
-            if ((Math.min(layerWidth, layerHeight) - filtersize) < 3) {
+            if ((Math.min(layerWidth, layerHeight) - filterSize) < 3) {
                 entry.plot.select(".filter_rect")
                     .transition()
                     .duration(500)
                     .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
-                    .attr("y", stackCount * 0.2 * yScale(layerHeight))
-                    .attr("width", xScale(filtersize))
-                    .attr("height", yScale(filtersize))
+                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + 10)
+                    .attr("width", xScale(filterSize))
+                    .attr("height", yScale(filterSize))
                     .on("end", function () {
                         transitionFinished = true;
                         console.log("transition finished");
@@ -1001,9 +857,9 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                     .transition()
                     .duration(500)
                     .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
-                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-                    .attr("width", xScale(filtersize))
-                    .attr("height", yScale(filtersize))
+                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
+                    .attr("width", xScale(filterSize))
+                    .attr("height", yScale(filterSize))
                     .on("end", function () {
                         transitionFinished = true;
                         console.log("transition finished");
@@ -1012,9 +868,9 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         });
     }
 
-    function setFiltersize(newFiltersize) {
-        // return if new filtersize is greater than layer size
-        if (newFiltersize > Math.min(layerWidth, layerWidth) || newFiltersize < 1) {
+    function setFilterSize(newFilterSize) {
+        // return if new filterSize is greater than layer size
+        if (newFilterSize > Math.min(layerWidth, layerWidth) || newFilterSize < 1) {
             console.log("Invalid filter size");
             return
         }
@@ -1022,20 +878,21 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         // start animation
         transitionFinished = false;
 
-        // update filtersize
-        filtersize = newFiltersize;
+        // update filterSize
+        filterSize = newFilterSize;
+        console.log("new Filter size: " + filterSize);
 
         layerPair.forEach(function (entry) {
-            entry.filtersizeDescription.text('Filtersize: ' + filtersize);
+            entry.filterSizeDescription.text('Filtersize: ' + filterSize);
 
-            if ((Math.min(layerWidth, layerHeight) - filtersize) < 3) {
+            if ((Math.min(layerWidth, layerHeight) - filterSize) < 3) {
                 entry.plot.select(".filter_rect")
                     .transition()
                     .duration(500)
                     .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
-                    .attr("y", stackCount * 0.2 * yScale(layerHeight))
-                    .attr("width", xScale(filtersize))
-                    .attr("height", yScale(filtersize))
+                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + 10)
+                    .attr("width", xScale(filterSize))
+                    .attr("height", yScale(filterSize))
                     .on("end", function () {
                         transitionFinished = true;
                         console.log("transition finished");
@@ -1045,9 +902,9 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                     .transition()
                     .duration(500)
                     .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
-                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-                    .attr("width", xScale(filtersize))
-                    .attr("height", yScale(filtersize))
+                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
+                    .attr("width", xScale(filterSize))
+                    .attr("height", yScale(filterSize))
                     .on("end", function () {
                         transitionFinished = true;
                         console.log("transition finished");
@@ -1188,12 +1045,12 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         removeStack();
     };
 
-    this.increaseFiltersize = function () {
-        increaseFiltersize();
+    this.increaseFilterSize = function () {
+        increaseFilterSize();
     };
 
-    this.decreaseFiltersize = function () {
-        decreaseFiltersize();
+    this.decreaseFilterSize = function () {
+        decreaseFilterSize();
     };
 
     this.setLayerDimension = function (newWidth, newHeight) {
@@ -1208,12 +1065,12 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         setStackCount(newStackCount);
     };
 
-    this.setFiltersize = function (newFiltersize) {
-        setFiltersize(newFiltersize);
+    this.setFilterSize = function (newFilterSize) {
+        setFilterSize(newFilterSize);
     };
 
-    this.getFiltersize = function () {
-        return filtersize;
+    this.getFilterSize = function () {
+        return filterSize;
     };
 
     this.getStackCount = function () {
@@ -1230,6 +1087,15 @@ function deselectAllLayers() {
     }
 
 }
+
+
+/*
+EventListener
+ */
+document.getElementById("applyLayerModification").addEventListener("click", function () {
+    annLayerPreview.setFilterSize(Number(document.getElementById("filtersizeModifier").value));
+    annLayerPreview.setStackCount(Number(document.getElementById("stackCountModifier").value));
+});
 
 
 // function createANNLayer(width, height, layerWidth, layerHeight, stackCount, filtersize, parentNodeID,
@@ -1376,7 +1242,7 @@ function deselectAllLayers() {
 //
 //
 //     // add filtersize description and buttons:
-//     var filtersizeDescription = plot.append("text")
+//     var filterSizeDescription = plot.append("text")
 //         .attr("class", "filter_description")
 //         .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * xScale(layerWidth) - 25) + ', ' +
 //             (((Math.max(stackCount, 2) / 2.0) * 0.2) * yScale(layerHeight) - 5) + ') rotate(315)')
@@ -1394,9 +1260,9 @@ function deselectAllLayers() {
 //             .on('click', function () {
 //                 if (transitionFinished) {
 //                     if (linkedLayer != null) {
-//                         linkedLayer.increaseFiltersize();
+//                         linkedLayer.increaseFilterSize();
 //                     }
-//                     increaseFiltersize();
+//                     increaseFilterSize();
 //                 }
 //             });
 //         filterPlusButtonGroup.append("circle")
@@ -1426,9 +1292,9 @@ function deselectAllLayers() {
 //             .on('click', function () {
 //                 if (transitionFinished) {
 //                     if (linkedLayer != null) {
-//                         linkedLayer.decreaseFiltersize();
+//                         linkedLayer.decreaseFilterSize();
 //                     }
-//                     decreaseFiltersize();
+//                     decreaseFilterSize();
 //                 }
 //             });
 //         filterMinusButtonGroup.append("circle")
@@ -1495,7 +1361,7 @@ function deselectAllLayers() {
 //
 //
 //         // move filtersize description
-//         filtersizeDescription
+//         filterSizeDescription
 //             .transition()
 //             .duration(500)
 //             .attr('transform', 'translate(' + (width - ((Math.max(stackCount, 2) / 2.0) * 0.2 + 1) * xScale(layerWidth) - 25)
@@ -1605,7 +1471,7 @@ function deselectAllLayers() {
 //
 //     }
 //
-//     function increaseFiltersize() {
+//     function increaseFilterSize() {
 //         // return if filtersize equals layer size
 //         if (filtersize === Math.min(layerWidth, layerWidth)) {
 //             return
@@ -1618,7 +1484,7 @@ function deselectAllLayers() {
 //         // update filtersize
 //         filtersize += 1;
 //
-//         filtersizeDescription.text('Filtersize: ' + filtersize);
+//         filterSizeDescription.text('Filtersize: ' + filtersize);
 //
 //
 //         if ((Math.min(layerWidth, layerWidth) - filtersize) < 3) {
@@ -1649,7 +1515,7 @@ function deselectAllLayers() {
 //
 //     }
 //
-//     function decreaseFiltersize() {
+//     function decreaseFilterSize() {
 //         // return if filtersize already 1
 //         if (filtersize < 2) {
 //             return
@@ -1661,7 +1527,7 @@ function deselectAllLayers() {
 //         // update filtersize
 //         filtersize -= 1;
 //
-//         filtersizeDescription.text('Filtersize: ' + filtersize);
+//         filterSizeDescription.text('Filtersize: ' + filtersize);
 //
 //
 //         if ((Math.min(layerWidth, layerWidth) - filtersize) < 3) {
@@ -1712,12 +1578,12 @@ function deselectAllLayers() {
 //         removeStack();
 //     };
 //
-//     this.increaseFiltersize = function () {
-//         increaseFiltersize();
+//     this.increaseFilterSize = function () {
+//         increaseFilterSize();
 //     };
 //
-//     this.decreaseFiltersize = function () {
-//         decreaseFiltersize();
+//     this.decreaseFilterSize = function () {
+//         decreaseFilterSize();
 //     };
 //
 //     this.setLayerDimension = function (newWidth, newHeight) {

@@ -128,14 +128,12 @@ li a:hover {
     float: left;
     margin: 20px;
     padding: 15px;
-
 }
 
 .rightColumn {
     float: right;
     margin: 20px;
     padding: 15px;
-
 }
 
 .horizontal-scroll {
@@ -146,6 +144,11 @@ li a:hover {
 
 .layer-svg {
     display: inline-block;
+}
+
+.layerPreviewTableCell {
+    margin: 20px;
+    padding: 15px;
 }
 
 /*
