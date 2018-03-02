@@ -134,7 +134,7 @@ function updateInputOutputLayer(resX, resY, channels) {
 
     //add visualisation:
     //var decoderVisualisation = new createANNLayer(250, 250, resX, resY, channels, 2, "outputLayer", false, false);
-    inputOutputLayerPair = new ANNLayerPair(200, 200, resX, resY, channels, 3);
+    inputOutputLayerPair = new ANNLayerPair(200, 200, resX, resY, channels, 3, "input_output_layer");
     //ANNLayerPreview(200, 200, 28, 28, channels, 2, "encoder", "Input Layer", decoderVisualisation);
     //createANNLayer(500, 500, resX, resY, channels, 2, "inputLayer", true, false, decoderVisualisation);
 

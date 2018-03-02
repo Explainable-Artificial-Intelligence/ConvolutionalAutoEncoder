@@ -495,6 +495,9 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         setFilterSize(linkedLayer.getFilterSize());
         setStackCount(linkedLayer.getStackCount());
 
+        // (de-)activate stack count input:
+        document.getElementById("stackCountModifier").disabled = (linkedLayer.getLayerType() === "input_output_layer");
+
     };
 
     this.setStackCount = function (newStackCount) {
@@ -508,12 +511,13 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
 
 }
 
-function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filterSize, layerType, linkedLayer) {
+function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filterSize, layerType) {
     //create plot pane pair:
     var layerPair = [];
 
 
     //define basic parameters
+    console.log(layerType);
     if (layerType === "input_output_layer") {
         var layerIdx = 0;
         layerPair.push({plot_id: "input_layer", title: "Input Layer ", parentNode: "#input", layerIdx: 0});
@@ -1075,6 +1079,10 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
 
     this.getStackCount = function () {
         return stackCount;
+    };
+
+    this.getLayerType = function () {
+        return layerType;
     };
 }
 
