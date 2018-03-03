@@ -289,6 +289,12 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
             transitionFinished = true;
         }
 
+        // update linked layer
+        if (linkedLayer !== null) {
+            console.log(linkedLayer);
+            linkedLayer.setStackCount(stackCount);
+        }
+
         // update input field:
         document.getElementById("stackCountModifier").value = stackCount;
 
