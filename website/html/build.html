@@ -8,6 +8,7 @@
 </head>
 
 <link rel="stylesheet" type="text/css" href="../css/layout.css">
+<link rel="stylesheet" type="text/css" href="../css/build.css">
 
 <body>
 <header>
@@ -37,6 +38,9 @@
             <option value="sigmoid">sigmoid</option>
             <option value="tanh">tanh</option>
         </select><br>
+        <section>
+            <img id="activationFunctionPreviewImage" src="../img/relu.svg">
+        </section>
         <br>
 
         Batch Size: <br>
@@ -64,6 +68,10 @@
         </select><br>
         <br>
         <section id="advancedLearningParameters">
+
+            <img id="learningRateFunctionPreviewImage" src="../img/static.svg">
+            <br>
+
             <div id="lrInitialLearningRateDiv" style="display:none">
                 Initial Learning Rate <br>
                 <input id="lrInitialLearningRate" type="number" value="0.01"><br>
@@ -168,6 +176,9 @@
         </select><br>
         <br>
         <section id="advancedWeightParameters">
+            <img id="randomFunctionForWeightsPreviewImage" src="../img/uniform.svg">
+            <br>
+
             <div id="rwAlphaDiv" style="display: none">
                 Alpha: <br>
                 <input id="rwAlpha" type="number" value="0.5"><br>
@@ -222,6 +233,9 @@
         <br>
         <br>
         <section id="advancedBiasParameters">
+            <img id="randomFunctionForBiasesPreviewImage" src="../img/zeros.svg">
+            <br>
+
             <div id="rbAlphaDiv" style="display: none">
                 Alpha: <br>
                 <input id="rbAlpha" type="number" value="0.5"><br>

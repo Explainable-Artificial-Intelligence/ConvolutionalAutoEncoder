@@ -12,10 +12,13 @@ function hideAndShowAdvancedLearningParameters() {
     }
     console.log(selectedOptions);
 
+    // set preview image:
+    document.getElementById("learningRateFunctionPreviewImage").src = "../img/" + selectedOptions[0] + ".svg";
+
     var children = document.getElementById("advancedLearningParameters").children;
 
     // hide all advanced options
-    for (i = 0; i < children.length; i++) {
+    for (i = 1; i < children.length; i++) {
         children[i].style.display = 'none'
     }
 
@@ -35,7 +38,7 @@ function hideAndShowAdvancedLearningParameters() {
             document.getElementById("lrDecayStepsDiv").style.display = 'block';
             document.getElementById("lrEndLearningRateDiv").style.display = 'block';
             document.getElementById("lrPowerDiv").style.display = 'block';
-            document.getElementById("lrCycleRateDiv").style.display = 'block';
+            document.getElementById("lrCycleDiv").style.display = 'block';
             continue;
         }
         document.getElementById("lrInitialLearningRateDiv").style.display = 'block';
@@ -44,6 +47,8 @@ function hideAndShowAdvancedLearningParameters() {
         document.getElementById("lrStaircaseDiv").style.display = 'block';
 
     }
+
+
 }
 
 function hideAndShowMomentum() {
@@ -68,13 +73,15 @@ function hideAndShowMomentum() {
 function hideAndShowAdvancedRandomParameters(prefix) {
     // get random weight/biases selection
     var selectedOptions = [];
-    var selectionFieldOptions, children;
+    var selectionFieldOptions, children, previewId;
     if (prefix === "rw") {
         selectionFieldOptions = document.getElementById("randomFunctionForWeights").options;
         children = document.getElementById("advancedWeightParameters").children;
+        previewId = "randomFunctionForWeightsPreviewImage"
     } else {
         selectionFieldOptions = document.getElementById("randomFunctionForBiases").options;
         children = document.getElementById("advancedBiasParameters").children;
+        previewId = "randomFunctionForBiasesPreviewImage"
     }
     for (var i = 0; i < selectionFieldOptions.length; i++) {
         if (selectionFieldOptions[i].selected) {
@@ -82,8 +89,12 @@ function hideAndShowAdvancedRandomParameters(prefix) {
         }
     }
     console.log(selectedOptions);
+
+    // set preview image:
+    document.getElementById(previewId).src = "../img/" + selectedOptions[0] + ".svg";
+
     // hide all advanced options
-    for (i = 0; i < children.length; i++) {
+    for (i = 1; i < children.length; i++) {
         children[i].style.display = 'none'
     }
 
@@ -139,6 +150,14 @@ function hideAndShowMSSSIMOptions() {
 /*
 link Event Listener
  */
+
+document.getElementById("activationFunction").addEventListener("change", function () {
+    // set preview image:
+    document.getElementById("activationFunctionPreviewImage").src = "../img/"
+        + document.getElementById("activationFunction")
+            .options[document.getElementById("activationFunction").selectedIndex].value + ".svg";
+
+});
 
 document.getElementById("learningRateFunction").addEventListener("change", hideAndShowAdvancedLearningParameters);
 document.getElementById("Optimizer").addEventListener("change", hideAndShowMomentum);
