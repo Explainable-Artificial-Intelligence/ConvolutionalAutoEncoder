@@ -771,12 +771,61 @@ definitions:
       verbose:
         type: boolean
         example: true
-      learning_rate_function:
+      learning_rate_dict:
+        type: array
+        items:
+          $ref: '#/definitions/LearningRate'
+      cost_function_dict:
+        type: array
+        items:
+          $ref: '#/definitions/CostFunction'
+      optimizer:
         type: array
         items:
           type: string
         example:
-          - static
+          - AdamOptimizer
+      momentum:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.9
+      random_weights_dict:
+        type: array
+        items:
+          $ref: '#/definitions/RandomFunction'
+      random_biases_dict:
+        type: array
+        items:
+          $ref: '#/definitions/RandomFunction'
+      session_saver_path:
+        type: string
+        example: ./save/
+      load_prev_session:
+        type: boolean
+        example: false
+      session_save_duration:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 5
+      num_test_pictures:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example:
+          - 100
+  LearningRate:
+    type: object
+    properties:
+      learning_rate_function:
+        type: string
+        example: static
       lr_initial_learning_rate:
         type: array
         items:
@@ -845,12 +894,12 @@ definitions:
           type: boolean
         example:
           - false
+  CostFunction:
+    type: object
+    properties:
       cf_cost_function:
-        type: array
-        items:
-          type: string
-        example:
-          - squared_pixel_distance
+        type: string
+        example: squared_pixel_distance
       cf_max_val:
         type: array
         items:
@@ -895,163 +944,68 @@ definitions:
             format: float
         example:
           - - 0.0
-      optimizer:
-        type: array
-        items:
-          type: string
-        example:
-          - AdamOptimizer
-      momentum:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0.9
-      random_function_for_weights:
-        type: array
-        items:
-          type: string
-        example:
-          - uniform
-      rw_alpha:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0.5
-      rw_beta:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 1
-      rw_mean:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0
-      rw_stddev:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 1
-      rw_lam:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0.5
-      rw_minval:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0
-      rw_maxval:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 1
-      rw_seed:
-        type: array
-        items:
-          type: integer
-          format: int32
-        example:
-          - -1
-      random_function_for_biases:
-        type: array
-        items:
-          type: string
-        example:
-          - zeros
-      rb_alpha:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0.5
-      rb_beta:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 1
-      rb_mean:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0
-      rb_stddev:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 1
-      rb_lam:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0.5
-      rb_minval:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 0
-      rb_maxval:
-        type: array
-        items:
-          type: number
-          format: double
-        example:
-          - 1
-      rb_seed:
-        type: array
-        items:
-          type: integer
-          format: int32
-        example:
-          - -1
-      session_saver_path:
+  RandomFunction:
+    type: object
+    properties:
+      random_function:
         type: string
-        example: ./save/
-      load_prev_session:
-        type: boolean
-        example: false
-      session_save_duration:
+        example: uniform
+      alpha:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.5
+      beta:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+      mean:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0
+      stddev:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+      lam:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0.5
+      minval:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 0
+      maxval:
+        type: array
+        items:
+          type: number
+          format: double
+        example:
+          - 1
+      seed:
         type: array
         items:
           type: integer
           format: int32
         example:
-          - 5
-      num_test_pictures:
-        type: array
-        items:
-          type: integer
-          format: int32
-        example:
-          - 100
+          - -1
   ProcessedImageData:
     type: object
     properties:

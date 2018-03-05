@@ -17,12 +17,12 @@
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/ClusterParameters', 'model/Clustering', 'model/Image', 'model/ImageData', 'model/ParameterList', 'model/Point2D', 'model/ProcessedImageData', 'model/TrainPerformance', 'model/TrainStatus', 'api/BuildApi', 'api/LoadApi', 'api/TrainApi', 'api/TuneApi', 'api/VisualizeApi'], factory);
+      define(['ApiClient', 'model/ClusterParameters', 'model/Clustering', 'model/CostFunction', 'model/Image', 'model/ImageData', 'model/LearningRate', 'model/ParameterList', 'model/Point2D', 'model/ProcessedImageData', 'model/RandomFunction', 'model/TrainPerformance', 'model/TrainStatus', 'api/BuildApi', 'api/LoadApi', 'api/TrainApi', 'api/TuneApi', 'api/VisualizeApi'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('./ApiClient'), require('./model/ClusterParameters'), require('./model/Clustering'), require('./model/Image'), require('./model/ImageData'), require('./model/ParameterList'), require('./model/Point2D'), require('./model/ProcessedImageData'), require('./model/TrainPerformance'), require('./model/TrainStatus'), require('./api/BuildApi'), require('./api/LoadApi'), require('./api/TrainApi'), require('./api/TuneApi'), require('./api/VisualizeApi'));
+      module.exports = factory(require('./ApiClient'), require('./model/ClusterParameters'), require('./model/Clustering'), require('./model/CostFunction'), require('./model/Image'), require('./model/ImageData'), require('./model/LearningRate'), require('./model/ParameterList'), require('./model/Point2D'), require('./model/ProcessedImageData'), require('./model/RandomFunction'), require('./model/TrainPerformance'), require('./model/TrainStatus'), require('./api/BuildApi'), require('./api/LoadApi'), require('./api/TrainApi'), require('./api/TuneApi'), require('./api/VisualizeApi'));
   }
-}(function(ApiClient, ClusterParameters, Clustering, Image, ImageData, ParameterList, Point2D, ProcessedImageData, TrainPerformance, TrainStatus, BuildApi, LoadApi, TrainApi, TuneApi, VisualizeApi) {
+}(function (ApiClient, ClusterParameters, Clustering, CostFunction, Image, ImageData, LearningRate, ParameterList, Point2D, ProcessedImageData, RandomFunction, TrainPerformance, TrainStatus, BuildApi, LoadApi, TrainApi, TuneApi, VisualizeApi) {
   'use strict';
 
   /**
@@ -73,20 +73,30 @@
      */
     Clustering: Clustering,
     /**
-     * The Image model constructor.
-     * @property {module:model/Image}
+     * The CostFunction model constructor.
+     * @property {module:model/CostFunction}
      */
-    Image: Image,
+    CostFunction: CostFunction,
+      /**
+       * The Image model constructor.
+       * @property {module:model/Image}
+       */
+      Image: Image,
     /**
      * The ImageData model constructor.
      * @property {module:model/ImageData}
      */
     ImageData: ImageData,
     /**
-     * The ParameterList model constructor.
-     * @property {module:model/ParameterList}
+     * The LearningRate model constructor.
+     * @property {module:model/LearningRate}
      */
-    ParameterList: ParameterList,
+    LearningRate: LearningRate,
+      /**
+       * The ParameterList model constructor.
+       * @property {module:model/ParameterList}
+       */
+      ParameterList: ParameterList,
     /**
      * The Point2D model constructor.
      * @property {module:model/Point2D}
@@ -98,10 +108,15 @@
      */
     ProcessedImageData: ProcessedImageData,
     /**
-     * The TrainPerformance model constructor.
-     * @property {module:model/TrainPerformance}
+     * The RandomFunction model constructor.
+     * @property {module:model/RandomFunction}
      */
-    TrainPerformance: TrainPerformance,
+    RandomFunction: RandomFunction,
+      /**
+       * The TrainPerformance model constructor.
+       * @property {module:model/TrainPerformance}
+       */
+      TrainPerformance: TrainPerformance,
     /**
      * The TrainStatus model constructor.
      * @property {module:model/TrainStatus}

@@ -685,7 +685,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # save train status
         self.train_status["train_cost"].append(float(train_cost))
-        self.train_status["learning_rate"].append(float(self.tf_session.run(self.learning_rate)))
+        if type(self.learning_rate) is float:
+            self.train_status["learning_rate"].append(self.learning_rate)
+        else:
+            self.train_status["learning_rate"].append(float(self.tf_session.run(self.learning_rate)))
 
         if self.verbose:
             print(str(step) + ": " + str(train_cost))

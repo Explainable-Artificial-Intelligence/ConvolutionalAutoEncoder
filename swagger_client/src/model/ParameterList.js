@@ -17,18 +17,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient'], factory);
+      define(['ApiClient', 'model/CostFunction', 'model/LearningRate', 'model/RandomFunction'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'));
+      module.exports = factory(require('../ApiClient'), require('./CostFunction'), require('./LearningRate'), require('./RandomFunction'));
   } else {
     // Browser globals (root is window)
     if (!root.ConvolutionalAutoencoder) {
       root.ConvolutionalAutoencoder = {};
     }
-    root.ConvolutionalAutoencoder.ParameterList = factory(root.ConvolutionalAutoencoder.ApiClient);
+      root.ConvolutionalAutoencoder.ParameterList = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.CostFunction, root.ConvolutionalAutoencoder.LearningRate, root.ConvolutionalAutoencoder.RandomFunction);
   }
-}(this, function(ApiClient) {
+}(this, function (ApiClient, CostFunction, LearningRate, RandomFunction) {
   'use strict';
 
 
@@ -89,116 +89,23 @@
       if (data.hasOwnProperty('verbose')) {
         obj['verbose'] = ApiClient.convertToType(data['verbose'], 'Boolean');
       }
-      if (data.hasOwnProperty('learning_rate_function')) {
-        obj['learning_rate_function'] = ApiClient.convertToType(data['learning_rate_function'], ['String']);
+        if (data.hasOwnProperty('learning_rate_dict')) {
+            obj['learning_rate_dict'] = ApiClient.convertToType(data['learning_rate_dict'], [LearningRate]);
       }
-      if (data.hasOwnProperty('lr_initial_learning_rate')) {
-        obj['lr_initial_learning_rate'] = ApiClient.convertToType(data['lr_initial_learning_rate'], ['Number']);
+        if (data.hasOwnProperty('cost_function_dict')) {
+            obj['cost_function_dict'] = ApiClient.convertToType(data['cost_function_dict'], [CostFunction]);
       }
-      if (data.hasOwnProperty('lr_decay_steps')) {
-        obj['lr_decay_steps'] = ApiClient.convertToType(data['lr_decay_steps'], ['Number']);
-      }
-      if (data.hasOwnProperty('lr_decay_rate')) {
-        obj['lr_decay_rate'] = ApiClient.convertToType(data['lr_decay_rate'], ['Number']);
-      }
-      if (data.hasOwnProperty('lr_staircase')) {
-        obj['lr_staircase'] = ApiClient.convertToType(data['lr_staircase'], ['Boolean']);
-      }
-      if (data.hasOwnProperty('lr_boundaries')) {
-        obj['lr_boundaries'] = ApiClient.convertToType(data['lr_boundaries'], [['Number']]);
-      }
-      if (data.hasOwnProperty('lr_values')) {
-        obj['lr_values'] = ApiClient.convertToType(data['lr_values'], [['Number']]);
-      }
-      if (data.hasOwnProperty('lr_end_learning_rate')) {
-        obj['lr_end_learning_rate'] = ApiClient.convertToType(data['lr_end_learning_rate'], ['Number']);
-      }
-      if (data.hasOwnProperty('lr_power')) {
-        obj['lr_power'] = ApiClient.convertToType(data['lr_power'], ['Number']);
-      }
-      if (data.hasOwnProperty('lr_cycle')) {
-        obj['lr_cycle'] = ApiClient.convertToType(data['lr_cycle'], ['Boolean']);
-      }
-        if (data.hasOwnProperty('cf_cost_function')) {
-            obj['cf_cost_function'] = ApiClient.convertToType(data['cf_cost_function'], ['String']);
-        }
-        if (data.hasOwnProperty('cf_max_val')) {
-            obj['cf_max_val'] = ApiClient.convertToType(data['cf_max_val'], ['Number']);
-        }
-        if (data.hasOwnProperty('cf_filter_size')) {
-            obj['cf_filter_size'] = ApiClient.convertToType(data['cf_filter_size'], ['Number']);
-        }
-        if (data.hasOwnProperty('cf_filter_sigma')) {
-            obj['cf_filter_sigma'] = ApiClient.convertToType(data['cf_filter_sigma'], ['Number']);
-        }
-        if (data.hasOwnProperty('cf_k1')) {
-            obj['cf_k1'] = ApiClient.convertToType(data['cf_k1'], ['Number']);
-        }
-        if (data.hasOwnProperty('cf_k2')) {
-            obj['cf_k2'] = ApiClient.convertToType(data['cf_k2'], ['Number']);
-        }
-        if (data.hasOwnProperty('cf_weights')) {
-            obj['cf_weights'] = ApiClient.convertToType(data['cf_weights'], [['Number']]);
-        }
       if (data.hasOwnProperty('optimizer')) {
         obj['optimizer'] = ApiClient.convertToType(data['optimizer'], ['String']);
       }
       if (data.hasOwnProperty('momentum')) {
         obj['momentum'] = ApiClient.convertToType(data['momentum'], ['Number']);
       }
-      if (data.hasOwnProperty('random_function_for_weights')) {
-        obj['random_function_for_weights'] = ApiClient.convertToType(data['random_function_for_weights'], ['String']);
+        if (data.hasOwnProperty('random_weights_dict')) {
+            obj['random_weights_dict'] = ApiClient.convertToType(data['random_weights_dict'], [RandomFunction]);
       }
-      if (data.hasOwnProperty('rw_alpha')) {
-        obj['rw_alpha'] = ApiClient.convertToType(data['rw_alpha'], ['Number']);
-      }
-      if (data.hasOwnProperty('rw_beta')) {
-        obj['rw_beta'] = ApiClient.convertToType(data['rw_beta'], ['Number']);
-      }
-      if (data.hasOwnProperty('rw_mean')) {
-        obj['rw_mean'] = ApiClient.convertToType(data['rw_mean'], ['Number']);
-      }
-      if (data.hasOwnProperty('rw_stddev')) {
-        obj['rw_stddev'] = ApiClient.convertToType(data['rw_stddev'], ['Number']);
-      }
-      if (data.hasOwnProperty('rw_lam')) {
-        obj['rw_lam'] = ApiClient.convertToType(data['rw_lam'], ['Number']);
-      }
-      if (data.hasOwnProperty('rw_minval')) {
-        obj['rw_minval'] = ApiClient.convertToType(data['rw_minval'], ['Number']);
-      }
-      if (data.hasOwnProperty('rw_maxval')) {
-        obj['rw_maxval'] = ApiClient.convertToType(data['rw_maxval'], ['Number']);
-      }
-      if (data.hasOwnProperty('rw_seed')) {
-        obj['rw_seed'] = ApiClient.convertToType(data['rw_seed'], ['Number']);
-      }
-      if (data.hasOwnProperty('random_function_for_biases')) {
-        obj['random_function_for_biases'] = ApiClient.convertToType(data['random_function_for_biases'], ['String']);
-      }
-      if (data.hasOwnProperty('rb_alpha')) {
-        obj['rb_alpha'] = ApiClient.convertToType(data['rb_alpha'], ['Number']);
-      }
-      if (data.hasOwnProperty('rb_beta')) {
-        obj['rb_beta'] = ApiClient.convertToType(data['rb_beta'], ['Number']);
-      }
-      if (data.hasOwnProperty('rb_mean')) {
-        obj['rb_mean'] = ApiClient.convertToType(data['rb_mean'], ['Number']);
-      }
-      if (data.hasOwnProperty('rb_stddev')) {
-        obj['rb_stddev'] = ApiClient.convertToType(data['rb_stddev'], ['Number']);
-      }
-      if (data.hasOwnProperty('rb_lam')) {
-        obj['rb_lam'] = ApiClient.convertToType(data['rb_lam'], ['Number']);
-      }
-      if (data.hasOwnProperty('rb_minval')) {
-        obj['rb_minval'] = ApiClient.convertToType(data['rb_minval'], ['Number']);
-      }
-      if (data.hasOwnProperty('rb_maxval')) {
-        obj['rb_maxval'] = ApiClient.convertToType(data['rb_maxval'], ['Number']);
-      }
-      if (data.hasOwnProperty('rb_seed')) {
-        obj['rb_seed'] = ApiClient.convertToType(data['rb_seed'], ['Number']);
+        if (data.hasOwnProperty('random_biases_dict')) {
+            obj['random_biases_dict'] = ApiClient.convertToType(data['random_biases_dict'], [RandomFunction]);
       }
       if (data.hasOwnProperty('session_saver_path')) {
         obj['session_saver_path'] = ApiClient.convertToType(data['session_saver_path'], 'String');
@@ -253,153 +160,29 @@
    */
   exports.prototype['verbose'] = undefined;
   /**
-   * @member {Array.<String>} learning_rate_function
+   * @member {Array.<module:model/LearningRate>} learning_rate_dict
    */
-  exports.prototype['learning_rate_function'] = undefined;
+  exports.prototype['learning_rate_dict'] = undefined;
   /**
-   * @member {Array.<Number>} lr_initial_learning_rate
+   * @member {Array.<module:model/CostFunction>} cost_function_dict
    */
-  exports.prototype['lr_initial_learning_rate'] = undefined;
+  exports.prototype['cost_function_dict'] = undefined;
   /**
-   * @member {Array.<Number>} lr_decay_steps
+   * @member {Array.<String>} optimizer
    */
-  exports.prototype['lr_decay_steps'] = undefined;
-  /**
-   * @member {Array.<Number>} lr_decay_rate
-   */
-  exports.prototype['lr_decay_rate'] = undefined;
-  /**
-   * @member {Array.<Boolean>} lr_staircase
-   */
-  exports.prototype['lr_staircase'] = undefined;
-  /**
-   * @member {Array.<Array.<Number>>} lr_boundaries
-   */
-  exports.prototype['lr_boundaries'] = undefined;
-  /**
-   * @member {Array.<Array.<Number>>} lr_values
-   */
-  exports.prototype['lr_values'] = undefined;
-  /**
-   * @member {Array.<Number>} lr_end_learning_rate
-   */
-  exports.prototype['lr_end_learning_rate'] = undefined;
-  /**
-   * @member {Array.<Number>} lr_power
-   */
-  exports.prototype['lr_power'] = undefined;
-  /**
-   * @member {Array.<Boolean>} lr_cycle
-   */
-  exports.prototype['lr_cycle'] = undefined;
-  /**
-   * @member {Array.<String>} cf_cost_function
-   */
-  exports.prototype['cf_cost_function'] = undefined;
-    /**
-     * @member {Array.<Number>} cf_max_val
-     */
-    exports.prototype['cf_max_val'] = undefined;
-    /**
-     * @member {Array.<Number>} cf_filter_size
-     */
-    exports.prototype['cf_filter_size'] = undefined;
-    /**
-     * @member {Array.<Number>} cf_filter_sigma
-     */
-    exports.prototype['cf_filter_sigma'] = undefined;
-    /**
-     * @member {Array.<Number>} cf_k1
-     */
-    exports.prototype['cf_k1'] = undefined;
-    /**
-     * @member {Array.<Number>} cf_k2
-     */
-    exports.prototype['cf_k2'] = undefined;
-    /**
-     * @member {Array.<Array.<Number>>} cf_weights
-     */
-    exports.prototype['cf_weights'] = undefined;
-    /**
-     * @member {Array.<String>} optimizer
-     */
-    exports.prototype['optimizer'] = undefined;
+  exports.prototype['optimizer'] = undefined;
   /**
    * @member {Array.<Number>} momentum
    */
   exports.prototype['momentum'] = undefined;
   /**
-   * @member {Array.<String>} random_function_for_weights
+   * @member {Array.<module:model/RandomFunction>} random_weights_dict
    */
-  exports.prototype['random_function_for_weights'] = undefined;
+  exports.prototype['random_weights_dict'] = undefined;
   /**
-   * @member {Array.<Number>} rw_alpha
+   * @member {Array.<module:model/RandomFunction>} random_biases_dict
    */
-  exports.prototype['rw_alpha'] = undefined;
-  /**
-   * @member {Array.<Number>} rw_beta
-   */
-  exports.prototype['rw_beta'] = undefined;
-  /**
-   * @member {Array.<Number>} rw_mean
-   */
-  exports.prototype['rw_mean'] = undefined;
-  /**
-   * @member {Array.<Number>} rw_stddev
-   */
-  exports.prototype['rw_stddev'] = undefined;
-  /**
-   * @member {Array.<Number>} rw_lam
-   */
-  exports.prototype['rw_lam'] = undefined;
-  /**
-   * @member {Array.<Number>} rw_minval
-   */
-  exports.prototype['rw_minval'] = undefined;
-  /**
-   * @member {Array.<Number>} rw_maxval
-   */
-  exports.prototype['rw_maxval'] = undefined;
-  /**
-   * @member {Array.<Number>} rw_seed
-   */
-  exports.prototype['rw_seed'] = undefined;
-  /**
-   * @member {Array.<String>} random_function_for_biases
-   */
-  exports.prototype['random_function_for_biases'] = undefined;
-  /**
-   * @member {Array.<Number>} rb_alpha
-   */
-  exports.prototype['rb_alpha'] = undefined;
-  /**
-   * @member {Array.<Number>} rb_beta
-   */
-  exports.prototype['rb_beta'] = undefined;
-  /**
-   * @member {Array.<Number>} rb_mean
-   */
-  exports.prototype['rb_mean'] = undefined;
-  /**
-   * @member {Array.<Number>} rb_stddev
-   */
-  exports.prototype['rb_stddev'] = undefined;
-  /**
-   * @member {Array.<Number>} rb_lam
-   */
-  exports.prototype['rb_lam'] = undefined;
-  /**
-   * @member {Array.<Number>} rb_minval
-   */
-  exports.prototype['rb_minval'] = undefined;
-  /**
-   * @member {Array.<Number>} rb_maxval
-   */
-  exports.prototype['rb_maxval'] = undefined;
-  /**
-   * @member {Array.<Number>} rb_seed
-   */
-  exports.prototype['rb_seed'] = undefined;
+  exports.prototype['random_biases_dict'] = undefined;
   /**
    * @member {String} session_saver_path
    */

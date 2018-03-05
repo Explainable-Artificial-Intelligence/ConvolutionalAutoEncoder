@@ -141,11 +141,14 @@ Class | Method | HTTP request | Description
 
  - [ConvolutionalAutoencoder.ClusterParameters](docs/ClusterParameters.md)
  - [ConvolutionalAutoencoder.Clustering](docs/Clustering.md)
+ - [ConvolutionalAutoencoder.CostFunction](docs/CostFunction.md)
  - [ConvolutionalAutoencoder.Image](docs/Image.md)
  - [ConvolutionalAutoencoder.ImageData](docs/ImageData.md)
+ - [ConvolutionalAutoencoder.LearningRate](docs/LearningRate.md)
  - [ConvolutionalAutoencoder.ParameterList](docs/ParameterList.md)
  - [ConvolutionalAutoencoder.Point2D](docs/Point2D.md)
  - [ConvolutionalAutoencoder.ProcessedImageData](docs/ProcessedImageData.md)
+ - [ConvolutionalAutoencoder.RandomFunction](docs/RandomFunction.md)
  - [ConvolutionalAutoencoder.TrainPerformance](docs/TrainPerformance.md)
  - [ConvolutionalAutoencoder.TrainStatus](docs/TrainStatus.md)
 

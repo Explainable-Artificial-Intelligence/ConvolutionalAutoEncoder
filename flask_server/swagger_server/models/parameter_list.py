@@ -4,6 +4,10 @@ from __future__ import absolute_import
 
 from typing import List
 
+from swagger_server.models.cost_function import CostFunction
+from swagger_server.models.learning_rate import LearningRate
+from swagger_server.models.random_function import RandomFunction
+
 from .base_model_ import Model
 from ..util import deserialize_model
 
@@ -17,22 +21,12 @@ class ParameterList(Model):
     def __init__(self, input_shape: List[List[int]] = None, number_of_stacks: List[List[int]] = None,
                  filter_sizes: List[List[int]] = None, mirror_weights: List[bool] = None,
                  activation_function: List[str] = None, batch_size: List[int] = None, n_epochs: List[int] = None,
-                 use_tensorboard: bool = None, verbose: bool = None, learning_rate_function: List[str] = None,
-                 lr_initial_learning_rate: List[float] = None, lr_decay_steps: List[int] = None,
-                 lr_decay_rate: List[float] = None, lr_staircase: List[bool] = None,
-                 lr_boundaries: List[List[int]] = None, lr_values: List[List[float]] = None,
-                 lr_end_learning_rate: List[float] = None, lr_power: List[float] = None, lr_cycle: List[bool] = None,
-                 cf_cost_function: List[str] = None, cf_max_val: List[float] = None, cf_filter_size: List[float] = None,
-                 cf_filter_sigma: List[float] = None, cf_k1: List[float] = None, cf_k2: List[float] = None,
-                 cf_weights: List[List[float]] = None, optimizer: List[str] = None, momentum: List[float] = None,
-                 random_function_for_weights: List[str] = None, rw_alpha: List[float] = None,
-                 rw_beta: List[float] = None, rw_mean: List[float] = None, rw_stddev: List[float] = None,
-                 rw_lam: List[float] = None, rw_minval: List[float] = None, rw_maxval: List[float] = None,
-                 rw_seed: List[int] = None, random_function_for_biases: List[str] = None, rb_alpha: List[float] = None,
-                 rb_beta: List[float] = None, rb_mean: List[float] = None, rb_stddev: List[float] = None,
-                 rb_lam: List[float] = None, rb_minval: List[float] = None, rb_maxval: List[float] = None,
-                 rb_seed: List[int] = None, session_saver_path: str = None, load_prev_session: bool = None,
-                 session_save_duration: List[int] = None, num_test_pictures: List[int] = None):
+                 use_tensorboard: bool = None, verbose: bool = None, learning_rate_dict: List[LearningRate] = None,
+                 cost_function_dict: List[CostFunction] = None, optimizer: List[str] = None,
+                 momentum: List[float] = None, random_weights_dict: List[RandomFunction] = None,
+                 random_biases_dict: List[RandomFunction] = None, session_saver_path: str = None,
+                 load_prev_session: bool = None, session_save_duration: List[int] = None,
+                 num_test_pictures: List[int] = None):
         """
         ParameterList - a model defined in Swagger
 
@@ -54,80 +48,18 @@ class ParameterList(Model):
         :type use_tensorboard: bool
         :param verbose: The verbose of this ParameterList.
         :type verbose: bool
-        :param learning_rate_function: The learning_rate_function of this ParameterList.
-        :type learning_rate_function: List[str]
-        :param lr_initial_learning_rate: The lr_initial_learning_rate of this ParameterList.
-        :type lr_initial_learning_rate: List[float]
-        :param lr_decay_steps: The lr_decay_steps of this ParameterList.
-        :type lr_decay_steps: List[int]
-        :param lr_decay_rate: The lr_decay_rate of this ParameterList.
-        :type lr_decay_rate: List[float]
-        :param lr_staircase: The lr_staircase of this ParameterList.
-        :type lr_staircase: List[bool]
-        :param lr_boundaries: The lr_boundaries of this ParameterList.
-        :type lr_boundaries: List[List[int]]
-        :param lr_values: The lr_values of this ParameterList.
-        :type lr_values: List[List[float]]
-        :param lr_end_learning_rate: The lr_end_learning_rate of this ParameterList.
-        :type lr_end_learning_rate: List[float]
-        :param lr_power: The lr_power of this ParameterList.
-        :type lr_power: List[float]
-        :param lr_cycle: The lr_cycle of this ParameterList.
-        :type lr_cycle: List[bool]
-        :param cf_cost_function: The cf_cost_function of this ParameterList.
-        :type cf_cost_function: List[str]
-        :param cf_max_val: The cf_max_val of this ParameterList.
-        :type cf_max_val: List[float]
-        :param cf_filter_size: The cf_filter_size of this ParameterList.
-        :type cf_filter_size: List[float]
-        :param cf_filter_sigma: The cf_filter_sigma of this ParameterList.
-        :type cf_filter_sigma: List[float]
-        :param cf_k1: The cf_k1 of this ParameterList.
-        :type cf_k1: List[float]
-        :param cf_k2: The cf_k2 of this ParameterList.
-        :type cf_k2: List[float]
-        :param cf_weights: The cf_weights of this ParameterList.
-        :type cf_weights: List[List[float]]
+        :param learning_rate_dict: The learning_rate_dict of this ParameterList.
+        :type learning_rate_dict: List[LearningRate]
+        :param cost_function_dict: The cost_function_dict of this ParameterList.
+        :type cost_function_dict: List[CostFunction]
         :param optimizer: The optimizer of this ParameterList.
         :type optimizer: List[str]
         :param momentum: The momentum of this ParameterList.
         :type momentum: List[float]
-        :param random_function_for_weights: The random_function_for_weights of this ParameterList.
-        :type random_function_for_weights: List[str]
-        :param rw_alpha: The rw_alpha of this ParameterList.
-        :type rw_alpha: List[float]
-        :param rw_beta: The rw_beta of this ParameterList.
-        :type rw_beta: List[float]
-        :param rw_mean: The rw_mean of this ParameterList.
-        :type rw_mean: List[float]
-        :param rw_stddev: The rw_stddev of this ParameterList.
-        :type rw_stddev: List[float]
-        :param rw_lam: The rw_lam of this ParameterList.
-        :type rw_lam: List[float]
-        :param rw_minval: The rw_minval of this ParameterList.
-        :type rw_minval: List[float]
-        :param rw_maxval: The rw_maxval of this ParameterList.
-        :type rw_maxval: List[float]
-        :param rw_seed: The rw_seed of this ParameterList.
-        :type rw_seed: List[int]
-        :param random_function_for_biases: The random_function_for_biases of this ParameterList.
-        :type random_function_for_biases: List[str]
-        :param rb_alpha: The rb_alpha of this ParameterList.
-        :type rb_alpha: List[float]
-        :param rb_beta: The rb_beta of this ParameterList.
-        :type rb_beta: List[float]
-        :param rb_mean: The rb_mean of this ParameterList.
-        :type rb_mean: List[float]
-        :param rb_stddev: The rb_stddev of this ParameterList.
-        :type rb_stddev: List[float]
-        :param rb_lam: The rb_lam of this ParameterList.
-        :type rb_lam: List[float]
-        :param rb_minval: The rb_minval of this ParameterList.
-        :type rb_minval: List[float]
-        :param rb_maxval: The rb_maxval of this ParameterList.
-        :type rb_maxval: List[float]
-        :param rb_seed: The rb_seed of this ParameterList.
-        :type rb_seed: List[int]
+        :param random_weights_dict: The random_weights_dict of this ParameterList.
+        :type random_weights_dict: List[RandomFunction]
+        :param random_biases_dict: The random_biases_dict of this ParameterList.
+        :type random_biases_dict: List[RandomFunction]
         :param session_saver_path: The session_saver_path of this ParameterList.
         :type session_saver_path: str
         :param load_prev_session: The load_prev_session of this ParameterList.
@@ -147,43 +79,12 @@ class ParameterList(Model):
             'n_epochs': List[int],
             'use_tensorboard': bool,
             'verbose': bool,
-            'learning_rate_function': List[str],
-            'lr_initial_learning_rate': List[float],
-            'lr_decay_steps': List[int],
-            'lr_decay_rate': List[float],
-            'lr_staircase': List[bool],
-            'lr_boundaries': List[List[int]],
-            'lr_values': List[List[float]],
-            'lr_end_learning_rate': List[float],
-            'lr_power': List[float],
-            'lr_cycle': List[bool],
-            'cf_cost_function': List[str],
-            'cf_max_val': List[float],
-            'cf_filter_size': List[float],
-            'cf_filter_sigma': List[float],
-            'cf_k1': List[float],
-            'cf_k2': List[float],
-            'cf_weights': List[List[float]],
+            'learning_rate_dict': List[LearningRate],
+            'cost_function_dict': List[CostFunction],
             'optimizer': List[str],
             'momentum': List[float],
-            'random_function_for_weights': List[str],
-            'rw_alpha': List[float],
-            'rw_beta': List[float],
-            'rw_mean': List[float],
-            'rw_stddev': List[float],
-            'rw_lam': List[float],
-            'rw_minval': List[float],
-            'rw_maxval': List[float],
-            'rw_seed': List[int],
-            'random_function_for_biases': List[str],
-            'rb_alpha': List[float],
-            'rb_beta': List[float],
-            'rb_mean': List[float],
-            'rb_stddev': List[float],
-            'rb_lam': List[float],
-            'rb_minval': List[float],
-            'rb_maxval': List[float],
-            'rb_seed': List[int],
+            'random_weights_dict': List[RandomFunction],
+            'random_biases_dict': List[RandomFunction],
             'session_saver_path': str,
             'load_prev_session': bool,
             'session_save_duration': List[int],
@@ -200,43 +101,12 @@ class ParameterList(Model):
             'n_epochs': 'n_epochs',
             'use_tensorboard': 'use_tensorboard',
             'verbose': 'verbose',
-            'learning_rate_function': 'learning_rate_function',
-            'lr_initial_learning_rate': 'lr_initial_learning_rate',
-            'lr_decay_steps': 'lr_decay_steps',
-            'lr_decay_rate': 'lr_decay_rate',
-            'lr_staircase': 'lr_staircase',
-            'lr_boundaries': 'lr_boundaries',
-            'lr_values': 'lr_values',
-            'lr_end_learning_rate': 'lr_end_learning_rate',
-            'lr_power': 'lr_power',
-            'lr_cycle': 'lr_cycle',
-            'cf_cost_function': 'cf_cost_function',
-            'cf_max_val': 'cf_max_val',
-            'cf_filter_size': 'cf_filter_size',
-            'cf_filter_sigma': 'cf_filter_sigma',
-            'cf_k1': 'cf_k1',
-            'cf_k2': 'cf_k2',
-            'cf_weights': 'cf_weights',
+            'learning_rate_dict': 'learning_rate_dict',
+            'cost_function_dict': 'cost_function_dict',
             'optimizer': 'optimizer',
             'momentum': 'momentum',
-            'random_function_for_weights': 'random_function_for_weights',
-            'rw_alpha': 'rw_alpha',
-            'rw_beta': 'rw_beta',
-            'rw_mean': 'rw_mean',
-            'rw_stddev': 'rw_stddev',
-            'rw_lam': 'rw_lam',
-            'rw_minval': 'rw_minval',
-            'rw_maxval': 'rw_maxval',
-            'rw_seed': 'rw_seed',
-            'random_function_for_biases': 'random_function_for_biases',
-            'rb_alpha': 'rb_alpha',
-            'rb_beta': 'rb_beta',
-            'rb_mean': 'rb_mean',
-            'rb_stddev': 'rb_stddev',
-            'rb_lam': 'rb_lam',
-            'rb_minval': 'rb_minval',
-            'rb_maxval': 'rb_maxval',
-            'rb_seed': 'rb_seed',
+            'random_weights_dict': 'random_weights_dict',
+            'random_biases_dict': 'random_biases_dict',
             'session_saver_path': 'session_saver_path',
             'load_prev_session': 'load_prev_session',
             'session_save_duration': 'session_save_duration',
@@ -252,43 +122,12 @@ class ParameterList(Model):
         self._n_epochs = n_epochs
         self._use_tensorboard = use_tensorboard
         self._verbose = verbose
-        self._learning_rate_function = learning_rate_function
-        self._lr_initial_learning_rate = lr_initial_learning_rate
-        self._lr_decay_steps = lr_decay_steps
-        self._lr_decay_rate = lr_decay_rate
-        self._lr_staircase = lr_staircase
-        self._lr_boundaries = lr_boundaries
-        self._lr_values = lr_values
-        self._lr_end_learning_rate = lr_end_learning_rate
-        self._lr_power = lr_power
-        self._lr_cycle = lr_cycle
-        self._cf_cost_function = cf_cost_function
-        self._cf_max_val = cf_max_val
-        self._cf_filter_size = cf_filter_size
-        self._cf_filter_sigma = cf_filter_sigma
-        self._cf_k1 = cf_k1
-        self._cf_k2 = cf_k2
-        self._cf_weights = cf_weights
+        self._learning_rate_dict = learning_rate_dict
+        self._cost_function_dict = cost_function_dict
         self._optimizer = optimizer
         self._momentum = momentum
-        self._random_function_for_weights = random_function_for_weights
-        self._rw_alpha = rw_alpha
-        self._rw_beta = rw_beta
-        self._rw_mean = rw_mean
-        self._rw_stddev = rw_stddev
-        self._rw_lam = rw_lam
-        self._rw_minval = rw_minval
-        self._rw_maxval = rw_maxval
-        self._rw_seed = rw_seed
-        self._random_function_for_biases = random_function_for_biases
-        self._rb_alpha = rb_alpha
-        self._rb_beta = rb_beta
-        self._rb_mean = rb_mean
-        self._rb_stddev = rb_stddev
-        self._rb_lam = rb_lam
-        self._rb_minval = rb_minval
-        self._rb_maxval = rb_maxval
-        self._rb_seed = rb_seed
+        self._random_weights_dict = random_weights_dict
+        self._random_biases_dict = random_biases_dict
         self._session_saver_path = session_saver_path
         self._load_prev_session = load_prev_session
         self._session_save_duration = session_save_duration
@@ -496,361 +335,46 @@ class ParameterList(Model):
         self._verbose = verbose
 
     @property
-    def learning_rate_function(self) -> List[str]:
+    def learning_rate_dict(self) -> List[LearningRate]:
         """
-        Gets the learning_rate_function of this ParameterList.
+        Gets the learning_rate_dict of this ParameterList.
 
-        :return: The learning_rate_function of this ParameterList.
-        :rtype: List[str]
+        :return: The learning_rate_dict of this ParameterList.
+        :rtype: List[LearningRate]
         """
-        return self._learning_rate_function
+        return self._learning_rate_dict
 
-    @learning_rate_function.setter
-    def learning_rate_function(self, learning_rate_function: List[str]):
+    @learning_rate_dict.setter
+    def learning_rate_dict(self, learning_rate_dict: List[LearningRate]):
         """
-        Sets the learning_rate_function of this ParameterList.
+        Sets the learning_rate_dict of this ParameterList.
 
-        :param learning_rate_function: The learning_rate_function of this ParameterList.
-        :type learning_rate_function: List[str]
-        """
-
-        self._learning_rate_function = learning_rate_function
-
-    @property
-    def lr_initial_learning_rate(self) -> List[float]:
-        """
-        Gets the lr_initial_learning_rate of this ParameterList.
-
-        :return: The lr_initial_learning_rate of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._lr_initial_learning_rate
-
-    @lr_initial_learning_rate.setter
-    def lr_initial_learning_rate(self, lr_initial_learning_rate: List[float]):
-        """
-        Sets the lr_initial_learning_rate of this ParameterList.
-
-        :param lr_initial_learning_rate: The lr_initial_learning_rate of this ParameterList.
-        :type lr_initial_learning_rate: List[float]
+        :param learning_rate_dict: The learning_rate_dict of this ParameterList.
+        :type learning_rate_dict: List[LearningRate]
         """
 
-        self._lr_initial_learning_rate = lr_initial_learning_rate
+        self._learning_rate_dict = learning_rate_dict
 
     @property
-    def lr_decay_steps(self) -> List[int]:
+    def cost_function_dict(self) -> List[CostFunction]:
         """
-        Gets the lr_decay_steps of this ParameterList.
+        Gets the cost_function_dict of this ParameterList.
 
-        :return: The lr_decay_steps of this ParameterList.
-        :rtype: List[int]
+        :return: The cost_function_dict of this ParameterList.
+        :rtype: List[CostFunction]
         """
-        return self._lr_decay_steps
+        return self._cost_function_dict
 
-    @lr_decay_steps.setter
-    def lr_decay_steps(self, lr_decay_steps: List[int]):
+    @cost_function_dict.setter
+    def cost_function_dict(self, cost_function_dict: List[CostFunction]):
         """
-        Sets the lr_decay_steps of this ParameterList.
+        Sets the cost_function_dict of this ParameterList.
 
-        :param lr_decay_steps: The lr_decay_steps of this ParameterList.
-        :type lr_decay_steps: List[int]
-        """
-
-        self._lr_decay_steps = lr_decay_steps
-
-    @property
-    def lr_decay_rate(self) -> List[float]:
-        """
-        Gets the lr_decay_rate of this ParameterList.
-
-        :return: The lr_decay_rate of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._lr_decay_rate
-
-    @lr_decay_rate.setter
-    def lr_decay_rate(self, lr_decay_rate: List[float]):
-        """
-        Sets the lr_decay_rate of this ParameterList.
-
-        :param lr_decay_rate: The lr_decay_rate of this ParameterList.
-        :type lr_decay_rate: List[float]
+        :param cost_function_dict: The cost_function_dict of this ParameterList.
+        :type cost_function_dict: List[CostFunction]
         """
 
-        self._lr_decay_rate = lr_decay_rate
-
-    @property
-    def lr_staircase(self) -> List[bool]:
-        """
-        Gets the lr_staircase of this ParameterList.
-
-        :return: The lr_staircase of this ParameterList.
-        :rtype: List[bool]
-        """
-        return self._lr_staircase
-
-    @lr_staircase.setter
-    def lr_staircase(self, lr_staircase: List[bool]):
-        """
-        Sets the lr_staircase of this ParameterList.
-
-        :param lr_staircase: The lr_staircase of this ParameterList.
-        :type lr_staircase: List[bool]
-        """
-
-        self._lr_staircase = lr_staircase
-
-    @property
-    def lr_boundaries(self) -> List[List[int]]:
-        """
-        Gets the lr_boundaries of this ParameterList.
-
-        :return: The lr_boundaries of this ParameterList.
-        :rtype: List[List[int]]
-        """
-        return self._lr_boundaries
-
-    @lr_boundaries.setter
-    def lr_boundaries(self, lr_boundaries: List[List[int]]):
-        """
-        Sets the lr_boundaries of this ParameterList.
-
-        :param lr_boundaries: The lr_boundaries of this ParameterList.
-        :type lr_boundaries: List[List[int]]
-        """
-
-        self._lr_boundaries = lr_boundaries
-
-    @property
-    def lr_values(self) -> List[List[float]]:
-        """
-        Gets the lr_values of this ParameterList.
-
-        :return: The lr_values of this ParameterList.
-        :rtype: List[List[float]]
-        """
-        return self._lr_values
-
-    @lr_values.setter
-    def lr_values(self, lr_values: List[List[float]]):
-        """
-        Sets the lr_values of this ParameterList.
-
-        :param lr_values: The lr_values of this ParameterList.
-        :type lr_values: List[List[float]]
-        """
-
-        self._lr_values = lr_values
-
-    @property
-    def lr_end_learning_rate(self) -> List[float]:
-        """
-        Gets the lr_end_learning_rate of this ParameterList.
-
-        :return: The lr_end_learning_rate of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._lr_end_learning_rate
-
-    @lr_end_learning_rate.setter
-    def lr_end_learning_rate(self, lr_end_learning_rate: List[float]):
-        """
-        Sets the lr_end_learning_rate of this ParameterList.
-
-        :param lr_end_learning_rate: The lr_end_learning_rate of this ParameterList.
-        :type lr_end_learning_rate: List[float]
-        """
-
-        self._lr_end_learning_rate = lr_end_learning_rate
-
-    @property
-    def lr_power(self) -> List[float]:
-        """
-        Gets the lr_power of this ParameterList.
-
-        :return: The lr_power of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._lr_power
-
-    @lr_power.setter
-    def lr_power(self, lr_power: List[float]):
-        """
-        Sets the lr_power of this ParameterList.
-
-        :param lr_power: The lr_power of this ParameterList.
-        :type lr_power: List[float]
-        """
-
-        self._lr_power = lr_power
-
-    @property
-    def lr_cycle(self) -> List[bool]:
-        """
-        Gets the lr_cycle of this ParameterList.
-
-        :return: The lr_cycle of this ParameterList.
-        :rtype: List[bool]
-        """
-        return self._lr_cycle
-
-    @lr_cycle.setter
-    def lr_cycle(self, lr_cycle: List[bool]):
-        """
-        Sets the lr_cycle of this ParameterList.
-
-        :param lr_cycle: The lr_cycle of this ParameterList.
-        :type lr_cycle: List[bool]
-        """
-
-        self._lr_cycle = lr_cycle
-
-    @property
-    def cf_cost_function(self) -> List[str]:
-        """
-        Gets the cf_cost_function of this ParameterList.
-
-        :return: The cf_cost_function of this ParameterList.
-        :rtype: List[str]
-        """
-        return self._cf_cost_function
-
-    @cf_cost_function.setter
-    def cf_cost_function(self, cf_cost_function: List[str]):
-        """
-        Sets the cf_cost_function of this ParameterList.
-
-        :param cf_cost_function: The cf_cost_function of this ParameterList.
-        :type cf_cost_function: List[str]
-        """
-
-        self._cf_cost_function = cf_cost_function
-
-    @property
-    def cf_max_val(self) -> List[float]:
-        """
-        Gets the cf_max_val of this ParameterList.
-
-        :return: The cf_max_val of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._cf_max_val
-
-    @cf_max_val.setter
-    def cf_max_val(self, cf_max_val: List[float]):
-        """
-        Sets the cf_max_val of this ParameterList.
-
-        :param cf_max_val: The cf_max_val of this ParameterList.
-        :type cf_max_val: List[float]
-        """
-
-        self._cf_max_val = cf_max_val
-
-    @property
-    def cf_filter_size(self) -> List[float]:
-        """
-        Gets the cf_filter_size of this ParameterList.
-
-        :return: The cf_filter_size of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._cf_filter_size
-
-    @cf_filter_size.setter
-    def cf_filter_size(self, cf_filter_size: List[float]):
-        """
-        Sets the cf_filter_size of this ParameterList.
-
-        :param cf_filter_size: The cf_filter_size of this ParameterList.
-        :type cf_filter_size: List[float]
-        """
-
-        self._cf_filter_size = cf_filter_size
-
-    @property
-    def cf_filter_sigma(self) -> List[float]:
-        """
-        Gets the cf_filter_sigma of this ParameterList.
-
-        :return: The cf_filter_sigma of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._cf_filter_sigma
-
-    @cf_filter_sigma.setter
-    def cf_filter_sigma(self, cf_filter_sigma: List[float]):
-        """
-        Sets the cf_filter_sigma of this ParameterList.
-
-        :param cf_filter_sigma: The cf_filter_sigma of this ParameterList.
-        :type cf_filter_sigma: List[float]
-        """
-
-        self._cf_filter_sigma = cf_filter_sigma
-
-    @property
-    def cf_k1(self) -> List[float]:
-        """
-        Gets the cf_k1 of this ParameterList.
-
-        :return: The cf_k1 of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._cf_k1
-
-    @cf_k1.setter
-    def cf_k1(self, cf_k1: List[float]):
-        """
-        Sets the cf_k1 of this ParameterList.
-
-        :param cf_k1: The cf_k1 of this ParameterList.
-        :type cf_k1: List[float]
-        """
-
-        self._cf_k1 = cf_k1
-
-    @property
-    def cf_k2(self) -> List[float]:
-        """
-        Gets the cf_k2 of this ParameterList.
-
-        :return: The cf_k2 of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._cf_k2
-
-    @cf_k2.setter
-    def cf_k2(self, cf_k2: List[float]):
-        """
-        Sets the cf_k2 of this ParameterList.
-
-        :param cf_k2: The cf_k2 of this ParameterList.
-        :type cf_k2: List[float]
-        """
-
-        self._cf_k2 = cf_k2
-
-    @property
-    def cf_weights(self) -> List[List[float]]:
-        """
-        Gets the cf_weights of this ParameterList.
-
-        :return: The cf_weights of this ParameterList.
-        :rtype: List[List[float]]
-        """
-        return self._cf_weights
-
-    @cf_weights.setter
-    def cf_weights(self, cf_weights: List[List[float]]):
-        """
-        Sets the cf_weights of this ParameterList.
-
-        :param cf_weights: The cf_weights of this ParameterList.
-        :type cf_weights: List[List[float]]
-        """
-
-        self._cf_weights = cf_weights
+        self._cost_function_dict = cost_function_dict
 
     @property
     def optimizer(self) -> List[str]:
@@ -895,382 +419,46 @@ class ParameterList(Model):
         self._momentum = momentum
 
     @property
-    def random_function_for_weights(self) -> List[str]:
+    def random_weights_dict(self) -> List[RandomFunction]:
         """
-        Gets the random_function_for_weights of this ParameterList.
+        Gets the random_weights_dict of this ParameterList.
 
-        :return: The random_function_for_weights of this ParameterList.
-        :rtype: List[str]
+        :return: The random_weights_dict of this ParameterList.
+        :rtype: List[RandomFunction]
         """
-        return self._random_function_for_weights
+        return self._random_weights_dict
 
-    @random_function_for_weights.setter
-    def random_function_for_weights(self, random_function_for_weights: List[str]):
+    @random_weights_dict.setter
+    def random_weights_dict(self, random_weights_dict: List[RandomFunction]):
         """
-        Sets the random_function_for_weights of this ParameterList.
+        Sets the random_weights_dict of this ParameterList.
 
-        :param random_function_for_weights: The random_function_for_weights of this ParameterList.
-        :type random_function_for_weights: List[str]
-        """
-
-        self._random_function_for_weights = random_function_for_weights
-
-    @property
-    def rw_alpha(self) -> List[float]:
-        """
-        Gets the rw_alpha of this ParameterList.
-
-        :return: The rw_alpha of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rw_alpha
-
-    @rw_alpha.setter
-    def rw_alpha(self, rw_alpha: List[float]):
-        """
-        Sets the rw_alpha of this ParameterList.
-
-        :param rw_alpha: The rw_alpha of this ParameterList.
-        :type rw_alpha: List[float]
+        :param random_weights_dict: The random_weights_dict of this ParameterList.
+        :type random_weights_dict: List[RandomFunction]
         """
 
-        self._rw_alpha = rw_alpha
+        self._random_weights_dict = random_weights_dict
 
     @property
-    def rw_beta(self) -> List[float]:
+    def random_biases_dict(self) -> List[RandomFunction]:
         """
-        Gets the rw_beta of this ParameterList.
+        Gets the random_biases_dict of this ParameterList.
 
-        :return: The rw_beta of this ParameterList.
-        :rtype: List[float]
+        :return: The random_biases_dict of this ParameterList.
+        :rtype: List[RandomFunction]
         """
-        return self._rw_beta
+        return self._random_biases_dict
 
-    @rw_beta.setter
-    def rw_beta(self, rw_beta: List[float]):
+    @random_biases_dict.setter
+    def random_biases_dict(self, random_biases_dict: List[RandomFunction]):
         """
-        Sets the rw_beta of this ParameterList.
+        Sets the random_biases_dict of this ParameterList.
 
-        :param rw_beta: The rw_beta of this ParameterList.
-        :type rw_beta: List[float]
+        :param random_biases_dict: The random_biases_dict of this ParameterList.
+        :type random_biases_dict: List[RandomFunction]
         """
 
-        self._rw_beta = rw_beta
-
-    @property
-    def rw_mean(self) -> List[float]:
-        """
-        Gets the rw_mean of this ParameterList.
-
-        :return: The rw_mean of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rw_mean
-
-    @rw_mean.setter
-    def rw_mean(self, rw_mean: List[float]):
-        """
-        Sets the rw_mean of this ParameterList.
-
-        :param rw_mean: The rw_mean of this ParameterList.
-        :type rw_mean: List[float]
-        """
-
-        self._rw_mean = rw_mean
-
-    @property
-    def rw_stddev(self) -> List[float]:
-        """
-        Gets the rw_stddev of this ParameterList.
-
-        :return: The rw_stddev of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rw_stddev
-
-    @rw_stddev.setter
-    def rw_stddev(self, rw_stddev: List[float]):
-        """
-        Sets the rw_stddev of this ParameterList.
-
-        :param rw_stddev: The rw_stddev of this ParameterList.
-        :type rw_stddev: List[float]
-        """
-
-        self._rw_stddev = rw_stddev
-
-    @property
-    def rw_lam(self) -> List[float]:
-        """
-        Gets the rw_lam of this ParameterList.
-
-        :return: The rw_lam of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rw_lam
-
-    @rw_lam.setter
-    def rw_lam(self, rw_lam: List[float]):
-        """
-        Sets the rw_lam of this ParameterList.
-
-        :param rw_lam: The rw_lam of this ParameterList.
-        :type rw_lam: List[float]
-        """
-
-        self._rw_lam = rw_lam
-
-    @property
-    def rw_minval(self) -> List[float]:
-        """
-        Gets the rw_minval of this ParameterList.
-
-        :return: The rw_minval of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rw_minval
-
-    @rw_minval.setter
-    def rw_minval(self, rw_minval: List[float]):
-        """
-        Sets the rw_minval of this ParameterList.
-
-        :param rw_minval: The rw_minval of this ParameterList.
-        :type rw_minval: List[float]
-        """
-
-        self._rw_minval = rw_minval
-
-    @property
-    def rw_maxval(self) -> List[float]:
-        """
-        Gets the rw_maxval of this ParameterList.
-
-        :return: The rw_maxval of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rw_maxval
-
-    @rw_maxval.setter
-    def rw_maxval(self, rw_maxval: List[float]):
-        """
-        Sets the rw_maxval of this ParameterList.
-
-        :param rw_maxval: The rw_maxval of this ParameterList.
-        :type rw_maxval: List[float]
-        """
-
-        self._rw_maxval = rw_maxval
-
-    @property
-    def rw_seed(self) -> List[int]:
-        """
-        Gets the rw_seed of this ParameterList.
-
-        :return: The rw_seed of this ParameterList.
-        :rtype: List[int]
-        """
-        return self._rw_seed
-
-    @rw_seed.setter
-    def rw_seed(self, rw_seed: List[int]):
-        """
-        Sets the rw_seed of this ParameterList.
-
-        :param rw_seed: The rw_seed of this ParameterList.
-        :type rw_seed: List[int]
-        """
-
-        self._rw_seed = rw_seed
-
-    @property
-    def random_function_for_biases(self) -> List[str]:
-        """
-        Gets the random_function_for_biases of this ParameterList.
-
-        :return: The random_function_for_biases of this ParameterList.
-        :rtype: List[str]
-        """
-        return self._random_function_for_biases
-
-    @random_function_for_biases.setter
-    def random_function_for_biases(self, random_function_for_biases: List[str]):
-        """
-        Sets the random_function_for_biases of this ParameterList.
-
-        :param random_function_for_biases: The random_function_for_biases of this ParameterList.
-        :type random_function_for_biases: List[str]
-        """
-
-        self._random_function_for_biases = random_function_for_biases
-
-    @property
-    def rb_alpha(self) -> List[float]:
-        """
-        Gets the rb_alpha of this ParameterList.
-
-        :return: The rb_alpha of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rb_alpha
-
-    @rb_alpha.setter
-    def rb_alpha(self, rb_alpha: List[float]):
-        """
-        Sets the rb_alpha of this ParameterList.
-
-        :param rb_alpha: The rb_alpha of this ParameterList.
-        :type rb_alpha: List[float]
-        """
-
-        self._rb_alpha = rb_alpha
-
-    @property
-    def rb_beta(self) -> List[float]:
-        """
-        Gets the rb_beta of this ParameterList.
-
-        :return: The rb_beta of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rb_beta
-
-    @rb_beta.setter
-    def rb_beta(self, rb_beta: List[float]):
-        """
-        Sets the rb_beta of this ParameterList.
-
-        :param rb_beta: The rb_beta of this ParameterList.
-        :type rb_beta: List[float]
-        """
-
-        self._rb_beta = rb_beta
-
-    @property
-    def rb_mean(self) -> List[float]:
-        """
-        Gets the rb_mean of this ParameterList.
-
-        :return: The rb_mean of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rb_mean
-
-    @rb_mean.setter
-    def rb_mean(self, rb_mean: List[float]):
-        """
-        Sets the rb_mean of this ParameterList.
-
-        :param rb_mean: The rb_mean of this ParameterList.
-        :type rb_mean: List[float]
-        """
-
-        self._rb_mean = rb_mean
-
-    @property
-    def rb_stddev(self) -> List[float]:
-        """
-        Gets the rb_stddev of this ParameterList.
-
-        :return: The rb_stddev of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rb_stddev
-
-    @rb_stddev.setter
-    def rb_stddev(self, rb_stddev: List[float]):
-        """
-        Sets the rb_stddev of this ParameterList.
-
-        :param rb_stddev: The rb_stddev of this ParameterList.
-        :type rb_stddev: List[float]
-        """
-
-        self._rb_stddev = rb_stddev
-
-    @property
-    def rb_lam(self) -> List[float]:
-        """
-        Gets the rb_lam of this ParameterList.
-
-        :return: The rb_lam of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rb_lam
-
-    @rb_lam.setter
-    def rb_lam(self, rb_lam: List[float]):
-        """
-        Sets the rb_lam of this ParameterList.
-
-        :param rb_lam: The rb_lam of this ParameterList.
-        :type rb_lam: List[float]
-        """
-
-        self._rb_lam = rb_lam
-
-    @property
-    def rb_minval(self) -> List[float]:
-        """
-        Gets the rb_minval of this ParameterList.
-
-        :return: The rb_minval of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rb_minval
-
-    @rb_minval.setter
-    def rb_minval(self, rb_minval: List[float]):
-        """
-        Sets the rb_minval of this ParameterList.
-
-        :param rb_minval: The rb_minval of this ParameterList.
-        :type rb_minval: List[float]
-        """
-
-        self._rb_minval = rb_minval
-
-    @property
-    def rb_maxval(self) -> List[float]:
-        """
-        Gets the rb_maxval of this ParameterList.
-
-        :return: The rb_maxval of this ParameterList.
-        :rtype: List[float]
-        """
-        return self._rb_maxval
-
-    @rb_maxval.setter
-    def rb_maxval(self, rb_maxval: List[float]):
-        """
-        Sets the rb_maxval of this ParameterList.
-
-        :param rb_maxval: The rb_maxval of this ParameterList.
-        :type rb_maxval: List[float]
-        """
-
-        self._rb_maxval = rb_maxval
-
-    @property
-    def rb_seed(self) -> List[int]:
-        """
-        Gets the rb_seed of this ParameterList.
-
-        :return: The rb_seed of this ParameterList.
-        :rtype: List[int]
-        """
-        return self._rb_seed
-
-    @rb_seed.setter
-    def rb_seed(self, rb_seed: List[int]):
-        """
-        Sets the rb_seed of this ParameterList.
-
-        :param rb_seed: The rb_seed of this ParameterList.
-        :type rb_seed: List[int]
-        """
-
-        self._rb_seed = rb_seed
+        self._random_biases_dict = random_biases_dict
 
     @property
     def session_saver_path(self) -> str:

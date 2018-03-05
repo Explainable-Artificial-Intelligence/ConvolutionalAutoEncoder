@@ -111,107 +111,17 @@
       //expect(instance).to.be();
     });
 
-    it('should have the property learningRateFunction (base name: "learning_rate_function")', function() {
-      // uncomment below and update the code to test the property learningRateFunction
+      it('should have the property learningRateDict (base name: "learning_rate_dict")', function () {
+          // uncomment below and update the code to test the property learningRateDict
       //var instane = new ConvolutionalAutoencoder.ParameterList();
       //expect(instance).to.be();
     });
 
-    it('should have the property lrInitialLearningRate (base name: "lr_initial_learning_rate")', function() {
-      // uncomment below and update the code to test the property lrInitialLearningRate
+      it('should have the property costFunctionDict (base name: "cost_function_dict")', function () {
+          // uncomment below and update the code to test the property costFunctionDict
       //var instane = new ConvolutionalAutoencoder.ParameterList();
       //expect(instance).to.be();
     });
-
-    it('should have the property lrDecaySteps (base name: "lr_decay_steps")', function() {
-      // uncomment below and update the code to test the property lrDecaySteps
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property lrDecayRate (base name: "lr_decay_rate")', function() {
-      // uncomment below and update the code to test the property lrDecayRate
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property lrStaircase (base name: "lr_staircase")', function() {
-      // uncomment below and update the code to test the property lrStaircase
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property lrBoundaries (base name: "lr_boundaries")', function() {
-      // uncomment below and update the code to test the property lrBoundaries
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property lrValues (base name: "lr_values")', function() {
-      // uncomment below and update the code to test the property lrValues
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property lrEndLearningRate (base name: "lr_end_learning_rate")', function() {
-      // uncomment below and update the code to test the property lrEndLearningRate
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property lrPower (base name: "lr_power")', function() {
-      // uncomment below and update the code to test the property lrPower
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property lrCycle (base name: "lr_cycle")', function() {
-      // uncomment below and update the code to test the property lrCycle
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-      it('should have the property cfCostFunction (base name: "cf_cost_function")', function () {
-          // uncomment below and update the code to test the property cfCostFunction
-          //var instane = new ConvolutionalAutoencoder.ParameterList();
-          //expect(instance).to.be();
-      });
-
-      it('should have the property cfMaxVal (base name: "cf_max_val")', function () {
-          // uncomment below and update the code to test the property cfMaxVal
-          //var instane = new ConvolutionalAutoencoder.ParameterList();
-          //expect(instance).to.be();
-      });
-
-      it('should have the property cfFilterSize (base name: "cf_filter_size")', function () {
-          // uncomment below and update the code to test the property cfFilterSize
-          //var instane = new ConvolutionalAutoencoder.ParameterList();
-          //expect(instance).to.be();
-      });
-
-      it('should have the property cfFilterSigma (base name: "cf_filter_sigma")', function () {
-          // uncomment below and update the code to test the property cfFilterSigma
-          //var instane = new ConvolutionalAutoencoder.ParameterList();
-          //expect(instance).to.be();
-      });
-
-      it('should have the property cfK1 (base name: "cf_k1")', function () {
-          // uncomment below and update the code to test the property cfK1
-          //var instane = new ConvolutionalAutoencoder.ParameterList();
-          //expect(instance).to.be();
-      });
-
-      it('should have the property cfK2 (base name: "cf_k2")', function () {
-          // uncomment below and update the code to test the property cfK2
-          //var instane = new ConvolutionalAutoencoder.ParameterList();
-          //expect(instance).to.be();
-      });
-
-      it('should have the property cfWeights (base name: "cf_weights")', function () {
-          // uncomment below and update the code to test the property cfWeights
-          //var instane = new ConvolutionalAutoencoder.ParameterList();
-          //expect(instance).to.be();
-      });
 
     it('should have the property optimizer (base name: "optimizer")', function() {
       // uncomment below and update the code to test the property optimizer
@@ -225,110 +135,14 @@
       //expect(instance).to.be();
     });
 
-    it('should have the property randomFunctionForWeights (base name: "random_function_for_weights")', function() {
-      // uncomment below and update the code to test the property randomFunctionForWeights
+      it('should have the property randomWeightsDict (base name: "random_weights_dict")', function () {
+          // uncomment below and update the code to test the property randomWeightsDict
       //var instane = new ConvolutionalAutoencoder.ParameterList();
       //expect(instance).to.be();
     });
 
-    it('should have the property rwAlpha (base name: "rw_alpha")', function() {
-      // uncomment below and update the code to test the property rwAlpha
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rwBeta (base name: "rw_beta")', function() {
-      // uncomment below and update the code to test the property rwBeta
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rwMean (base name: "rw_mean")', function() {
-      // uncomment below and update the code to test the property rwMean
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rwStddev (base name: "rw_stddev")', function() {
-      // uncomment below and update the code to test the property rwStddev
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rwLam (base name: "rw_lam")', function() {
-      // uncomment below and update the code to test the property rwLam
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rwMinval (base name: "rw_minval")', function() {
-      // uncomment below and update the code to test the property rwMinval
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rwMaxval (base name: "rw_maxval")', function() {
-      // uncomment below and update the code to test the property rwMaxval
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rwSeed (base name: "rw_seed")', function() {
-      // uncomment below and update the code to test the property rwSeed
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property randomFunctionForBiases (base name: "random_function_for_biases")', function() {
-      // uncomment below and update the code to test the property randomFunctionForBiases
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rbAlpha (base name: "rb_alpha")', function() {
-      // uncomment below and update the code to test the property rbAlpha
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rbBeta (base name: "rb_beta")', function() {
-      // uncomment below and update the code to test the property rbBeta
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rbMean (base name: "rb_mean")', function() {
-      // uncomment below and update the code to test the property rbMean
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rbStddev (base name: "rb_stddev")', function() {
-      // uncomment below and update the code to test the property rbStddev
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rbLam (base name: "rb_lam")', function() {
-      // uncomment below and update the code to test the property rbLam
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rbMinval (base name: "rb_minval")', function() {
-      // uncomment below and update the code to test the property rbMinval
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rbMaxval (base name: "rb_maxval")', function() {
-      // uncomment below and update the code to test the property rbMaxval
-      //var instane = new ConvolutionalAutoencoder.ParameterList();
-      //expect(instance).to.be();
-    });
-
-    it('should have the property rbSeed (base name: "rb_seed")', function() {
-      // uncomment below and update the code to test the property rbSeed
+      it('should have the property randomBiasesDict (base name: "random_biases_dict")', function () {
+          // uncomment below and update the code to test the property randomBiasesDict
       //var instane = new ConvolutionalAutoencoder.ParameterList();
       //expect(instance).to.be();
     });
