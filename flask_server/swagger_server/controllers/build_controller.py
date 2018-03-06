@@ -26,7 +26,7 @@ def build_ann(inputParameters):
                 else:
                     parameter_set[key[1:]] = inputParameters.__dict__[key]
 
-        print(parameter_set)
+        # print(parameter_set)
 
         # # set default values to None for input shape, seeds and weights:
         # if parameter_set['input_shape'][0] == -1:
@@ -81,7 +81,6 @@ def build_ann(inputParameters):
         parameter_set.pop('cost_function_dict', None)
         parameter_set.pop('random_biases_dict', None)
         parameter_set.pop('random_weights_dict', None)
-        print(parameter_set)
 
         # set default values to None for input shape and seeds:
         if parameter_set['input_shape'][0] == -1:

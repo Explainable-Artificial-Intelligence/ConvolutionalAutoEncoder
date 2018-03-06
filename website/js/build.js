@@ -146,13 +146,17 @@ function updateInputOutputLayer(resX, resY, channels) {
     //ANNLayerPreview(200, 200, 28, 28, channels, 2, "encoder", "Input Layer", decoderVisualisation);
     //createANNLayer(500, 500, resX, resY, channels, 2, "inputLayer", true, false, decoderVisualisation);
 
+    // add sample ANN
+    addLayer(null, 3, 12, resX / 2, resY / 2);
+    addLayer(null, 2, 6, resX / 4, resY / 4);
+
     // set input output layer as preview:
     annLayerPreview.setLinkedLayer(0);
 
 }
 
 //
-function addLayer(event, filtersize, numStacks) {
+function addLayer(event, filtersize, numStacks, resX, resY) {
     //read parameters:
     filtersize = filtersize || 2;
     numStacks = numStacks || 4;
@@ -174,7 +178,7 @@ function addLayer(event, filtersize, numStacks) {
     */
     //console.log("add encoder");
     //add visualisation:
-    encoderDecoderLayerPairs.push(new ANNLayerPair(200, 200, 28, 28, numStacks, filtersize, "encoder_decoder_layer", (encoderCount + 1), null));
+    encoderDecoderLayerPairs.push(new ANNLayerPair(200, 200, resX, resY, numStacks, filtersize, "encoder_decoder_layer", (encoderCount + 1), null));
 
     console.log(encoderDecoderLayerPairs);
 
@@ -318,12 +322,6 @@ on load
  */
 
 getInputDimensions();
-
-// add sample ANN
-addLayer(null, 3, 12);
-// addLayer(null, 3, 10);
-// addLayer(null, 2, 10);
-addLayer(null, 2, 6);
 
 
 //createANNLayer(400, 400, 28, 28, 2, 5, "encoderLayer_1");

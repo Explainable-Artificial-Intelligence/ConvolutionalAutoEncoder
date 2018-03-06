@@ -138,6 +138,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # reset currently active tf graph
         tf.reset_default_graph()
 
+        # define strides:
+        self.layer_strides = [1, 2, 2, 1]
+
         # parse ANN topology parameters
         self.input_shape = input_shape
         self.number_of_stacks = number_of_stacks
@@ -311,7 +314,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # create placeholder for input images
         self.input_images = tf.placeholder(tf.float32, self.input_shape, name="Input_Images")
 
-
         # define model topology
         # encoder part
         self._build_encoder(restore)
@@ -329,12 +331,14 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.encoder_shapes = []
         self.layers = []
         current_input = self.input_images
-        self.layers.append(self.input_images)
+        # self.layers.append(self.input_images)
         # iterate over all encoder layer
+        print(list(enumerate(self.number_of_stacks)))
         for layer_i, n_output in enumerate(self.number_of_stacks):
             output = self._build_encoder_layer(current_input, layer_i, n_output, restore)
             self.layers.append(output)
             current_input = output
+            print(output.get_shape())
 
         # save latent representation
         self.latent_representation = output
@@ -360,12 +364,11 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 [self.filter_sizes[layer_i], self.filter_sizes[layer_i], number_of_input_layers, n_output],
                 "encoder_weights_layer_" + str(layer_i))
             bias_of_layer_i = self._create_layer_biases([n_output], "encoder_biases_layer_" + str(layer_i))
-        print(weights_of_layer_i.get_shape())
         self.encoder_weights.append(weights_of_layer_i)
         self.encoder_biases.append(bias_of_layer_i)
         # TODO: understand strides /padding
         output = self.activation_function(
-            tf.nn.conv2d(current_input, weights_of_layer_i, strides=[1, 2, 2, 1], padding='SAME') +
+            tf.nn.conv2d(current_input, weights_of_layer_i, strides=self.layer_strides, padding='SAME') +
             bias_of_layer_i)
         return output
 
@@ -437,7 +440,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # reuse weights and biases
         reversed_encoder_weights = list(reversed(self.encoder_weights))
 
-        print(reversed_encoder_weights[layer_i].get_shape().as_list())
         if self.mirror_weights:
             weights_of_layer_i = reversed_encoder_weights[layer_i]
         else:
@@ -461,7 +463,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                                                                  tf.stack(
                                                                      [tf.shape(self.input_images)[0], shape[1],
                                                                       shape[2], shape[3]]),
-                                                                 strides=[1, 2, 2, 1],
+                                                                 strides=self.layer_strides,
                                                                  padding='SAME') + biases_of_layer_i)
         return output
 

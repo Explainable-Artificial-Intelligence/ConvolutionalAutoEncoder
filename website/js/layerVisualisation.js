@@ -5,6 +5,14 @@ var encoderDecoderLayerPairs = [];
 var inputOutputLayerPair = null;
 var annLayerPreview = new ANNLayerPreview(500, 500, 28, 28, 3, 3);
 
+/*
+d3 helper functions:
+ */
+d3.selection.prototype.moveToFront = function () {
+    return this.each(function () {
+        this.parentNode.appendChild(this);
+    });
+};
 
 /*
 Functions to create interactive ANN layer
@@ -156,6 +164,7 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
             .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
             .attr("width", xScale(filterSize))
             .attr("height", yScale(filterSize));
+        plot.select(".filter_rect").moveToFront();
     }
 
     function addStack() {
@@ -460,9 +469,11 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
     function setLayerDimension(newWidth, newHeight) {
         if (newWidth > 0) {
             layerWidth = newWidth;
+            xAxisDescription.text(layerWidth + "px");
         }
         if (newHeight > 0) {
             layerHeight = newHeight;
+            yAxisDescription.text(layerHeight + "px");
         }
 
         rescaleChart();
@@ -500,6 +511,7 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         // set current layer values:
         setFilterSize(linkedLayer.getFilterSize());
         setStackCount(linkedLayer.getStackCount());
+        setLayerDimension(linkedLayer.getLayerWidth(), linkedLayer.getLayerHeight());
 
         // (de-)activate stack count input:
         document.getElementById("stackCountModifier").disabled = (linkedLayer.getLayerType() === "input_output_layer");
@@ -508,7 +520,7 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
 
     this.setStackCount = function (newStackCount) {
         setStackCount(newStackCount);
-    }
+    };
 
     this.setFilterSize = function (newFiltersize) {
         setFilterSize(newFiltersize);
@@ -727,7 +739,8 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                 .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
                 .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
                 .attr("width", xScale(filterSize))
-                .attr("height", yScale(filterSize));
+                .attr("height", yScale(filterSize))
+                .moveToFront();
         });
     }
 
@@ -1089,6 +1102,14 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
 
     this.getLayerType = function () {
         return layerType;
+    };
+
+    this.getLayerWidth = function () {
+        return layerWidth;
+    };
+
+    this.getLayerHeight = function () {
+        return layerHeight;
     };
 }
 
