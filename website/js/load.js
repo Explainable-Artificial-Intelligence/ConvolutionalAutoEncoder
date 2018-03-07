@@ -3,6 +3,8 @@ check if client and server are running correctly
  */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
+var selectedImageId = "";
+
 var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
 
@@ -17,21 +19,7 @@ function callback(error, data, response) {
 loadApi.resetAllBatchIndices(callback);
 
 
-function loadFile() {
-
-    // get all input fields
-    var filename = document.getElementById("inputFilePath").value;
-    var datasetname = document.getElementById("inputDatasetName").value;
-    var readLabels = document.getElementById("readLabels").options[document.getElementById("readLabels").selectedIndex].value === true;
-    var dataType = document.getElementById("dataType").options[document.getElementById("dataType").selectedIndex].value;
-
-    // call swagger client
-    var api = new ConvolutionalAutoencoder.LoadApi();
-    console.log(api.loadFile(filename, datasetname, readLabels, dataType));
-
-}
-
-function appendImages() {
+function appendImages(numberOfImages) {
     // get image grid
     var imageGrid = document.getElementById("imageGrid");
 
@@ -57,7 +45,21 @@ function appendImages() {
                 // change preview view
                 newImage.addEventListener("click", function () {
                     console.log(this.id);
-                    document.getElementById("imagePreview").src = this.src;
+                    // remove old border
+
+                    // update preview:
+                    var imagePreview = document.getElementById("imagePreview");
+                    // remove old border
+                    if (imagePreview.linkedId !== "") {
+                        document.getElementById(imagePreview.linkedId).style.border = "";
+                    }
+
+                    imagePreview.src = this.src;
+
+                    // mark selected image:
+                    this.style.border = "1px solid orange";
+                    // save current id in preview
+                    imagePreview.linkedId = this.id;
                 });
 
 
@@ -67,9 +69,47 @@ function appendImages() {
         }
     }
 
-    loadApi.getImageBatch({"batchSize": 300}, imageCallback);
+    loadApi.getImageBatch({"batchSize": numberOfImages}, imageCallback);
 
 }
+
+function loadFile() {
+
+    // get all input fields
+    var filename = document.getElementById("inputFilePath").value;
+    var datasetname = document.getElementById("inputDatasetName").value;
+    var readLabels = document.getElementById("readLabels").options[document.getElementById("readLabels").selectedIndex].value === true;
+    var dataType = document.getElementById("dataType").options[document.getElementById("dataType").selectedIndex].value;
+
+    // call swagger client
+    var api = new ConvolutionalAutoencoder.LoadApi();
+
+    // create callback function
+    function loadCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            //console.log(response);
+            //console.log(data);
+            //load the first image batch
+            console.log("File loaded");
+
+            appendImages(1000);
+
+            // remove selection:
+            document.getElementById("imagePreview").linkedId = "";
+
+        }
+    }
+
+    api.loadFile(filename, {
+        'datasetname': datasetname,
+        'read_labels': readLabels,
+        'data_type': dataType
+    }, loadCallback);
+
+}
+
 
 /*
 Attach button events
@@ -77,4 +117,6 @@ Attach button events
 
 document.getElementById("loadBtn").addEventListener("click", loadFile);
 
-document.getElementById("showImagesBtn").addEventListener("click", appendImages);
+document.getElementById("showImagesBtn").addEventListener("click", function () {
+    appendImages(300);
+});
