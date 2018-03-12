@@ -547,8 +547,8 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
         setStackCount(newStackCount);
     };
 
-    this.setFilterSize = function (newFiltersize) {
-        setFilterSize(newFiltersize);
+    this.setFilterSize = function (newFilterSize) {
+        setFilterSize(newFilterSize);
     }
 
 
@@ -562,7 +562,7 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
 
     //create plot pane pair:
     var layerPair = [];
-    
+
     //define basic parameters
     console.log(layerType);
     if (layerType === "input_output_layer") {

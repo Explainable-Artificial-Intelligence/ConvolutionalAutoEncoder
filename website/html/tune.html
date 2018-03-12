@@ -63,18 +63,7 @@
         <details>
             <summary>Activation Fuction:</summary>
             <p>
-                <select id="activationFunction" size="7" multiple>
-                    <option value="relu">relu</option>
-                    <option value="relu6">relu6</option>
-                    <option value="elu">elu</option>
-                    <option value="softplus">softplus</option>
-                    <option value="softsign">softsign</option>
-                    <option value="sigmoid">sigmoid</option>
-                    <option value="tanh">tanh</option>
-                </select>
-                <br>
-
-            <table>
+            <table id="activationFunctionTable">
                 <tr class="center">
                     <th>relu</th>
                     <th>relu6</th>
@@ -130,14 +119,14 @@
         <details>
             <summary>Learning Rate Function:</summary>
             <p>
-                <select id="learningRateFunction" size="6" multiple>
-                    <option value="static">static</option>
-                    <option value="exponential_decay">exponential_decay</option>
-                    <option value="inverse_time_decay">inverse_time_decay</option>
-                    <option value="natural_exp_decay">natural_exp_decay</option>
-                    <option value="piecewise_constant">piecewise_constant</option>
-                    <option value="polynomial_decay">polynomial_decay</option>
-                </select><br>
+                <!--<select id="learningRateFunction" size="6" multiple>-->
+                <!--<option value="static">static</option>-->
+                <!--<option value="exponential_decay">exponential_decay</option>-->
+                <!--<option value="inverse_time_decay">inverse_time_decay</option>-->
+                <!--<option value="natural_exp_decay">natural_exp_decay</option>-->
+                <!--<option value="piecewise_constant">piecewise_constant</option>-->
+                <!--<option value="polynomial_decay">polynomial_decay</option>-->
+                <!--</select><br>-->
 
             <div id="lrInitialLearningRateDiv" style="display:none">
 
@@ -153,9 +142,7 @@
                 <br>
             </div>
             <div id="lrEndLearningRateDiv" style="display:none">
-                End Learning Rate <br>
-                <input id="lrEndLearningRate" value="[0.0001]"><br>
-                <br>
+
             </div>
             <div id="lrPowerDiv" style="display:none">
                 Power <br>
@@ -173,7 +160,7 @@
             </div>
 
 
-            <table>
+            <table id="learningRateFunctionTable">
                 <tr class="center">
                     <th>static</th>
                     <th>exponential decay</th>
@@ -199,6 +186,93 @@
                     <td><input id="piecewiseConstantCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="polynomialDecayCheckbox" type="checkbox" class="tableSelector"></td>
                 </tr>
+                <tr>
+                    <td>
+                        Initial learning rate: <br>
+                        <input id="lrInitialLearningRateStatic" value="[0.01]"> <br>
+                        <br>
+                    </td>
+                    <td>
+                        Initial learning rate: <br>
+                        <input id="lrInitialLearningRateExpDecay" value="[0.01]"> <br>
+                        <br>
+                        Decay steps: <br>
+                        <input id="lrDecayStepsExpDecay" value="[1000]"><br>
+                        <br>
+                        Decay rate: <br>
+                        <input id="lrDecayRateExpDecay" value="[0.9]"><br>
+                        <br>
+                        <label for="lrStaircaseExpDecay">Use stepwise decay</label>
+                        <select id="lrStaircaseExpDecay" size="1">
+                            <option value="true">true</option>
+                            <option value="false" selected="selected">false</option>
+                            <option value="both">test both</option>
+                        </select>
+                    </td>
+                    <td>
+                        Initial learning rate: <br>
+                        <input id="lrInitialLearningRateInvTimeDecay" value="[0.01]"> <br>
+                        <br>
+                        Decay steps: <br>
+                        <input id="lrDecayStepsInvTimeDecay" value="[1000]"><br>
+                        <br>
+                        Decay rate: <br>
+                        <input id="lrDecayRateInvTimeDecay" value="[0.9]"><br>
+                        <br>
+                        <label for="lrStaircaseInvTimeDecay">Use stepwise decay</label>
+                        <select id="lrStaircaseInvTimeDecay" size="1">
+                            <option value="true">true</option>
+                            <option value="false" selected="selected">false</option>
+                            <option value="both">test both</option>
+                        </select>
+                    </td>
+                    <td>
+                        Initial learning rate: <br>
+                        <input id="lrInitialLearningRateNatExpDecay" value="[0.01]"> <br>
+                        <br>
+                        Decay steps: <br>
+                        <input id="lrDecayStepsNatExpDecay" value="[1000]"><br>
+                        <br>
+                        Decay rate: <br>
+                        <input id="lrDecayRateNatExpDecay" value="[0.9]"><br>
+                        <br>
+                        <label for="lrStaircaseNatExpDecay">Use stepwise decay</label>
+                        <select id="lrStaircaseNatExpDecay" size="1">
+                            <option value="true">true</option>
+                            <option value="false" selected="selected">false</option>
+                            <option value="both">test both</option>
+                        </select>
+                    </td>
+                    <td>
+                        Boundaries: <br>
+                        <input id="lrBoundariesPiecewiseConstant" value="[[10000, 20000]]"> <br>
+                        <br>
+
+                        Boundary values: <br>
+                        <input id="lrValuesPiecewiseConstant" value="[[1.0, 0.5, 0.1]]"><br>
+                        <br>
+                    </td>
+                    <td>
+                        Initial learning rate: <br>
+                        <input id="lrInitialLearningRatePolynomDecay" value="[0.01]"> <br>
+                        <br>
+                        Decay steps: <br>
+                        <input id="lrDecayStepsPolynomDecay" value="[1000]"><br>
+                        <br>
+                        End Learning Rate: <br>
+                        <input id="lrEndLearningRatePolynomDecay" value="[0.0001]"><br>
+                        <br>
+                        Power: <br>
+                        <input id="lrPowerPolynomDecay" value="[1.0]"><br>
+                        <br>
+                        <label for="lrCyclePolynomDecay">Use stepwise decay</label>
+                        <select id="lrCyclePolynomDecay" size="1">
+                            <option value="true">true</option>
+                            <option value="false" selected="selected">false</option>
+                            <option value="both">test both</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
             </p>
         </details>
@@ -207,24 +281,24 @@
         <details>
             <summary> Optimizer:</summary>
             <p>
-                <select id="Optimizer" size="5" multiple>
-                    <option value="GradientDescentOptimizer">GradientDescentOptimizer</option>
-                    <option value="AdadeltaOptimizer">AdadeltaOptimizer</option>
-                    <option value="AdagradOptimizer">AdagradOptimizer</option>
-                    <option value="AdagradDAOptimizer">AdagradDAOptimizer</option>
-                    <option value="MomentumOptimizer">MomentumOptimizer</option>
-                    <option value="AdamOptimizer" selected>AdamOptimizer</option>
-                    <option value="FtrlOptimizer">FtrlOptimizer</option>
-                    <option value="ProximalGradientDescentOptimizer">ProximalGradientDescentOptimizer</option>
-                    <option value="ProximalAdagradOptimizer">ProximalAdagradOptimizer</option>
-                    <option value="RMSPropOptimizer">RMSPropOptimizer</option>
-                </select><br>
-                <br>
-            <div id="MomentumDiv" style="display:none">
+                <!--<select id="Optimizer" size="5" multiple>-->
+                <!--<option value="GradientDescentOptimizer">GradientDescentOptimizer</option>-->
+                <!--<option value="AdadeltaOptimizer">AdadeltaOptimizer</option>-->
+                <!--<option value="AdagradOptimizer">AdagradOptimizer</option>-->
+                <!--<option value="AdagradDAOptimizer">AdagradDAOptimizer</option>-->
+                <!--<option value="MomentumOptimizer">MomentumOptimizer</option>-->
+                <!--<option value="AdamOptimizer" selected>AdamOptimizer</option>-->
+                <!--<option value="FtrlOptimizer">FtrlOptimizer</option>-->
+                <!--<option value="ProximalGradientDescentOptimizer">ProximalGradientDescentOptimizer</option>-->
+                <!--<option value="ProximalAdagradOptimizer">ProximalAdagradOptimizer</option>-->
+                <!--<option value="RMSPropOptimizer">RMSPropOptimizer</option>-->
+                <!--</select><br>-->
+                <!--<br>-->
+                <!--<div id="MomentumDiv" style="display:none">-->
 
-            </div>
+                <!--</div>-->
 
-            <table>
+            <table id="optimizerTable">
                 <tr class="center">
                     <th>Gradient descent optimizer</th>
                     <th>Adadelta optimizer</th>
@@ -274,58 +348,58 @@
         <details>
             <summary>Random functions for weights</summary>
             <p>
-                <select id="randomFunctionForWeights" size="5" multiple>
-                    <option value="zeros">zeros</option>
-                    <option value="gamma">gamma</option>
-                    <option value="normal">normal</option>
-                    <option value="poisson">poisson</option>
-                    <option value="uniform" selected>uniform</option>
-                </select><br>
-                <br>
-                <section id="advancedWeightParameters">
-                    <div id="rwAlphaDiv" style="display: none">
-                        Alpha: <br>
-                        <input id="rwAlpha" value="[0.5]"><br>
-                        <br>
-                    </div>
-                    <div id="rwBetaDiv" style="display: none">
-                        Beta: <br>
-                        <input id="rwBeta" value="[1.0]"><br>
-                        <br>
-                    </div>
-                    <div id="rwMeanDiv" style="display: none">
-                        Mean: <br>
-                        <input id="rwMean" value="[0.0]"><br>
-                        <br>
-                    </div>
-                    <div id="rwStddevDiv" style="display: none">
-                        Standard deviation: <br>
-                        <input id="rwStddev" value="[1.0]"><br>
-                        <br>
-                    </div>
-                    <div id="rwLamDiv" style="display: none">
-                        Rate parameter: <br>
-                        <input id="rwLam" value="[0.5]"><br>
-                        <br>
-                    </div>
-                    <div id="rwMinvalDiv" style="display: none">
-                        Minimum value: <br>
-                        <input id="rwMinval" value="[-0.5]"><br>
-                        <br>
-                    </div>
-                    <div id="rwMaxvalDiv" style="display: none">
-                        Maximum value: <br>
-                        <input id="rwMaxval" value="[0.5]"><br>
-                        <br>
-                    </div>
-                    <div id="rwSeedDiv" style="display: none">
-                        Seed: <br>
-                        <input id="rwSeed" value="[-1]"><br>
-                        <br>
-                    </div>
+                <!--<select id="randomFunctionForWeights" size="5" multiple>-->
+                <!--<option value="zeros">zeros</option>-->
+                <!--<option value="gamma">gamma</option>-->
+                <!--<option value="normal">normal</option>-->
+                <!--<option value="poisson">poisson</option>-->
+                <!--<option value="uniform" selected>uniform</option>-->
+                <!--</select><br>-->
+                <!--<br>-->
+                <!--<section id="advancedWeightParameters">-->
+                <!--<div id="rwAlphaDiv" style="display: none">-->
+                <!--Alpha: <br>-->
+                <!--<input id="rwAlpha" value="[0.5]"><br>-->
+                <!--<br>-->
+                <!--</div>-->
+                <!--<div id="rwBetaDiv" style="display: none">-->
+                <!--Beta: <br>-->
+                <!--<input id="rwBeta" value="[1.0]"><br>-->
+                <!--<br>-->
+                <!--</div>-->
+                <!--<div id="rwMeanDiv" style="display: none">-->
+                <!--Mean: <br>-->
+                <!--<input id="rwMean" value="[0.0]"><br>-->
+                <!--<br>-->
+                <!--</div>-->
+                <!--<div id="rwStddevDiv" style="display: none">-->
+                <!--Standard deviation: <br>-->
+                <!--<input id="rwStddev" value="[1.0]"><br>-->
+                <!--<br>-->
+                <!--</div>-->
+                <!--<div id="rwLamDiv" style="display: none">-->
+                <!--Rate parameter: <br>-->
+                <!--<input id="rwLam" value="[0.5]"><br>-->
+                <!--<br>-->
+                <!--</div>-->
+                <!--<div id="rwMinvalDiv" style="display: none">-->
+                <!--Minimum value: <br>-->
+                <!--<input id="rwMinval" value="[-0.5]"><br>-->
+                <!--<br>-->
+                <!--</div>-->
+                <!--<div id="rwMaxvalDiv" style="display: none">-->
+                <!--Maximum value: <br>-->
+                <!--<input id="rwMaxval" value="[0.5]"><br>-->
+                <!--<br>-->
+                <!--</div>-->
+                <!--<div id="rwSeedDiv" style="display: none">-->
+                <!--Seed: <br>-->
+                <!--<input id="rwSeed" value="[-1]"><br>-->
+                <!--<br>-->
+                <!--</div>-->
 
-                </section>
-            <table>
+                <!--</section>-->
+            <table id="randomFunctionsForWeightsTable">
                 <tr class="center">
                     <th>zeros</th>
                     <th>gamma</th>
@@ -341,12 +415,13 @@
                     <td><img src="../img/uniform.svg"></td>
                 </tr>
                 <tr class="center">
-                    <td style="background-color: orange"><input id="rwZerosCheckbox" type="checkbox"
-                                                                class="tableSelector" checked></td>
+                    <td><input id="rwZerosCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="rwGammaCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="rwNormalCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="rwPoissonCheckbox" type="checkbox" class="tableSelector"></td>
-                    <td><input id="rwUniformCheckbox" type="checkbox" class="tableSelector"></td>
+                    <td style="background-color: orange">
+                        <input id="rwUniformCheckbox" type="checkbox" class="tableSelector" checked>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
@@ -400,59 +475,8 @@
         <details>
             <summary>Random functions for biases</summary>
             <p>
-                <select id="randomFunctionForBiases" size="5" multiple>
-                    <option value="zeros" selected>zeros</option>
-                    <option value="gamma">gamma</option>
-                    <option value="normal">normal</option>
-                    <option value="poisson">poisson</option>
-                    <option value="uniform">uniform</option>
-                </select>
-                <br>
-                <br>
-                <section id="advancedBiasParameters">
-                    <div id="rbAlphaDiv" style="display: none">
-                        Alpha: <br>
-                        <input id="rbAlpha" value="[0.5]"><br>
-                        <br>
-                    </div>
-                    <div id="rbBetaDiv" style="display: none">
-                        Beta: <br>
-                        <input id="rbBeta" value="[1.0]"><br>
-                        <br>
-                    </div>
-                    <div id="rbMeanDiv" style="display: none">
-                        Mean: <br>
-                        <input id="rbMean" value="[0.0]"><br>
-                        <br>
-                    </div>
-                    <div id="rbStddevDiv" style="display: none">
-                        Standard deviation: <br>
-                        <input id="rbStddev" value="[1.0]"><br>
-                        <br>
-                    </div>
-                    <div id="rbLamDiv" style="display: none">
-                        Rate parameter: <br>
-                        <input id="rbLam" value="[0.5]"><br>
-                        <br>
-                    </div>
-                    <div id="rbMinvalDiv" style="display: none">
-                        Minimum value: <br>
-                        <input id="rbMinval" value="[-0.5]"><br>
-                        <br>
-                    </div>
-                    <div id="rbMaxvalDiv" style="display: none">
-                        Maximum value: <br>
-                        <input id="rbMaxval" value="[0.5]"><br>
-                        <br>
-                    </div>
-                    <div id="rbSeedDiv" style="display: none">
-                        Seed: <br>
-                        <input id="rbSeed" value="[-1]"><br>
-                        <br>
-                    </div>
 
-                </section>
-            <table>
+            <table id="randomFunctionsForBiasesTable">
                 <tr class="center">
                     <th>zeros</th>
                     <th>gamma</th>
@@ -561,7 +585,7 @@
 </div>
 
 <script src="../js/tune_visualisation.js"></script>
-<!--<script src="../js/tune_bundle.js"></script>-->
+<script src="../js/tune_bundle.js"></script>
 <!--<script src="../js/hideAndShowBuildParameters.js"></script>-->
 </body>
 </html>
