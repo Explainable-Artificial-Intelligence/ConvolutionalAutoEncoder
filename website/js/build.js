@@ -132,58 +132,20 @@ function getInputDimensions() {
 }
 
 function updateInputOutputLayer(resX, resY, channels) {
-    //update view:
-    // document.getElementById("resXLabel").textContent = resX;
-    // document.getElementById("resXLabel2").textContent = resX;
-    // document.getElementById("resYLabel").textContent = resY;
-    // document.getElementById("resYLabel2").textContent = resY;
-    // document.getElementById("channelLabel").textContent = channels;
-    // document.getElementById("channelLabel2").textContent = channels;
-
     //add visualisation:
-    //var decoderVisualisation = new createANNLayer(250, 250, resX, resY, channels, 2, "outputLayer", false, false);
     inputOutputLayerPair = new ANNLayerPair(200, 200, resX, resY, channels, 3, "input_output_layer");
-    //ANNLayerPreview(200, 200, 28, 28, channels, 2, "encoder", "Input Layer", decoderVisualisation);
-    //createANNLayer(500, 500, resX, resY, channels, 2, "inputLayer", true, false, decoderVisualisation);
 
     // add sample ANN
-    addLayer(null, 3, 12, resX / 2, resY / 2);
-    addLayer(null, 2, 6, resX / 4, resY / 4);
+    addLayer(null, 3, 12);
+    addLayer(null, 2, 6);
+
+    // update global variable:
+    inputLayerDim = [resX, resY];
 
     // set input output layer as preview:
     annLayerPreview.setLinkedLayer(0);
 
 }
-
-//
-function addLayer(event, filtersize, numStacks, resX, resY) {
-    //read parameters:
-    filtersize = filtersize || 2;
-    numStacks = numStacks || 4;
-    /*
-    get current ANN topology information
-     */
-    // get encoder count
-    var encoderCount = document.getElementById("encoder").children.length - 1; // one child is input layer
-
-    /*
-    append decoder layer
-    */
-    //console.log("add decoder");
-    //add visualisation:
-    //var decoderVisualisation = new ANNLayerPreview(200, 200, 28, 28, numStacks, filtersize, "encoder_decoder_layer", (encoderCount + 1), null);
-
-    /*
-    append Encoder layer
-    */
-    //console.log("add encoder");
-    //add visualisation:
-    encoderDecoderLayerPairs.push(new ANNLayerPair(200, 200, resX, resY, numStacks, filtersize, "encoder_decoder_layer", (encoderCount + 1), null));
-
-    console.log(encoderDecoderLayerPairs);
-
-}
-
 
 function renumberLayers() {
     var layerDiv = document.getElementById("encoder").childNodes;
@@ -304,16 +266,8 @@ function buildANN() {
 
 
 /*
-Global variables
- */
-
-var inputShape = [-1, -1, -1, -1];
-
-
-/*
 Event Listener
  */
-document.getElementById("addLayer").addEventListener("click", addLayer);
 document.getElementById("buildANN").addEventListener("click", buildANN);
 
 
@@ -324,7 +278,6 @@ on load
 getInputDimensions();
 
 
-//createANNLayer(400, 400, 28, 28, 2, 5, "encoderLayer_1");
 
 
 

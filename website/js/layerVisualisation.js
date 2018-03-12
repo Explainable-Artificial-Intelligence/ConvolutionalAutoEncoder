@@ -1,9 +1,10 @@
 /*
 Global variables
  */
+var inputLayerDim = [28, 28];
 var encoderDecoderLayerPairs = [];
 var inputOutputLayerPair = null;
-var annLayerPreview = new ANNLayerPreview(500, 500, 28, 28, 3, 3);
+var annLayerPreview = new ANNLayerPreview(500, 500, inputLayerDim[0], inputLayerDim[1], 3, 3);
 
 /*
 d3 helper functions:
@@ -19,6 +20,11 @@ Functions to create interactive ANN layer
  */
 
 function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, filterSize) {
+    // prevent invalid filter sizes:
+    if (filterSize > Math.min(layerWidth, layerHeight)) {
+        filterSize = 1;
+    }
+
     //create plot pane:
     var plot = d3.select("#layerPreview")
         .append("svg")
@@ -157,13 +163,31 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
             });
 
         //move filter rect:
-        plot.select(".filter_rect")
-            .transition()
-            .duration(500)
-            .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
-            .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
-            .attr("width", xScale(filterSize))
-            .attr("height", yScale(filterSize));
+        if ((Math.min(layerWidth, layerWidth) - filterSize) < 3) {
+            plot.select(".filter_rect")
+                .transition()
+                .duration(500)
+                .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
+                .attr("y", stackCount * 0.2 * yScale(layerHeight))
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
+                .on("end", function () {
+                    transitionFinished = true;
+                    console.log("transition finished");
+                });
+        } else {
+            plot.select(".filter_rect")
+                .transition()
+                .duration(500)
+                .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
+                .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3))
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
+                .on("end", function () {
+                    transitionFinished = true;
+                    console.log("transition finished");
+                });
+        }
         plot.select(".filter_rect").moveToFront();
     }
 
@@ -508,6 +532,7 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
             linkedLayer = inputOutputLayerPair;
         }
 
+        console.log(layerIdx);
         // set current layer values:
         setFilterSize(linkedLayer.getFilterSize());
         setStackCount(linkedLayer.getStackCount());
@@ -530,10 +555,14 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
 }
 
 function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filterSize, layerType) {
+    // prevent invalid filter sizes:
+    if (filterSize > Math.min(layerWidth, layerHeight)) {
+        filterSize = 1;
+    }
+
     //create plot pane pair:
     var layerPair = [];
-
-
+    
     //define basic parameters
     console.log(layerType);
     if (layerType === "input_output_layer") {
@@ -613,16 +642,29 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         }
 
         // add filter size rect:
-        entry.filterRect = entry.plot.append("rect")
-            .attr('class', 'filter_rect')
-            .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
-            .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
-            .attr("width", xScale(filterSize))
-            .attr("height", yScale(filterSize))
-            .style('stroke-width', 2)
-            .style('stroke', "red")
-            .style('fill', "red")
-            .style('fill-opacity', 0.2);
+        if ((Math.min(layerWidth, layerHeight) - filterSize) < 3) {
+            entry.filterRect = entry.plot.append("rect")
+                .attr('class', 'filter_rect')
+                .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
+                .attr("y", stackCount * 0.2 * yScale(layerHeight) + 10)
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
+                .style('stroke-width', 2)
+                .style('stroke', "red")
+                .style('fill', "red")
+                .style('fill-opacity', 0.2);
+        } else {
+            entry.filterRect = entry.plot.append("rect")
+                .attr('class', 'filter_rect')
+                .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
+                .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
+                .attr("width", xScale(filterSize))
+                .attr("height", yScale(filterSize))
+                .style('stroke-width', 2)
+                .style('stroke', "red")
+                .style('fill', "red")
+                .style('fill-opacity', 0.2);
+        }
 
         // add delete button:
         if (layerType !== "input_output_layer") {
@@ -650,8 +692,20 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                 .style('fill', "orange")
                 .text("x")
                 .on("click", function () {
+                    // remove layer from layer array:
+                    encoderDecoderLayerPairs.splice(layerIdx - 1, 1);
+                    console.log(encoderDecoderLayerPairs);
+
+                    // remove svg:
                     d3.select("#encoder_layer_" + layerIdx).remove();
                     d3.select("#decoder_layer_" + layerIdx).remove();
+
+                    // renumber layer:
+                    renumberLayers();
+
+                    // disable event propagation to parent:
+                    d3.event.stopPropagation();
+
                 });
         }
 
@@ -733,14 +787,32 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                 });
 
             //move filter rect:
-            entry.plot.select(".filter_rect")
-                .transition()
-                .duration(500)
-                .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
-                .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
-                .attr("width", xScale(filterSize))
-                .attr("height", yScale(filterSize))
-                .moveToFront();
+            if ((Math.min(layerWidth, layerHeight) - filterSize) < 3) {
+                entry.plot.select(".filter_rect")
+                    .transition()
+                    .duration(500)
+                    .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth))
+                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + 10)
+                    .attr("width", xScale(filterSize))
+                    .attr("height", yScale(filterSize))
+                    .on("end", function () {
+                        transitionFinished = true;
+                        console.log("transition finished");
+                    });
+            } else {
+                entry.plot.select(".filter_rect")
+                    .transition()
+                    .duration(500)
+                    .attr("x", width - xScale(layerWidth) - stackCount * 0.2 * xScale(layerWidth) + xScale(3))
+                    .attr("y", stackCount * 0.2 * yScale(layerHeight) + yScale(3) + 10)
+                    .attr("width", xScale(filterSize))
+                    .attr("height", yScale(filterSize))
+                    .on("end", function () {
+                        transitionFinished = true;
+                        console.log("transition finished");
+                    });
+            }
+            entry.plot.select(".filter_rect").moveToFront();
         });
     }
 
@@ -1092,6 +1164,21 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         setFilterSize(newFilterSize);
     };
 
+    this.setLayerIdx = function (idx) {
+        layerPair.forEach(function (entry) {
+
+            layerIdx = idx;
+            entry.layerIdx = idx;
+            entry.plot_id = entry.plot_id.split('_')[0] + '_' + entry.layerIdx;
+            entry.title = entry.title.split(' ')[0] + ' ' + entry.title.split(' ')[1] + ' ' + entry.layerIdx;
+            console.log(entry.plot_id);
+            entry.plot.attr("id", entry.plot_id);
+
+            // update description:
+            entry.titleDescription.text(entry.title)
+        });
+    };
+
     this.getFilterSize = function () {
         return filterSize;
     };
@@ -1123,10 +1210,32 @@ function deselectAllLayers() {
 
 }
 
+function renumberLayers() {
+    for (var i = 0; i < encoderDecoderLayerPairs.length; i++) {
+        encoderDecoderLayerPairs[i].setLayerIdx(i + 1);
+        encoderDecoderLayerPairs[i].setLayerDimension(Math.ceil(inputLayerDim[0] / Math.pow(2, (i + 1))),
+            Math.ceil(inputLayerDim[0] / Math.pow(2, (i + 1))));
+    }
+}
+
+function addLayer(event, filterSize, numStacks) {
+    //read parameters:
+    filterSize = filterSize || 2;
+    numStacks = numStacks || 4;
+
+    //add visualisation:
+    encoderDecoderLayerPairs.push(new ANNLayerPair(200, 200, Math.ceil(inputLayerDim[0] / Math.pow(2, encoderDecoderLayerPairs.length + 1)),
+        Math.ceil(inputLayerDim[0] / Math.pow(2, encoderDecoderLayerPairs.length + 1)), numStacks, filterSize, "encoder_decoder_layer"));
+
+    console.log(encoderDecoderLayerPairs);
+
+}
+
 
 /*
-EventListener
+Event Listener
  */
+document.getElementById("addLayer").addEventListener("click", addLayer);
 document.getElementById("applyLayerModification").addEventListener("click", function () {
     annLayerPreview.setFilterSize(Number(document.getElementById("filtersizeModifier").value));
     annLayerPreview.setStackCount(Number(document.getElementById("stackCountModifier").value));
