@@ -5,7 +5,6 @@ import itertools
 
 from flask_server.swagger_server.models.image import Image
 from flask_server.swagger_server.models.processed_image_data import ProcessedImageData
-from flask_server.utils.DimensionReduction import perform_dimension_reduction
 from flask_server.utils.ImageProcessing import convert_image_array_to_byte_string
 from flask_server.utils.Storage import Storage
 
@@ -96,8 +95,8 @@ def generate_parameter_combination_list(input_parameter_list: object):
         if input_shape[0] == -1:
             input_shape[0] = None
     # set default seed to None if -1 is given
-    parameter_list['rw_seed'] = [None if seed == -1 else seed for seed in parameter_list['rw_seed']]
-    parameter_list['rb_seed'] = [None if seed == -1 else seed for seed in parameter_list['rb_seed']]
+    # parameter_list['rw_seed'] = [None if seed == -1 else seed for seed in parameter_list['rw_seed']]
+    # parameter_list['rb_seed'] = [None if seed == -1 else seed for seed in parameter_list['rb_seed']]
 
     # split parameter list in static and variable parameters:
     static_parameter_list = {}

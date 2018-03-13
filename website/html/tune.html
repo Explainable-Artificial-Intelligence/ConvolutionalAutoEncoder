@@ -281,22 +281,6 @@
         <details>
             <summary> Optimizer:</summary>
             <p>
-                <!--<select id="Optimizer" size="5" multiple>-->
-                <!--<option value="GradientDescentOptimizer">GradientDescentOptimizer</option>-->
-                <!--<option value="AdadeltaOptimizer">AdadeltaOptimizer</option>-->
-                <!--<option value="AdagradOptimizer">AdagradOptimizer</option>-->
-                <!--<option value="AdagradDAOptimizer">AdagradDAOptimizer</option>-->
-                <!--<option value="MomentumOptimizer">MomentumOptimizer</option>-->
-                <!--<option value="AdamOptimizer" selected>AdamOptimizer</option>-->
-                <!--<option value="FtrlOptimizer">FtrlOptimizer</option>-->
-                <!--<option value="ProximalGradientDescentOptimizer">ProximalGradientDescentOptimizer</option>-->
-                <!--<option value="ProximalAdagradOptimizer">ProximalAdagradOptimizer</option>-->
-                <!--<option value="RMSPropOptimizer">RMSPropOptimizer</option>-->
-                <!--</select><br>-->
-                <!--<br>-->
-                <!--<div id="MomentumDiv" style="display:none">-->
-
-                <!--</div>-->
 
             <table id="optimizerTable">
                 <tr class="center">
@@ -346,59 +330,32 @@
         <br>
 
         <details>
+            <summary> Cost functions:</summary>
+            <p>
+
+            <table id="costFunctionTable">
+                <tr class="center">
+                    <th>squared pixel distance</th>
+                    <th>pixel distance</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="center">
+                    <td style="background-color: orange"><input id="squaredPixelDistanceCheckbox" type="checkbox"
+                                                                class="tableSelector" checked></td>
+                    <td><input id="pixelDistanceCheckbox" type="checkbox" class="tableSelector"></td>
+                </tr>
+            </table>
+            </p>
+        </details>
+        <br>
+
+        <details>
             <summary>Random functions for weights</summary>
             <p>
-                <!--<select id="randomFunctionForWeights" size="5" multiple>-->
-                <!--<option value="zeros">zeros</option>-->
-                <!--<option value="gamma">gamma</option>-->
-                <!--<option value="normal">normal</option>-->
-                <!--<option value="poisson">poisson</option>-->
-                <!--<option value="uniform" selected>uniform</option>-->
-                <!--</select><br>-->
-                <!--<br>-->
-                <!--<section id="advancedWeightParameters">-->
-                <!--<div id="rwAlphaDiv" style="display: none">-->
-                <!--Alpha: <br>-->
-                <!--<input id="rwAlpha" value="[0.5]"><br>-->
-                <!--<br>-->
-                <!--</div>-->
-                <!--<div id="rwBetaDiv" style="display: none">-->
-                <!--Beta: <br>-->
-                <!--<input id="rwBeta" value="[1.0]"><br>-->
-                <!--<br>-->
-                <!--</div>-->
-                <!--<div id="rwMeanDiv" style="display: none">-->
-                <!--Mean: <br>-->
-                <!--<input id="rwMean" value="[0.0]"><br>-->
-                <!--<br>-->
-                <!--</div>-->
-                <!--<div id="rwStddevDiv" style="display: none">-->
-                <!--Standard deviation: <br>-->
-                <!--<input id="rwStddev" value="[1.0]"><br>-->
-                <!--<br>-->
-                <!--</div>-->
-                <!--<div id="rwLamDiv" style="display: none">-->
-                <!--Rate parameter: <br>-->
-                <!--<input id="rwLam" value="[0.5]"><br>-->
-                <!--<br>-->
-                <!--</div>-->
-                <!--<div id="rwMinvalDiv" style="display: none">-->
-                <!--Minimum value: <br>-->
-                <!--<input id="rwMinval" value="[-0.5]"><br>-->
-                <!--<br>-->
-                <!--</div>-->
-                <!--<div id="rwMaxvalDiv" style="display: none">-->
-                <!--Maximum value: <br>-->
-                <!--<input id="rwMaxval" value="[0.5]"><br>-->
-                <!--<br>-->
-                <!--</div>-->
-                <!--<div id="rwSeedDiv" style="display: none">-->
-                <!--Seed: <br>-->
-                <!--<input id="rwSeed" value="[-1]"><br>-->
-                <!--<br>-->
-                <!--</div>-->
 
-                <!--</section>-->
             <table id="randomFunctionsForWeightsTable">
                 <tr class="center">
                     <th>zeros</th>

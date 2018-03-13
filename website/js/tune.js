@@ -151,13 +151,42 @@ function readLearningRateFunctions() {
     return selectedFunctions;
 }
 
-function readOptimizerFunction() {
+function readOptimizerFunctions() {
     var selectedFunctions = [];
     var table = document.getElementById("optimizerTable");
     // iterate over all checkboxes:
     for (var i = 0; i < table.rows[2].cells.length; i++) {
         if (table.rows[2].cells[i].children[0].checked) {
             selectedFunctions.push(convertToCamelCase(table.rows[0].cells[i].textContent));
+        }
+    }
+    console.log(selectedFunctions);
+    return selectedFunctions;
+}
+
+function readCostFunctions() {
+    var selectedFunctions = [];
+    var table = document.getElementById("costFunctionTable");
+    // iterate over all checkboxes:
+    for (var i = 0; i < table.rows[2].cells.length; i++) {
+        if (table.rows[2].cells[i].children[0].checked) {
+            // create new dict:
+            var costFunctionDict = new ConvolutionalAutoencoder.CostFunction();
+            var functionName = table.rows[0].cells[i].textContent;
+
+            // add additional parameters:
+            switch (functionName) {
+                case "squared pixel distance":
+                    costFunctionDict.cf_cost_function = "squared_pixel_distance";
+                    break;
+                case "pixel distance":
+                    costFunctionDict.cf_cost_function = "pixel_distance";
+                    break;
+                // to be continued...
+            }
+
+            // add dict to list
+            selectedFunctions.push(costFunctionDict);
         }
     }
     console.log(selectedFunctions);
@@ -220,18 +249,15 @@ function readLearningParameter() {
 
 
     inputParameterList.mirror_weights = read3OptionList("mirrorWeights");
-
-    inputParameterList.activation_function = readActivationFunctions();
-
     inputParameterList.batch_size = parseInputList("batchSize", true);
     inputParameterList.n_epochs = parseInputList("nEpochs", true);
 
-    // read learning rates
+    // read functions:
+    inputParameterList.activation_function = readActivationFunctions();
     inputParameterList.learning_rate_dict = readLearningRateFunctions();
-
-    inputParameterList.optimizer = readOptimizerFunction();
+    inputParameterList.optimizer = readOptimizerFunctions();
     inputParameterList.momentum = parseInputList("Momentum", true);
-
+    inputParameterList.cost_function_dict = readCostFunctions();
     inputParameterList.random_weights_dict = readRandomFunctions("randomFunctionsForWeightsTable", "rw");
     inputParameterList.random_biases_dict = readRandomFunctions("randomFunctionsForBiasesTable", "rb");
 

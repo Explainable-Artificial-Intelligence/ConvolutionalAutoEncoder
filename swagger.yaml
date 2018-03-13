@@ -745,6 +745,8 @@ definitions:
           type: boolean
         example:
           - false
+        default:
+          - false
       activation_function:
         type: array
         items:
@@ -758,6 +760,8 @@ definitions:
           format: int32
         example:
           - 100
+        default:
+          - 100
       n_epochs:
         type: array
         items:
@@ -765,12 +769,16 @@ definitions:
           format: int32
         example:
           - 50
+        default:
+          - 50
       use_tensorboard:
         type: boolean
         example: true
+        default: true
       verbose:
         type: boolean
         example: true
+        default: true
       learning_rate_dict:
         type: array
         items:
@@ -785,12 +793,16 @@ definitions:
           type: string
         example:
           - AdamOptimizer
+        default:
+          - AdamOptimizer
       momentum:
         type: array
         items:
           type: number
           format: double
         example:
+          - 0.9
+        default:
           - 0.9
       random_weights_dict:
         type: array
@@ -803,15 +815,19 @@ definitions:
       session_saver_path:
         type: string
         example: ./save/
+        default: ./save/
       load_prev_session:
         type: boolean
         example: false
+        default: false
       session_save_duration:
         type: array
         items:
           type: integer
           format: int32
         example:
+          - 5
+        default:
           - 5
       num_test_pictures:
         type: array
@@ -820,18 +836,23 @@ definitions:
           format: int32
         example:
           - 100
+        default:
+          - 100
   LearningRate:
     type: object
     properties:
       learning_rate_function:
         type: string
         example: static
+        default: static
       lr_initial_learning_rate:
         type: array
         items:
           type: number
           format: double
         example:
+          - 0.01
+        default:
           - 0.01
       lr_decay_steps:
         type: array
@@ -840,6 +861,8 @@ definitions:
           format: int32
         example:
           - 1000
+        default:
+          - 1000
       lr_decay_rate:
         type: array
         items:
@@ -847,11 +870,15 @@ definitions:
           format: double
         example:
           - 0.9
+        default:
+          - 0.9
       lr_staircase:
         type: array
         items:
           type: boolean
         example:
+          - false
+        default:
           - false
       lr_boundaries:
         type: array
@@ -861,6 +888,9 @@ definitions:
             type: integer
             format: int32
         example:
+          - - 10000
+            - 20000
+        default:
           - - 10000
             - 20000
       lr_values:
@@ -874,12 +904,18 @@ definitions:
           - - 1
             - 0.5
             - 0.1
+        default:
+          - - 1
+            - 0.5
+            - 0.1
       lr_end_learning_rate:
         type: array
         items:
           type: number
           format: double
         example:
+          - 0.0001
+        default:
           - 0.0001
       lr_power:
         type: array
@@ -888,11 +924,15 @@ definitions:
           format: double
         example:
           - 1
+        default:
+          - 1
       lr_cycle:
         type: array
         items:
           type: boolean
         example:
+          - false
+        default:
           - false
   CostFunction:
     type: object
@@ -900,12 +940,15 @@ definitions:
       cf_cost_function:
         type: string
         example: squared_pixel_distance
+        default: squared_pixel_distance
       cf_max_val:
         type: array
         items:
           type: number
           format: float
         example:
+          - 255
+        default:
           - 255
       cf_filter_size:
         type: array
@@ -914,12 +957,16 @@ definitions:
           format: int32
         example:
           - 11
+        default:
+          - 11
       cf_filter_sigma:
         type: array
         items:
           type: number
           format: float
         example:
+          - 1.5
+        default:
           - 1.5
       cf_k1:
         type: array
@@ -928,12 +975,16 @@ definitions:
           format: float
         example:
           - 0.01
+        default:
+          - 0.01
       cf_k2:
         type: array
         items:
           type: number
           format: float
         example:
+          - 0.03
+        default:
           - 0.03
       cf_weights: 
         type: array
@@ -943,6 +994,8 @@ definitions:
             type: number
             format: float
         example:
+          - - 0.0
+        default:
           - - 0.0
   RandomFunction:
     type: object
@@ -957,12 +1010,16 @@ definitions:
           format: double
         example:
           - 0.5
+        default:
+          - 0.5
       beta:
         type: array
         items:
           type: number
           format: double
         example:
+          - 1
+        default:
           - 1
       mean:
         type: array
@@ -971,12 +1028,16 @@ definitions:
           format: double
         example:
           - 0
+        default:
+          - 0
       stddev:
         type: array
         items:
           type: number
           format: double
         example:
+          - 1
+        default:
           - 1
       lam:
         type: array
@@ -992,6 +1053,8 @@ definitions:
           format: double
         example:
           - 0
+        default:
+          - 0
       maxval:
         type: array
         items:
@@ -999,12 +1062,16 @@ definitions:
           format: double
         example:
           - 1
+        default:
+          - 1
       seed:
         type: array
         items:
           type: integer
           format: int32
         example:
+          - -1
+        default:
           - -1
   ProcessedImageData:
     type: object
