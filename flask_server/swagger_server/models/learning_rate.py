@@ -2,10 +2,9 @@
 
 from __future__ import absolute_import
 
-from typing import List
+from typing import List  # noqa: F401
 
-from .base_model_ import Model
-from ..util import deserialize_model
+from swagger_server.models.base_model_ import Model
 
 
 class LearningRate(Model):
@@ -14,12 +13,12 @@ class LearningRate(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, learning_rate_function: str = None, lr_initial_learning_rate: List[float] = None,
+    def __init__(self, learning_rate_function: str = 'static', lr_initial_learning_rate: List[float] = None,
                  lr_decay_steps: List[int] = None, lr_decay_rate: List[float] = None, lr_staircase: List[bool] = None,
                  lr_boundaries: List[List[int]] = None, lr_values: List[List[float]] = None,
-                 lr_end_learning_rate: List[float] = None, lr_power: List[float] = None, lr_cycle: List[bool] = None):
-        """
-        LearningRate - a model defined in Swagger
+                 lr_end_learning_rate: List[float] = None, lr_power: List[float] = None,
+                 lr_cycle: List[bool] = None):  # noqa: E501
+        """LearningRate - a model defined in Swagger
 
         :param learning_rate_function: The learning_rate_function of this LearningRate.
         :type learning_rate_function: str

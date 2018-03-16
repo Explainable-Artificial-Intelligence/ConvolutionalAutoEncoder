@@ -2,7 +2,7 @@
   "name": "convolutional_autoencoder",
   "version": "1.0.7",
   "description": "WebUI_to_build_train_and_tune_a_Convolutional_Autoencoder",
-  "license": "Unlicense",
+  "license": "Apache 2.0",
   "main": "src/index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive"

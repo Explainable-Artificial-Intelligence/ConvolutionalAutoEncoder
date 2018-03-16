@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-from typing import List
+from typing import List  # noqa: F401
 
 from swagger_server.models.cost_function import CostFunction
 from swagger_server.models.learning_rate import LearningRate
@@ -21,14 +21,13 @@ class ParameterList(Model):
     def __init__(self, input_shape: List[List[int]] = None, number_of_stacks: List[List[int]] = None,
                  filter_sizes: List[List[int]] = None, mirror_weights: List[bool] = None,
                  activation_function: List[str] = None, batch_size: List[int] = None, n_epochs: List[int] = None,
-                 use_tensorboard: bool = None, verbose: bool = None, learning_rate_dict: List[LearningRate] = None,
+                 use_tensorboard: bool = True, verbose: bool = True, learning_rate_dict: List[LearningRate] = None,
                  cost_function_dict: List[CostFunction] = None, optimizer: List[str] = None,
                  momentum: List[float] = None, random_weights_dict: List[RandomFunction] = None,
-                 random_biases_dict: List[RandomFunction] = None, session_saver_path: str = None,
-                 load_prev_session: bool = None, session_save_duration: List[int] = None,
-                 num_test_pictures: List[int] = None):
-        """
-        ParameterList - a model defined in Swagger
+                 random_biases_dict: List[RandomFunction] = None, session_saver_path: str = './save/',
+                 load_prev_session: bool = False, session_save_duration: List[int] = None,
+                 num_test_pictures: List[int] = None):  # noqa: E501
+        """ParameterList - a model defined in Swagger
 
         :param input_shape: The input_shape of this ParameterList.
         :type input_shape: List[List[int]]

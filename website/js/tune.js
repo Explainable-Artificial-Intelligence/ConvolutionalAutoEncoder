@@ -261,6 +261,7 @@ function readLearningParameter() {
     inputParameterList.random_weights_dict = readRandomFunctions("randomFunctionsForWeightsTable", "rw");
     inputParameterList.random_biases_dict = readRandomFunctions("randomFunctionsForBiasesTable", "rb");
 
+    console.log(inputParameterList);
     return inputParameterList;
 }
 
