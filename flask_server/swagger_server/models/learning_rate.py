@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 from typing import List  # noqa: F401
 
-from swagger_server.models.base_model_ import Model
+from flask_server.swagger_server.models.base_model_ import Model
 
 
 class LearningRate(Model):

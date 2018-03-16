@@ -4,10 +4,9 @@ from __future__ import absolute_import
 
 from typing import List  # noqa: F401
 
-from swagger_server.models.cost_function import CostFunction
-from swagger_server.models.learning_rate import LearningRate
-from swagger_server.models.random_function import RandomFunction
-
+from flask_server.swagger_server.models.cost_function import CostFunction
+from flask_server.swagger_server.models.learning_rate import LearningRate
+from flask_server.swagger_server.models.random_function import RandomFunction
 from .base_model_ import Model
 from ..util import deserialize_model
 
