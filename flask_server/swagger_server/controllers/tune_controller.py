@@ -99,6 +99,8 @@ def pass_ann_parameter_lists(inputParameterLists):
 
         all_parameter_combinations = generate_parameter_combination_list(inputParameterLists)
 
+        print(all_parameter_combinations)
+
         # generate model for each combination
         for parameter_combination in all_parameter_combinations:
             # generate model object

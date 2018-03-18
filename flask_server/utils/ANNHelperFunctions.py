@@ -178,7 +178,7 @@ def generate_parameter_combination_list(input_parameter_list: object):
         # concatenate with list element:
         for rb_combination in rb_lists:
             # generate new parameter list:
-            new_parameter_combination = list(parameter_combination)
+            new_parameter_combination = dict(parameter_combination)
             # move elements from biases dict:
             for key in rb_combination.keys():
                 if key == 'random_function':
@@ -200,7 +200,7 @@ def generate_parameter_combination_list(input_parameter_list: object):
         # concatenate with list element:
         for rw_combination in rw_lists:
             # generate new parameter list:
-            new_parameter_combination = list(parameter_combination)
+            new_parameter_combination = dict(parameter_combination)
             # move elements from biases dict:
             for key in rw_combination.keys():
                 if key == 'random_function':
@@ -221,6 +221,14 @@ def generate_parameter_combination_list(input_parameter_list: object):
             parameter_combination['rb_seed'] = None
         if parameter_combination['cf_weights'] == [0.0]:
             parameter_combination['cf_weights'] = None
+
+        # remove 'none' parameters:
+        keys_to_remove = []
+        for key in parameter_combination.keys():
+            if parameter_combination[key] is None:
+                keys_to_remove.append(key)
+        for key in keys_to_remove:
+            parameter_combination.pop(key, None)
 
     return parameter_combinations_w_o_random_weights
 

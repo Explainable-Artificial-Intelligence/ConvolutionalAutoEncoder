@@ -52,12 +52,31 @@
         <h4>Learning Parameters:</h4>
         <br>
 
-        <label for="mirrorWeights">Mirror weights</label>
-        <select id="mirrorWeights" size="1">
-            <option value="true">true</option>
-            <option value="false">false</option>
-            <option value="both">test both</option>
-        </select><br>
+        <details>
+            <summary>Network Topology:</summary>
+            <p>
+                <label for="InputShape">Input shape:</label>
+                <input id="InputShape" value="[[-1, 28, 28, 1]]">
+                <br>
+                <br>
+                <label for="NumberOfStacks">Number of stacks:</label>
+                <input id="NumberOfStacks" value="[[3, 3, 2]]">
+                <br>
+                <br>
+                <label for="FilterSizes">Filter sizes:</label>
+                <input id="FilterSizes" value="[[1, 12, 6]]">
+                <br>
+                <br>
+                <label for="mirrorWeights">Mirror weights</label>
+                <select id="mirrorWeights" size="1">
+                    <option value="true">true</option>
+                    <option value="false" checked>false</option>
+                    <option value="both">test both</option>
+                </select><br>
+                <br>
+
+            </p>
+        </details>
         <br>
 
         <details>
@@ -509,34 +528,36 @@
     </div>
 
 
-    <div id="ConvolutionalAutoEncoder">
-        <div id="encoder">
-            <div id="inputLayer" class="ANNLayer">
-                Input Layer:
-                <br>
-                <br>
-                Resolution:
-                <label id="resXLabel">?</label> x <label id="resYLabel">?</label>
-                Channels:
-                <label id="channelLabel">?</label>
-            </div>
-        </div>
-        <button id="addLayer">add Layer</button>
-        <div id="decoder">
-            <div id="outputLayer" class="ANNLayer">
-                Output Layer:
-                <br>
-                <br>
-                Resolution:
-                <label id="resXLabel2">?</label> x <label id="resYLabel2">?</label>
-                Channels: <label id="channelLabel2">?</label>
-            </div>
-        </div>
-    </div>
+    <!--<div id="ConvolutionalAutoEncoder">-->
+    <!--<div id="encoder">-->
+    <!--<div id="inputLayer" class="ANNLayer">-->
+    <!--Input Layer:-->
+    <!--<br>-->
+    <!--<br>-->
+    <!--Resolution:-->
+    <!--<label id="resXLabel">?</label> x <label id="resYLabel">?</label>-->
+    <!--Channels:-->
+    <!--<label id="channelLabel">?</label>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<button id="addLayer">add Layer</button>-->
+    <!--<div id="decoder">-->
+    <!--<div id="outputLayer" class="ANNLayer">-->
+    <!--Output Layer:-->
+    <!--<br>-->
+    <!--<br>-->
+    <!--Resolution:-->
+    <!--<label id="resXLabel2">?</label> x <label id="resYLabel2">?</label>-->
+    <!--Channels: <label id="channelLabel2">?</label>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
     <div style="text-align:right;">
         <button id="buildANN">Build ANN</button>
+        <button id="startGridSearch">Start grid search</button>
         <br>
         <label id="responseLabel"></label>
+
     </div>
 
 </div>

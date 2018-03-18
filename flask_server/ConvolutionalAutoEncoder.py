@@ -439,26 +439,25 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         # reuse weights and biases
         reversed_encoder_weights = list(reversed(self.encoder_weights))
+        reversed_encoder_biases = list(reversed(self.encoder_biases))
 
-        if self.mirror_weights:
-            weights_of_layer_i = reversed_encoder_weights[layer_i]
+        if restore:
+            weights_of_layer_i = tf.get_default_graph().get_tensor_by_name(
+                "decoder_weights_layer_" + str(layer_i) + ":0")
+            biases_of_layer_i = tf.get_default_graph().get_tensor_by_name(
+                "decoder_biases_layer_" + str(layer_i) + ":0")
         else:
-            if restore:
-                weights_of_layer_i = tf.get_default_graph().get_tensor_by_name(
-                    "decoder_weights_layer_" + str(layer_i) + ":0")
-                biases_of_layer_i = tf.get_default_graph().get_tensor_by_name(
-                    "decoder_biases_layer_" + str(layer_i) + ":0")
+            if self.mirror_weights:
+                weights_of_layer_i = reversed_encoder_weights[layer_i]
             else:
                 weights_of_layer_i = self._create_random_layer_weights(
                     reversed_encoder_weights[layer_i].get_shape().as_list(), "decoder_weights_layer_" + str(layer_i))
-
-                biases_of_layer_i = self._create_layer_biases(weights_of_layer_i.get_shape().as_list()[2],
-                                                              "decoder_biases_layer_" + str(layer_i))
+            biases_of_layer_i = self._create_layer_biases(weights_of_layer_i.get_shape().as_list()[2],
+                                                          "decoder_biases_layer_" + str(layer_i))
 
         self.decoder_weights.append(weights_of_layer_i)
         self.decoder_biases.append(biases_of_layer_i)
         # TODO: add names
-        # print([current_input.shape, weights_of_layer_i.shape, tf.stack([tf.shape(self.input_images)[0], shape[1], shape[2], shape[3]])])
         output = self.activation_function(tf.nn.conv2d_transpose(current_input, weights_of_layer_i,
                                                                  tf.stack(
                                                                      [tf.shape(self.input_images)[0], shape[1],

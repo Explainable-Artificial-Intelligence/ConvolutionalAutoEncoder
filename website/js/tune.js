@@ -3,7 +3,7 @@ check if client and server are running correctly
  */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
-var buildApi = new ConvolutionalAutoencoder.BuildApi();
+var tuneApi = new ConvolutionalAutoencoder.TuneApi();
 
 // check API functionality
 function callback(error, data, response) {
@@ -14,7 +14,7 @@ function callback(error, data, response) {
     }
 }
 
-buildApi.getInputShape([], callback);
+
 
 
 /*
@@ -247,6 +247,11 @@ function readLearningParameter() {
     inputParameterList.session_save_duration = [Number(document.getElementById("sessionSaveDuration").value)];
     inputParameterList.num_test_pictures = [Number(document.getElementById("numTestPictures").value)];
 
+    //read network topology:
+    inputParameterList.input_shape = JSON.parse(document.getElementById("InputShape").value.trim());
+    inputParameterList.number_of_stacks = JSON.parse(document.getElementById("NumberOfStacks").value.trim());
+    inputParameterList.filter_sizes = JSON.parse(document.getElementById("FilterSizes").value.trim());
+
 
     inputParameterList.mirror_weights = read3OptionList("mirrorWeights");
     inputParameterList.batch_size = parseInputList("batchSize", true);
@@ -264,6 +269,47 @@ function readLearningParameter() {
     console.log(inputParameterList);
     return inputParameterList;
 }
+
+
+function buildANN() {
+
+    // get learning parameters (sidebar):
+    var inputParameters = readLearningParameter();
+
+    console.log(inputParameters);
+
+
+    /*
+        initialize API call
+     */
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(response);
+            console.log(data);
+            document.getElementById("responseLabel").textContent = response.text;
+        }
+    }
+
+    console.log(tuneApi);
+    tuneApi.passANNParameterLists(inputParameters, callback);
+
+
+}
+
+/*
+Event Listener
+ */
+document.getElementById("buildANN").addEventListener("click", buildANN);
+//
+
+/*
+on load
+ */
+
+
+
 
 // // get input (output) dimensions
 // function getInputDimensions() {
@@ -467,18 +513,6 @@ function readLearningParameter() {
 // var inputShape = [-1, -1, -1, -1];
 //
 //
-/*
-Event Listener
- */
-document.getElementById("addLayer").addEventListener("click", addLayer);
-document.getElementById("buildANN").addEventListener("click", readLearningParameter);
-//
-
-/*
-on load
- */
-
-console.log(readLearningParameter());
 
 // getInputDimensions();
 //
