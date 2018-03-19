@@ -33,6 +33,7 @@ function LineChart(parentNodeID, width, height, yAxisName) {
     var data = [];
     var line;
     var step = 0;
+    var logScale = false;
 
     //set initial min/max values:
     var xmin = 0;
@@ -97,6 +98,31 @@ function LineChart(parentNodeID, width, height, yAxisName) {
         .attr("font-size", "12px")
         .text("steps")
         .attr("fill", "orange");
+
+
+    // add event listener:
+    plot.on("click", function () {
+        // get domain and range:
+        console.log(yAxis.scale());
+        var domain = yAxis.scale().domain();
+        var range = yAxis.scale().range();
+
+        // create new scale:
+
+
+        if (logScale) {
+            yScale = d3.scaleLinear();
+            logScale = false;
+        } else {
+            yScale = d3.scaleLog();
+            logScale = true;
+        }
+        yScale.domain(domain);
+        yScale.range(range);
+
+        // update axis
+        updateAxis();
+    });
 
     //draw line:
 
