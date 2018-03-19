@@ -521,7 +521,7 @@ paths:
       - "tune"
       summary: "passes all learning and ANN parameters to the server"
       description: "Includes learning parameters and ANN topology as lists"
-      operationId: "pass_ann_parameter_lists"
+      operationId: "build_grid_search_ann"
       consumes:
       - "application/json"
       produces:
@@ -540,11 +540,11 @@ paths:
           description: "File parsing error"
       x-swagger-router-controller: "swagger_server.controllers.tune_controller"
   /tune/controlTuning:
-    put:
+    post:
       tags:
       - "tune"
       summary: "starts, pauses and stops the tuning"
-      description: ""
+      description: "uses a string enum"
       operationId: "control_tuning"
       consumes:
       - "application/json"

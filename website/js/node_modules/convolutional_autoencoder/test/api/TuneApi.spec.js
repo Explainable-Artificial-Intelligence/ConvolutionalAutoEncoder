@@ -51,6 +51,16 @@
   }
 
   describe('TuneApi', function() {
+      describe('buildGridSearchANN', function () {
+          it('should call buildGridSearchANN successfully', function (done) {
+              //uncomment below and update the code to test buildGridSearchANN
+              //instance.buildGridSearchANN(function(error) {
+              //  if (error) throw error;
+              //expect().to.be();
+              //});
+              done();
+          });
+      });
     describe('controlTuning', function() {
       it('should call controlTuning successfully', function(done) {
         //uncomment below and update the code to test controlTuning
@@ -75,16 +85,6 @@
       it('should call getTrainPerformanceOfCurrentTuning successfully', function(done) {
         //uncomment below and update the code to test getTrainPerformanceOfCurrentTuning
         //instance.getTrainPerformanceOfCurrentTuning(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-    describe('passANNParameterLists', function() {
-      it('should call passANNParameterLists successfully', function(done) {
-        //uncomment below and update the code to test passANNParameterLists
-        //instance.passANNParameterLists(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});

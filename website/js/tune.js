@@ -270,7 +270,6 @@ function readLearningParameter() {
     return inputParameterList;
 }
 
-
 function buildANN() {
 
     // get learning parameters (sidebar):
@@ -293,15 +292,54 @@ function buildANN() {
     }
 
     console.log(tuneApi);
-    tuneApi.passANNParameterLists(inputParameters, callback);
+    tuneApi.buildGridSearchANN(inputParameters, callback);
 
 
 }
+
+function startTuning() {
+
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(response);
+            console.log(data);
+            document.getElementById("responseLabel").textContent = response.text;
+
+            // start update timer
+            trainTimer = setInterval(updateView, 5000);
+        }
+    }
+
+    tuneApi.controlTuning('"start"', callback);
+}
+
+function stopTuning() {
+
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(response);
+            console.log(data);
+            document.getElementById("responseLabel").textContent = response.text;
+
+            // stop update timer
+            clearInterval(trainTimer);
+        }
+    }
+
+    tuneApi.controlTuning('"stop"', callback);
+}
+
 
 /*
 Event Listener
  */
 document.getElementById("buildANN").addEventListener("click", buildANN);
+document.getElementById("startGridSearch").addEventListener("click", startTuning);
+document.getElementById("stopGridSearch").addEventListener("click", stopTuning);
 //
 
 /*

@@ -511,7 +511,7 @@ paths:
         - tune
       summary: passes all learning and ANN parameters to the server
       description: Includes learning parameters and ANN topology as lists
-      operationId: passANNParameterLists
+      operationId: buildGridSearchANN
       consumes:
         - application/json
       produces:
@@ -529,11 +529,11 @@ paths:
         '415':
           description: File parsing error
   /tune/controlTuning:
-    put:
+    post:
       tags:
         - tune
       summary: 'starts, pauses and stops the tuning'
-      description: ''
+      description: uses a string enum
       operationId: controlTuning
       consumes:
         - application/json

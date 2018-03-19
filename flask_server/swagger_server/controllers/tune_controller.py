@@ -84,7 +84,7 @@ def get_train_performance_of_current_tuning():
     return train_performance_object, 200
 
 
-def pass_ann_parameter_lists(inputParameterLists):
+def build_grid_search_ann(inputParameterLists):
     """
     passes all learning and ANN parameters to the server
     Includes learning parameters and ANN topology as lists

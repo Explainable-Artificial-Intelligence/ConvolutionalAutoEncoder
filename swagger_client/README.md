@@ -129,10 +129,10 @@ Class | Method | HTTP request | Description
 *ConvolutionalAutoencoder.TrainApi* | [**controlTraining**](docs/TrainApi.md#controlTraining) | **POST** /train/controlTraining | starts, pauses and stops the training
 *ConvolutionalAutoencoder.TrainApi* | [**getProcessedImageData**](docs/TrainApi.md#getProcessedImageData) | **GET** /train/getProcessedImageData | returns a subset of the current train images and the corresponding latent representation and output
 *ConvolutionalAutoencoder.TrainApi* | [**getTrainPerformance**](docs/TrainApi.md#getTrainPerformance) | **GET** /train/getTrainPerformance | returns the next batch of scalar train variables
-*ConvolutionalAutoencoder.TuneApi* | [**controlTuning**](docs/TuneApi.md#controlTuning) | **PUT** /tune/controlTuning | starts, pauses and stops the tuning
+*ConvolutionalAutoencoder.TuneApi* | [**buildGridSearchANN**](docs/TuneApi.md#buildGridSearchANN) | **POST** /tune/buildGridSearchANN | passes all learning and ANN parameters to the server
+*ConvolutionalAutoencoder.TuneApi* | [**controlTuning**](docs/TuneApi.md#controlTuning) | **POST** /tune/controlTuning | starts, pauses and stops the tuning
 *ConvolutionalAutoencoder.TuneApi* | [**getProcessedImageDataOfCurrentTuning**](docs/TuneApi.md#getProcessedImageDataOfCurrentTuning) | **GET** /tune/getProcessedImageDataOfCurrentTuning | returns a subset of the current train images and the corresponding latent representation and output
 *ConvolutionalAutoencoder.TuneApi* | [**getTrainPerformanceOfCurrentTuning**](docs/TuneApi.md#getTrainPerformanceOfCurrentTuning) | **GET** /tune/getTrainPerformanceOfCurrentTuning | returns the next batch of scalar train variables
-*ConvolutionalAutoencoder.TuneApi* | [**passANNParameterLists**](docs/TuneApi.md#passANNParameterLists) | **POST** /tune/buildGridSearchANN | passes all learning and ANN parameters to the server
 *ConvolutionalAutoencoder.VisualizeApi* | [**generateImageFromSinglePoint**](docs/VisualizeApi.md#generateImageFromSinglePoint) | **GET** /visualize/generateImageFromSinglePoint | generates the AE output from a given point of the sample distribution
 *ConvolutionalAutoencoder.VisualizeApi* | [**getHiddenLayerLatentClustering**](docs/VisualizeApi.md#getHiddenLayerLatentClustering) | **GET** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
 

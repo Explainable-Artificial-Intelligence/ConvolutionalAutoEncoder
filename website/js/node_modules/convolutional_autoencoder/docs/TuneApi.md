@@ -4,11 +4,57 @@ All URIs are relative to *http://localhost:8080/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**controlTuning**](TuneApi.md#controlTuning) | **PUT** /tune/controlTuning | starts, pauses and stops the tuning
+[**buildGridSearchANN**](TuneApi.md#buildGridSearchANN) | **POST** /tune/buildGridSearchANN | passes all learning and ANN parameters to the server
+[**controlTuning**](TuneApi.md#controlTuning) | **POST** /tune/controlTuning | starts, pauses and stops the tuning
 [**getProcessedImageDataOfCurrentTuning**](TuneApi.md#getProcessedImageDataOfCurrentTuning) | **GET** /tune/getProcessedImageDataOfCurrentTuning | returns a subset of the current train images and the corresponding latent representation and output
 [**getTrainPerformanceOfCurrentTuning**](TuneApi.md#getTrainPerformanceOfCurrentTuning) | **GET** /tune/getTrainPerformanceOfCurrentTuning | returns the next batch of scalar train variables
-[**passANNParameterLists**](TuneApi.md#passANNParameterLists) | **POST** /tune/buildGridSearchANN | passes all learning and ANN parameters to the server
 
+
+<a name="buildGridSearchANN"></a>
+# **buildGridSearchANN**
+> buildGridSearchANN(inputParameterLists)
+
+passes all learning and ANN parameters to the server
+
+Includes learning parameters and ANN topology as lists
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.TuneApi();
+
+var inputParameterLists = new ConvolutionalAutoencoder.ParameterList(); // ParameterList | object with all tunable parameter lists
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+apiInstance.buildGridSearchANN(inputParameterLists, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **inputParameterLists** | [**ParameterList**](ParameterList.md)| object with all tunable parameter lists | 
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="controlTuning"></a>
 # **controlTuning**
@@ -16,7 +62,7 @@ Method | HTTP request | Description
 
 starts, pauses and stops the tuning
 
-
+uses a string enum
 
 ### Example
 ```javascript
@@ -132,52 +178,6 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**TrainPerformance**](TrainPerformance.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-<a name="passANNParameterLists"></a>
-# **passANNParameterLists**
-> passANNParameterLists(inputParameterLists)
-
-passes all learning and ANN parameters to the server
-
-Includes learning parameters and ANN topology as lists
-
-### Example
-```javascript
-var ConvolutionalAutoencoder = require('convolutional_autoencoder');
-
-var apiInstance = new ConvolutionalAutoencoder.TuneApi();
-
-var inputParameterLists = new ConvolutionalAutoencoder.ParameterList(); // ParameterList | object with all tunable parameter lists
-
-
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully.');
-  }
-};
-apiInstance.passANNParameterLists(inputParameterLists, callback);
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **inputParameterLists** | [**ParameterList**](ParameterList.md)| object with all tunable parameter lists | 
-
-### Return type
-
-null (empty response body)
 
 ### Authorization
 

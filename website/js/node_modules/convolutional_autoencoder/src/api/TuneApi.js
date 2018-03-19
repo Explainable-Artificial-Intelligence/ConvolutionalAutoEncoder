@@ -48,6 +48,47 @@
     this.apiClient = apiClient || ApiClient.instance;
 
 
+      /**
+       * Callback function to receive the result of the buildGridSearchANN operation.
+       * @callback module:api/TuneApi~buildGridSearchANNCallback
+       * @param {String} error Error message, if any.
+       * @param data This operation does not return a value.
+       * @param {String} response The complete HTTP response.
+       */
+
+      /**
+       * passes all learning and ANN parameters to the server
+       * Includes learning parameters and ANN topology as lists
+       * @param {module:model/ParameterList} inputParameterLists object with all tunable parameter lists
+       * @param {module:api/TuneApi~buildGridSearchANNCallback} callback The callback function, accepting three arguments: error, data, response
+       */
+      this.buildGridSearchANN = function (inputParameterLists, callback) {
+          var postBody = inputParameterLists;
+
+          // verify the required parameter 'inputParameterLists' is set
+          if (inputParameterLists === undefined || inputParameterLists === null) {
+              throw new Error("Missing the required parameter 'inputParameterLists' when calling buildGridSearchANN");
+          }
+
+
+          var pathParams = {};
+          var queryParams = {};
+          var collectionQueryParams = {};
+          var headerParams = {};
+          var formParams = {};
+
+          var authNames = [];
+          var contentTypes = ['application/json'];
+          var accepts = ['application/json'];
+          var returnType = null;
+
+          return this.apiClient.callApi(
+              '/tune/buildGridSearchANN', 'POST',
+              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+              authNames, contentTypes, accepts, returnType, callback
+          );
+      }
+
     /**
      * Callback function to receive the result of the controlTuning operation.
      * @callback module:api/TuneApi~controlTuningCallback
@@ -58,7 +99,7 @@
 
     /**
      * starts, pauses and stops the tuning
-     * 
+     * uses a string enum
      * @param {module:model/TrainStatus} trainStatus new status for training
      * @param {module:api/TuneApi~controlTuningCallback} callback The callback function, accepting three arguments: error, data, response
      */
@@ -87,7 +128,7 @@
       var returnType = null;
 
       return this.apiClient.callApi(
-        '/tune/controlTuning', 'PUT',
+          '/tune/controlTuning', 'POST',
           pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
@@ -176,51 +217,6 @@
 
       return this.apiClient.callApi(
         '/tune/getTrainPerformanceOfCurrentTuning', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
-      );
-    }
-
-    /**
-     * Callback function to receive the result of the passANNParameterLists operation.
-     * @callback module:api/TuneApi~passANNParameterListsCallback
-     * @param {String} error Error message, if any.
-     * @param data This operation does not return a value.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
-     * passes all learning and ANN parameters to the server
-     * Includes learning parameters and ANN topology as lists
-     * @param {module:model/ParameterList} inputParameterLists object with all tunable parameter lists
-     * @param {module:api/TuneApi~passANNParameterListsCallback} callback The callback function, accepting three arguments: error, data, response
-     */
-    this.passANNParameterLists = function(inputParameterLists, callback) {
-      var postBody = inputParameterLists;
-
-      // verify the required parameter 'inputParameterLists' is set
-      if (inputParameterLists === undefined || inputParameterLists === null) {
-        throw new Error("Missing the required parameter 'inputParameterLists' when calling passANNParameterLists");
-      }
-
-
-      var pathParams = {
-      };
-      var queryParams = {
-      };
-        var collectionQueryParams = {};
-      var headerParams = {
-      };
-      var formParams = {
-      };
-
-      var authNames = [];
-      var contentTypes = ['application/json'];
-      var accepts = ['application/json'];
-      var returnType = null;
-
-      return this.apiClient.callApi(
-        '/tune/buildGridSearchANN', 'POST',
           pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
