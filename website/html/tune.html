@@ -48,12 +48,12 @@
 
 <div id="content">
 
-    <div id="LearningParameters">
-        <h4>Learning Parameters:</h4>
-        <br>
-
-        <details>
-            <summary>Network Topology:</summary>
+    <div>
+        <details id="LearningParameters">
+            <summary><h4>Learning Parameters:</h4></summary>
+            <p>
+                <details>
+                    <summary>Network Topology:</summary>
             <p>
                 <label for="InputShape">Input shape:</label>
                 <input id="InputShape" value="[[-1, 28, 28, 1]]">
@@ -70,7 +70,7 @@
                 <label for="mirrorWeights">Mirror weights</label>
                 <select id="mirrorWeights" size="1">
                     <option value="true">true</option>
-                    <option value="false" checked>false</option>
+                    <option value="false" selected>false</option>
                     <option value="both">test both</option>
                 </select><br>
                 <br>
@@ -82,7 +82,7 @@
         <details>
             <summary>Activation Fuction:</summary>
             <p>
-            <table id="activationFunctionTable">
+            <table id="activationFunctionTable" class="parameterTable">
                 <tr class="center">
                     <th>relu</th>
                     <th>relu6</th>
@@ -120,7 +120,7 @@
         <details>
             <summary>Batch Size:</summary>
             <p>
-                <input id="batchSize" value="[100]"><br>
+                <input id="batchSize" value="(100, 1000, 300)"><br>
                 <br>
             </p>
         </details>
@@ -129,7 +129,7 @@
         <details>
             <summary>Number of Epochs</summary>
             <p>
-                <input id="nEpochs" value="[50]"><br>
+                <input id="nEpochs" value="[5]"><br>
                 <br>
             </p>
         </details>
@@ -138,14 +138,6 @@
         <details>
             <summary>Learning Rate Function:</summary>
             <p>
-                <!--<select id="learningRateFunction" size="6" multiple>-->
-                <!--<option value="static">static</option>-->
-                <!--<option value="exponential_decay">exponential_decay</option>-->
-                <!--<option value="inverse_time_decay">inverse_time_decay</option>-->
-                <!--<option value="natural_exp_decay">natural_exp_decay</option>-->
-                <!--<option value="piecewise_constant">piecewise_constant</option>-->
-                <!--<option value="polynomial_decay">polynomial_decay</option>-->
-                <!--</select><br>-->
 
             <div id="lrInitialLearningRateDiv" style="display:none">
 
@@ -179,7 +171,7 @@
             </div>
 
 
-            <table id="learningRateFunctionTable">
+            <table id="learningRateFunctionTable" class="parameterTable">
                 <tr class="center">
                     <th>static</th>
                     <th>exponential decay</th>
@@ -301,7 +293,7 @@
             <summary> Optimizer:</summary>
             <p>
 
-            <table id="optimizerTable">
+            <table id="optimizerTable" class="parameterTable">
                 <tr class="center">
                     <th>Gradient descent optimizer</th>
                     <th>Adadelta optimizer</th>
@@ -331,13 +323,13 @@
                     <td></td>
                 </tr>
                 <tr class="center">
-                    <td style="background-color: orange"><input id="GradientDescentOptimizerCheckbox" type="checkbox"
-                                                                class="tableSelector" checked></td>
+                    <td><input id="GradientDescentOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="AdadeltaOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="AdagradOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="AdagradDAOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="MomentumOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
-                    <td><input id="AdamOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
+                    <td style="background-color: orange"><input id="AdamOptimizerCheckbox" type="checkbox"
+                                                                class="tableSelector" checked></td>
                     <td><input id="FtrlOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="ProximalGradientDescentOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
                     <td><input id="ProximalAdagradOptimizerCheckbox" type="checkbox" class="tableSelector"></td>
@@ -352,7 +344,7 @@
             <summary> Cost functions:</summary>
             <p>
 
-            <table id="costFunctionTable">
+            <table id="costFunctionTable" class="parameterTable">
                 <tr class="center">
                     <th>squared pixel distance</th>
                     <th>pixel distance</th>
@@ -375,7 +367,7 @@
             <summary>Random functions for weights</summary>
             <p>
 
-            <table id="randomFunctionsForWeightsTable">
+            <table id="randomFunctionsForWeightsTable" class="parameterTable">
                 <tr class="center">
                     <th>zeros</th>
                     <th>gamma</th>
@@ -452,7 +444,7 @@
             <summary>Random functions for biases</summary>
             <p>
 
-            <table id="randomFunctionsForBiasesTable">
+            <table id="randomFunctionsForBiasesTable" class="parameterTable">
                 <tr class="center">
                     <th>zeros</th>
                     <th>gamma</th>
@@ -523,6 +515,8 @@
             </p>
         </details>
         <br>
+        </p>
+        </details>
 
 
     </div>

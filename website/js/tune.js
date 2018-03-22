@@ -312,7 +312,7 @@ function updateTrainImages() {
             //console.log(data);
 
             //get image pane
-            var imageGrid = document.getElementById("imageGrid");
+            var imageGrid = currentTile.imageGrid;
 
             // remove all previous elements:
             imageGrid.innerHTML = "";
@@ -357,7 +357,7 @@ function updateTrainImages() {
 
         }
     };
-    trainApi.getProcessedImageData(9, callback);
+    tuneApi.getProcessedImageDataOfCurrentTuning(3, callback);
 }
 
 function updateTrainStatistics() {
@@ -374,8 +374,11 @@ function updateTrainStatistics() {
                 // create new tile:
                 currentTile = new SummaryTile("summaryTiles", data.model_id);
             } else if (currentTile.uuid !== data.model_id) {
+                //mark tile as completely trained
+                currentTile.markAsTrained();
                 // store old tile in array:
                 previousTiles.push(currentTile);
+
                 // create new tile:
                 currentTile = new SummaryTile("summaryTiles", data.model_id);
             }
@@ -396,11 +399,12 @@ function updateTrainStatistics() {
 
 function updateView() {
     console.log("tick");
-    // update train images:
-    //updateTrainImages();
 
     // update charts:
     updateTrainStatistics();
+
+    // update train images:
+    updateTrainImages();
 }
 
 function startTuning() {
@@ -418,6 +422,8 @@ function startTuning() {
         }
     }
 
+    // hide learning parameters:
+    document.getElementById("LearningParameters").open = false;
     tuneApi.controlTuning('"start"', callback);
 }
 
@@ -436,6 +442,8 @@ function stopTuning() {
         }
     }
 
+    // show learning parameters:
+    document.getElementById("LearningParameters").open = true;
     tuneApi.controlTuning('"stop"', callback);
 }
 
@@ -451,6 +459,8 @@ document.getElementById("stopGridSearch").addEventListener("click", stopTuning);
 /*
 on load
  */
+// show parameters
+document.getElementById("LearningParameters").open = true;
 
 
 

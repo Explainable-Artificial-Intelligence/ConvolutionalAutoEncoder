@@ -56,6 +56,10 @@ function appendImages(numberOfImages) {
 
                     imagePreview.src = this.src;
 
+                    // update histogram:
+                    histogram.setImage(this);
+
+
                     // mark selected image:
                     this.style.border = "1px solid orange";
                     // save current id in preview
@@ -120,3 +124,10 @@ document.getElementById("loadBtn").addEventListener("click", loadFile);
 document.getElementById("showImagesBtn").addEventListener("click", function () {
     appendImages(300);
 });
+
+/*
+Initialisation
+ */
+
+// create histogram
+var histogram = new Histogram("imagePreviewView", 200, 200);

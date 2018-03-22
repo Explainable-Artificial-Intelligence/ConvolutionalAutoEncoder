@@ -1,4 +1,4 @@
-table {
+table.parameterTable {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 80%;
@@ -16,4 +16,17 @@ tr:nth-child(even) {
 
 tr.center {
     text-align: center;
+}
+
+div.SummaryTile {
+    margin: 15px;
+    padding: 15px;
+    background-color: #4a4a4a;
+    width: 80%;
+
+    /*border: 5px solid lime;*/
+}
+
+div.trained {
+    border: 1px solid lime;
 }

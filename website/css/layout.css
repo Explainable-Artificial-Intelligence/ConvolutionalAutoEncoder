@@ -152,6 +152,16 @@ li a:hover {
     padding: 15px;
 }
 
+.columns {
+    width: 250px;
+    height: 250px;
+}
+
+.columnDiv {
+    overflow: auto;
+    width: 100%;
+}
+
 /*
 .imageRibbonThumbnail{
     width: 50px;

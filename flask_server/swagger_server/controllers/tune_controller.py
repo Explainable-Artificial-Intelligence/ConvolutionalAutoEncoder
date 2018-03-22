@@ -1,3 +1,4 @@
+import datetime
 import os
 import threading
 import uuid
@@ -104,8 +105,7 @@ def build_grid_search_ann(inputParameterLists):
         # generate model for each combination
         for parameter_combination in all_parameter_combinations:
             # generate model object
-            # TODO: integrate timestamp to uuid
-            unique_id = str(uuid.uuid1())
+            unique_id = datetime.datetime.now().strftime("%Y%m%d_%H%M%S-") + str(uuid.uuid4())[:8]
             ann_model = ModelStorage(parameter_combination, unique_id)
 
             # generate unique folder for each ann

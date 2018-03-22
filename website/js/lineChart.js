@@ -122,6 +122,7 @@ function LineChart(parentNodeID, width, height, yAxisName) {
 
         // update axis
         updateAxis();
+        redrawLine();
     });
 
     //draw line:
@@ -172,42 +173,9 @@ function LineChart(parentNodeID, width, height, yAxisName) {
     }
 
 
-    this.appendData = function (additionalData) {
-        //append random data
-        //additionalData = generateRandomArray(0, 1350, 44);
-
-        data = data.concat(additionalData);
-
-        //rescale chart:
-        xmax = data.length;
-        xScale.domain([xmin - 1, xmax + 100]);
-        if (ymax < d3.max(data) || ymin > d3.min(data)) {
-            ymax = d3.max(data);
-            ymin = d3.min(data);
-            yScale.domain([ymin * 0.9, ymax * 1.1]);
-        }
-
-        //update axis
-        updateAxis();
-
+    function redrawLine() {
         //remove old line:
         panel.selectAll("path").remove();
-
-        /*//update old line
-        line.data(data)
-            .transition()
-            .duration(1000)
-            .attr("r", 3.5)
-            .attr("cx", function (d, i) {
-                //console.log(i);
-                return xScale(i);
-            })
-            .attr("cy", function (d) {
-                return yScale(d);
-            })
-            .style("fill", "red");*/
-
-        //console.log(line);
 
         // add new line
         line = panel.append('path')
@@ -216,34 +184,46 @@ function LineChart(parentNodeID, width, height, yAxisName) {
             .attr('stroke', 'lightblue')
             .attr('stroke-width', 1)
             .attr('fill', 'none');
-        //console.log(step);
-
-        //line = panel.selectAll(".line");
-
-
-        //console.log(data);
-    }
-    /*//create scales
-    var xScale = scaleAxis(data, xColumnName, panelWidth - 150, false);
-    var yScale = scaleAxis(data, yColumnName, panelHeight, true);
-
-    // get color scheme
-    var colorLabels = new Set(data.map(function (d) {
-        return d[colorColumn];
-    }));
-
-    var colorMap = getColorScheme(colorLabels);
-    generateDataPoints(panel, data, xScale, xColumnName, yScale, yColumnName, rScale, sizeColumnName, colorMap,
-        colorColumn, labelColumn);
-    if (showAlwaysLabels){
-        generateLabels(panel, data, xScale, xColumnName, yScale, yColumnName, rScale, sizeColumnName, labelColumn);
     }
 
+    function updateChart() {
+        //rescale chart:
+        xmax = data.length;
+        xScale.domain([xmin - 1, xmax + 1]);
+        // if (ymax < d3.max(data) || ymin > d3.min(data)) {
+        //     ymax = d3.max(data);
+        //     ymin = d3.min(data);
+        //     yScale.domain([ymin * 0.9, ymax * 1.1]);
+        // }
 
+        ymax = d3.max(data);
+        ymin = d3.min(data);
+        yScale.domain([ymin * 0.9, ymax * 1.1]);
 
-    generateAxis(xScale, yScale, panel, plot, yColumnName, xColumnName, panelHeight, panelWidth);
+        //update axis
+        updateAxis();
 
-    generateLegend(colorMap, panel, panelWidth, [3, 4, 6, 8, 12], rScale);*/
+        redrawLine();
+    }
+
+    this.appendData = function (additionalData) {
+        data = data.concat(additionalData);
+        updateChart();
+
+    };
+
+    this.replaceData = function (newData) {
+        data = newData;
+        updateChart();
+
+    };
+
+    this.getLatestValue = function () {
+        return data[data.length - 1];
+    };
+    this.getLatestStep = function () {
+        return data.length;
+    };
 
 }
 

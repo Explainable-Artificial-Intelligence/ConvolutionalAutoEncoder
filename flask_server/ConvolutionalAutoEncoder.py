@@ -286,6 +286,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
             self._build_ann(restore=True)
 
+            self.ann_status = tf.Variable("loaded", name="ANN_Status", dtype=tf.string)
+
             if self.verbose:
                 print("session restored!")
 
@@ -604,6 +606,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         # reopen a previous training:
         if self.model_is_trained:
             self._load_session()
+
         # set ANN status
         self.tf_session.run(self.ann_status.assign("training"))
 
@@ -722,6 +725,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         if status == "stop":
+            # return if session is already closed
+            if self.tf_session._closed:
+                # self._load_session()
+                # self.tf_session.run(self.ann_status.assign("stop", use_locking=True))
+                # self._close_session()
+                return
             self.tf_session.run(self.ann_status.assign("stop", use_locking=True))
 
     def get_latent_representation(self, input_data):

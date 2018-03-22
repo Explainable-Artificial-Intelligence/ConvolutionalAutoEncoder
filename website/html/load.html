@@ -5,8 +5,6 @@
     <title>Load</title>
 
 
-
-
 </head>
 
 <link rel="stylesheet" type="text/css" href="../css/layout.css">
@@ -25,7 +23,7 @@
 <aside id="sidebar">
     <section id="widget_1">
         Input File: <br>
-        <input id="inputFilePath" value="../data/mnist_train_data.npy"> <br>
+        <input id="inputFilePath" value="../data/cifar_train_data.npy"> <br>
         <br>
         Dataset name:<br>
         <input id="inputDatasetName" value="train_data"><br>
@@ -46,8 +44,6 @@
         <button id="loadBtn">Load</button>
 
 
-
-
         <br>
         <br>
         <br>
@@ -62,17 +58,19 @@
 
 </aside>
 
-    <div id="content">
-        <div id="imagePreviewView">
-            <img src="" id="imagePreview" width="400px">
-        </div>
-        <div id="imageGrid">
-
-        </div>
+<div id="content">
+    <div id="imagePreviewView">
+        <img src="" id="imagePreview" width="400px">
     </div>
+    <div id="imageGrid">
+
+    </div>
+</div>
 
 
-
-    <script src="../js/load_bundle.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../js/histogram.js"></script>
+<script src="../js/lineChart.js"></script>
+<script src="../js/load_bundle.js"></script>
 </body>
 </html>
