@@ -130,4 +130,4 @@ Initialisation
  */
 
 // create histogram
-var histogram = new Histogram("imagePreviewView", 200, 200);
+var histogram = new Histogram("imagePreviewView", 400, 400);

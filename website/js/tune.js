@@ -4,6 +4,7 @@ check if client and server are running correctly
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
 var tuneApi = new ConvolutionalAutoencoder.TuneApi();
+var buildApi = new ConvolutionalAutoencoder.BuildApi();
 
 // check API functionality
 function callback(error, data, response) {
@@ -243,6 +244,41 @@ function readRandomFunctions(id, prefix) {
     return selectedFunctions;
 }
 
+
+/*
+Main building functions
+ */
+
+// get input (output) dimensions
+function getInputDimensions() {
+
+
+    function inputShapeCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            //console.log('API called successfully.');
+            //console.log(response);
+            console.log(data);
+
+
+            //update input shape:
+            inputShape = data;
+
+            // add placeholder for first dim:
+            inputShape[0] = -1;
+
+            // update topology input output layers:
+            console.log(inputShape);
+            document.getElementById("InputShape").value = JSON.stringify([inputShape], null, 1);
+
+        }
+    }
+
+    console.log("test");
+    buildApi.getInputShape([], inputShapeCallback)
+}
+
 function readLearningParameter() {
 
     var inputParameterList = new ConvolutionalAutoencoder.ParameterList();
@@ -303,6 +339,11 @@ function buildANN() {
 
 }
 
+
+/*
+Main tuning functions
+ */
+
 function updateTrainImages() {
     var callback = function (error, data, response) {
         if (error) {
@@ -343,8 +384,8 @@ function updateTrainImages() {
                 newOutputImage.style.width = "80px";
                 newOutputImage.class = "imageThumbnail";
 
-                console.log(newOutputImage.id);
-                console.log(data.outputLayer[i].bytestring.substring(2, data.outputLayer[i].bytestring.length - 1));
+                // console.log(newOutputImage.id);
+                // console.log(data.outputLayer[i].bytestring.substring(2, data.outputLayer[i].bytestring.length - 1));
 
                 // append new image to image grid
                 imageGrid.appendChild(newOutputImage);
@@ -365,8 +406,8 @@ function updateTrainStatistics() {
         if (error) {
             console.error(error);
         } else {
-            console.log(response);
-            console.log(data);
+            // console.log(response);
+            // console.log(data);
 
             //update tiles
             // special case: first tile:
@@ -385,8 +426,8 @@ function updateTrainStatistics() {
 
             //update diagrams
             if (data.cost.length > 0) {
-                currentTile.costChart.appendData(data.cost);
-                currentTile.learningRateChart.appendData(data.currentLearningRate)
+                currentTile.costChart.appendData({'cost': data.cost});
+                currentTile.learningRateChart.appendData({'learning rate': data.currentLearningRate})
             }
 
         }
@@ -459,6 +500,9 @@ document.getElementById("stopGridSearch").addEventListener("click", stopTuning);
 /*
 on load
  */
+// get input shape
+getInputDimensions();
+
 // show parameters
 document.getElementById("LearningParameters").open = true;
 

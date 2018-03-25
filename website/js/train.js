@@ -27,8 +27,8 @@ loadApi.resetAllBatchIndices(callback);
 Charts
  */
 
-var costChart = new LineChart("charts", 500, 500, "cost");
-var learningRateChart = new LineChart("charts", 500, 500, "learning rate");
+var costChart = new LineChart("charts", 500, 500, "cost", {'cost': 'lightblue'});
+var learningRateChart = new LineChart("charts", 500, 500, 'learning rate', {'learning rate': 'lightblue'});
 
 console.log(costChart.parentNodeID);
 
@@ -72,8 +72,8 @@ function updateTrainImages() {
                 newOutputImage.style.width = "80px";
                 newOutputImage.class = "imageThumbnail";
 
-                console.log(newOutputImage.id);
-                console.log(data.outputLayer[i].bytestring.substring(2, data.outputLayer[i].bytestring.length - 1));
+                // console.log(newOutputImage.id);
+                // console.log(data.outputLayer[i].bytestring.substring(2, data.outputLayer[i].bytestring.length - 1));
 
                 // append new image to image grid
                 imageGrid.appendChild(newOutputImage);
@@ -94,13 +94,13 @@ function updateTrainStatistics() {
         if (error) {
             console.error(error);
         } else {
-            console.log(response);
-            console.log(data);
+            // console.log(response);
+            // console.log(data);
 
             //update cost diagram
             if (data.cost.length > 0) {
-                costChart.appendData(data.cost);
-                learningRateChart.appendData(data.currentLearningRate)
+                costChart.appendData({'cost': data.cost});
+                learningRateChart.appendData({'learning rate': data.currentLearningRate});
             }
 
         }

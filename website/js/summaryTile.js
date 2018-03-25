@@ -73,8 +73,8 @@ function SummaryTile(parentID, uuid) {
     // tile.appendChild(rightColumn);
 
     // add charts
-    this.costChart = new LineChart(firstCell.id, 250, 250, "cost");
-    this.learningRateChart = new LineChart(secondCell.id, 250, 250, "learning rate");
+    this.costChart = new LineChart(firstCell.id, 250, 250, "cost", {'cost': 'lightblue'});
+    this.learningRateChart = new LineChart(secondCell.id, 250, 250, "learning rate", {'learning rate': 'lightblue'});
 
     // add image grid:
     this.imageGrid = thirdCell

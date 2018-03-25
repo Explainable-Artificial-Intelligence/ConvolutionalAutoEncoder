@@ -26,12 +26,12 @@ function generateRandomArray(min, max, length) {
 
 }
 
-function LineChart(parentNodeID, width, height, yAxisName) {
+function LineChart(parentNodeID, width, height, yAxisName, colorScheme) {
     console.log(this);
 
     //storage for datapoints:
     var data = [];
-    var line;
+    var line = {};
     var step = 0;
     var logScale = false;
 
@@ -131,9 +131,11 @@ function LineChart(parentNodeID, width, height, yAxisName) {
     //line helper function
     var lineSegment = d3.line()
         .x(function (d, i) {
+            // console.log(xScale(i));
             return xScale(i);
         })
         .y(function (d) {
+            // console.log(yScale(d));
             return yScale(d);
         });
 
@@ -177,27 +179,41 @@ function LineChart(parentNodeID, width, height, yAxisName) {
         //remove old line:
         panel.selectAll("path").remove();
 
-        // add new line
-        line = panel.append('path')
-            .datum(data)
-            .attr('d', lineSegment)
-            .attr('stroke', 'lightblue')
-            .attr('stroke-width', 1)
-            .attr('fill', 'none');
+        console.log(yAxis.scale().domain());
+
+        // add new lines
+        for (var key in data) {
+            console.log(key);
+            console.log(data[key]);
+            line[key] = panel.append('path')
+                .datum(data[key])
+                .attr('d', lineSegment)
+                .attr('stroke', colorScheme[key]);
+            // .attr('stroke-width', 1)
+            // .attr('fill', 'none');
+        }
     }
 
     function updateChart() {
         //rescale chart:
-        xmax = data.length;
-        xScale.domain([xmin - 1, xmax + 1]);
+
+
         // if (ymax < d3.max(data) || ymin > d3.min(data)) {
         //     ymax = d3.max(data);
         //     ymin = d3.min(data);
         //     yScale.domain([ymin * 0.9, ymax * 1.1]);
         // }
 
-        ymax = d3.max(data);
-        ymin = d3.min(data);
+        // get min/max of whole dataset:
+        ymax = Number.MIN_VALUE;
+        ymin = Number.MAX_VALUE;
+        xmax = 0;
+        for (var key in data) {
+            xmax = Math.max(data[key].length, xmax);
+            ymax = Math.max(d3.max(data[key]), ymax);
+            ymin = Math.min(d3.min(data[key]), ymin);
+        }
+        xScale.domain([xmin - 1, xmax + 1]);
         yScale.domain([ymin * 0.9, ymax * 1.1]);
 
         //update axis
@@ -207,7 +223,15 @@ function LineChart(parentNodeID, width, height, yAxisName) {
     }
 
     this.appendData = function (additionalData) {
-        data = data.concat(additionalData);
+        for (var key in additionalData) {
+            if (key in data) {
+                data[key] = data[key].concat(additionalData[key]);
+            } else {
+                data[key] = additionalData[key]
+            }
+
+        }
+
         updateChart();
 
     };
@@ -218,11 +242,19 @@ function LineChart(parentNodeID, width, height, yAxisName) {
 
     };
 
-    this.getLatestValue = function () {
-        return data[data.length - 1];
+    this.getLatestValue = function (key) {
+        // if no key provided return latest value of first line
+        if (key === null) {
+            return Object.keys(data)[0][Object.keys(data)[0].length - 1];
+        }
+        return data[key][data[key].length - 1];
     };
-    this.getLatestStep = function () {
-        return data.length;
+    this.getLatestStep = function (key) {
+        // if no key provided return latest step of first line
+        if (key === null) {
+            return Object.keys(data)[0].length;
+        }
+        return data[key].length;
     };
 
 }
