@@ -1,9 +1,10 @@
 # coding: utf-8
 
 from __future__ import absolute_import
+
+from typing import List
+
 from .base_model_ import Model
-from datetime import date, datetime
-from typing import List, Dict
 from ..util import deserialize_model
 
 
@@ -18,7 +19,9 @@ class TrainPerformance(Model):
 
         :param model_id: The model_id of this TrainPerformance.
         :type model_id: str
-        :param cost: The cost of this TrainPerformance.
+        :param train_status: The train_status of this TrainPerformance.  
+        :type train_status: str
+        :param cost: The cost of this TrainPerformance.  
         :type cost: List[float]
         :param current_learning_rate: The current_learning_rate of this TrainPerformance.
         :type current_learning_rate: List[float]
@@ -73,9 +76,30 @@ class TrainPerformance(Model):
         self._model_id = model_id
 
     @property
-    def cost(self) -> List[float]:
+    def train_status(self) -> str:
+        """Gets the train_status of this TrainPerformance.
+
+
+        :return: The train_status of this TrainPerformance.
+        :rtype: str
         """
-        Gets the cost of this TrainPerformance.
+        return self._train_status
+
+    @train_status.setter
+    def train_status(self, train_status: str):
+        """Sets the train_status of this TrainPerformance.
+
+
+        :param train_status: The train_status of this TrainPerformance.
+        :type train_status: str
+        """
+
+        self._train_status = train_status
+
+    @property
+    def cost(self) -> List[float]:
+        """Gets the cost of this TrainPerformance.
+
 
         :return: The cost of this TrainPerformance.
         :rtype: List[float]

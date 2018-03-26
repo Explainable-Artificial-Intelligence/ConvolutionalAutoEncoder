@@ -32,7 +32,6 @@ function LineChart(parentNodeID, width, height, yAxisName, colorScheme) {
     //storage for datapoints:
     var data = [];
     var line = {};
-    var step = 0;
     var logScale = false;
 
     //set initial min/max values:
@@ -103,7 +102,6 @@ function LineChart(parentNodeID, width, height, yAxisName, colorScheme) {
     // add event listener:
     plot.on("click", function () {
         // get domain and range:
-        console.log(yAxis.scale());
         var domain = yAxis.scale().domain();
         var range = yAxis.scale().range();
 
@@ -179,18 +177,12 @@ function LineChart(parentNodeID, width, height, yAxisName, colorScheme) {
         //remove old line:
         panel.selectAll("path").remove();
 
-        console.log(yAxis.scale().domain());
-
         // add new lines
         for (var key in data) {
-            console.log(key);
-            console.log(data[key]);
             line[key] = panel.append('path')
                 .datum(data[key])
                 .attr('d', lineSegment)
                 .attr('stroke', colorScheme[key]);
-            // .attr('stroke-width', 1)
-            // .attr('fill', 'none');
         }
     }
 

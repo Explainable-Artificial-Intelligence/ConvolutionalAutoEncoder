@@ -81,6 +81,16 @@
         done();
       });
     });
+      describe('getProcessedImageDataOfSpecificTuning', function () {
+          it('should call getProcessedImageDataOfSpecificTuning successfully', function (done) {
+              //uncomment below and update the code to test getProcessedImageDataOfSpecificTuning
+              //instance.getProcessedImageDataOfSpecificTuning(function(error) {
+              //  if (error) throw error;
+              //expect().to.be();
+              //});
+              done();
+          });
+      });
     describe('getTrainPerformanceOfCurrentTuning', function() {
       it('should call getTrainPerformanceOfCurrentTuning successfully', function(done) {
         //uncomment below and update the code to test getTrainPerformanceOfCurrentTuning
@@ -91,6 +101,26 @@
         done();
       });
     });
+      describe('getTrainPerformanceOfSpecificTuning', function () {
+          it('should call getTrainPerformanceOfSpecificTuning successfully', function (done) {
+              //uncomment below and update the code to test getTrainPerformanceOfSpecificTuning
+              //instance.getTrainPerformanceOfSpecificTuning(function(error) {
+              //  if (error) throw error;
+              //expect().to.be();
+              //});
+              done();
+          });
+      });
+      describe('getTuneParameter', function () {
+          it('should call getTuneParameter successfully', function (done) {
+              //uncomment below and update the code to test getTuneParameter
+              //instance.getTuneParameter(function(error) {
+              //  if (error) throw error;
+              //expect().to.be();
+              //});
+              done();
+          });
+      });
   });
 
 }));

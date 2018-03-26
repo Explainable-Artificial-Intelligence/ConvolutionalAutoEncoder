@@ -1,10 +1,11 @@
 # coding: utf-8
 
 from __future__ import absolute_import
+
+from typing import List
+
 from flask_server.swagger_server.models.image import Image
 from .base_model_ import Model
-from datetime import date, datetime
-from typing import List, Dict
 from ..util import deserialize_model
 
 
@@ -19,14 +20,14 @@ class ProcessedImageData(Model):
 
         :param input_layer: The input_layer of this ProcessedImageData.
         :type input_layer: List[Image]
-        :param latent_layer: The latent_layer of this ProcessedImageData.
-        :type latent_layer: List[Image]
-        :param output_layer: The output_layer of this ProcessedImageData.
+        :param latent_layer: The latent_layer of this ProcessedImageData.  
+        :type latent_layer: List[List[Image]]
+        :param output_layer: The output_layer of this ProcessedImageData.  
         :type output_layer: List[Image]
         """
         self.swagger_types = {
             'input_layer': List[Image],
-            'latent_layer': List[Image],
+            'latent_layer': List[List[Image]],
             'output_layer': List[Image]
         }
 
@@ -79,7 +80,7 @@ class ProcessedImageData(Model):
         Gets the latent_layer of this ProcessedImageData.
 
         :return: The latent_layer of this ProcessedImageData.
-        :rtype: List[Image]
+        :rtype: List[List[Image]]
         """
         return self._latent_layer
 
@@ -89,7 +90,7 @@ class ProcessedImageData(Model):
         Sets the latent_layer of this ProcessedImageData.
 
         :param latent_layer: The latent_layer of this ProcessedImageData.
-        :type latent_layer: List[Image]
+        :type latent_layer: List[List[Image]]
         """
 
         self._latent_layer = latent_layer

@@ -16,8 +16,6 @@ function callback(error, data, response) {
     }
 }
 
-loadApi.resetAllBatchIndices(callback);
-
 
 function appendImages(numberOfImages) {
     // get image grid
@@ -131,3 +129,5 @@ Initialisation
 
 // create histogram
 var histogram = new Histogram("imagePreviewView", 400, 400);
+loadApi.resetAllBatchIndices(callback);
+appendImages(1000);

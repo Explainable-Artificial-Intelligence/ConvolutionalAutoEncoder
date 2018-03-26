@@ -51,6 +51,7 @@
 
 
 
+
   };
 
   /**
@@ -67,6 +68,9 @@
       if (data.hasOwnProperty('model_id')) {
         obj['model_id'] = ApiClient.convertToType(data['model_id'], 'String');
       }
+        if (data.hasOwnProperty('train_status')) {
+            obj['train_status'] = ApiClient.convertToType(data['train_status'], 'String');
+        }
       if (data.hasOwnProperty('cost')) {
         obj['cost'] = ApiClient.convertToType(data['cost'], ['Number']);
       }
@@ -82,9 +86,13 @@
    */
   exports.prototype['model_id'] = undefined;
   /**
-   * @member {Array.<Number>} cost
+   * @member {String} train_status
    */
-  exports.prototype['cost'] = undefined;
+  exports.prototype['train_status'] = undefined;
+    /**
+     * @member {Array.<Number>} cost
+     */
+    exports.prototype['cost'] = undefined;
   /**
    * @member {Array.<Number>} currentLearningRate
    */

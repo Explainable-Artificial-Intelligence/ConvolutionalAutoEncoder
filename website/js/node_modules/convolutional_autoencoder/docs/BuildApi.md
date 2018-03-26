@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost:8080/v2*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**buildANN**](BuildApi.md#buildANN) | **POST** /build/buildANN | passes all learning and ANN parameters to the server
+[**getANNParameter**](BuildApi.md#getANNParameter) | **GET** /build/getANNParameter | returns the parameter set of the created ANN
 [**getInputShape**](BuildApi.md#getInputShape) | **GET** /build/getInputShape | returns the input shape of the train data
 
 
@@ -44,6 +45,46 @@ Name | Type | Description  | Notes
 ### Return type
 
 null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getANNParameter"></a>
+# **getANNParameter**
+> ParameterList getANNParameter()
+
+returns the parameter set of the created ANN
+
+returns a object of type ParameterList
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.BuildApi();
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.getANNParameter(callback);
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**ParameterList**](ParameterList.md)
 
 ### Authorization
 

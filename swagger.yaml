@@ -372,9 +372,27 @@ paths:
             $ref: '#/definitions/ParameterList'
       responses:
         '202':
-          description: Parameters successfully commited
+          description: Parameters successfully committed
         '415':
           description: File parsing error
+  /build/getANNParameter:
+    get:
+      tags:
+        - build
+      summary: returns the parameter set of the created ANN
+      description: returns a object of type ParameterList
+      operationId: getANNParameter
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Parameters successfully returned
+          schema:
+            $ref: '#/definitions/ParameterList'
+        '404':
+          description: Ressource not found
   /train/controlTraining:
     post:
       tags:
@@ -400,9 +418,8 @@ paths:
     get:
       tags:
         - train
-      summary: >-
-        returns a subset of the current train images and the corresponding
-        latent representation and output
+      summary: returns a subset of the current train images and the 
+        corresponding latent representation and output
       description: ''
       operationId: getProcessedImageData
       consumes:
@@ -590,6 +607,81 @@ paths:
           description: Train status recieved
           schema:
             $ref: '#/definitions/TrainPerformance'
+  /tune/getTuneParameter:
+    get:
+      tags:
+        - tune
+      summary: returns the parameter set of the ANN with the given model id
+      description: returns a object of type ParameterList
+      operationId: getTuneParameter
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: modelId
+          in: query
+          description: model id of the exspected parameter set
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Parameters successfully returned
+          schema:
+            $ref: '#/definitions/ParameterList'
+        '404':
+          description: Ressource not found
+  /tune/getProcessedImageDataOfSpecificTuning:
+    get:
+      tags:
+        - tune
+      summary: returns a subset of the current train images and the 
+        corresponding latent representation and output
+      description: ''
+      operationId: getProcessedImageDataOfSpecificTuning
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: setSize
+          in: query
+          description: size of the image subset
+          required: true
+          type: integer
+          format: int32
+        - name: modelId
+          in: query
+          description: model id of the exspected parameter set
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Train images updated
+          schema:
+            $ref: '#/definitions/ProcessedImageData'
+  /tune/getTrainPerformanceOfSpecificTuning:
+    get:
+      tags:
+        - tune
+      summary: returns the complete set of scalar train variables to a given model
+      description: as list of dicts
+      operationId: getTrainPerformanceOfSpecificTuning
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: modelId
+          in: query
+          description: model id of the exspected parameter set
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Train status recieved
+          schema:
+            $ref: '#/definitions/TrainPerformance'
 definitions:
   ImageData:
     type: object
@@ -678,7 +770,7 @@ definitions:
       x:
         type: number
         format: float
-      'y':
+      y:
         type: number
         format: float
       cluster:
@@ -1083,7 +1175,9 @@ definitions:
       latentLayer:
         type: array
         items:
-          $ref: '#/definitions/Image'
+          type: array
+          items:
+            $ref: '#/definitions/Image'
       outputLayer:
         type: array
         items:
@@ -1092,6 +1186,8 @@ definitions:
     type: object
     properties:
       model_id:
+        type: string
+      train_status:
         type: string
       cost:
         type: array

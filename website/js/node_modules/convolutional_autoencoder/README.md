@@ -118,6 +118,7 @@ All URIs are relative to *http://localhost:8080/v2*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ConvolutionalAutoencoder.BuildApi* | [**buildANN**](docs/BuildApi.md#buildANN) | **POST** /build/buildANN | passes all learning and ANN parameters to the server
+*ConvolutionalAutoencoder.BuildApi* | [**getANNParameter**](docs/BuildApi.md#getANNParameter) | **GET** /build/getANNParameter | returns the parameter set of the created ANN
 *ConvolutionalAutoencoder.BuildApi* | [**getInputShape**](docs/BuildApi.md#getInputShape) | **GET** /build/getInputShape | returns the input shape of the train data
 *ConvolutionalAutoencoder.LoadApi* | [**getImageBatch**](docs/LoadApi.md#getImageBatch) | **GET** /load/getImageBatch | returns the next batch of input/output images
 *ConvolutionalAutoencoder.LoadApi* | [**getImageById**](docs/LoadApi.md#getImageById) | **GET** /load/getImageById | returns a single input/output image
@@ -132,7 +133,10 @@ Class | Method | HTTP request | Description
 *ConvolutionalAutoencoder.TuneApi* | [**buildGridSearchANN**](docs/TuneApi.md#buildGridSearchANN) | **POST** /tune/buildGridSearchANN | passes all learning and ANN parameters to the server
 *ConvolutionalAutoencoder.TuneApi* | [**controlTuning**](docs/TuneApi.md#controlTuning) | **POST** /tune/controlTuning | starts, pauses and stops the tuning
 *ConvolutionalAutoencoder.TuneApi* | [**getProcessedImageDataOfCurrentTuning**](docs/TuneApi.md#getProcessedImageDataOfCurrentTuning) | **GET** /tune/getProcessedImageDataOfCurrentTuning | returns a subset of the current train images and the corresponding latent representation and output
+*ConvolutionalAutoencoder.TuneApi* | [**getProcessedImageDataOfSpecificTuning**](docs/TuneApi.md#getProcessedImageDataOfSpecificTuning) | **GET** /tune/getProcessedImageDataOfSpecificTuning | returns a subset of the current train images and the corresponding latent representation and output
 *ConvolutionalAutoencoder.TuneApi* | [**getTrainPerformanceOfCurrentTuning**](docs/TuneApi.md#getTrainPerformanceOfCurrentTuning) | **GET** /tune/getTrainPerformanceOfCurrentTuning | returns the next batch of scalar train variables
+*ConvolutionalAutoencoder.TuneApi* | [**getTrainPerformanceOfSpecificTuning**](docs/TuneApi.md#getTrainPerformanceOfSpecificTuning) | **GET** /tune/getTrainPerformanceOfSpecificTuning | returns the complete set of scalar train variables to a given model
+*ConvolutionalAutoencoder.TuneApi* | [**getTuneParameter**](docs/TuneApi.md#getTuneParameter) | **GET** /tune/getTuneParameter | returns the parameter set of the ANN with the given model id
 *ConvolutionalAutoencoder.VisualizeApi* | [**generateImageFromSinglePoint**](docs/VisualizeApi.md#generateImageFromSinglePoint) | **GET** /visualize/generateImageFromSinglePoint | generates the AE output from a given point of the sample distribution
 *ConvolutionalAutoencoder.VisualizeApi* | [**getHiddenLayerLatentClustering**](docs/VisualizeApi.md#getHiddenLayerLatentClustering) | **GET** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
 

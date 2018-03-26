@@ -381,9 +381,29 @@ paths:
           $ref: "#/definitions/ParameterList"
       responses:
         202:
-          description: "Parameters successfully commited"
+          description: "Parameters successfully committed"
         415:
           description: "File parsing error"
+      x-swagger-router-controller: "swagger_server.controllers.build_controller"
+  /build/getANNParameter:
+    get:
+      tags:
+      - "build"
+      summary: "returns the parameter set of the created ANN"
+      description: "returns a object of type ParameterList"
+      operationId: "get_ann_parameter"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Parameters successfully returned"
+          schema:
+            $ref: "#/definitions/ParameterList"
+        404:
+          description: "Ressource not found"
       x-swagger-router-controller: "swagger_server.controllers.build_controller"
   /train/controlTraining:
     post:
@@ -598,6 +618,84 @@ paths:
       produces:
       - "application/json"
       parameters: []
+      responses:
+        200:
+          description: "Train status recieved"
+          schema:
+            $ref: "#/definitions/TrainPerformance"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/getTuneParameter:
+    get:
+      tags:
+      - "tune"
+      summary: "returns the parameter set of the ANN with the given model id"
+      description: "returns a object of type ParameterList"
+      operationId: "get_tune_parameter"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "modelId"
+        in: "query"
+        description: "model id of the exspected parameter set"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Parameters successfully returned"
+          schema:
+            $ref: "#/definitions/ParameterList"
+        404:
+          description: "Ressource not found"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/getProcessedImageDataOfSpecificTuning:
+    get:
+      tags:
+      - "tune"
+      summary: "returns a subset of the current train images and the corresponding\
+        \ latent representation and output"
+      description: ""
+      operationId: "get_processed_image_data_of_specific_tuning"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "setSize"
+        in: "query"
+        description: "size of the image subset"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "modelId"
+        in: "query"
+        description: "model id of the exspected parameter set"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Train images updated"
+          schema:
+            $ref: "#/definitions/ProcessedImageData"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/getTrainPerformanceOfSpecificTuning:
+    get:
+      tags:
+      - "tune"
+      summary: "returns the complete set of scalar train variables to a given model"
+      description: "as list of dicts"
+      operationId: "get_train_performance_of_specific_tuning"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "modelId"
+        in: "query"
+        description: "model id of the exspected parameter set"
+        required: true
+        type: "string"
       responses:
         200:
           description: "Train status recieved"
@@ -1298,17 +1396,23 @@ definitions:
       latentLayer:
         type: "array"
         items:
-          $ref: "#/definitions/Image"
+          type: "array"
+          items:
+            $ref: "#/definitions/Image"
       outputLayer:
         type: "array"
         items:
           $ref: "#/definitions/Image"
     example:
       latentLayer:
-      - bytestring: "bytestring"
-        id: 5
-      - bytestring: "bytestring"
-        id: 5
+      - - bytestring: "bytestring"
+          id: 5
+        - bytestring: "bytestring"
+          id: 5
+      - - bytestring: "bytestring"
+          id: 5
+        - bytestring: "bytestring"
+          id: 5
       inputLayer:
       - bytestring: "bytestring"
         id: 5
@@ -1324,6 +1428,8 @@ definitions:
     properties:
       model_id:
         type: "string"
+      train_status:
+        type: "string"
       cost:
         type: "array"
         items:
@@ -1335,6 +1441,7 @@ definitions:
           type: "number"
           format: "double"
     example:
+      train_status: "train_status"
       cost:
       - 0.80082819046101150206595775671303272247314453125
       - 0.80082819046101150206595775671303272247314453125

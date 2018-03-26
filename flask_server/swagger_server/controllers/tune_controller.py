@@ -65,6 +65,21 @@ def get_processed_image_data_of_current_tuning(setSize):
     return processed_image_data, 200
 
 
+def get_processed_image_data_of_specific_tuning(setSize, modelId):  # noqa: E501
+    """returns a subset of the current train images and the corresponding latent representation and output
+
+     # noqa: E501
+
+    :param setSize: size of the image subset
+    :type setSize: int
+    :param modelId: model id of the exspected parameter set
+    :type modelId: str
+
+    :rtype: ProcessedImageData
+    """
+    return 'do some magic!'
+
+
 def get_train_performance_of_current_tuning():
     """
     returns the next batch of scalar train variables
@@ -126,4 +141,30 @@ def build_grid_search_ann(inputParameterLists):
 
         anns = Storage.tuning_ANNs
 
-    return 'CAEs created', 200
+    return str(len(all_parameter_combinations)) + ' CAEs created', 200
+
+
+def get_train_performance_of_specific_tuning(modelId):  # noqa: E501
+    """returns the complete set of scalar train variables to a given model
+
+    as list of dicts # noqa: E501
+
+    :param modelId: model id of the exspected parameter set
+    :type modelId: str
+
+    :rtype: TrainPerformance
+    """
+    return 'do some magic!'
+
+
+def get_tune_parameter(modelId):  # noqa: E501
+    """returns the parameter set of the ANN with the given model id
+
+    returns a object of type ParameterList # noqa: E501
+
+    :param modelId: model id of the exspected parameter set
+    :type modelId: str
+
+    :rtype: ParameterList
+    """
+    return 'do some magic!'

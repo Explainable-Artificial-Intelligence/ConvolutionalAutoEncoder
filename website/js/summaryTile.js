@@ -16,14 +16,14 @@ function SummaryTile(parentID, uuid) {
         var finalStats = document.createElement("div");
 
         var finalCost = document.createElement("p");
-        finalCost.textContent = "Final Cost: " + this.costChart.getLatestValue();
+        finalCost.textContent = "Final Cost: " + this.costChart.getLatestValue('cost');
         finalStats.appendChild(finalCost);
 
         var br = document.createElement('br');
         finalStats.appendChild(br);
         finalStats.appendChild(br);
         var finalSteps = document.createElement("p");
-        finalSteps.textContent += "Steps: " + this.costChart.getLatestStep();
+        finalSteps.textContent += "Steps: " + this.costChart.getLatestStep('cost');
         finalStats.appendChild(finalSteps);
 
 

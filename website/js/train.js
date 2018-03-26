@@ -30,8 +30,6 @@ Charts
 var costChart = new LineChart("charts", 500, 500, "cost", {'cost': 'lightblue'});
 var learningRateChart = new LineChart("charts", 500, 500, 'learning rate', {'learning rate': 'lightblue'});
 
-console.log(costChart.parentNodeID);
-
 function updateTrainImages() {
     var callback = function (error, data, response) {
         if (error) {

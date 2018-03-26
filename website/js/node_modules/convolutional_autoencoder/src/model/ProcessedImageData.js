@@ -68,7 +68,7 @@
         obj['inputLayer'] = ApiClient.convertToType(data['inputLayer'], [Image]);
       }
       if (data.hasOwnProperty('latentLayer')) {
-        obj['latentLayer'] = ApiClient.convertToType(data['latentLayer'], [Image]);
+          obj['latentLayer'] = ApiClient.convertToType(data['latentLayer'], [[Image]]);
       }
       if (data.hasOwnProperty('outputLayer')) {
         obj['outputLayer'] = ApiClient.convertToType(data['outputLayer'], [Image]);
@@ -82,7 +82,7 @@
    */
   exports.prototype['inputLayer'] = undefined;
   /**
-   * @member {Array.<module:model/Image>} latentLayer
+   * @member {Array.<Array.<module:model/Image>>} latentLayer
    */
   exports.prototype['latentLayer'] = undefined;
   /**

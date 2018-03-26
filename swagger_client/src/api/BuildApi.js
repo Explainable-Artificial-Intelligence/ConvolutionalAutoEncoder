@@ -89,9 +89,45 @@
       return this.apiClient.callApi(
         '/build/buildANN', 'POST',
           pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, callback
+          authNames, contentTypes, accepts, returnType, callback
       );
     }
+
+      /**
+       * Callback function to receive the result of the getANNParameter operation.
+       * @callback module:api/BuildApi~getANNParameterCallback
+       * @param {String} error Error message, if any.
+       * @param {module:model/ParameterList} data The data returned by the service call.
+       * @param {String} response The complete HTTP response.
+       */
+
+      /**
+       * returns the parameter set of the created ANN
+       * returns a object of type ParameterList
+       * @param {module:api/BuildApi~getANNParameterCallback} callback The callback function, accepting three arguments: error, data, response
+       * data is of type: {@link module:model/ParameterList}
+       */
+      this.getANNParameter = function (callback) {
+          var postBody = null;
+
+
+          var pathParams = {};
+          var queryParams = {};
+          var collectionQueryParams = {};
+          var headerParams = {};
+          var formParams = {};
+
+          var authNames = [];
+          var contentTypes = ['application/json'];
+          var accepts = ['application/json'];
+          var returnType = ParameterList;
+
+          return this.apiClient.callApi(
+              '/build/getANNParameter', 'GET',
+              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+              authNames, contentTypes, accepts, returnType, callback
+          );
+      }
 
     /**
      * Callback function to receive the result of the getInputShape operation.

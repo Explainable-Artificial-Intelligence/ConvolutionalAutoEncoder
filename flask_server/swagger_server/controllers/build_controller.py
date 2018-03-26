@@ -105,6 +105,17 @@ def build_ann(inputParameters):
     return 'parameter parsing error', 415
 
 
+def get_ann_parameter():  # noqa: E501
+    """returns the parameter set of the created ANN
+
+    returns a object of type ParameterList # noqa: E501
+
+
+    :rtype: ParameterList
+    """
+    return 'do some magic!'
+
+
 def get_input_shape(dataset_name="train_data"):
     """
     returns the input shape of the train data

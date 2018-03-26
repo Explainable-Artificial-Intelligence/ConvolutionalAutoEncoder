@@ -63,6 +63,12 @@
       //expect(instance).to.be();
     });
 
+      it('should have the property trainStatus (base name: "train_status")', function () {
+          // uncomment below and update the code to test the property trainStatus
+          //var instane = new ConvolutionalAutoencoder.TrainPerformance();
+          //expect(instance).to.be();
+      });
+
     it('should have the property cost (base name: "cost")', function() {
       // uncomment below and update the code to test the property cost
       //var instane = new ConvolutionalAutoencoder.TrainPerformance();
