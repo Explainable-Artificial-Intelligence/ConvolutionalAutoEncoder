@@ -4,14 +4,18 @@ function to create a summary tile for tuning
 
 function SummaryTile(parentID, uuid) {
     // functions:
-    this.markAsTrained = function () {
+    this.markAsFinished = function (aborted) {
         /*
         marks tile as trained
          */
+        console.log("mark as finished");
+        console.log(aborted);
         // mark div as trained (css modifications)
-        tile.classList.add("trained");
-        //tile.style.border = "5px lime";
-
+        if (aborted) {
+            tile.classList.add("aborted");
+        } else {
+            tile.classList.add("trained");
+        }
         // display final cost and steps:
         var finalStats = document.createElement("div");
 

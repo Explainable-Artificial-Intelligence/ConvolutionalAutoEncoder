@@ -14,8 +14,10 @@ class Storage(object):
     train_step = 0
 
     tuning_ANNs = []
+    tuning_ANN_model_ids = []
     tuning_thread = threading.Thread()
     tuning_queue = object()
+    tuning_status = ""
 
     @classmethod
     def set_input_data(cls, train_data, dataset_name="train_data"):
@@ -102,3 +104,9 @@ class Storage(object):
     @classmethod
     def set_parameter_list(cls, parameter_set):
         cls.parameter_set = parameter_set
+
+    @classmethod
+    def get_tune_model(cls, model_id):
+        if model_id in cls.tuning_ANN_model_ids:
+            return cls.tuning_ANNs[cls.tuning_ANN_model_ids.index(model_id)]
+        return None

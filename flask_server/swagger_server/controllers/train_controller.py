@@ -80,5 +80,9 @@ def get_train_performance():
     train_performance_object = TrainPerformance()
     train_performance_object.cost = current_train_status["train_cost"]
     train_performance_object.current_learning_rate = current_train_status["learning_rate"]
+    if Storage.cae_thread.isAlive():
+        train_performance_object.train_status = "running"
+    else:
+        train_performance_object.train_status = "finished"
 
     return train_performance_object, 200

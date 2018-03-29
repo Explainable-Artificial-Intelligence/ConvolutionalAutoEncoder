@@ -22,65 +22,6 @@ def compute_output_images(datasetname):
         Storage.output_data[datasetname] = output_images
 
 
-class TuningQueue(object):
-    """
-    A class which allows too execute the parameter tuning in a different thread and supports controls and stats
-    """
-
-    tuning_status = ""
-    current_running_model = object()
-
-    def __init__(self):
-        pass
-
-    def run_tuning(self, train_data, test_data=None):
-        # iterate over all combinations
-        for parameter_combination in Storage.tuning_ANNs:
-
-            # start training for this parameter combination:
-            self.current_running_model = parameter_combination
-            self.current_running_model.ann.fit(train_data)
-
-            # stop tuning if aborted
-            if self.tuning_status == "stop":
-                break
-
-            if test_data is not None:
-                # perform a scoring of the test data
-                scoring = self.current_running_model.ann.score(test_data)
-                print(sum(scoring))
-                parameter_combination.final_score = sum(scoring)
-
-            # stop tuning if aborted
-            if self.tuning_status == "stop":
-                break
-
-    def stop_tuning(self):
-        # abort tuning queue
-        self.tuning_status = "stop"
-
-        # abort current training
-        self.current_running_model.ann.update_ann_status("stop")
-
-    def get_training_performance(self):
-        # get current running cae:
-        cae = self.current_running_model.ann
-
-        # get previous training step:
-        prev_step = self.current_running_model.train_step
-
-        # get current training status:
-        current_train_performance = cae.get_train_status(start_idx=prev_step)
-
-        # update previous training step:
-        self.current_running_model.train_step += len(current_train_performance["train_cost"])
-
-        return current_train_performance
-
-    def get_processed_image_data(self, set_size=100):
-        return self.current_running_model.ann.get_current_status_images(set_size)
-
-
 def generate_parameter_list_from_dict(parameter_dict):
     """
     generates a list of parameter combinations from a given parameter set as dict or object

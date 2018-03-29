@@ -22,11 +22,15 @@ div.SummaryTile {
     margin: 15px;
     padding: 15px;
     background-color: #4a4a4a;
-    width: 100%;
+    width: auto;
 
     /*border: 5px solid lime;*/
 }
 
 div.trained {
     border: 1px solid lime;
+}
+
+div.aborted {
+    border: 1px solid darkred;
 }

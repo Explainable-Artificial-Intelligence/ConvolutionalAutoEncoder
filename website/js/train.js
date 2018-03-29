@@ -21,6 +21,7 @@ function callback(error, data, response) {
         console.log('API called successfully.');
     }
 }
+
 loadApi.resetAllBatchIndices(callback);
 
 /*
@@ -94,11 +95,23 @@ function updateTrainStatistics() {
         } else {
             // console.log(response);
             // console.log(data);
+            console.log(data.train_status);
 
             //update cost diagram
             if (data.cost.length > 0) {
                 costChart.appendData({'cost': data.cost});
                 learningRateChart.appendData({'learning rate': data.currentLearningRate});
+            }
+
+            if (data.train_status === "finished") {
+                // stop update timer
+                clearInterval(trainTimer);
+
+                // print status
+                console.log("Training finished");
+                console.log("Final step: " + costChart.getLatestStep('cost'));
+                document.getElementById("responseLabel").textContent = "Training finished.  Final step: "
+                    + costChart.getLatestStep('cost');
             }
 
         }

@@ -16,8 +16,6 @@ function callback(error, data, response) {
 }
 
 
-
-
 /*
 Convolutional Auto Encoder topology
  */
@@ -244,6 +242,30 @@ function readRandomFunctions(id, prefix) {
     return selectedFunctions;
 }
 
+function finishSummaryTile(currentTile) {
+    var callback = function (error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(response);
+            console.log(data);
+
+            // finish old summary tile:
+
+            // update charts:
+            currentTile.costChart.replaceData({'cost': data.cost});
+            currentTile.learningRateChart.replaceData({'learning rate': data.currentLearningRate});
+
+            //mark tile as completely trained
+            currentTile.markAsFinished(!(data.train_status === "finished" || data.train_status === "running"));
+        }
+
+
+    };
+
+    tuneApi.getTrainPerformanceOfSpecificTuning(currentTile.uuid, callback);
+}
+
 
 /*
 Main building functions
@@ -263,7 +285,7 @@ function getInputDimensions() {
 
 
             //update input shape:
-            inputShape = data;
+            var inputShape = data;
 
             // add placeholder for first dim:
             inputShape[0] = -1;
@@ -401,13 +423,14 @@ function updateTrainImages() {
     tuneApi.getProcessedImageDataOfCurrentTuning(3, callback);
 }
 
+
 function updateTrainStatistics() {
     var callback = function (error, data, response) {
         if (error) {
             console.error(error);
         } else {
             // console.log(response);
-            // console.log(data);
+            console.log(data.train_status);
 
             //update tiles
             // special case: first tile:
@@ -415,8 +438,9 @@ function updateTrainStatistics() {
                 // create new tile:
                 currentTile = new SummaryTile("summaryTiles", data.model_id);
             } else if (currentTile.uuid !== data.model_id) {
-                //mark tile as completely trained
-                currentTile.markAsTrained();
+                // finish old summary tile:
+                finishSummaryTile(currentTile);
+
                 // store old tile in array:
                 previousTiles.push(currentTile);
 
@@ -428,6 +452,13 @@ function updateTrainStatistics() {
             if (data.cost.length > 0) {
                 currentTile.costChart.appendData({'cost': data.cost});
                 currentTile.learningRateChart.appendData({'learning rate': data.currentLearningRate})
+            }
+
+            if (data.train_status === "finished" || data.train_status === "aborted" || data.train_status === "aborting") {
+                // stop update timer
+                clearInterval(updateTimer);
+                // finish summary tile
+                finishSummaryTile(currentTile);
             }
 
         }
@@ -505,8 +536,6 @@ getInputDimensions();
 
 // show parameters
 document.getElementById("LearningParameters").open = true;
-
-
 
 
 // // get input (output) dimensions

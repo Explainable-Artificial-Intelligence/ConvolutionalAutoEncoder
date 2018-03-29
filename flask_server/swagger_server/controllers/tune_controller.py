@@ -1,4 +1,5 @@
 import datetime
+import datetime
 import os
 import threading
 import uuid
@@ -9,10 +10,11 @@ from flask_server.ConvolutionalAutoEncoder import SklearnCAE
 from flask_server.swagger_server.models.parameter_list import ParameterList
 from flask_server.swagger_server.models.train_performance import TrainPerformance
 from flask_server.swagger_server.models.train_status import TrainStatus
-from flask_server.utils.ANNHelperFunctions import TuningQueue, generate_status_image_object_from_status_images, \
+from flask_server.utils.ANNHelperFunctions import generate_status_image_object_from_status_images, \
     generate_parameter_combination_list
 from flask_server.utils.ModelStorage import ModelStorage
 from flask_server.utils.Storage import Storage
+from flask_server.utils.TuningQueue import TuningQueue
 
 
 def control_tuning(trainStatus):
@@ -65,10 +67,9 @@ def get_processed_image_data_of_current_tuning(setSize):
     return processed_image_data, 200
 
 
-def get_processed_image_data_of_specific_tuning(setSize, modelId):  # noqa: E501
-    """returns a subset of the current train images and the corresponding latent representation and output
-
-     # noqa: E501
+def get_processed_image_data_of_specific_tuning(setSize, modelId):
+    """
+    returns a subset of the current train images and the corresponding latent representation and output
 
     :param setSize: size of the image subset
     :type setSize: int
@@ -77,7 +78,23 @@ def get_processed_image_data_of_specific_tuning(setSize, modelId):  # noqa: E501
 
     :rtype: ProcessedImageData
     """
-    return 'do some magic!'
+    # get model by id
+    model_storage = Storage.get_tune_model(modelId)
+
+    # catch key not found error
+    if model_storage is None:
+        return "Model ID not found", 415
+
+    # slice train images:
+    sliced_train_images = {"input_images": model_storage.train_images[:setSize],
+                           "latent_representation": model_storage.train_images[:setSize],
+                           "output_images": model_storage.train_images[:setSize],
+                           "indices": model_storage.train_images[:setSize]}
+
+    # generate ProcessedImageData object from status images
+    processed_image_data = generate_status_image_object_from_status_images(sliced_train_images)
+
+    return processed_image_data, 200
 
 
 def get_train_performance_of_current_tuning():
@@ -96,6 +113,7 @@ def get_train_performance_of_current_tuning():
     train_performance_object.cost = current_train_performance["train_cost"]
     train_performance_object.current_learning_rate = current_train_performance["learning_rate"]
     train_performance_object.model_id = Storage.tuning_queue.current_running_model.id
+    train_performance_object.train_status = Storage.tuning_status
 
     return train_performance_object, 200
 
@@ -115,7 +133,10 @@ def build_grid_search_ann(inputParameterLists):
 
         all_parameter_combinations = generate_parameter_combination_list(inputParameterLists)
 
-        print(all_parameter_combinations)
+        # print(all_parameter_combinations)
+
+        # update tuning status
+        Storage.tuning_status = "creating"
 
         # generate model for each combination
         for parameter_combination in all_parameter_combinations:
@@ -138,23 +159,64 @@ def build_grid_search_ann(inputParameterLists):
             ann_model.ann = cae
 
             Storage.tuning_ANNs.append(ann_model)
+            Storage.tuning_ANN_model_ids.append(unique_id)
 
-        anns = Storage.tuning_ANNs
+        # anns = Storage.tuning_ANNs
 
-    return str(len(all_parameter_combinations)) + ' CAEs created', 200
+        # update tuning status
+        Storage.tuning_status = "created"
+
+        return str(len(all_parameter_combinations)) + ' CAEs created', 200
+
+    return "ANNs couldn't be created", 415
 
 
 def get_train_performance_of_specific_tuning(modelId):  # noqa: E501
     """returns the complete set of scalar train variables to a given model
 
-    as list of dicts # noqa: E501
+    as list of dicts
 
     :param modelId: model id of the exspected parameter set
     :type modelId: str
 
     :rtype: TrainPerformance
     """
-    return 'do some magic!'
+    # get model by id
+    model_storage = Storage.get_tune_model(modelId)
+
+    # catch key not found error
+    if model_storage is None:
+        return "Model ID not found", 415
+
+    # build up response object and return it
+    train_performance_object = TrainPerformance()
+    train_performance_object.cost = model_storage.train_performance["train_cost"]
+    train_performance_object.current_learning_rate = model_storage.train_performance["learning_rate"]
+    train_performance_object.model_id = model_storage.id
+    train_performance_object.train_status = Storage.tuning_status
+
+    return train_performance_object, 200
+    # cae = Storage.get_cae()
+    #
+    # # get previous training step:
+    # prev_step = Storage.get_prev_training_step()
+    #
+    # # get current training status:
+    # current_train_status = cae.get_train_status(start_idx=prev_step)
+    #
+    # # update previous training step:
+    # Storage.update_prev_training_step(len(current_train_status["train_cost"]))
+    #
+    # # build up response object and return it
+    # train_performance_object = TrainPerformance()
+    # train_performance_object.cost = current_train_status["train_cost"]
+    # train_performance_object.current_learning_rate = current_train_status["learning_rate"]
+    # if Storage.cae_thread.isAlive():
+    #     train_performance_object.train_status = "running"
+    # else:
+    #     train_performance_object.train_status = "finished"
+    #
+    # return train_performance_object, 200
 
 
 def get_tune_parameter(modelId):  # noqa: E501
@@ -162,9 +224,15 @@ def get_tune_parameter(modelId):  # noqa: E501
 
     returns a object of type ParameterList # noqa: E501
 
-    :param modelId: model id of the exspected parameter set
+    :param modelId: model id of the expected parameter set
     :type modelId: str
 
     :rtype: ParameterList
     """
-    return 'do some magic!'
+    # get model by id
+    model_storage = Storage.get_tune_model(modelId)
+
+    # catch key not found error
+    if model_storage is None:
+        return "Model ID not found", 415
+    return model_storage.parameter_set, 200
