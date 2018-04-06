@@ -191,18 +191,39 @@ def generate_status_image_object_from_status_images(status_images):
     print(status_images["latent_representation"].shape)
     # generate CurrentTrainImages object
     for i in range(len(status_images["indices"])):
-        # generate input image
+        # generate input image:
         input_img = Image()
         input_img.bytestring = convert_image_array_to_byte_string(status_images["input_images"][i], channels=channels,
                                                                   normalize=True)
         input_img.id = int(status_images["indices"][i])
         processed_image_data.input_layer.append(input_img)
 
+        # generate output image:
         output_img = Image()
         output_img.bytestring = convert_image_array_to_byte_string(status_images["output_images"][i], channels=channels,
                                                                    normalize=True)
         output_img.id = int(status_images["indices"][i])
         processed_image_data.output_layer.append(output_img)
+
+        # generate latent image grid:
+        print(status_images["latent_representation"][i].shape[2])
+        if status_images["latent_representation"][i].shape[2] <= 3:
+            # if possible: display latent layer in one image
+            latent_img_list = [Image()]
+            latent_img_list[0].bytestring = convert_image_array_to_byte_string(
+                status_images["latent_representation"][i], channels=status_images["latent_representation"][i].shape[2],
+                normalize=True)
+            latent_img_list[0].id = int(status_images["indices"][i])
+        else:
+            # if not: create a list of images for each layer:
+            latent_img_list = []
+            for stack in range(status_images["latent_representation"][i].shape[2]):
+                latent_img = Image()
+                latent_img.bytestring = convert_image_array_to_byte_string(
+                    status_images["latent_representation"][i][:, :, stack], channels=1, normalize=True)
+                latent_img.id = int(status_images["indices"][i])
+                latent_img_list.append(latent_img)
+        processed_image_data.latent_layer.append(latent_img_list)
 
         # latent_img = Image()
         # # TODO: find better way to display latent representation as image

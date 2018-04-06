@@ -648,7 +648,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                                     global_step=self.global_step)
             print("final model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session_final.bak')))
             # TODO remove
-            print(self.tf_session.run(self.encoder_weights[0][0][0]))
+            # print(self.tf_session.run(self.encoder_weights[0][0][0]))
             # print(self.tf_session.run(self.decoder_weights))
             self._close_session()
 
@@ -761,10 +761,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.model_is_trained:
             # reopen session (if model is saved to disk):
             self._load_session()
-            # self._print_training_warning()
-            # TODO remove
-            print(self.tf_session.run(self.encoder_weights))
-            print(self.tf_session.run(self.decoder_weights))
+            self._print_training_warning()
             prediction, _ = self.tf_session.run([self.output_images, self.latent_representation],
                                                 feed_dict={self.input_images: X})
             # close session (if possible):

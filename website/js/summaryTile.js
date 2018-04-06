@@ -81,7 +81,8 @@ function SummaryTile(parentID, uuid) {
     this.learningRateChart = new LineChart(secondCell.id, 250, 250, "learning rate", {'learning rate': 'lightblue'});
 
     // add image grid:
-    this.imageGrid = thirdCell
+    this.imageGrid = document.createElement("table");
+    thirdCell.appendChild(this.imageGrid);
     //     = document.createElement("div");
     // this.imageGrid.className = 'columns';
     // tile.appendChild(this.imageGrid);
