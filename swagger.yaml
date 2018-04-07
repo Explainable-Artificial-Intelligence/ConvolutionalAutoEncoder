@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: 'WebUI to build, train and tune a Convolutional Autoencoder'
-  version: 1.0.7
+  version: 1.1.0
   title: Convolutional Autoencoder
   termsOfService: 'http://swagger.io/terms/'
   contact:
@@ -323,6 +323,42 @@ paths:
           description: No data found
         '415':
           description: Index out of bounds
+  /load/getLatentRepresentationById:
+    get:
+      tags:
+        - load
+      summary: returns a single latent representation as ()list of) png images
+      description: images are encoded as png byte strings
+      operationId: getLatentRepresentationById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: defines the id of the images
+          required: true
+          type: integer
+          format: int32
+        - name: datasetname
+          in: query
+          description: name for dataset on the server
+          required: false
+          type: string
+          format: string
+          default: train_data
+      responses:
+        '200':
+          description: Images successfully returned
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ImageData'
+        '404':
+          description: No data found
+        '415':
+          description: Index out of bounds
   /build/getInputShape:
     get:
       tags:
@@ -482,12 +518,12 @@ paths:
           description: determines the algorithm for dim reduction
           required: false
           type: string
-        #- name: cluster_parameters
-        #  in: body
-        #  description: determines the clutering parameters
-        #  required: false
-        #  schema:
-        #    $ref: '#/definitions/ClusterParameters'
+        - name: cluster_parameters
+          in: body
+          description: determines the clutering parameters
+          required: false
+          schema:
+            $ref: '#/definitions/ClusterParameters'
         - name: layer
           in: query
           description: determines the hidden layer

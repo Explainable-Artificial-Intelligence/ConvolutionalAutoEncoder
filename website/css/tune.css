@@ -4,17 +4,17 @@ table.parameterTable {
     width: 80%;
 }
 
-td, th {
+table.parameterTable td, th {
     border: 2px solid #4a4a4a;
     vertical-align: top;
     padding: 15px;
 }
 
-tr:nth-child(even) {
+table.parameterTable tr:nth-child(even) {
     background-color: #3a3a3a;
 }
 
-tr.center {
+table.parameterTable tr.center {
     text-align: center;
 }
 
@@ -25,6 +25,32 @@ div.SummaryTile {
     width: auto;
 
     /*border: 5px solid lime;*/
+}
+
+td.summaryColumn {
+    margin: 10px;
+    padding: 10px;
+    background-color: #4a4a4a;
+
+    /*border: 5px solid lime;*/
+}
+
+p.scrollPane {
+    margin: 0;
+    padding: 0;
+    max-width: 400px;
+    max-height: 350px;
+}
+
+table.imageGrid {
+    margin: 0;
+    padding: 0;
+}
+
+table.imageGrid td, tr {
+    margin: 0;
+    padding: 0;
+
 }
 
 div.trained {

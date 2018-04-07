@@ -51,18 +51,22 @@ function SummaryTile(parentID, uuid) {
     tile.appendChild(table);
 
     var firstCell = document.createElement("td");
+    firstCell.classList.add("summaryColumn");
     firstCell.id = "firstCell_" + uuid;
     table.appendChild(firstCell);
 
     var secondCell = document.createElement("td");
+    secondCell.classList.add("summaryColumn");
     secondCell.id = "secondCell_" + uuid;
     table.appendChild(secondCell);
 
     var thirdCell = document.createElement("td");
+    thirdCell.classList.add("summaryColumn");
     thirdCell.id = "thirdCell_" + uuid;
     table.appendChild(thirdCell);
 
     var fourthCell = document.createElement("td");
+    fourthCell.classList.add("summaryColumn");
     fourthCell.id = "fourthCell_" + uuid;
     table.appendChild(fourthCell);
 
@@ -82,7 +86,13 @@ function SummaryTile(parentID, uuid) {
 
     // add image grid:
     this.imageGrid = document.createElement("table");
-    thirdCell.appendChild(this.imageGrid);
+    this.imageGrid.classList.add("imageGrid");
+    var scrollPane = document.createElement("p");
+    scrollPane.classList.add("scrollPane");
+    scrollPane.appendChild(this.imageGrid);
+    thirdCell.appendChild(scrollPane);
+
+
     //     = document.createElement("div");
     // this.imageGrid.className = 'columns';
     // tile.appendChild(this.imageGrid);

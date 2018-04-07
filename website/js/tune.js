@@ -393,7 +393,7 @@ function updateTrainImages() {
                 newInputImage.id = "InputImage_" + data.inputLayer[i].id;
                 newInputImage.src = "data:image/png;base64," + data.inputLayer[i].bytestring.substring(2,
                     data.inputLayer[i].bytestring.length - 1);
-                newInputImage.style.width = "80px";
+                newInputImage.style.width = "50px";
                 newInputImage.class = "imageThumbnail";
 
                 // append new image to image grid
@@ -407,8 +407,8 @@ function updateTrainImages() {
                     newLatentImage.id = "LatentImage_" + data.latentLayer[i][j].id + "_" + j;
                     newLatentImage.src = "data:image/png;base64," + data.latentLayer[i][j].bytestring.substring(2,
                         data.latentLayer[i][j].bytestring.length - 1);
-                    newLatentImage.style.width = "30px";
-                    newLatentImage.class = "imageThumbnail";
+                    newLatentImage.style.width = "20px";
+                    newLatentImage.class = "layerThumbnail";
                     // append new image div to image grid
                     latentCell.appendChild(newLatentImage);
                     if ((j + 1) % 4 === 0) { //Math.ceil(Math.sqrt(data.latentLayer[i].length))
@@ -434,7 +434,7 @@ function updateTrainImages() {
                 newOutputImage.id = "OutputImage_" + data.outputLayer[i].id;
                 newOutputImage.src = "data:image/png;base64," + data.outputLayer[i].bytestring.substring(2,
                     data.outputLayer[i].bytestring.length - 1);
-                newOutputImage.style.width = "80px";
+                newOutputImage.style.width = "50px";
                 newOutputImage.class = "imageThumbnail";
 
                 // append new image to image grid
@@ -448,7 +448,7 @@ function updateTrainImages() {
 
         }
     };
-    tuneApi.getProcessedImageDataOfCurrentTuning(3, callback);
+    tuneApi.getProcessedImageDataOfCurrentTuning(20, callback);
 }
 
 

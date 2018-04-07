@@ -9,6 +9,7 @@ Global variables
 var trainApi = new ConvolutionalAutoencoder.TrainApi();
 var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
+
 var trainTimer;
 
 /*
