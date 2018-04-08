@@ -233,7 +233,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.model_is_trained = False
 
         # set ANN status:
-        self.ann_status = tf.Variable("initialized", name="ANN_Status", dtype=tf.string)
+        self.ann_status = tf.Variable("initialized", name="ann_status", dtype=tf.string)
         self.trained_epochs = tf.Variable(0, dtype=tf.int32, name="trained_epochs")
 
         self._build_ann()
@@ -286,7 +286,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
             self._build_ann(restore=True)
 
-            self.ann_status = tf.Variable("loaded", name="ANN_Status", dtype=tf.string)
+            self._restore_variables_from_checkpoint()
 
             if self.verbose:
                 print("session restored!")
@@ -294,6 +294,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
     def _restore_variables_from_checkpoint(self):
         # get trained variables from file:
         self.global_step = tf.get_default_graph().get_tensor_by_name("global_step:0")
+        self.ann_status = tf.get_default_graph().get_tensor_by_name("ann_status:0")
 
     def _build_ann(self, restore=False):
         """
@@ -807,7 +808,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
 
-        if not self.ann_status.eval(self.tf_session) == b'completely trained':
+        if not self.ann_status.eval(session=self.tf_session) == b'completely trained':
             print("WARNING: The ANN is not completely trained", file=sys.stderr)
 
     def _init_train_status_variables(self):
