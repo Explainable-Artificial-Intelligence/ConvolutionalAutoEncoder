@@ -188,7 +188,6 @@ def generate_status_image_object_from_status_images(status_images):
 
     # get num of channels
     channels = status_images["input_images"].shape[3]
-    print(status_images["latent_representation"].shape)
     # generate CurrentTrainImages object
     for i in range(len(status_images["indices"])):
         # generate input image:
@@ -206,7 +205,6 @@ def generate_status_image_object_from_status_images(status_images):
         processed_image_data.output_layer.append(output_img)
 
         # generate latent image grid:
-        print(status_images["latent_representation"][i].shape[2])
         if status_images["latent_representation"][i].shape[2] <= 3:
             # if possible: display latent layer in one image
             latent_img_list = [Image()]

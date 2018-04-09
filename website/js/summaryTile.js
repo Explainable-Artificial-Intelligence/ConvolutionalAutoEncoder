@@ -87,7 +87,7 @@ function SummaryTile(parentID, uuid) {
     // add image grid:
     this.imageGrid = document.createElement("table");
     this.imageGrid.classList.add("imageGrid");
-    var scrollPane = document.createElement("p");
+    var scrollPane = document.createElement("div");
     scrollPane.classList.add("scrollPane");
     scrollPane.appendChild(this.imageGrid);
     thirdCell.appendChild(scrollPane);

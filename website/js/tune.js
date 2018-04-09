@@ -419,14 +419,6 @@ function updateTrainImages() {
                 // append new image div to image grid
                 tableRow.appendChild(latentCell);
 
-
-                /*// add eventListener
-                // change preview view
-                newInputImage.addEventListener("click", function () {
-                    console.log(this.id);
-                    document.getElementById("imagePreview").src = this.src;
-                });*/
-
                 // create cell for input image
                 var outputCell = document.createElement("td");
                 // create new output image object
@@ -518,7 +510,7 @@ function startTuning() {
             document.getElementById("responseLabel").textContent = response.text;
 
             // start update timer
-            updateTimer = setInterval(updateView, 5000);
+            updateTimer = setInterval(updateView, 500);
         }
     }
 

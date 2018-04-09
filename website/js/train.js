@@ -171,7 +171,7 @@ function startTraining() {
             document.getElementById("responseLabel").textContent = response.text;
 
             // start update timer
-            trainTimer = setInterval(updateView, 5000);
+            trainTimer = setInterval(updateView, 500);
         }
     }
 
