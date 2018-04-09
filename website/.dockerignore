@@ -1,0 +1,6 @@
+# exclude node modules
+js/node_modules/
+js/package-lock.json
+
+# exclude docker file
+Dockerfile

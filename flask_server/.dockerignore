@@ -70,3 +70,8 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# tensorflow checkpoints
+save/
+train/
+test/

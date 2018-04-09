@@ -1,0 +1,22 @@
+FROM python:3-alpine
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY requirements.txt /usr/src/app/
+
+# Install dependencies
+RUN echo "http://dl-8.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+RUN apk --no-cache --update-cache add gcc gfortran python python-dev py-pip build-base wget freetype-dev libpng-dev openblas-dev
+RUN ln -s /usr/include/locale.h /usr/include/xlocale.h
+
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+COPY . /usr/src/app
+
+# Swagger API port
+EXPOSE 8080
+
+ENTRYPOINT ["python3"]
+
+CMD ["-m", "swagger_server"]

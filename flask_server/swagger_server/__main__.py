@@ -2,7 +2,8 @@
 
 import connexion
 
-from swagger_server import encoder
+from flask_server.swagger_server import encoder
+from flask_server.utils.FileParser import download_test_data
 
 
 def main():
@@ -13,4 +14,5 @@ def main():
 
 
 if __name__ == '__main__':
+    download_test_data()
     main()
