@@ -1,4 +1,5 @@
 # --- predefined docker file from: ---
+
 # https://hub.docker.com/_/python/
 # Dockerfile:
 # https://github.com/docker-library/python/blob/caba688d74997c2d063907e35f5439b1b1811d9e/3.6/stretch/Dockerfile
@@ -112,11 +113,32 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/app/flask_server
 
+# --- ~~~ ---
+
+
+
+# --- ports ---
+
 # Swagger API port
 EXPOSE 8080
 
 # Tensorboard port
 EXPOSE 6006
+
+# --- ~~~ ---
+
+
+
+# --- enviroment variables ---
+
+ENV JOBLIB_TEMP_FOLDER=/tmp
+
+# --- ~~~ ---
+
+
+
+
+# --- commands ---
 
 ENTRYPOINT ["python3"]
 
