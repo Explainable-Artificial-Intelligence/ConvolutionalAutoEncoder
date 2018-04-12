@@ -2,7 +2,7 @@ import sys
 
 from flask_server.swagger_server.models.image import Image
 from flask_server.swagger_server.models.image_data import ImageData
-from flask_server.utils.ANNHelperFunctions import compute_output_images
+from flask_server.utils.ANNHelperFunctions import compute_output_images, compute_latent_representation
 from flask_server.utils.FileParser import load_input_data
 from flask_server.utils.ImageProcessing import convert_image_array_to_byte_string
 from flask_server.utils.Storage import Storage
@@ -129,10 +129,10 @@ def get_images(start_idx, end_idx, datasetname="train_data", sort_by=None, filte
     return input_images, 200
 
 
-def get_latent_representation_by_id(id, datasetname=None):  # noqa: E501
+def get_latent_representation_by_id(id, datasetname=None):
     """returns a single latent representation as ()list of) png images
 
-    images are encoded as png byte strings # noqa: E501
+    images are encoded as png byte strings
 
     :param id: defines the id of the images
     :type id: int
@@ -141,7 +141,34 @@ def get_latent_representation_by_id(id, datasetname=None):  # noqa: E501
 
     :rtype: List[ImageData]
     """
-    return 'do some magic!'
+    # check if output images already computed
+    compute_latent_representation(datasetname)
+    # get the image as nd array
+    image_array = Storage.latent_representation_data[datasetname][id]
+
+    # generate latent image grid:
+    latent_img_data = ImageData()
+    latent_img_data.res_x = image_array.shape[0]
+    latent_img_data.res_y = image_array.shape[1]
+    latent_img_data.images = []
+
+    if image_array.shape[2] <= 3:
+        # if possible: display latent layer in one image
+        latent_img = Image()
+        latent_img.bytestring = convert_image_array_to_byte_string(image_array, channels=image_array.shape[2],
+                                                                   normalize=True)
+        latent_img.id = id
+        latent_img_data.images.append(latent_img)
+    else:
+        # if not: create a list of images for each layer:
+        for stack in range(image_array.shape[2]):
+            latent_img = Image()
+            latent_img.bytestring = convert_image_array_to_byte_string(image_array[:, :, stack], channels=1,
+                                                                       normalize=True)
+            latent_img.id = id
+            latent_img_data.images.append(latent_img)
+
+    return [latent_img_data], 200
 
 
 def get_random_images(batch_size=100, datasetname="train_data", sort_by=None, filter=None, output=False):

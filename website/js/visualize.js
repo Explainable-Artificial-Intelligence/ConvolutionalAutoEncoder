@@ -57,19 +57,21 @@ function appendImages(batchSize) {
 
                         var image_id = this.id.split('_')[1];
 
-                        // get corresponding output image
-                    function outputImageCallback(error, data, response) {
-                            if (error) {
-                                console.error(error);
-                            } else {
-                                document.getElementById('outputPreview').src = "data:image/png;base64,"
-                                    + response.body.bytestring.substring(2, response.body.bytestring.length - 1);
+                    updatePreviewImages(image_id);
 
-                            }
-
-                        }
-
-                    loadApi.getImageById(Number(image_id), {'output': true}, outputImageCallback);
+                    //     // get corresponding output image
+                    // function outputImageCallback(error, data, response) {
+                    //         if (error) {
+                    //             console.error(error);
+                    //         } else {
+                    //             document.getElementById('outputPreview').src = "data:image/png;base64,"
+                    //                 + response.body.bytestring.substring(2, response.body.bytestring.length - 1);
+                    //
+                    //         }
+                    //
+                    //     }
+                    //
+                    // loadApi.getImageById(Number(image_id), {'output': true}, outputImageCallback);
                     }
                 );
 
@@ -217,21 +219,46 @@ function drawClustering() {
 }
 
 function updatePreviewImages(id) {
-    // update input image
-    function inputImageCallback(error, data, response) {
+    // // update input image
+    // function inputImageCallback(error, data, response) {
+    //     if (error) {
+    //         console.error(error);
+    //     } else {
+    //         document.getElementById('inputPreview').src = "data:image/png;base64,"
+    //             + response.body.bytestring.substring(2, response.body.bytestring.length - 1);
+    //
+    //     }
+    //
+    // }
+    // loadApi.getImageById(Number(id), {'output': false}, inputImageCallback);
+
+    console.log("test");
+
+    // update latent image(s)
+    function latentImageCallback(error, data, response) {
         if (error) {
             console.error(error);
         } else {
-            document.getElementById('inputPreview').src = "data:image/png;base64,"
-                + response.body.bytestring.substring(2, response.body.bytestring.length - 1);
+            console.log(response);
+            console.log(data);
 
+            var latentImageGrid = document.getElementById('latentImages');
+            latentImageGrid.innerHTML = "";
+            //iterate over all images;
+            for (var i = 0; i < data[0].images.length; i++) {
+                //add new image:
+                var image = document.createElement("img");
+                image.width = 100;
+                image.src = "data:image/png;base64," + data[0].images[i].bytestring.substring(2, data[0].images[i].bytestring.length - 1);
+                latentImageGrid.appendChild(image);
+            }
         }
 
     }
 
-    loadApi.getImageById(Number(id), {'output': false}, inputImageCallback);
+    loadApi.getLatentRepresentationById(Number(id), {}, latentImageCallback);
 
-    // update input image
+    // update output image
     function outputImageCallback(error, data, response) {
         if (error) {
             console.error(error);
@@ -242,7 +269,6 @@ function updatePreviewImages(id) {
         }
 
     }
-
     loadApi.getImageById(Number(id), {'output': true}, outputImageCallback);
 
 }

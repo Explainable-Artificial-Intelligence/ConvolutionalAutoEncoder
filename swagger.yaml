@@ -352,8 +352,6 @@ paths:
         '200':
           description: Images successfully returned
           schema:
-            type: array
-            items:
               $ref: '#/definitions/ImageData'
         '404':
           description: No data found

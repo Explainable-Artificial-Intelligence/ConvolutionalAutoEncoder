@@ -22,6 +22,19 @@ def compute_output_images(datasetname):
         Storage.output_data[datasetname] = output_images
 
 
+def compute_latent_representation(datasetname):
+    # check if latent already computed
+    if not Storage.latent_representation_computed(datasetname):
+        # compute latent representation for this dataset:
+
+        # get CAE
+        cae = Storage.get_cae()
+        # predict train images
+        latent_representation = cae.get_latent_representation(Storage.input_data[datasetname])
+        # save latent representation
+        Storage.latent_representation_data[datasetname] = latent_representation
+
+
 def generate_parameter_list_from_dict(parameter_dict):
     """
     generates a list of parameter combinations from a given parameter set as dict or object

@@ -4,9 +4,11 @@ import threading
 
 class Storage(object):
     # storrage items
+
     input_data = {}
     input_batch_indices = {}
     output_data = {}
+    latent_representation_data = {}
     output_batch_indices = {}
     cae = object()
     parameter_set = {}
@@ -83,6 +85,10 @@ class Storage(object):
     @classmethod
     def output_images_computed(cls, datasetname):
         return datasetname in cls.output_data.keys()
+
+    @classmethod
+    def latent_representation_computed(cls, datasetname):
+        return datasetname in cls.latent_representation_data.keys()
 
     @classmethod
     def get_output_image_by_id(cls, datasetname, id):
