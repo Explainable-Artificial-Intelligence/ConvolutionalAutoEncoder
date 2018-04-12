@@ -6,6 +6,7 @@ from typing import List
 
 from swagger_server import util
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.train_performance_data_point import TrainPerformanceDataPoint  # noqa: F401,E501
 
 
 class TrainPerformance(Model):
@@ -14,37 +15,32 @@ class TrainPerformance(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, model_id: str = None, train_status: str = None, cost: List[float] = None,
-                 current_learning_rate: List[float] = None):  # noqa: E501
+    def __init__(self, model_id: str = None, train_status: str = None,
+                 train_performance_data: List[TrainPerformanceDataPoint] = None):  # noqa: E501
         """TrainPerformance - a model defined in Swagger
 
         :param model_id: The model_id of this TrainPerformance.  # noqa: E501
         :type model_id: str
         :param train_status: The train_status of this TrainPerformance.  # noqa: E501
         :type train_status: str
-        :param cost: The cost of this TrainPerformance.  # noqa: E501
-        :type cost: List[float]
-        :param current_learning_rate: The current_learning_rate of this TrainPerformance.  # noqa: E501
-        :type current_learning_rate: List[float]
+        :param train_performance_data: The train_performance_data of this TrainPerformance.  # noqa: E501
+        :type train_performance_data: List[TrainPerformanceDataPoint]
         """
         self.swagger_types = {
             'model_id': str,
             'train_status': str,
-            'cost': List[float],
-            'current_learning_rate': List[float]
+            'train_performance_data': List[TrainPerformanceDataPoint]
         }
 
         self.attribute_map = {
             'model_id': 'model_id',
             'train_status': 'train_status',
-            'cost': 'cost',
-            'current_learning_rate': 'currentLearningRate'
+            'train_performance_data': 'train_performance_data'
         }
 
         self._model_id = model_id
         self._train_status = train_status
-        self._cost = cost
-        self._current_learning_rate = current_learning_rate
+        self._train_performance_data = train_performance_data
 
     @classmethod
     def from_dict(cls, dikt) -> 'TrainPerformance':
@@ -100,43 +96,22 @@ class TrainPerformance(Model):
         self._train_status = train_status
 
     @property
-    def cost(self) -> List[float]:
-        """Gets the cost of this TrainPerformance.
+    def train_performance_data(self) -> List[TrainPerformanceDataPoint]:
+        """Gets the train_performance_data of this TrainPerformance.
 
 
-        :return: The cost of this TrainPerformance.
-        :rtype: List[float]
+        :return: The train_performance_data of this TrainPerformance.
+        :rtype: List[TrainPerformanceDataPoint]
         """
-        return self._cost
+        return self._train_performance_data
 
-    @cost.setter
-    def cost(self, cost: List[float]):
-        """Sets the cost of this TrainPerformance.
-
-
-        :param cost: The cost of this TrainPerformance.
-        :type cost: List[float]
-        """
-
-        self._cost = cost
-
-    @property
-    def current_learning_rate(self) -> List[float]:
-        """Gets the current_learning_rate of this TrainPerformance.
+    @train_performance_data.setter
+    def train_performance_data(self, train_performance_data: List[TrainPerformanceDataPoint]):
+        """Sets the train_performance_data of this TrainPerformance.
 
 
-        :return: The current_learning_rate of this TrainPerformance.
-        :rtype: List[float]
-        """
-        return self._current_learning_rate
-
-    @current_learning_rate.setter
-    def current_learning_rate(self, current_learning_rate: List[float]):
-        """Sets the current_learning_rate of this TrainPerformance.
-
-
-        :param current_learning_rate: The current_learning_rate of this TrainPerformance.
-        :type current_learning_rate: List[float]
+        :param train_performance_data: The train_performance_data of this TrainPerformance.
+        :type train_performance_data: List[TrainPerformanceDataPoint]
         """
 
-        self._current_learning_rate = current_learning_rate
+        self._train_performance_data = train_performance_data

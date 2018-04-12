@@ -63,6 +63,21 @@ class TestLoadController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
+    def test_get_latent_representation_by_id(self):
+        """Test case for get_latent_representation_by_id
+
+        returns a single latent representation as ()list of) png images
+        """
+        query_string = [('id', 56),
+                        ('datasetname', 'train_data')]
+        response = self.client.open(
+            '/v2/load/getLatentRepresentationById',
+            method='GET',
+            content_type='application/json',
+            query_string=query_string)
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
     def test_get_random_images(self):
         """Test case for get_random_images
 

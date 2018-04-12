@@ -250,6 +250,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.current_input_image_sample = np.array([])
         self.current_latent_image_sample = np.array([])
         self.current_output_image_sample = np.array([])
+        self.current_train_step = 0
+        self.current_train_epoch = 0
 
         # initialize session saver:
         # session_saver_path = None
@@ -678,17 +680,19 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if not self.ann_status.eval(self.tf_session) == b'training':
             return
         if self.use_tensorboard:
-            summary, train_cost, _, step = self.tf_session.run(
-                [self.merged_summary, self.cost_function, self.final_optimizer, self.global_step],
+            summary, train_cost, _, step, epoch = self.tf_session.run(
+                [self.merged_summary, self.cost_function, self.final_optimizer, self.global_step, self.trained_epochs],
                 feed_dict={self.input_images: current_batch})
             # TODO:replace feed_dict?
             self.train_writer.add_summary(summary, step)
         else:
-            train_cost, _, step = self.tf_session.run(
-                [self.cost_function, self.final_optimizer, self.global_step],
+            train_cost, _, step, epoch = self.tf_session.run(
+                [self.cost_function, self.final_optimizer, self.global_step, self.trained_epochs],
                 feed_dict={self.input_images: current_batch})
 
         # save train status
+        self.train_status["epoch"].append(int(epoch))
+        self.train_status["step"].append(int(step))
         self.train_status["train_cost"].append(float(train_cost))
         if type(self.learning_rate) is float:
             self.train_status["learning_rate"].append(self.learning_rate)
@@ -705,20 +709,15 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
 
         # get random subset of train images
-        subset_indices = np.random.randint(0, len(train_data), size=self.num_test_pictures)
+        self.current_sample_indices = np.random.randint(0, len(train_data), size=self.num_test_pictures)
 
         # get input image subset:
-        input_subset = train_data[subset_indices]
+        self.current_input_image_sample = train_data[self.current_sample_indices]
 
         # get latent representation and output images of the current subset
-        output_subset, latent_subset = self.tf_session.run([self.output_images, self.latent_representation],
-                                                           feed_dict={self.input_images: input_subset})
-
-        # store current status images:
-        self.current_input_image_sample = input_subset
-        self.current_latent_image_sample = latent_subset
-        self.current_output_image_sample = output_subset
-        self.current_sample_indices = subset_indices
+        self.current_output_image_sample, self.current_latent_image_sample, self.current_train_epoch, self.current_train_step = self.tf_session.run(
+            [self.output_images, self.latent_representation, self.trained_epochs, self.global_step],
+            feed_dict={self.input_images: self.current_input_image_sample})
 
     def update_ann_status(self, status):
         """
@@ -816,7 +815,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         :return:
         """
-        self.train_status = {"train_cost": [], "learning_rate": []}
+        self.train_status = {"step": [], "epoch": [], "train_cost": [], "learning_rate": []}
 
     def get_train_status(self, start_idx=None, end_idx=None):
         """
@@ -832,18 +831,24 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 return self.train_status
             else:
                 # return the status variables up to the end index
-                sliced_train_status = {"train_cost": self.train_status["train_cost"][:end_idx],
+                sliced_train_status = {"step": self.train_status["step"][:end_idx],
+                                       "epoch": self.train_status["epoch"][:end_idx],
+                                       "train_cost": self.train_status["train_cost"][:end_idx],
                                        "learning_rate": self.train_status["learning_rate"][:end_idx]}
                 return sliced_train_status
         else:
             if end_idx is None:
                 # return the status variables after the start index
-                sliced_train_status = {"train_cost": self.train_status["train_cost"][start_idx:],
+                sliced_train_status = {"step": self.train_status["step"][start_idx:],
+                                       "epoch": self.train_status["epoch"][start_idx:],
+                                       "train_cost": self.train_status["train_cost"][start_idx:],
                                        "learning_rate": self.train_status["learning_rate"][start_idx:]}
                 return sliced_train_status
             else:
                 # return the status variables in a given range
-                sliced_train_status = {"train_cost": self.train_status["train_cost"][start_idx:end_idx],
+                sliced_train_status = {"step": self.train_status["step"][start_idx:end_idx],
+                                       "epoch": self.train_status["epoch"][start_idx:end_idx],
+                                       "train_cost": self.train_status["train_cost"][start_idx:end_idx],
                                        "learning_rate": self.train_status["learning_rate"][start_idx:end_idx]}
                 return sliced_train_status
 
@@ -857,7 +862,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
 
         max_idx = min(self.num_test_pictures, size)
-        return {"input_images": self.current_input_image_sample[:max_idx],
+        return {"step": self.current_train_step, "epoch": self.current_train_epoch,
+                "input_images": self.current_input_image_sample[:max_idx],
                 "latent_representation": self.current_latent_image_sample[:max_idx],
                 "output_images": self.current_output_image_sample[:max_idx],
                 "indices": self.current_sample_indices[:max_idx]}

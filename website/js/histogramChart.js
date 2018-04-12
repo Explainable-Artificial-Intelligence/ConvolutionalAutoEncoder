@@ -26,7 +26,7 @@ function generateRandomArray(min, max, length) {
 
 }
 
-function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName, yAxisName, colorScheme) {
+function HistogramChart(parentNodeID, width, height, yAxisName, colorScheme) {
     console.log(this);
 
     //storage for datapoints:
@@ -85,7 +85,7 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
 
     plot.append("text")
         .attr("x", 10)
-        .attr("y", 9)
+        .attr("y", 10)
         .attr("font-size", "12px")
         .text(yAxisName)
         .attr("fill", "orange");
@@ -95,7 +95,7 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
         .attr("x", width / 2)
         .attr("y", panelHeight + 40)
         .attr("font-size", "12px")
-        .text(xAxisName)
+        .text("intensity")
         .attr("fill", "orange");
 
 
@@ -128,11 +128,13 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
 
     //line helper function
     var lineSegment = d3.line()
-        .x(function (d) {
-            return xScale(d[xProperty]);
+        .x(function (d, i) {
+            // console.log(xScale(i));
+            return xScale(i);
         })
         .y(function (d) {
-            return yScale(d[yProperty]);
+            // console.log(yScale(d));
+            return yScale(d);
         });
 
     function updateAxis() {
@@ -197,16 +199,11 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
         // get min/max of whole dataset:
         ymax = Number.MIN_VALUE;
         ymin = Number.MAX_VALUE;
-        xmax = Number.MIN_VALUE;
-        xmin = Number.MAX_VALUE;
+        xmax = 0;
         for (var key in data) {
-            for (var i = 0; i < data[key].length; i++) {
-                xmin = Math.min(data[key][i][xProperty], xmin);
-                xmax = Math.max(data[key][i][xProperty], xmax);
-                ymax = Math.max(data[key][i][yProperty], ymax);
-                ymin = Math.min(data[key][i][yProperty], ymin);
-            }
-
+            xmax = Math.max(data[key].length, xmax);
+            ymax = Math.max(d3.max(data[key]), ymax);
+            ymin = Math.min(d3.min(data[key]), ymin);
         }
         xScale.domain([xmin - 1, xmax + 1]);
         yScale.domain([ymin * 0.9, ymax * 1.1]);
@@ -240,16 +237,18 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
     this.getLatestYValue = function (key) {
         // if no key provided return latest value of first line
         if (key === null) {
-            return Object.keys(data)[0][Object.keys(data)[0].length - 1][yProperty];
+            return Object.keys(data)[0][Object.keys(data)[0].length - 1];
         }
-        return data[key][data[key].length - 1][yProperty];
+        console.log(data[key]);
+        console.log(key);
+        return data[key][data[key].length - 1];
     };
     this.getLatestXValue = function (key) {
         // if no key provided return latest step of first line
         if (key === null) {
-            return Object.keys(data)[0][Object.keys(data)[0].length - 1][xProperty];
+            return Object.keys(data)[0].length;
         }
-        return data[key][data[key].length - 1][xProperty];
+        return data[key].length;
     };
 
 }

@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: 'WebUI to build, train and tune a Convolutional Autoencoder'
-  version: 1.1.0
+  version: 1.1.1
   title: Convolutional Autoencoder
   termsOfService: 'http://swagger.io/terms/'
   contact:
@@ -1204,6 +1204,12 @@ definitions:
   ProcessedImageData:
     type: object
     properties:
+      epoch:
+        type: number
+        format: int32
+      step:
+        type: number
+        format: int32
       inputLayer:
         type: array
         items:
@@ -1225,13 +1231,23 @@ definitions:
         type: string
       train_status:
         type: string
+      train_performance_data:
+        type: array
+        items:
+          $ref: '#/definitions/TrainPerformanceDataPoint'
+    
+  TrainPerformanceDataPoint:
+    type: object
+    properties:
+      epoch:
+        type: number
+        format: int32
+      step:
+        type: number
+        format: int32
       cost:
-        type: array
-        items:
-          type: number
-          format: double
+        type: number
+        format: double
       currentLearningRate:
-        type: array
-        items:
-          type: number
-          format: double
+        type: number
+        format: double

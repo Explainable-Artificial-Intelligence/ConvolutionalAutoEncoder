@@ -72,6 +72,7 @@ var opts = {
   'algorithm': "algorithm_example", // String | determines the clutering algorithm
   'datasetName': "train_data", // String | determines the dataset which should be clustered
   'dimensionReduction': "dimensionReduction_example", // String | determines the algorithm for dim reduction
+  'clusterParameters': new ConvolutionalAutoencoder.ClusterParameters(), // ClusterParameters | determines the clutering parameters
   'layer': 56 // Number | determines the hidden layer
 };
 
@@ -92,6 +93,7 @@ Name | Type | Description  | Notes
  **algorithm** | **String**| determines the clutering algorithm | [optional] 
  **datasetName** | **String**| determines the dataset which should be clustered | [optional] [default to train_data]
  **dimensionReduction** | **String**| determines the algorithm for dim reduction | [optional] 
+ **clusterParameters** | [**ClusterParameters**](ClusterParameters.md)| determines the clutering parameters | [optional] 
  **layer** | **Number**| determines the hidden layer | [optional] 
 
 ### Return type

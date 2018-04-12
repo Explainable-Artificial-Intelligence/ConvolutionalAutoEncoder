@@ -3,6 +3,7 @@ import threading
 import connexion
 
 from flask_server.swagger_server.models.train_performance import TrainPerformance
+from flask_server.swagger_server.models.train_performance_data_point import TrainPerformanceDataPoint
 from flask_server.utils.ANNHelperFunctions import generate_status_image_object_from_status_images
 from flask_server.utils.Storage import Storage
 
@@ -78,11 +79,19 @@ def get_train_performance():
 
     # build up response object and return it
     train_performance_object = TrainPerformance()
-    train_performance_object.cost = current_train_status["train_cost"]
-    train_performance_object.current_learning_rate = current_train_status["learning_rate"]
     if Storage.cae_thread.isAlive():
         train_performance_object.train_status = "running"
     else:
         train_performance_object.train_status = "finished"
+
+    # iterate over steps and generate TrainPerformanceDataPoints:
+    train_performance_object.train_performance_data = []
+    for i in range(len(current_train_status["train_cost"])):
+        train_performance_data_point = TrainPerformanceDataPoint()
+        train_performance_data_point.step = current_train_status["step"][i]
+        train_performance_data_point.epoch = current_train_status["epoch"][i]
+        train_performance_data_point.current_learning_rate = current_train_status["learning_rate"][i]
+        train_performance_data_point.cost = current_train_status["train_cost"][i]
+        train_performance_object.train_performance_data.append(train_performance_data_point)
 
     return train_performance_object, 200

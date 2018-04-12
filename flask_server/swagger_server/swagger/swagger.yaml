@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "WebUI to build, train and tune a Convolutional Autoencoder"
-  version: "1.0.7"
+  version: "1.1.1"
   title: "Convolutional Autoencoder"
   termsOfService: "http://swagger.io/terms/"
   contact:
@@ -332,6 +332,43 @@ paths:
         415:
           description: "Index out of bounds"
       x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/getLatentRepresentationById:
+    get:
+      tags:
+      - "load"
+      summary: "returns a single latent representation as ()list of) png images"
+      description: "images are encoded as png byte strings"
+      operationId: "get_latent_representation_by_id"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "query"
+        description: "defines the id of the images"
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "datasetname"
+        in: "query"
+        description: "name for dataset on the server"
+        required: false
+        type: "string"
+        default: "train_data"
+        format: "string"
+      responses:
+        200:
+          description: "Images successfully returned"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ImageData"
+        404:
+          description: "No data found"
+        415:
+          description: "Index out of bounds"
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
   /build/getInputShape:
     get:
       tags:
@@ -499,6 +536,12 @@ paths:
         description: "determines the algorithm for dim reduction"
         required: false
         type: "string"
+      - in: "body"
+        name: "cluster_parameters"
+        description: "determines the clutering parameters"
+        required: false
+        schema:
+          $ref: "#/definitions/ClusterParameters"
       - name: "layer"
         in: "query"
         description: "determines the hidden layer"
@@ -771,6 +814,18 @@ definitions:
       algorithm:
         type: "string"
         example: "auto"
+    example:
+      n_clusters: 10
+      n_init: 10
+      tol: 1.0E-4
+      init: "k-means++"
+      n_jobs: -1
+      random_state: -1
+      max_iter: 300
+      copy_x: true
+      precompute_distances: "auto"
+      verbose: 0
+      algorithm: "auto"
   Clustering:
     type: "object"
     properties:
@@ -1389,6 +1444,12 @@ definitions:
   ProcessedImageData:
     type: "object"
     properties:
+      epoch:
+        type: "number"
+        format: "int32"
+      step:
+        type: "number"
+        format: "int32"
       inputLayer:
         type: "array"
         items:
@@ -1423,6 +1484,8 @@ definitions:
         id: 5
       - bytestring: "bytestring"
         id: 5
+      epoch: 0.80082819046101150206595775671303272247314453125
+      step: 6.02745618307040320615897144307382404804229736328125
   TrainPerformance:
     type: "object"
     properties:
@@ -1430,22 +1493,39 @@ definitions:
         type: "string"
       train_status:
         type: "string"
-      cost:
+      train_performance_data:
         type: "array"
         items:
-          type: "number"
-          format: "double"
-      currentLearningRate:
-        type: "array"
-        items:
-          type: "number"
-          format: "double"
+          $ref: "#/definitions/TrainPerformanceDataPoint"
     example:
       train_status: "train_status"
-      cost:
-      - 0.80082819046101150206595775671303272247314453125
-      - 0.80082819046101150206595775671303272247314453125
-      currentLearningRate:
-      - 6.02745618307040320615897144307382404804229736328125
-      - 6.02745618307040320615897144307382404804229736328125
       model_id: "model_id"
+      train_performance_data:
+      - cost: 1.46581298050294517310021547018550336360931396484375
+        currentLearningRate: 5.962133916683182377482808078639209270477294921875
+        epoch: 0.80082819046101150206595775671303272247314453125
+        step: 6.02745618307040320615897144307382404804229736328125
+      - cost: 1.46581298050294517310021547018550336360931396484375
+        currentLearningRate: 5.962133916683182377482808078639209270477294921875
+        epoch: 0.80082819046101150206595775671303272247314453125
+        step: 6.02745618307040320615897144307382404804229736328125
+  TrainPerformanceDataPoint:
+    type: "object"
+    properties:
+      epoch:
+        type: "number"
+        format: "int32"
+      step:
+        type: "number"
+        format: "int32"
+      cost:
+        type: "number"
+        format: "double"
+      currentLearningRate:
+        type: "number"
+        format: "double"
+    example:
+      cost: 1.46581298050294517310021547018550336360931396484375
+      currentLearningRate: 5.962133916683182377482808078639209270477294921875
+      epoch: 0.80082819046101150206595775671303272247314453125
+      step: 6.02745618307040320615897144307382404804229736328125

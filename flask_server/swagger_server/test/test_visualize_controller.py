@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 
 from flask import json
+from swagger_server.models.cluster_parameters import ClusterParameters  # noqa: E501
 from swagger_server.models.point2_d import Point2D  # noqa: E501
 from swagger_server.test import BaseTestCase
 
@@ -29,6 +30,7 @@ class TestVisualizeController(BaseTestCase):
 
         returns the clustering of the latent representation of a hidden layer
         """
+        cluster_parameters = ClusterParameters()
         query_string = [('algorithm', 'algorithm_example'),
                         ('dataset_name', 'train_data'),
                         ('dimension_reduction', 'dimension_reduction_example'),
@@ -36,6 +38,7 @@ class TestVisualizeController(BaseTestCase):
         response = self.client.open(
             '/v2/visualize/getHiddenLayerLatentClustering',
             method='GET',
+            data=json.dumps(cluster_parameters),
             content_type='application/json',
             query_string=query_string)
         self.assert200(response,

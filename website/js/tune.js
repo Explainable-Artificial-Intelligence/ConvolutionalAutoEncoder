@@ -247,14 +247,14 @@ function finishSummaryTile(currentTile) {
         if (error) {
             console.error(error);
         } else {
-            console.log(response);
-            console.log(data);
+            // console.log(response);
+            // console.log(data);
 
             // finish old summary tile:
 
             // update charts:
-            currentTile.costChart.replaceData({'cost': data.cost});
-            currentTile.learningRateChart.replaceData({'learning rate': data.currentLearningRate});
+            currentTile.costChart.replaceData({'cost': data.train_performance_data});
+            currentTile.learningRateChart.replaceData({'learning rate': data.train_performance_data});
 
             //mark tile as completely trained
             currentTile.markAsFinished(!(data.train_status === "finished" || data.train_status === "running"));
@@ -281,7 +281,7 @@ function getInputDimensions() {
         } else {
             //console.log('API called successfully.');
             //console.log(response);
-            console.log(data);
+            // console.log(data);
 
 
             //update input shape:
@@ -291,13 +291,12 @@ function getInputDimensions() {
             inputShape[0] = -1;
 
             // update topology input output layers:
-            console.log(inputShape);
+            // console.log(inputShape);
             document.getElementById("InputShape").value = JSON.stringify([inputShape], null, 1);
 
         }
     }
 
-    console.log("test");
     buildApi.getInputShape([], inputShapeCallback)
 }
 
@@ -350,7 +349,7 @@ function buildANN() {
             console.error(error);
         } else {
             console.log(response);
-            console.log(data);
+            // console.log(data);
             document.getElementById("responseLabel").textContent = response.text;
         }
     }
@@ -450,7 +449,7 @@ function updateTrainStatistics() {
             console.error(error);
         } else {
             // console.log(response);
-            console.log(data.train_status);
+            // console.log(data);
 
             //update tiles
             // special case: first tile:
@@ -469,9 +468,9 @@ function updateTrainStatistics() {
             }
 
             //update diagrams
-            if (data.cost.length > 0) {
-                currentTile.costChart.appendData({'cost': data.cost});
-                currentTile.learningRateChart.appendData({'learning rate': data.currentLearningRate})
+            if (data.train_performance_data.length > 0) {
+                currentTile.costChart.appendData({'cost': data.train_performance_data});
+                currentTile.learningRateChart.appendData({'learning rate': data.train_performance_data});
             }
 
             if (data.train_status === "finished" || data.train_status === "aborted" || data.train_status === "aborting") {
@@ -490,7 +489,7 @@ function updateTrainStatistics() {
 }
 
 function updateView() {
-    console.log("tick");
+    // console.log("tick");
 
     // update charts:
     updateTrainStatistics();

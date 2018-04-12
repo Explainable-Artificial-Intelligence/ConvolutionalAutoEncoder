@@ -129,6 +129,21 @@ def get_images(start_idx, end_idx, datasetname="train_data", sort_by=None, filte
     return input_images, 200
 
 
+def get_latent_representation_by_id(id, datasetname=None):  # noqa: E501
+    """returns a single latent representation as ()list of) png images
+
+    images are encoded as png byte strings # noqa: E501
+
+    :param id: defines the id of the images
+    :type id: int
+    :param datasetname: name for dataset on the server
+    :type datasetname: str
+
+    :rtype: List[ImageData]
+    """
+    return 'do some magic!'
+
+
 def get_random_images(batch_size=100, datasetname="train_data", sort_by=None, filter=None, output=False):
     """
     returns the next batch of input/output images

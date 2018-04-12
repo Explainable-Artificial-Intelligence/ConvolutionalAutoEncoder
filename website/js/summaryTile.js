@@ -20,14 +20,14 @@ function SummaryTile(parentID, uuid) {
         var finalStats = document.createElement("div");
 
         var finalCost = document.createElement("p");
-        finalCost.textContent = "Final Cost: " + this.costChart.getLatestValue('cost');
+        finalCost.textContent = "Final Cost: " + this.costChart.getLatestYValue('cost');
         finalStats.appendChild(finalCost);
 
         var br = document.createElement('br');
         finalStats.appendChild(br);
         finalStats.appendChild(br);
         var finalSteps = document.createElement("p");
-        finalSteps.textContent += "Steps: " + this.costChart.getLatestStep('cost');
+        finalSteps.textContent += "Steps: " + this.costChart.getLatestXValue('cost');
         finalStats.appendChild(finalSteps);
 
 
@@ -81,8 +81,9 @@ function SummaryTile(parentID, uuid) {
     // tile.appendChild(rightColumn);
 
     // add charts
-    this.costChart = new LineChart(firstCell.id, 250, 250, "cost", {'cost': 'lightblue'});
-    this.learningRateChart = new LineChart(secondCell.id, 250, 250, "learning rate", {'learning rate': 'lightblue'});
+    this.costChart = new LineChart(firstCell.id, 250, 250, "step", "cost", "steps", "cost", {'cost': 'lightblue'});
+    this.learningRateChart = new LineChart(secondCell.id, 250, 250, "step", "currentLearningRate", "steps",
+        "learning rate", {'learning rate': 'lightblue'});
 
     // add image grid:
     this.imageGrid = document.createElement("table");

@@ -28,9 +28,9 @@ loadApi.resetAllBatchIndices(callback);
 /*
 Charts
  */
-
-var costChart = new LineChart("charts", 500, 500, "cost", {'cost': 'lightblue'});
-var learningRateChart = new LineChart("charts", 500, 500, 'learning rate', {'learning rate': 'lightblue'});
+var costChart = new LineChart("charts", 500, 500, "step", "cost", "steps", "cost", {'cost': 'lightblue'});
+var learningRateChart = new LineChart("charts", 500, 500, "step", "currentLearningRate", "steps", "learning rate",
+    {'learning rate': 'lightblue'});
 
 function updateTrainImages() {
     var callback = function (error, data, response) {
@@ -122,14 +122,11 @@ function updateTrainStatistics() {
         if (error) {
             console.error(error);
         } else {
-            // console.log(response);
-            // console.log(data);
-            console.log(data.train_status);
 
             //update cost diagram
-            if (data.cost.length > 0) {
-                costChart.appendData({'cost': data.cost});
-                learningRateChart.appendData({'learning rate': data.currentLearningRate});
+            if (data.train_performance_data.length > 0) {
+                costChart.appendData({'cost': data.train_performance_data});
+                learningRateChart.appendData({'learning rate': data.train_performance_data});
             }
 
             if (data.train_status === "finished") {
@@ -138,9 +135,9 @@ function updateTrainStatistics() {
 
                 // print status
                 console.log("Training finished");
-                console.log("Final step: " + costChart.getLatestStep('cost'));
+                console.log("Final step: " + costChart.getLatestXValue('cost'));
                 document.getElementById("responseLabel").textContent = "Training finished.  Final step: "
-                    + costChart.getLatestStep('cost');
+                    + costChart.getLatestXValue('cost');
             }
 
         }
@@ -152,7 +149,6 @@ function updateTrainStatistics() {
 }
 
 function updateView() {
-    console.log("tick");
     // update train images:
     updateTrainImages();
 

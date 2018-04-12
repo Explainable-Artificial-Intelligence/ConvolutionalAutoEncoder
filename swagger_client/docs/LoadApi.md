@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**getImageBatch**](LoadApi.md#getImageBatch) | **GET** /load/getImageBatch | returns the next batch of input/output images
 [**getImageById**](LoadApi.md#getImageById) | **GET** /load/getImageById | returns a single input/output image
 [**getImages**](LoadApi.md#getImages) | **GET** /load/getImages | returns a subset of input/output images
+[**getLatentRepresentationById**](LoadApi.md#getLatentRepresentationById) | **GET** /load/getLatentRepresentationById | returns a single latent representation as ()list of) png images
 [**getRandomImages**](LoadApi.md#getRandomImages) | **GET** /load/getRandomImages | returns the next batch of input/output images
 [**loadFile**](LoadApi.md#loadFile) | **POST** /load/loadFile | Load a train/test data file
 [**resetAllBatchIndices**](LoadApi.md#resetAllBatchIndices) | **POST** /load/resetAllBatchIndices | resets all batch indices of all image sets
@@ -173,6 +174,56 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ImageData**](ImageData.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getLatentRepresentationById"></a>
+# **getLatentRepresentationById**
+> [ImageData] getLatentRepresentationById(id, opts)
+
+returns a single latent representation as ()list of) png images
+
+images are encoded as png byte strings
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.LoadApi();
+
+var id = 56; // Number | defines the id of the images
+
+var opts = { 
+  'datasetname': "train_data" // String | name for dataset on the server
+};
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.getLatentRepresentationById(id, opts, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **Number**| defines the id of the images | 
+ **datasetname** | **String**| name for dataset on the server | [optional] [default to train_data]
+
+### Return type
+
+[**[ImageData]**](ImageData.md)
 
 ### Authorization
 

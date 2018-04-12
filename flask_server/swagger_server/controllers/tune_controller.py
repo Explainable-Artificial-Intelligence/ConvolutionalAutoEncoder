@@ -9,6 +9,7 @@ import connexion
 from flask_server.ConvolutionalAutoEncoder import SklearnCAE
 from flask_server.swagger_server.models.parameter_list import ParameterList
 from flask_server.swagger_server.models.train_performance import TrainPerformance
+from flask_server.swagger_server.models.train_performance_data_point import TrainPerformanceDataPoint
 from flask_server.swagger_server.models.train_status import TrainStatus
 from flask_server.utils.ANNHelperFunctions import generate_status_image_object_from_status_images, \
     generate_parameter_combination_list
@@ -109,11 +110,18 @@ def get_train_performance_of_current_tuning():
     current_train_performance = Storage.tuning_queue.get_training_performance()
 
     # build up response object and return it
+    # iterate over steps and generate TrainPerformanceDataPoints:
     train_performance_object = TrainPerformance()
-    train_performance_object.cost = current_train_performance["train_cost"]
-    train_performance_object.current_learning_rate = current_train_performance["learning_rate"]
     train_performance_object.model_id = Storage.tuning_queue.current_running_model.id
     train_performance_object.train_status = Storage.tuning_status
+    train_performance_object.train_performance_data = []
+    for i in range(len(current_train_performance["train_cost"])):
+        train_performance_data_point = TrainPerformanceDataPoint()
+        train_performance_data_point.step = current_train_performance["step"][i]
+        train_performance_data_point.epoch = current_train_performance["epoch"][i]
+        train_performance_data_point.current_learning_rate = current_train_performance["learning_rate"][i]
+        train_performance_data_point.cost = current_train_performance["train_cost"][i]
+        train_performance_object.train_performance_data.append(train_performance_data_point)
 
     return train_performance_object, 200
 
@@ -190,10 +198,16 @@ def get_train_performance_of_specific_tuning(modelId):  # noqa: E501
 
     # build up response object and return it
     train_performance_object = TrainPerformance()
-    train_performance_object.cost = model_storage.train_performance["train_cost"]
-    train_performance_object.current_learning_rate = model_storage.train_performance["learning_rate"]
     train_performance_object.model_id = model_storage.id
     train_performance_object.train_status = Storage.tuning_status
+    train_performance_object.train_performance_data = []
+    for i in range(len(model_storage.train_performance["train_cost"])):
+        train_performance_data_point = TrainPerformanceDataPoint()
+        train_performance_data_point.step = model_storage.train_performance["step"][i]
+        train_performance_data_point.epoch = model_storage.train_performance["epoch"][i]
+        train_performance_data_point.current_learning_rate = model_storage.train_performance["learning_rate"][i]
+        train_performance_data_point.cost = model_storage.train_performance["train_cost"][i]
+        train_performance_object.train_performance_data.append(train_performance_data_point)
 
     return train_performance_object, 200
     # cae = Storage.get_cae()

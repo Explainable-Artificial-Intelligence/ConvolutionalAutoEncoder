@@ -73,7 +73,7 @@ function Histogram(parentNodeID, width, height) {
     };
 
     // create charts:
-    var redChannelHist = new LineChart(parentNodeID, width, height, "red channel", {
+    var redChannelHist = new HistogramChart(parentNodeID, width, height, "channel density", {
         'red': 'red',
         'green': 'lime',
         'blue': 'blue'
