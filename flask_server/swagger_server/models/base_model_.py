@@ -2,7 +2,8 @@ import pprint
 import typing
 
 import six
-from swagger_server import util
+
+from flask_server.swagger_server import util
 
 T = typing.TypeVar('T')
 

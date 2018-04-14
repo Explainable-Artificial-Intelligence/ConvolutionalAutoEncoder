@@ -193,8 +193,8 @@ def generate_status_image_object_from_status_images(status_images):
     processed_image_data.input_layer = []
     processed_image_data.output_layer = []
     processed_image_data.latent_layer = []
-    processed_image_data.epoch = status_images["epoch"]
-    processed_image_data.step = status_images["step"]
+    processed_image_data.epoch = int(status_images["epoch"])
+    processed_image_data.step = int(status_images["step"])
 
     # special case: training is still in first epoch (no pictures available)
     if len(status_images["input_images"].shape) < 4:

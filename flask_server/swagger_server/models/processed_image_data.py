@@ -4,9 +4,9 @@ from __future__ import absolute_import
 
 from typing import List  # noqa: F401
 
-from swagger_server import util
-from swagger_server.models.base_model_ import Model
-from swagger_server.models.image import Image  # noqa: F401,E501
+from flask_server.swagger_server import util
+from flask_server.swagger_server.models.base_model_ import Model
+from flask_server.swagger_server.models.image import Image  # noqa: F401,E501
 
 
 class ProcessedImageData(Model):
@@ -15,10 +15,14 @@ class ProcessedImageData(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, input_layer: List[Image] = None, latent_layer: List[List[Image]] = None,
-                 output_layer: List[Image] = None):  # noqa: E501
+    def __init__(self, epoch: float = None, step: float = None, input_layer: List[Image] = None,
+                 latent_layer: List[List[Image]] = None, output_layer: List[Image] = None):  # noqa: E501
         """ProcessedImageData - a model defined in Swagger
 
+        :param epoch: The epoch of this ProcessedImageData.  # noqa: E501
+        :type epoch: float
+        :param step: The step of this ProcessedImageData.  # noqa: E501
+        :type step: float
         :param input_layer: The input_layer of this ProcessedImageData.  # noqa: E501
         :type input_layer: List[Image]
         :param latent_layer: The latent_layer of this ProcessedImageData.  # noqa: E501
@@ -27,17 +31,23 @@ class ProcessedImageData(Model):
         :type output_layer: List[Image]
         """
         self.swagger_types = {
+            'epoch': float,
+            'step': float,
             'input_layer': List[Image],
             'latent_layer': List[List[Image]],
             'output_layer': List[Image]
         }
 
         self.attribute_map = {
+            'epoch': 'epoch',
+            'step': 'step',
             'input_layer': 'inputLayer',
             'latent_layer': 'latentLayer',
             'output_layer': 'outputLayer'
         }
 
+        self._epoch = epoch
+        self._step = step
         self._input_layer = input_layer
         self._latent_layer = latent_layer
         self._output_layer = output_layer
@@ -52,6 +62,48 @@ class ProcessedImageData(Model):
         :rtype: ProcessedImageData
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def epoch(self) -> float:
+        """Gets the epoch of this ProcessedImageData.
+
+
+        :return: The epoch of this ProcessedImageData.
+        :rtype: float
+        """
+        return self._epoch
+
+    @epoch.setter
+    def epoch(self, epoch: float):
+        """Sets the epoch of this ProcessedImageData.
+
+
+        :param epoch: The epoch of this ProcessedImageData.
+        :type epoch: float
+        """
+
+        self._epoch = epoch
+
+    @property
+    def step(self) -> float:
+        """Gets the step of this ProcessedImageData.
+
+
+        :return: The step of this ProcessedImageData.
+        :rtype: float
+        """
+        return self._step
+
+    @step.setter
+    def step(self, step: float):
+        """Sets the step of this ProcessedImageData.
+
+
+        :param step: The step of this ProcessedImageData.
+        :type step: float
+        """
+
+        self._step = step
 
     @property
     def input_layer(self) -> List[Image]:

@@ -25,6 +25,7 @@ Global variables
  */
 var updateTimer;
 var currentTile = null;
+var currentTrainImageEpoch = 0;
 var previousTiles = [];
 
 /*
@@ -370,71 +371,78 @@ function updateTrainImages() {
         if (error) {
             console.error(error);
         } else {
-            //console.log(response);
-            //console.log(data);
+            // console.log(response);
+            // console.log(data);
 
-            //get image pane
-            var imageGrid = currentTile.imageGrid;
+            if (data.epoch > currentTrainImageEpoch) {
 
-            // remove all previous elements:
-            imageGrid.innerHTML = "";
+                //create new column:
+                currentTile.imageGrid.addNewImageColumn(data);
 
-            // add image pairs
-            for (var i = 0; i < data.inputLayer.length; i++) {
-                // create new table row:
-                var tableRow = document.createElement("tr");
-
-
-                // create cell for input image
-                var inputCell = document.createElement("td");
-                // create new input image object
-                var newInputImage = document.createElement("img");
-                newInputImage.id = "InputImage_" + data.inputLayer[i].id;
-                newInputImage.src = "data:image/png;base64," + data.inputLayer[i].bytestring.substring(2,
-                    data.inputLayer[i].bytestring.length - 1);
-                newInputImage.style.width = "50px";
-                newInputImage.class = "imageThumbnail";
-
-                // append new image to image grid
-                inputCell.appendChild(newInputImage);
-                tableRow.appendChild(inputCell);
-
-                // create new latent image object
-                var latentCell = document.createElement("td");
-                for (var j = 0; j < data.latentLayer[i].length; j++) {
-                    var newLatentImage = document.createElement("img");
-                    newLatentImage.id = "LatentImage_" + data.latentLayer[i][j].id + "_" + j;
-                    newLatentImage.src = "data:image/png;base64," + data.latentLayer[i][j].bytestring.substring(2,
-                        data.latentLayer[i][j].bytestring.length - 1);
-                    newLatentImage.style.width = "20px";
-                    newLatentImage.class = "layerThumbnail";
-                    // append new image div to image grid
-                    latentCell.appendChild(newLatentImage);
-                    if ((j + 1) % 4 === 0) { //Math.ceil(Math.sqrt(data.latentLayer[i].length))
-                        latentCell.appendChild(document.createElement('br'));
-                    }
-
-                }
-                // append new image div to image grid
-                tableRow.appendChild(latentCell);
-
-                // create cell for input image
-                var outputCell = document.createElement("td");
-                // create new output image object
-                var newOutputImage = document.createElement("img");
-                newOutputImage.id = "OutputImage_" + data.outputLayer[i].id;
-                newOutputImage.src = "data:image/png;base64," + data.outputLayer[i].bytestring.substring(2,
-                    data.outputLayer[i].bytestring.length - 1);
-                newOutputImage.style.width = "50px";
-                newOutputImage.class = "imageThumbnail";
-
-                // append new image to image grid
-                outputCell.appendChild(newOutputImage);
-                tableRow.appendChild(outputCell);
-
-                imageGrid.appendChild(tableRow);
-
+                currentTrainImageEpoch = data.epoch;
             }
+
+
+            //
+            // // remove all previous elements:
+            // imageGrid.innerHTML = "";
+            //
+            // // add image pairs
+            // for (var i = 0; i < data.inputLayer.length; i++) {
+            //     // create new table row:
+            //     var tableRow = document.createElement("tr");
+            //
+            //
+            //     // create cell for input image
+            //     var inputCell = document.createElement("td");
+            //     // create new input image object
+            //     var newInputImage = document.createElement("img");
+            //     newInputImage.id = "InputImage_" + data.inputLayer[i].id;
+            //     newInputImage.src = "data:image/png;base64," + data.inputLayer[i].bytestring.substring(2,
+            //         data.inputLayer[i].bytestring.length - 1);
+            //     newInputImage.style.width = "50px";
+            //     newInputImage.class = "imageThumbnail";
+            //
+            //     // append new image to image grid
+            //     inputCell.appendChild(newInputImage);
+            //     tableRow.appendChild(inputCell);
+            //
+            //     // create new latent image object
+            //     var latentCell = document.createElement("td");
+            //     for (var j = 0; j < data.latentLayer[i].length; j++) {
+            //         var newLatentImage = document.createElement("img");
+            //         newLatentImage.id = "LatentImage_" + data.latentLayer[i][j].id + "_" + j;
+            //         newLatentImage.src = "data:image/png;base64," + data.latentLayer[i][j].bytestring.substring(2,
+            //             data.latentLayer[i][j].bytestring.length - 1);
+            //         newLatentImage.style.width = "20px";
+            //         newLatentImage.class = "layerThumbnail";
+            //         // append new image div to image grid
+            //         latentCell.appendChild(newLatentImage);
+            //         if ((j + 1) % 4 === 0) { //Math.ceil(Math.sqrt(data.latentLayer[i].length))
+            //             latentCell.appendChild(document.createElement('br'));
+            //         }
+            //
+            //     }
+            //     // append new image div to image grid
+            //     tableRow.appendChild(latentCell);
+            //
+            //     // create cell for input image
+            //     var outputCell = document.createElement("td");
+            //     // create new output image object
+            //     var newOutputImage = document.createElement("img");
+            //     newOutputImage.id = "OutputImage_" + data.outputLayer[i].id;
+            //     newOutputImage.src = "data:image/png;base64," + data.outputLayer[i].bytestring.substring(2,
+            //         data.outputLayer[i].bytestring.length - 1);
+            //     newOutputImage.style.width = "50px";
+            //     newOutputImage.class = "imageThumbnail";
+            //
+            //     // append new image to image grid
+            //     outputCell.appendChild(newOutputImage);
+            //     tableRow.appendChild(outputCell);
+            //
+            //     imageGrid.appendChild(tableRow);
+            //
+            // }
 
 
         }
@@ -455,7 +463,7 @@ function updateTrainStatistics() {
             // special case: first tile:
             if (currentTile === null) {
                 // create new tile:
-                currentTile = new SummaryTile("summaryTiles", data.model_id);
+                currentTile = new SummaryTile("summaryTiles", data.model_id, 20);
             } else if (currentTile.uuid !== data.model_id) {
                 // finish old summary tile:
                 finishSummaryTile(currentTile);
@@ -464,7 +472,7 @@ function updateTrainStatistics() {
                 previousTiles.push(currentTile);
 
                 // create new tile:
-                currentTile = new SummaryTile("summaryTiles", data.model_id);
+                currentTile = new SummaryTile("summaryTiles", data.model_id, 20);
             }
 
             //update diagrams

@@ -4,9 +4,9 @@ from __future__ import absolute_import
 
 from typing import List  # noqa: F401
 
-from swagger_server import util
-from swagger_server.models.base_model_ import Model
-from swagger_server.models.image import Image  # noqa: F401,E501
+from flask_server.swagger_server import util
+from flask_server.swagger_server.models.base_model_ import Model
+from flask_server.swagger_server.models.image import Image  # noqa: F401,E501
 
 
 class ImageData(Model):

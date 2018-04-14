@@ -2,7 +2,7 @@
 function to create a summary tile for tuning
  */
 
-function SummaryTile(parentID, uuid) {
+function SummaryTile(parentID, uuid, trainImageCount) {
     // functions:
     this.markAsFinished = function (aborted) {
         /*
@@ -86,12 +86,13 @@ function SummaryTile(parentID, uuid) {
         "learning rate", {'learning rate': 'lightblue'});
 
     // add image grid:
-    this.imageGrid = document.createElement("table");
-    this.imageGrid.classList.add("imageGrid");
-    var scrollPane = document.createElement("div");
-    scrollPane.classList.add("scrollPane");
-    scrollPane.appendChild(this.imageGrid);
-    thirdCell.appendChild(scrollPane);
+    this.imageGrid = new ImageGrid(thirdCell, trainImageCount);
+    // this.imageGrid = document.createElement("table");
+    // this.imageGrid.classList.add("imageGrid");
+    // var scrollPane = document.createElement("div");
+    // scrollPane.classList.add("scrollPane");
+    // scrollPane.appendChild(this.imageGrid);
+    // thirdCell.appendChild(scrollPane);
 
 
     //     = document.createElement("div");
