@@ -1,0 +1,13 @@
+version: '1'
+services:
+  swagger_server:
+    build: flask_server/
+    ports:
+      - "8080:8080"
+      - "6006:6006"
+
+  swagger_webserver:
+    build: website/
+    ports:
+     - "80:80"
+
