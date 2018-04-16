@@ -24,7 +24,7 @@ def generate_image_from_single_point(point_2D):
     return 'do some magic!'
 
 
-def get_hidden_layer_latent_clustering(algorithm=None, dataset_name=None, dimension_reduction=None, layer=None):
+def get_hidden_layer_latent_clustering(algorithm="auto", dataset_name="train_data", dimension_reduction="PCA", layer=0):
     """
     returns the clustering of the latent representation of a hidden layer
     

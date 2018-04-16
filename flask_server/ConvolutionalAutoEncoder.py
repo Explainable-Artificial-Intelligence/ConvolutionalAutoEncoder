@@ -51,7 +51,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
     _cost_functions = ["squared_pixel_distance", "pixel_distance"]  # , "msssim"]
 
     def __init__(self, input_shape, number_of_stacks, filter_sizes, mirror_weights=False, activation_function="relu",
-                 batch_size=100, n_epochs=50, use_tensorboard=True, verbose=True, learning_rate_function="static",
+                 batch_size=100, max_predict_batch_size=1000, n_epochs=50, use_tensorboard=True, verbose=True,
+                 learning_rate_function="static",
                  lr_initial_learning_rate=0.01, lr_decay_steps=1000, lr_decay_rate=0.9, lr_staircase=False,
                  lr_boundaries=[10000, 20000], lr_values=[1.0, 0.5, 0.1], lr_end_learning_rate=0.0001, lr_power=1.0,
                  lr_cycle=False, optimizer='AdamOptimizer', momentum=0.9, cf_cost_function="squared_pixel_distance",
@@ -223,6 +224,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         # parse train parameters
         self.batch_size = batch_size
+        self.max_predict_batch_size = max_predict_batch_size
         self.n_epochs = n_epochs
         self.use_tensorboard = use_tensorboard
 
@@ -709,7 +711,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
 
         # get random subset of train images
-        self.current_sample_indices = np.random.randint(0, len(train_data), size=self.num_test_pictures)
+        if len(self.current_sample_indices) != len(train_data):
+            self.current_sample_indices = np.random.randint(0, len(train_data), size=self.num_test_pictures)
 
         # get input image subset:
         self.current_input_image_sample = train_data[self.current_sample_indices]
@@ -742,11 +745,21 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.model_is_trained:
             # reopen session (if model is saved to disk):
             self._load_session()
-            # self._print_training_warning()
-            latent_representation = self.tf_session.run(self.latent_representation,
-                                                        feed_dict={self.input_images: input_data})
+            self._print_training_warning()
+
+            # split input data into batches:
+            input_batches = np.array_split(input_data, self.max_predict_batch_size)
+            latent_batches = []
+            for input_batch in input_batches:
+                latent_batch = self.tf_session.run(self.latent_representation,
+                                                   feed_dict={self.input_images: input_batch})
+                latent_batches.append(latent_batch)
             # close session (if possible):
             self._close_session()
+
+            # concatenate batches to one array:
+            latent_representation = np.vstack(latent_batches)
+
             return latent_representation
         else:
             raise RuntimeError("You must train transformer before predicting data!")
@@ -762,10 +775,18 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # reopen session (if model is saved to disk):
             self._load_session()
             self._print_training_warning()
-            prediction, _ = self.tf_session.run([self.output_images, self.latent_representation],
-                                                feed_dict={self.input_images: X})
+
+            # split input data into batches:
+            input_batches = np.array_split(X, self.max_predict_batch_size)
+            prediction_batches = []
+            for input_batch in input_batches:
+                prediction_batch = self.tf_session.run(self.output_images, feed_dict={self.input_images: input_batch})
+                prediction_batches.append(prediction_batch)
             # close session (if possible):
             self._close_session()
+
+            # concatenate  batches to one array:
+            prediction = np.vstack(prediction_batches)
 
             return prediction
         else:
@@ -781,11 +802,17 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.model_is_trained:
             # reopen session (if model is saved to disk):
             self._load_session()
-            # self._print_training_warning()
-            cost = self.tf_session.run(self.cost_function, feed_dict={self.input_images: X})
+            self._print_training_warning()
+            # split input data into batches:
+            input_batches = np.array_split(X, self.max_predict_batch_size)
+            costs = []
+            for input_batch in input_batches:
+                cost = self.tf_session.run(self.cost_function, feed_dict={self.input_images: input_batch})
+                costs.append(cost)
             # close session (if possible):
             self._close_session()
-            return cost
+
+            return sum(costs)
         else:
             raise RuntimeError("You must train transformer before scoring data!")
 
