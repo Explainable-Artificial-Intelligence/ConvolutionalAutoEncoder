@@ -3,10 +3,10 @@ Collection of methods to parse input data files
 """
 import os
 import sys
-import urllib.request
 
 import numpy as np
 from PIL import Image
+from tensorflow.python.keras import datasets
 
 
 def load_input_data(filepath):
@@ -72,7 +72,7 @@ def read_image_folder(folderpath):
     array_shape = image_array.shape
     if len(array_shape) < 4:
         new_shape = [1] * 4
-        for i in range(0,len(array_shape)):
+        for i in range(0, len(array_shape)):
             new_shape[i] = array_shape[i]
         return image_array.reshape(new_shape)
 
@@ -89,34 +89,54 @@ def download_test_data():
     print("Getting test data...")
     # check if data folder exists
     data_path = os.path.join(os.getcwd(), "data")
+    print(os.path.abspath(data_path))
     if not os.path.exists(data_path):
         os.makedirs(data_path)
 
-    # download files
-    # TODO: don't download data, but use them online
-    if not os.path.exists(os.path.join(data_path, "cifar_test_data.npy")):
-        print("    downloading cifar test set ...")
-        urllib.request.urlretrieve(
-            "https://www.amazon.de/clouddrive/share/VklV3XIwaprp3SfybM7nq5EoJnrhHuFyJRe3u9qZDs3/Ci16CUCGSda2GNozUPPoqQ?_encoding=UTF8&*Version*=1&*entries*=0&mgh=1",
-                                   os.path.join(data_path, "cifar_test_data.npy"))
-        # urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/VklV3XIwaprp3SfybM7nq5EoJnrhHuFyJRe3u9qZDs3",
-        #                            os.path.join(data_path, "cifar_test_data.npy"))
-    if not os.path.exists(os.path.join(data_path, "cifar_train_data.npy")):
-        print("    downloading cifar train set ...")
-        urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/zeGKk15hokrQrvBbblXNin7DZOOnSAHFuwJBIMoZVBw",
-                                   os.path.join(data_path, "cifar_train_data.npy"))
-        # urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/zeGKk15hokrQrvBbblXNin7DZOOnSAHFuwJBIMoZVBw",
-        #                            os.path.join(data_path, "cifar_train_data.npy"))
-    if not os.path.exists(os.path.join(data_path, "mnist_test_data.npy")):
-        print("    downloading mnist test set ...")
-        urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/kLduOnUBYrytpgKDL5Cfg077zVWjQ0Ea0nIH6hBlkOd",
-                                   os.path.join(data_path, "mnist_test_data.npy"))
-        # urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/kLduOnUBYrytpgKDL5Cfg077zVWjQ0Ea0nIH6hBlkOd",
-        #                            os.path.join(data_path, "mnist_test_data.npy"))
-    if not os.path.exists(os.path.join(data_path, "mnist_train_data.npy")):
-        print("    downloading mnist train set ...")
-        urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/RFIV7M9u00O1CkJ4Ile4vXfr7bqAts0rxKs0ULUVgwf",
-                                   os.path.join(data_path, "mnist_train_data.npy"))
-        # urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/RFIV7M9u00O1CkJ4Ile4vXfr7bqAts0rxKs0ULUVgwf",
-        #                            os.path.join(data_path, "mnist_train_data.npy"))
+        # not functional anymore:
+        # # download files
+        # # TODO: don't download data, but use them online
+        # if not os.path.exists(os.path.join(data_path, "cifar_test_data.npy")):
+        #     print("    downloading cifar test set ...")
+        #     urllib.request.urlretrieve(
+        #         "https://www.amazon.de/clouddrive/share/VklV3XIwaprp3SfybM7nq5EoJnrhHuFyJRe3u9qZDs3/Ci16CUCGSda2GNozUPPoqQ?_encoding=UTF8&*Version*=1&*entries*=0&mgh=1",
+        #                                os.path.join(data_path, "cifar_test_data.npy"))
+        #     # urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/VklV3XIwaprp3SfybM7nq5EoJnrhHuFyJRe3u9qZDs3",
+        #     #                            os.path.join(data_path, "cifar_test_data.npy"))
+        # if not os.path.exists(os.path.join(data_path, "cifar_train_data.npy")):
+        #     print("    downloading cifar train set ...")
+        #     urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/zeGKk15hokrQrvBbblXNin7DZOOnSAHFuwJBIMoZVBw",
+        #                                os.path.join(data_path, "cifar_train_data.npy"))
+        #     # urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/zeGKk15hokrQrvBbblXNin7DZOOnSAHFuwJBIMoZVBw",
+        #     #                            os.path.join(data_path, "cifar_train_data.npy"))
+        # if not os.path.exists(os.path.join(data_path, "mnist_test_data.npy")):
+        #     print("    downloading mnist test set ...")
+        #     urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/kLduOnUBYrytpgKDL5Cfg077zVWjQ0Ea0nIH6hBlkOd",
+        #                                os.path.join(data_path, "mnist_test_data.npy"))
+        #     # urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/kLduOnUBYrytpgKDL5Cfg077zVWjQ0Ea0nIH6hBlkOd",
+        #     #                            os.path.join(data_path, "mnist_test_data.npy"))
+        # if not os.path.exists(os.path.join(data_path, "mnist_train_data.npy")):
+        #     print("    downloading mnist train set ...")
+        #     urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/RFIV7M9u00O1CkJ4Ile4vXfr7bqAts0rxKs0ULUVgwf",
+        #                                os.path.join(data_path, "mnist_train_data.npy"))
+        #     # urllib.request.urlretrieve("https://www.amazon.de/clouddrive/share/RFIV7M9u00O1CkJ4Ile4vXfr7bqAts0rxKs0ULUVgwf",
+        #     #
+        #                       os.path.join(data_path, "mnist_train_data.npy"))
+
+    # workaround: use tensorflow:
+    if not (os.path.exists(os.path.join(data_path, "cifar_test_data.npy") or os.path.exists(
+            os.path.join(data_path, "cifar_train_data.npy")))):
+        print("    downloading cifar data ...")
+        cifar_data = datasets.cifar10.load_data()
+
+        np.save(os.path.join(data_path, "cifar_train_data.npy"), cifar_data[0][0])
+        np.save(os.path.join(data_path, "cifar_test_data.npy"), cifar_data[1][0])
+
+    if not (os.path.exists(os.path.join(data_path, "mnist_test_data.npy") or os.path.exists(
+            os.path.join(data_path, "mnist_train_data.npy")))):
+        print("    downloading mnist data ...")
+        mnist_data = datasets.mnist.load_data()
+
+        np.save(os.path.join(data_path, "mnist_train_data.npy"), mnist_data[0][0])
+        np.save(os.path.join(data_path, "mnist_test_data.npy"), mnist_data[1][0])
     print("done")

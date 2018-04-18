@@ -75,3 +75,6 @@ target/
 save/
 train/
 test/
+
+# data folder
+data/

@@ -256,6 +256,7 @@ function finishSummaryTile(currentTile) {
             // update charts:
             currentTile.costChart.replaceData({'cost': data.train_performance_data});
             currentTile.learningRateChart.replaceData({'learning rate': data.train_performance_data});
+            currentTrainImageEpoch = 0;
 
             //mark tile as completely trained
             currentTile.markAsFinished(!(data.train_status === "finished" || data.train_status === "running"));
