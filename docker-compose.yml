@@ -3,8 +3,8 @@ swagger_server:
   ports:
     - "8080:8080"
     - "6006:6006"
-  volumes:
-    - ./data/docker:/usr/src/app/flask_server/data
+#  volumes:
+#    - ./data/docker:/usr/src/app/flask_server/data
 
 swagger_webserver:
   build: website/

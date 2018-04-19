@@ -790,7 +790,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
             return prediction
         else:
-            raise RuntimeError("You must train transformer before predicting data!")
+            raise RuntimeError("ERROR: You have to train transformer before predicting data!")
 
     def score(self, X, y=None):
         """
@@ -814,7 +814,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
             return sum(costs)
         else:
-            raise RuntimeError("You must train transformer before scoring data!")
+            raise RuntimeError("ERROR: You have to train transformer before scoring data!")
 
     def _close_session(self):
         """

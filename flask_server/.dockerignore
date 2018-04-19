@@ -78,3 +78,7 @@ test/
 
 # data folder
 data/
+
+# Dockerfiles
+Dockerfile
+Dockerfile*

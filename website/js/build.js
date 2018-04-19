@@ -4,6 +4,7 @@ check if client and server are running correctly
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
 var buildApi = new ConvolutionalAutoencoder.BuildApi();
+buildApi.setHeader()
 
 // check API functionality
 function callback(error, data, response) {

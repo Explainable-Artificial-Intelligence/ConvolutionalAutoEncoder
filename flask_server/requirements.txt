@@ -36,3 +36,4 @@ urllib3 >= 1.22
 wheel >= 0.31.0
 tensorboard	>= 1.7.0
 tensorflow	>= 1.7.0
+Flask-Cors >= 3.0.3
