@@ -2,11 +2,24 @@
 
 from __future__ import absolute_import
 
+from six import BytesIO
 from swagger_server.test import BaseTestCase
 
 
 class TestLoadController(BaseTestCase):
     """LoadController integration test stubs"""
+
+    def test_get_available_data_sets(self):
+        """Test case for get_available_data_sets
+
+        get available data sets
+        """
+        response = self.client.open(
+            '/v2/load/getAvailableDataSets',
+            method='POST',
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
 
     def test_get_image_batch(self):
         """Test case for get_image_batch
@@ -137,6 +150,20 @@ class TestLoadController(BaseTestCase):
             method='POST',
             content_type='application/json',
             query_string=query_string)
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+    def test_upload_file(self):
+        """Test case for upload_file
+
+        uploads a data file
+        """
+        data = dict(upfile=(BytesIO(b'some file data'), 'file.txt'))
+        response = self.client.open(
+            '/v2/load/uploadFile',
+            method='POST',
+            data=data,
+            content_type='multipart/form-data')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 

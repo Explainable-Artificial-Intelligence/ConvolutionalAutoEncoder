@@ -2,6 +2,8 @@
 check if client and server are running correctly
  */
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+var fs = require('fs');
+var path = require('path');
 
 var selectedImageId = "";
 
@@ -75,16 +77,43 @@ function appendImages(numberOfImages) {
 
 }
 
+function getAvailableDataSets() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('Available data sets retrieved');
+            // replace options in 'Available data sets' selection
+            console.log(data);
+            var selection = document.getElementById("inputAvailableDataSets");
+            // remove previous options
+            selection.options.length = 0;
+            // add available file names
+            for (var i = 0; i < data.length; i++) {
+                selection.options[i] = new Option(data[i], data[i], false, false)
+            }
+        }
+    }
+
+    loadApi.getAvailableDataSets(callback);
+}
+
 function loadFile() {
 
+    // abort if no data set is selected
+    if (document.getElementById("inputAvailableDataSets").selectedIndex === -1) {
+        console.log("No data set selected");
+        return;
+    }
+
     // get all input fields
-    var filename = document.getElementById("inputFilePath").value;
+    var filename = document.getElementById("inputAvailableDataSets").options[document.getElementById("inputAvailableDataSets").selectedIndex].value;
     var datasetname = document.getElementById("inputDatasetName").value;
-    var readLabels = document.getElementById("readLabels").options[document.getElementById("readLabels").selectedIndex].value === true;
+    //var readLabels = document.getElementById("readLabels").options[document.getElementById("readLabels").selectedIndex].value === true;
     var dataType = document.getElementById("dataType").options[document.getElementById("dataType").selectedIndex].value;
 
-    // call swagger client
-    var api = new ConvolutionalAutoencoder.LoadApi();
+    // // call swagger client
+    // var api = new ConvolutionalAutoencoder.LoadApi();
 
     // create callback function
     function loadCallback(error, data, response) {
@@ -104,11 +133,31 @@ function loadFile() {
         }
     }
 
-    api.loadFile(filename, {
+    loadApi.loadFile(filename, {
         'datasetname': datasetname,
-        'read_labels': readLabels,
+        'read_labels': false,
         'data_type': dataType
     }, loadCallback);
+
+}
+
+function uploadFile() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('File uploaded!');
+            // update available dat sets:
+            getAvailableDataSets();
+        }
+    }
+
+    var files = document.getElementById("inputUploadFile").files;
+    //console.log(filePath);
+    for (var i = 0, f; f = files[i]; i++) {
+        console.log(f);
+        loadApi.uploadFile(f);
+    }
 
 }
 
@@ -123,6 +172,8 @@ document.getElementById("showImagesBtn").addEventListener("click", function () {
     appendImages(300);
 });
 
+document.getElementById("uploadBtn").addEventListener("click", uploadFile);
+
 /*
 Initialisation
  */
@@ -131,3 +182,6 @@ Initialisation
 var histogram = new Histogram("imagePreviewView", 400, 400);
 loadApi.resetAllBatchIndices(callback);
 appendImages(1000);
+getAvailableDataSets();
+
+

@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: 'WebUI to build, train and tune a Convolutional Autoencoder'
-  version: 1.1.1
+  version: 1.1.2
   title: Convolutional Autoencoder
   termsOfService: 'http://swagger.io/terms/'
   contact:
@@ -25,6 +25,48 @@ tags:
 schemes:
   - http
 paths:
+  /load/getAvailableDataSets:
+    post:
+      tags:
+        - load
+      summary: get available data sets
+      description: returns a list of available data set files
+      operationId: getAvailableDataSets
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: set of filenames successfully returned
+          schema:
+            type: array
+            items:
+                type: string
+        '404':
+          description: Directory not found
+  /load/uploadFile:
+    post:
+      tags:
+        - load
+      summary: uploads a data file
+      description: Load a data file in different data formats
+      operationId: uploadFile
+      consumes:
+         - multipart/form-data
+      parameters:
+         - in: formData
+           name: upfile
+           required: true
+           type: file
+           description: The file to upload.
+      responses:
+        '200':
+          description: file successful loaded
+        '404':
+          description: File not found
+        '415':
+          description: File parsing error
   /load/loadFile:
     post:
       tags:

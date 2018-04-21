@@ -4,7 +4,6 @@ check if client and server are running correctly
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
 var buildApi = new ConvolutionalAutoencoder.BuildApi();
-buildApi.setHeader()
 
 // check API functionality
 function callback(error, data, response) {
@@ -21,7 +20,6 @@ buildApi.getInputShape([], callback);
 function readLearningParameter() {
 
     var inputParameterList = new ConvolutionalAutoencoder.ParameterList();
-
     inputParameterList.mirror_weights = [document.getElementById("mirrorWeights").checked];
     inputParameterList.activation_function = [document.getElementById("activationFunction").options[document.getElementById("activationFunction").selectedIndex].value];
     inputParameterList.batch_size = [Number(document.getElementById("batchSize").value)];

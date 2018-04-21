@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:8080/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**getAvailableDataSets**](LoadApi.md#getAvailableDataSets) | **POST** /load/getAvailableDataSets | get available data sets
 [**getImageBatch**](LoadApi.md#getImageBatch) | **GET** /load/getImageBatch | returns the next batch of input/output images
 [**getImageById**](LoadApi.md#getImageById) | **GET** /load/getImageById | returns a single input/output image
 [**getImages**](LoadApi.md#getImages) | **GET** /load/getImages | returns a subset of input/output images
@@ -12,7 +13,48 @@ Method | HTTP request | Description
 [**loadFile**](LoadApi.md#loadFile) | **POST** /load/loadFile | Load a train/test data file
 [**resetAllBatchIndices**](LoadApi.md#resetAllBatchIndices) | **POST** /load/resetAllBatchIndices | resets all batch indices of all image sets
 [**resetBatchIndex**](LoadApi.md#resetBatchIndex) | **POST** /load/resetBatchIndex | resets the batch index of the image set
+[**uploadFile**](LoadApi.md#uploadFile) | **POST** /load/uploadFile | uploads a data file
 
+
+<a name="getAvailableDataSets"></a>
+# **getAvailableDataSets**
+> [&#39;String&#39;] getAvailableDataSets()
+
+get available data sets
+
+returns a list of available data set files
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.LoadApi();
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.getAvailableDataSets(callback);
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**[&#39;String&#39;]**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="getImageBatch"></a>
 # **getImageBatch**
@@ -186,7 +228,7 @@ No authorization required
 
 <a name="getLatentRepresentationById"></a>
 # **getLatentRepresentationById**
-> [ImageData] getLatentRepresentationById(id, opts)
+> ImageData getLatentRepresentationById(id, opts)
 
 returns a single latent representation as ()list of) png images
 
@@ -223,7 +265,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[ImageData]**](ImageData.md)
+[**ImageData**](ImageData.md)
 
 ### Authorization
 
@@ -431,4 +473,50 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
+<a name="uploadFile"></a>
+# **uploadFile**
+> uploadFile(upfile)
+
+uploads a data file
+
+Load a data file in different data formats
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.LoadApi();
+
+var upfile = "/path/to/file.txt"; // File | The file to upload.
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+apiInstance.uploadFile(upfile, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **upfile** | **File**| The file to upload. | 
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
+ - **Accept**: Not defined
 

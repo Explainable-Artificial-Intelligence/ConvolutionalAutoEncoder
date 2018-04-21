@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "WebUI to build, train and tune a Convolutional Autoencoder"
-  version: "1.1.1"
+  version: "1.1.2"
   title: "Convolutional Autoencoder"
   termsOfService: "http://swagger.io/terms/"
   contact:
@@ -26,6 +26,51 @@ tags:
 schemes:
 - "http"
 paths:
+  /load/getAvailableDataSets:
+    post:
+      tags:
+      - "load"
+      summary: "get available data sets"
+      description: "returns a list of available data set files"
+      operationId: "get_available_data_sets"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "set of filenames successfully returned"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        404:
+          description: "Directory not found"
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/uploadFile:
+    post:
+      tags:
+      - "load"
+      summary: "uploads a data file"
+      description: "Load a data file in different data formats"
+      operationId: "upload_file"
+      consumes:
+      - "multipart/form-data"
+      parameters:
+      - name: "upfile"
+        in: "formData"
+        description: "The file to upload."
+        required: true
+        type: "file"
+      responses:
+        200:
+          description: "file successful loaded"
+        404:
+          description: "File not found"
+        415:
+          description: "File parsing error"
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
   /load/loadFile:
     post:
       tags:
@@ -361,9 +406,7 @@ paths:
         200:
           description: "Images successfully returned"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/ImageData"
+            $ref: "#/definitions/ImageData"
         404:
           description: "No data found"
         415:

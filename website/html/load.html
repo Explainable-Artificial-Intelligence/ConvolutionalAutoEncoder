@@ -22,28 +22,43 @@
 
 <aside id="sidebar">
     <section id="widget_1">
-        Input File: <br>
-        <input id="inputFilePath" value="data/cifar_train_data.npy"> <br>
+
+        <label for="inputAvailableDataSets">Available data sets:</label>
         <br>
-        Dataset name:<br>
-        <input id="inputDatasetName" value="train_data"><br>
         <br>
-        Data type: <br>
+        <select id="inputAvailableDataSets" size="3">
+
+        </select>
+        <br>
+        <br>
+        <label for="dataType">Data type:</label>
+        <br>
         <select id="dataType" size="1">
             <option value="auto">auto</option>
             <option value="npy">npy (numpy array format)</option>
             <option value="png">png (Image files)</option>
-        </select><br>
+        </select>
         <br>
-        Read Labels: <br>
-        <select id="readLabels" size="1">
-            <option>true</option>
-            <option>false</option>
-        </select> <br>
+        <br>
+        Dataset name:<br>
+        <input id="inputDatasetName" value="train_data"><br>
+        <br>
+        <br>
+        <button id="loadBtn">Load available data file</button>
+        <br>
+        <br>
+        <br>
+        Upload data file: <br>
+        <input id="inputUploadFile" type="file"> <br>
+        <br>
+        <button id="uploadBtn">Upload data file</button>
 
-        <button id="loadBtn">Load</button>
 
-
+        <!--Read Labels: <br>-->
+        <!--<select id="readLabels" size="1">-->
+        <!--<option>true</option>-->
+        <!--<option>false</option>-->
+        <!--</select> <br>-->
         <br>
         <br>
         <br>

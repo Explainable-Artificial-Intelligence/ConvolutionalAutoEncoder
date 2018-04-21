@@ -29,6 +29,8 @@ loadApi.resetAllBatchIndices(callback);
 Charts
  */
 var costChart = new LineChart("charts", 500, 500, "step", "cost", "steps", "cost", {'cost': 'lightblue'});
+// add line break
+document.getElementById("charts").appendChild(document.createElement("br"));
 var learningRateChart = new LineChart("charts", 500, 500, "step", "currentLearningRate", "steps", "learning rate",
     {'learning rate': 'lightblue'});
 

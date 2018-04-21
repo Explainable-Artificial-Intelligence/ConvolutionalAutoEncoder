@@ -3,9 +3,20 @@ import sys
 from flask_server.swagger_server.models.image import Image
 from flask_server.swagger_server.models.image_data import ImageData
 from flask_server.utils.ANNHelperFunctions import compute_output_images, compute_latent_representation
-from flask_server.utils.FileParser import load_input_data
+from flask_server.utils.FileParser import load_input_data, list_data_files, save_data_file
 from flask_server.utils.ImageProcessing import convert_image_array_to_byte_string
 from flask_server.utils.Storage import Storage
+
+
+def get_available_data_sets():
+    """get available data sets
+
+    returns a list of available data set files # noqa: E501
+
+
+    :rtype: List[str]
+    """
+    return list_data_files()
 
 
 def get_image_batch(batch_size=100, datasetname="train_data", sort_by=None, filter=None, output=False):
@@ -252,3 +263,17 @@ def reset_batch_index(dataset_name=None, output=None):
         return 'Batch index reset', 200
     except KeyError:
         return 'dataset not found', 404
+
+
+def upload_file(upfile):
+    """uploads a data file
+
+    Load a data file in different data formats # noqa: E501
+
+    :param upfile: The file to upload.
+    :type upfile: werkzeug.datastructures.FileStorage
+
+    :rtype: None
+    """
+
+    return save_data_file(upfile)

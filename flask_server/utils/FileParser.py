@@ -9,13 +9,14 @@ from PIL import Image
 from tensorflow.python.keras import datasets
 
 
-def load_input_data(filepath):
+def load_input_data(filename):
     """
     imports input files in several formats
-    :param filepath:
+    :param filename:
     :return:
     """
-
+    data_path = os.path.join(os.getcwd(), "data")
+    filepath = os.path.join(data_path, filename)
     if os.path.isfile(filepath):
         print("file found", file=sys.stderr)
         if filepath.endswith('.npy') or filepath.endswith('.NPY'):
@@ -140,3 +141,27 @@ def download_test_data():
         np.save(os.path.join(data_path, "mnist_train_data.npy"), mnist_data[0][0])
         np.save(os.path.join(data_path, "mnist_test_data.npy"), mnist_data[1][0])
     print("done")
+
+
+def list_data_files():
+    """
+        returns a list of all files in the data directory
+
+        :return: list of file names
+    """
+    data_path = os.path.join(os.getcwd(), "data")
+    if os.path.exists(data_path):
+        data_files = [file for file in os.listdir(data_path) if os.path.isfile(os.path.join(data_path, file))]
+        return data_files, 200
+    else:
+        return 'data path not found', 404
+
+
+def save_data_file(file):
+    try:
+        data_path = os.path.join(os.getcwd(), "data")
+        filename = file.filename
+        file.save(os.path.join(data_path, filename))
+        return "File successfully saved", 200
+    except IOError:
+        return 'File could not be saved to disk', 415

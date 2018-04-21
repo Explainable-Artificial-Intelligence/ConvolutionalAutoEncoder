@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import connexion
-from flask.ext.cors import CORS
+from flask_cors import CORS
 
 from flask_server.swagger_server import encoder
 from flask_server.utils.FileParser import download_test_data
