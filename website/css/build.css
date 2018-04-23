@@ -2,3 +2,16 @@ section {
     padding: 15px;
     /*margin: 15px;*/
 }
+
+div#decoder {
+    margin-left: 5px;
+}
+
+div#encoder {
+    margin-left: 5px;
+}
+
+svg.layer-svg {
+    margin-left: 2px;
+    margin-right: 2px;
+}

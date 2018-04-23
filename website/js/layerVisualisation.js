@@ -522,7 +522,7 @@ function ANNLayerPreview(width, height, layerWidth, layerHeight, stackCount, fil
 
     this.setLayerDimension = function (newWidth, newHeight) {
         setLayerDimension(newWidth, newHeight);
-    }
+    };
 
     this.setLinkedLayer = function (layerIdx) {
         if (layerIdx > 0) {
@@ -565,14 +565,14 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
 
     //define basic parameters
     console.log(layerType);
+    var layerIdx = 0;
     if (layerType === "input_output_layer") {
-        var layerIdx = 0;
         layerPair.push({plot_id: "input_layer", title: "Input Layer ", parentNode: "#input", layerIdx: 0});
         layerPair.push({plot_id: "output_layer", title: "Output Layer ", parentNode: "#output", layerIdx: 0});
 
 
     } else {
-        var layerIdx = (encoderDecoderLayerPairs.length + 1);
+        layerIdx = (encoderDecoderLayerPairs.length + 1);
         layerPair.push({
             plot_id: "encoder_layer_" + layerIdx,
             title: "Encoder Layer " + layerIdx,
@@ -682,8 +682,10 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                 .style('fill', "none")
                 .style('fill-opacity', 0.2)
                 .on("click", function () {
-                    d3.select("#encoder_layer_" + layerIdx).remove();
-                    d3.select("#decoder_layer_" + layerIdx).remove();
+                    console.log("#encoder_layer_" + entry.layerIdx);
+                    console.log("#decoder_layer_" + entry.layerIdx);
+                    d3.select("#encoder_layer_" + entry.layerIdx).remove();
+                    d3.select("#decoder_layer_" + entry.layerIdx).remove();
                 });
             entry.deleteBtn = entry.plot.append("text")
                 .attr("class", "delete_button")
@@ -693,12 +695,14 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
                 .text("x")
                 .on("click", function () {
                     // remove layer from layer array:
-                    encoderDecoderLayerPairs.splice(layerIdx - 1, 1);
+                    encoderDecoderLayerPairs.splice(entry.layerIdx - 1, 1);
                     console.log(encoderDecoderLayerPairs);
 
                     // remove svg:
-                    d3.select("#encoder_layer_" + layerIdx).remove();
-                    d3.select("#decoder_layer_" + layerIdx).remove();
+                    console.log("#encoder_layer_" + entry.layerIdx);
+                    console.log("#decoder_layer_" + entry.layerIdx);
+                    d3.select("#encoder_layer_" + entry.layerIdx).remove();
+                    d3.select("#decoder_layer_" + entry.layerIdx).remove();
 
                     // renumber layer:
                     renumberLayers();
@@ -1115,14 +1119,7 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
     }
 
     this.toggleSelection = function () {
-        //(de-)select this layer:
-        if (selected) {
-            border.style("stroke-width", 0);
-            selected = false;
-        } else {
-            border.style("stroke-width", 2);
-            selected = true;
-        }
+        toggleSelection();
     };
 
     this.deselectLayer = function () {
@@ -1152,10 +1149,6 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
         setLayerDimension(newWidth, newHeight);
     };
 
-    this.linkLayer = function (linkLayer) {
-        linkedLayer = linkedLayer;
-    };
-
     this.setStackCount = function (newStackCount) {
         setStackCount(newStackCount);
     };
@@ -1165,11 +1158,11 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
     };
 
     this.setLayerIdx = function (idx) {
+        console.log("setLayerIdx: " + idx);
         layerPair.forEach(function (entry) {
-
-            layerIdx = idx;
+            console.log(idx);
             entry.layerIdx = idx;
-            entry.plot_id = entry.plot_id.split('_')[0] + '_' + entry.layerIdx;
+            entry.plot_id = entry.plot_id.split('_')[0] + '_' + entry.plot_id.split('_')[1] + '_' + entry.layerIdx;
             entry.title = entry.title.split(' ')[0] + ' ' + entry.title.split(' ')[1] + ' ' + entry.layerIdx;
             console.log(entry.plot_id);
             entry.plot.attr("id", entry.plot_id);

@@ -115,7 +115,7 @@ function getInputDimensions() {
 
 
             //update input shape:
-            inputShape = data;
+            var inputShape = data;
 
             // add placeholder for first dim:
             inputShape[0] = -1;
