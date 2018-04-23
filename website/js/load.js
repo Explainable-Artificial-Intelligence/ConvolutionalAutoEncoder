@@ -181,6 +181,8 @@ Initialisation
 // create histogram
 var histogram = new Histogram("imagePreviewView", 400, 400);
 loadApi.resetAllBatchIndices(callback);
+// remove selection:
+document.getElementById("imagePreview").linkedId = "";
 appendImages(1000);
 getAvailableDataSets();
 

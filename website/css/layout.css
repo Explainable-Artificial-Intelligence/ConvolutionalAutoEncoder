@@ -51,6 +51,7 @@ li a {
 
 li a:hover {
     background-color: #111;
+    color: orange
 }
 
 path {
@@ -182,6 +183,13 @@ path:hover {
 .columnDiv {
     overflow: auto;
     width: 100%;
+}
+
+li.tabSelected a {
+    background-color: orange;
+    color: #2a2a2a;
+    font-weight: bold;
+
 }
 
 /*
