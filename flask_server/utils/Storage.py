@@ -9,6 +9,7 @@ class Storage(object):
     input_batch_indices = {}
     output_data = {}
     latent_representation_data = {}
+    score_data = {}
     output_batch_indices = {}
     cae = object()
     parameter_set = {}

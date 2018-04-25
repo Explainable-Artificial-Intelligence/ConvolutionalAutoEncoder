@@ -812,7 +812,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             # close session (if possible):
             self._close_session()
 
-            return sum(costs)
+            return costs
         else:
             raise RuntimeError("ERROR: You have to train transformer before scoring data!")
 

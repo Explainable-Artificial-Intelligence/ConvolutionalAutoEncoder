@@ -12,26 +12,31 @@ class Image(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, bytestring: str = None, id: int = None):  # noqa: E501
+    def __init__(self, bytestring: str = None, id: int = None, cost: float = None):  # noqa: E501
         """Image - a model defined in Swagger
 
         :param bytestring: The bytestring of this Image.  # noqa: E501
         :type bytestring: str
         :param id: The id of this Image.  # noqa: E501
         :type id: int
+        :param cost: The cost of this Image.  # noqa: E501
+        :type cost: float
         """
         self.swagger_types = {
             'bytestring': str,
-            'id': int
+            'id': int,
+            'cost': float
         }
 
         self.attribute_map = {
             'bytestring': 'bytestring',
-            'id': 'id'
+            'id': 'id',
+            'cost': 'cost'
         }
 
         self._bytestring = bytestring
         self._id = id
+        self._cost = cost
 
     @classmethod
     def from_dict(cls, dikt) -> 'Image':
@@ -85,3 +90,24 @@ class Image(Model):
         """
 
         self._id = id
+
+    @property
+    def cost(self) -> float:
+        """Gets the cost of this Image.
+
+
+        :return: The cost of this Image.
+        :rtype: float
+        """
+        return self._cost
+
+    @cost.setter
+    def cost(self, cost: float):
+        """Sets the cost of this Image.
+
+
+        :param cost: The cost of this Image.
+        :type cost: float
+        """
+
+        self._cost = cost

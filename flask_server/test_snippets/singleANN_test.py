@@ -14,6 +14,4 @@ cae_test = ConvolutionalAutoEncoder.SklearnCAE([None, 28, 28, 1], [12, 8, 8, 4],
 
 cae_test.fit(train_data)
 
-print(cae_test.score(test_data))
-
-
+print(sum(cae_test.score(test_data)))

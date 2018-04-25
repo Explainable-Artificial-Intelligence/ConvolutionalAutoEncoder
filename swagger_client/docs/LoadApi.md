@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost:8080/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getAvailableDataSets**](LoadApi.md#getAvailableDataSets) | **POST** /load/getAvailableDataSets | get available data sets
+[**getAvailableDataSets**](LoadApi.md#getAvailableDataSets) | **GET** /load/getAvailableDataSets | get available data sets
 [**getImageBatch**](LoadApi.md#getImageBatch) | **GET** /load/getImageBatch | returns the next batch of input/output images
 [**getImageById**](LoadApi.md#getImageById) | **GET** /load/getImageById | returns a single input/output image
 [**getImages**](LoadApi.md#getImages) | **GET** /load/getImages | returns a subset of input/output images

@@ -67,18 +67,22 @@ def get_image_by_id(id=None, datasetname="train_data", sort_by=None, filter=None
     :rtype: ImageData
     """
 
+    # create Image
+    image = Image()
+    image.id = id
+
     if output:
         # check if output images already computed
         compute_output_images(datasetname)
         # get the image as nd array
         image_array = Storage.output_data[datasetname][id]
+        image.cost = Storage.score_data[datasetname][id]
     else:
         # get the image as nd array
         image_array = Storage.input_data[datasetname][id]
+        image.cost = 0.0
 
-    # create Image
-    image = Image()
-    image.id = id
+    # convert image array to byte string
     image.bytestring = convert_image_array_to_byte_string(image_array, channels=image_array.shape[2])
 
     return image, 200
@@ -129,6 +133,7 @@ def get_images(start_idx, end_idx, datasetname="train_data", sort_by=None, filte
     input_images.images = []
     for i in range(start_idx, end_idx):
         image = Image()
+        image.cost = 0.0
         image.id = i
         # TODO : use byte array
         image.bytestring = convert_image_array_to_byte_string(image_data[i], channels=image_data.shape[3])
@@ -166,6 +171,7 @@ def get_latent_representation_by_id(id, datasetname=None):
     if image_array.shape[2] <= 3:
         # if possible: display latent layer in one image
         latent_img = Image()
+        latent_img.cost = 0.0
         latent_img.bytestring = convert_image_array_to_byte_string(image_array, channels=image_array.shape[2],
                                                                    normalize=True)
         latent_img.id = id
@@ -174,6 +180,7 @@ def get_latent_representation_by_id(id, datasetname=None):
         # if not: create a list of images for each layer:
         for stack in range(image_array.shape[2]):
             latent_img = Image()
+            latent_img.cost = 0.0
             latent_img.bytestring = convert_image_array_to_byte_string(image_array[:, :, stack], channels=1,
                                                                        normalize=True)
             latent_img.id = id

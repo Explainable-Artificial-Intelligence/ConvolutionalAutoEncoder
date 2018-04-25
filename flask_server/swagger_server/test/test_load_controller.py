@@ -16,7 +16,7 @@ class TestLoadController(BaseTestCase):
         """
         response = self.client.open(
             '/v2/load/getAvailableDataSets',
-            method='POST',
+            method='GET',
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

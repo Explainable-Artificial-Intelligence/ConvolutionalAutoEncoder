@@ -246,11 +246,12 @@ function updatePreviewImages(id) {
             var latentImageGrid = document.getElementById('latentImages');
             latentImageGrid.innerHTML = "";
             //iterate over all images;
-            for (var i = 0; i < data[0].images.length; i++) {
+            for (var i = 0; i < response.body[0].images.length; i++) {
                 //add new image:
                 var image = document.createElement("img");
                 image.width = 100;
-                image.src = "data:image/png;base64," + data[0].images[i].bytestring.substring(2, data[0].images[i].bytestring.length - 1);
+                image.src = "data:image/png;base64," + response.body[0].images[i].bytestring.substring(2,
+                    response.body[0].images[i].bytestring.length - 1);
                 latentImageGrid.appendChild(image);
             }
         }
@@ -264,12 +265,18 @@ function updatePreviewImages(id) {
         if (error) {
             console.error(error);
         } else {
+            console.log(response);
+            console.log(data);
+
             document.getElementById('outputPreview').src = "data:image/png;base64,"
                 + response.body.bytestring.substring(2, response.body.bytestring.length - 1);
+            document.getElementById('scoreLabel').textContent = "Score: " + response.body.cost;
+
 
         }
 
     }
+
     loadApi.getImageById(Number(id), {'output': true}, outputImageCallback);
 
 }

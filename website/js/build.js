@@ -94,6 +94,7 @@ Convolutional Auto Encoder topology
 /*
 Global Variables
  */
+var inputShape = [0, 0, 0, 0];
 
 // var previewLayer = new ANNLayerPreview(500, 500, 28, 28, 3, 3, null, true, false, null);
 
@@ -115,7 +116,7 @@ function getInputDimensions() {
 
 
             //update input shape:
-            var inputShape = data;
+            inputShape = data;
 
             // add placeholder for first dim:
             inputShape[0] = -1;
