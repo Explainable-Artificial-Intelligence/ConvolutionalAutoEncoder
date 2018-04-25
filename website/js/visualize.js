@@ -212,10 +212,12 @@ function drawClustering() {
     clusterParameter.tol = 0.0001;
     clusterParameter.verbose = 0;
 
+    // console.log(clusterParameter);
 
-    visualizeApi.getHiddenLayerLatentClustering({
-        algorithm: "auto", datasetName: "train_data", dimensionReduction: "PCA",
-        layer: 0, clusterParameters: clusterParameter
+
+    visualizeApi.getHiddenLayerLatentClustering("auto", "PCA", {
+        datasetName: "train_data", layer: 0,
+        clusterParameters: clusterParameter
     }, clusterCallback);
 }
 

@@ -105,26 +105,36 @@
     /**
      * returns the clustering of the latent representation of a hidden layer
      * returns the clustering of the latent representation of a hidden layer
+     * @param {String} algorithm determines the clutering algorithm
+     * @param {String} dimensionReduction determines the algorithm for dim reduction
      * @param {Object} opts Optional parameters
-     * @param {String} opts.algorithm determines the clutering algorithm
      * @param {String} opts.datasetName determines the dataset which should be clustered (default to train_data)
-     * @param {String} opts.dimensionReduction determines the algorithm for dim reduction
-     * @param {module:model/ClusterParameters} opts.clusterParameters determines the clutering parameters
      * @param {Number} opts.layer determines the hidden layer
+     * @param {module:model/ClusterParameters} opts.clusterParameters determines the clutering parameters
      * @param {module:api/VisualizeApi~getHiddenLayerLatentClusteringCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/Clustering}
      */
-    this.getHiddenLayerLatentClustering = function(opts, callback) {
+    this.getHiddenLayerLatentClustering = function (algorithm, dimensionReduction, opts, callback) {
       opts = opts || {};
         var postBody = opts['clusterParameters'];
+
+        // verify the required parameter 'algorithm' is set
+        if (algorithm === undefined || algorithm === null) {
+            throw new Error("Missing the required parameter 'algorithm' when calling getHiddenLayerLatentClustering");
+        }
+
+        // verify the required parameter 'dimensionReduction' is set
+        if (dimensionReduction === undefined || dimensionReduction === null) {
+            throw new Error("Missing the required parameter 'dimensionReduction' when calling getHiddenLayerLatentClustering");
+        }
 
 
       var pathParams = {
       };
       var queryParams = {
-        'algorithm': opts['algorithm'],
+          'algorithm': algorithm,
         'dataset_name': opts['datasetName'],
-        'dimension_reduction': opts['dimensionReduction'],
+          'dimension_reduction': dimensionReduction,
           'layer': opts['layer'],
       };
         var collectionQueryParams = {
@@ -140,7 +150,7 @@
       var returnType = Clustering;
 
       return this.apiClient.callApi(
-        '/visualize/getHiddenLayerLatentClustering', 'GET',
+          '/visualize/getHiddenLayerLatentClustering', 'POST',
           pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );

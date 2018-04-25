@@ -551,7 +551,7 @@ paths:
             $ref: "#/definitions/TrainPerformance"
       x-swagger-router-controller: "swagger_server.controllers.train_controller"
   /visualize/getHiddenLayerLatentClustering:
-    get:
+    post:
       tags:
       - "visualize"
       summary: "returns the clustering of the latent representation of a hidden layer"
@@ -566,7 +566,7 @@ paths:
       - name: "algorithm"
         in: "query"
         description: "determines the clutering algorithm"
-        required: false
+        required: true
         type: "string"
       - name: "dataset_name"
         in: "query"
@@ -577,20 +577,20 @@ paths:
       - name: "dimension_reduction"
         in: "query"
         description: "determines the algorithm for dim reduction"
-        required: false
+        required: true
         type: "string"
-      - in: "body"
-        name: "cluster_parameters"
-        description: "determines the clutering parameters"
-        required: false
-        schema:
-          $ref: "#/definitions/ClusterParameters"
       - name: "layer"
         in: "query"
         description: "determines the hidden layer"
         required: false
         type: "integer"
         format: "int32"
+      - in: "body"
+        name: "cluster_parameters"
+        description: "determines the clutering parameters"
+        required: false
+        schema:
+          $ref: "#/definitions/ClusterParameters"
       responses:
         200:
           description: "Operation successful"

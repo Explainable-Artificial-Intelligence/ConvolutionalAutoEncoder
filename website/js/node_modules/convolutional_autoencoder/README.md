@@ -141,7 +141,7 @@ Class | Method | HTTP request | Description
 *ConvolutionalAutoencoder.TuneApi* | [**getTrainPerformanceOfSpecificTuning**](docs/TuneApi.md#getTrainPerformanceOfSpecificTuning) | **GET** /tune/getTrainPerformanceOfSpecificTuning | returns the complete set of scalar train variables to a given model
 *ConvolutionalAutoencoder.TuneApi* | [**getTuneParameter**](docs/TuneApi.md#getTuneParameter) | **GET** /tune/getTuneParameter | returns the parameter set of the ANN with the given model id
 *ConvolutionalAutoencoder.VisualizeApi* | [**generateImageFromSinglePoint**](docs/VisualizeApi.md#generateImageFromSinglePoint) | **GET** /visualize/generateImageFromSinglePoint | generates the AE output from a given point of the sample distribution
-*ConvolutionalAutoencoder.VisualizeApi* | [**getHiddenLayerLatentClustering**](docs/VisualizeApi.md#getHiddenLayerLatentClustering) | **GET** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
+*ConvolutionalAutoencoder.VisualizeApi* | [**getHiddenLayerLatentClustering**](docs/VisualizeApi.md#getHiddenLayerLatentClustering) | **POST** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
 
 
 ## Documentation for Models

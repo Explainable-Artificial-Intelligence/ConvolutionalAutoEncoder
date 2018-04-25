@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost:8080/v2*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**generateImageFromSinglePoint**](VisualizeApi.md#generateImageFromSinglePoint) | **GET** /visualize/generateImageFromSinglePoint | generates the AE output from a given point of the sample distribution
-[**getHiddenLayerLatentClustering**](VisualizeApi.md#getHiddenLayerLatentClustering) | **GET** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
+[**getHiddenLayerLatentClustering**](VisualizeApi.md#getHiddenLayerLatentClustering) | **POST** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
 
 
 <a name="generateImageFromSinglePoint"></a>
@@ -56,7 +56,7 @@ No authorization required
 
 <a name="getHiddenLayerLatentClustering"></a>
 # **getHiddenLayerLatentClustering**
-> Clustering getHiddenLayerLatentClustering(opts)
+> Clustering getHiddenLayerLatentClustering(algorithm, dimensionReduction, opts)
 
 returns the clustering of the latent representation of a hidden layer
 
@@ -68,12 +68,14 @@ var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
 var apiInstance = new ConvolutionalAutoencoder.VisualizeApi();
 
+var algorithm = "algorithm_example"; // String | determines the clutering algorithm
+
+var dimensionReduction = "dimensionReduction_example"; // String | determines the algorithm for dim reduction
+
 var opts = { 
-  'algorithm': "algorithm_example", // String | determines the clutering algorithm
   'datasetName': "train_data", // String | determines the dataset which should be clustered
-  'dimensionReduction': "dimensionReduction_example", // String | determines the algorithm for dim reduction
-  'clusterParameters': new ConvolutionalAutoencoder.ClusterParameters(), // ClusterParameters | determines the clutering parameters
-  'layer': 56 // Number | determines the hidden layer
+  'layer': 56, // Number | determines the hidden layer
+  'clusterParameters': new ConvolutionalAutoencoder.ClusterParameters() // ClusterParameters | determines the clutering parameters
 };
 
 var callback = function(error, data, response) {
@@ -83,18 +85,18 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-apiInstance.getHiddenLayerLatentClustering(opts, callback);
+apiInstance.getHiddenLayerLatentClustering(algorithm, dimensionReduction, opts, callback);
 ```
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **algorithm** | **String**| determines the clutering algorithm | [optional] 
+ **algorithm** | **String**| determines the clutering algorithm | 
+ **dimensionReduction** | **String**| determines the algorithm for dim reduction | 
  **datasetName** | **String**| determines the dataset which should be clustered | [optional] [default to train_data]
- **dimensionReduction** | **String**| determines the algorithm for dim reduction | [optional] 
- **clusterParameters** | [**ClusterParameters**](ClusterParameters.md)| determines the clutering parameters | [optional] 
  **layer** | **Number**| determines the hidden layer | [optional] 
+ **clusterParameters** | [**ClusterParameters**](ClusterParameters.md)| determines the clutering parameters | [optional] 
 
 ### Return type
 
