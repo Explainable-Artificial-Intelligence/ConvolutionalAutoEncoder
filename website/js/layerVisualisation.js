@@ -1159,6 +1159,7 @@ function ANNLayerPair(width, height, layerWidth, layerHeight, stackCount, filter
 
     this.setLayerIdx = function (idx) {
         console.log("setLayerIdx: " + idx);
+        layerIdx = idx;
         layerPair.forEach(function (entry) {
             console.log(idx);
             entry.layerIdx = idx;

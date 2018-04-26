@@ -26,6 +26,11 @@ function callback(error, data, response) {
 loadApi.resetAllBatchIndices(callback);
 
 /*
+Global variables
+ */
+var currentTrainImageEpoch = 0;
+
+/*
 Charts
  */
 var costChart = new LineChart("charts", 500, 500, "step", "cost", "steps", "cost", {'cost': 'lightblue'});
@@ -33,6 +38,10 @@ var costChart = new LineChart("charts", 500, 500, "step", "cost", "steps", "cost
 document.getElementById("charts").appendChild(document.createElement("br"));
 var learningRateChart = new LineChart("charts", 500, 500, "step", "currentLearningRate", "steps", "learning rate",
     {'learning rate': 'lightblue'});
+// add line break
+document.getElementById("charts").appendChild(document.createElement("br"));
+var epochImages = new ImageGrid(document.getElementById("charts"), 9);
+
 
 function updateTrainImages() {
     var callback = function (error, data, response) {
@@ -111,6 +120,16 @@ function updateTrainImages() {
 
                 imageGrid.appendChild(tableRow);
 
+
+            }
+
+            //add images epochwise
+            if (data.epoch > currentTrainImageEpoch) {
+
+                //create new column:
+                epochImages.addNewImageColumn(data);
+
+                currentTrainImageEpoch = data.epoch;
             }
 
 

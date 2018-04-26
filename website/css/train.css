@@ -1,0 +1,46 @@
+
+div.scrollPane {
+    margin: 0;
+    padding: 0;
+    height: 280px;
+}
+
+table.imageGrid {
+    margin: 0;
+    padding: 0;
+}
+
+table.imageGrid td, tr {
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+
+}
+
+table.imageGrid td.inputImageColumn {
+    width: 52px;
+
+}
+
+table.imageGrid td.outputImageColumn {
+    width: 52px;
+
+}
+
+table.imageGrid td.latentImageColumn {
+    width: 82px;
+
+}
+
+.imageGrid .header {
+
+    font-size: 8px;
+    /*transform: rotate(45.0deg);*/
+    /*-moz-transform: rotate(-90.0deg); !* FF3.5+ *!*/
+    /*-o-transform: rotate(-90.0deg); !* Opera 10.5 *!*/
+    /*-webkit-transform: rotate(-90.0deg); !* Saf3.1+, Chrome *!*/
+    /*filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083); !* IE6,IE7 *!*/
+    /*-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; !* IE8 *!*/
+    /*margin-left: -10em;*/
+    /*margin-right: -10em;*/
+}

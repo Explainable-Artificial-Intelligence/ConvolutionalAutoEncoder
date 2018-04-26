@@ -57,13 +57,15 @@ function ImageGrid(parentNode, rowCount) {
 
             // create cell for input image
             var inputCell = document.createElement("td");
+            inputCell.classList.add("inputImageColumn");
             // create new input image object
             var newInputImage = document.createElement("img");
             newInputImage.id = "InputImage_" + trainImages.inputLayer[i].id;
             newInputImage.src = "data:image/png;base64," + trainImages.inputLayer[i].bytestring.substring(2,
                 trainImages.inputLayer[i].bytestring.length - 1);
             newInputImage.style.width = "50px";
-            newInputImage.class = "imageThumbnail";
+            newInputImage.classList.add("imageThumbnail");
+
 
             // append new image to image grid
             inputCell.appendChild(newInputImage);
@@ -71,13 +73,15 @@ function ImageGrid(parentNode, rowCount) {
 
             // create new latent image object
             var latentCell = document.createElement("td");
+            latentCell.classList.add("latentImageColumn");
             for (var j = 0; j < trainImages.latentLayer[i].length; j++) {
                 var newLatentImage = document.createElement("img");
                 newLatentImage.id = "LatentImage_" + trainImages.latentLayer[i][j].id + "_" + j;
                 newLatentImage.src = "data:image/png;base64," + trainImages.latentLayer[i][j].bytestring.substring(2,
                     trainImages.latentLayer[i][j].bytestring.length - 1);
                 newLatentImage.style.width = "20px";
-                newLatentImage.class = "layerThumbnail";
+                newLatentImage.classList.add("imageThumbnail");
+
                 // append new image div to image grid
                 latentCell.appendChild(newLatentImage);
                 if ((j + 1) % 4 === 0) { //Math.ceil(Math.sqrt(data.latentLayer[i].length))
@@ -90,13 +94,15 @@ function ImageGrid(parentNode, rowCount) {
 
             // create cell for input image
             var outputCell = document.createElement("td");
+            outputCell.classList.add("outputImageColumn");
             // create new output image object
             var newOutputImage = document.createElement("img");
             newOutputImage.id = "OutputImage_" + trainImages.outputLayer[i].id;
             newOutputImage.src = "data:image/png;base64," + trainImages.outputLayer[i].bytestring.substring(2,
                 trainImages.outputLayer[i].bytestring.length - 1);
             newOutputImage.style.width = "50px";
-            newOutputImage.class = "imageThumbnail";
+            newOutputImage.classList.add("imageThumbnail");
+
 
             // append new image to image grid
             outputCell.appendChild(newOutputImage);

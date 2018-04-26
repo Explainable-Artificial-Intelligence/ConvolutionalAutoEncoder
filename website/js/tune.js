@@ -451,7 +451,6 @@ function updateTrainImages() {
     tuneApi.getProcessedImageDataOfCurrentTuning(20, callback);
 }
 
-
 function updateTrainStatistics() {
     var callback = function (error, data, response) {
         if (error) {
