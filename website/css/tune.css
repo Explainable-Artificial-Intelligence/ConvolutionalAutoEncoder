@@ -41,7 +41,10 @@ td.summaryColumn {
 div.scrollPane {
     margin: 0;
     padding: 0;
-    height: 280px;
+    height: 300px;
+    overflow: auto;
+    white-space: nowrap;
+    max-width: 300px;
 }
 
 table.imageGrid {

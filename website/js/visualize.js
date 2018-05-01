@@ -8,7 +8,8 @@ var loadApi = new ConvolutionalAutoencoder.LoadApi();
 var visualizeApi = new ConvolutionalAutoencoder.VisualizeApi();
 
 // increase timeout
-visualizeApi.timeout = 600000;
+visualizeApi.timeout = 1600000;
+visualizeApi.defaultTimeout = 160000;
 
 
 var colorMap = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd'];
@@ -187,6 +188,25 @@ function ClusterChart(parentNodeID, width, height, colorMap, clustering) {
 
 }
 
+function readClusterParameter() {
+    var clusterParameter = new ConvolutionalAutoencoder.ClusterParameters();
+    clusterParameter.algorithm = document.getElementById("advancedClusteringAlgorithm").options[document.getElementById("advancedClusteringAlgorithm").selectedIndex].value;
+    clusterParameter.copy_x = (document.getElementById("advancedClusteringCopyX").options[document.getElementById("advancedClusteringCopyX").selectedIndex].value === 'true');
+    clusterParameter.init = document.getElementById("advancedClusteringInit").options[document.getElementById("advancedClusteringInit").selectedIndex].value;
+    clusterParameter.max_iter = Number(document.getElementById("advancedClusteringMaxIter").value);
+    clusterParameter.n_clusters = Number(document.getElementById("advancedClusteringNClusters").value);
+    clusterParameter.n_init = Number(document.getElementById("advancedClusteringNInit").value);
+    clusterParameter.n_jobs = -1;
+    clusterParameter.precompute_distances = document.getElementById("advancedClusteringPrecomputeDistances").options[document.getElementById("advancedClusteringPrecomputeDistances").selectedIndex].value;
+    clusterParameter.random_state = Number(document.getElementById("advancedClusteringRandomState").value);
+    clusterParameter.tol = Number(document.getElementById("advancedClusteringTol").value);
+    clusterParameter.verbose = 0;
+
+
+    return clusterParameter;
+
+}
+
 function drawClustering() {
 
 
@@ -199,26 +219,12 @@ function drawClustering() {
         }
     }
 
-    var clusterParameter = new ConvolutionalAutoencoder.ClusterParameters();
-    clusterParameter.algorithm = 'auto';
-    clusterParameter.copy_x = true;
-    clusterParameter.init = 'kmeans++';
-    clusterParameter.max_iter = 300;
-    clusterParameter.n_clusters = 10;
-    clusterParameter.n_init = 10;
-    clusterParameter.n_jobs = -1;
-    clusterParameter.precompute_distances = 'auto';
-    clusterParameter.random_state = -1;
-    clusterParameter.tol = 0.0001;
-    clusterParameter.verbose = 0;
-
-    // console.log(clusterParameter);
+    var clusterParameter = readClusterParameter();
+    var algorithm = document.getElementById("clusteringAlgorithm").options[document.getElementById("clusteringAlgorithm").selectedIndex].value;
+    var dimensionReduction = document.getElementById("dimReductionAlgorithm").options[document.getElementById("dimReductionAlgorithm").selectedIndex].value;
 
 
-    visualizeApi.getHiddenLayerLatentClustering("auto", "PCA", {
-        datasetName: "train_data", layer: 0,
-        clusterParameters: clusterParameter
-    }, clusterCallback);
+    visualizeApi.getHiddenLayerLatentClustering(algorithm, dimensionReduction, {clusterParameters: clusterParameter}, clusterCallback);
 }
 
 function updatePreviewImages(id) {
@@ -284,10 +290,6 @@ function updatePreviewImages(id) {
 }
 
 
-appendImages(70);
-drawClustering();
-
-
 //init slick slider
 $(document).ready(function () {
     $('.slick').slick({
@@ -303,6 +305,13 @@ $('.slick').on('afterChange', function (event, slick, direction) {
     appendImages(11);
     // left
 });
+
+/*
+init tab
+ */
+document.getElementById("drawClustering").addEventListener('click', drawClustering);
+
+appendImages(70);
 
 
 

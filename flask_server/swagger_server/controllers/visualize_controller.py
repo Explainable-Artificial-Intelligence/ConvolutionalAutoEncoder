@@ -62,7 +62,7 @@ def get_hidden_layer_latent_clustering(algorithm="auto", dataset_name="train_dat
         labels = kmeans_clustering.predict(flat_latent_representation)
 
         # perform dimension reduction
-        latent_representation_2D = perform_dimension_reduction(flat_latent_representation,
+        latent_representation_2d = perform_dimension_reduction(flat_latent_representation,
                                                                algorithm=dimension_reduction, n_dimensions=2)
 
         # create Clustering object
@@ -70,15 +70,15 @@ def get_hidden_layer_latent_clustering(algorithm="auto", dataset_name="train_dat
 
         # transfer properties
         clustering.n_clusters = 10
-        clustering.min_x = float(np.min(latent_representation_2D[:, 0]))
-        clustering.max_x = float(np.max(latent_representation_2D[:, 0]))
-        clustering.min_y = float(np.min(latent_representation_2D[:, 1]))
-        clustering.max_y = float(np.max(latent_representation_2D[:, 1]))
+        clustering.min_x = float(np.min(latent_representation_2d[:, 0]))
+        clustering.max_x = float(np.max(latent_representation_2d[:, 0]))
+        clustering.min_y = float(np.min(latent_representation_2d[:, 1]))
+        clustering.max_y = float(np.max(latent_representation_2d[:, 1]))
         clustering.points = []
 
         # generate cluster points:
-        for i in range(latent_representation_2D.shape[0]):
-            point = Point2D(x=float(latent_representation_2D[i, 0]), y=float(latent_representation_2D[i, 1]),
+        for i in range(latent_representation_2d.shape[0]):
+            point = Point2D(x=float(latent_representation_2d[i, 0]), y=float(latent_representation_2d[i, 1]),
                             cluster=int(labels[i]))
             clustering.points.append(point)
         return clustering, 200

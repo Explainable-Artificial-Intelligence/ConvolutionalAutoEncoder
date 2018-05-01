@@ -5,9 +5,13 @@ helper function to create a image grid for train images
 
 function ImageGrid(parentNode, rowCount) {
 
+    var scrollPane = document.createElement("div");
+    scrollPane.classList.add("scrollPane");
+    parentNode.appendChild(scrollPane);
+
     var outerTable = document.createElement("table");
     outerTable.classList.add("imageGrid");
-    parentNode.appendChild(outerTable);
+    scrollPane.appendChild(outerTable);
 
     // create table rows:
     for (var i = 0; i < (rowCount + 2); i++) {
@@ -19,11 +23,11 @@ function ImageGrid(parentNode, rowCount) {
     this.addNewImageColumn = function (trainImages) {
         // add epoch and step:
         var tableCell = document.createElement("td");
-        tableCell.textContent = "Epoch: " + trainImages.epoch;
+        tableCell.textContent = "Epoch:";
         outerTable.rows[0].appendChild(tableCell);
 
         var tableCell = document.createElement("td");
-        // tableCell.textContent = "Step: " + trainImages.step;
+        tableCell.textContent = trainImages.epoch;
         outerTable.rows[0].appendChild(tableCell);
 
         var tableCell = document.createElement("td");
@@ -51,8 +55,6 @@ function ImageGrid(parentNode, rowCount) {
         for (var i = 0; i < trainImages.inputLayer.length; i++) {
             // create new table row:
             var tableRow = outerTable.rows[i + 2];
-
-            console.log(outerTable.rows);
 
 
             // create cell for input image

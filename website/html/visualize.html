@@ -55,9 +55,98 @@
         </div>
 
     </div>
+    <br>
     <div id="clusterView">
+        <br>
+        <label for="clusteringAlgorithm">Clustering algorithm:</label>
+        <br>
+        <select id="clusteringAlgorithm">
+            <option value="auto">auto</option>
+            <option value="kmeans">kmeans</option>
+        </select>
+        <br>
+        <br>
+        <label for="dimReductionAlgorithm">Dimension reduction algorithm:</label>
+        <br>
+        <select id="dimReductionAlgorithm">
+            <option value="PCA">PCA</option>
+            <option value="t-SNE">t-SNE</option>
+        </select>
+        <br>
 
+        <details>
+            <summary>Advanced cluster parameters:</summary>
+            <p>
+                <label>
+                    Number of runs:
+                    <input id="advancedClusteringNClusters" type="number" value="10">
+                </label>
+                <br>
+
+                <label for="advancedClusteringInit">Init:</label>
+                <select id="advancedClusteringInit">
+                    <option value="k-means++">k-means++</option>
+                    <option value="random">random</option>
+                </select>
+                <br>
+
+                <label>
+                    Number of runs:
+                    <input id="advancedClusteringNInit" type="number" value="10">
+                </label>
+                <br>
+
+                <label>
+                    Maximum number of iterations:
+                    <input id="advancedClusteringMaxIter" type="number" value="300">
+                </label>
+                <br>
+
+                <label>
+                    Tolerance:
+                    <input id="advancedClusteringTol" type="number" value="0.0001">
+                </label>
+                <br>
+
+                <label for="advancedClusteringPrecomputeDistances">Precompute distances:</label>
+                <br>
+                <select id="advancedClusteringPrecomputeDistances">
+                    <option value=true>true</option>
+                    <option value=false>false</option>
+                </select>
+                <br>
+
+                <label>
+                    Random state:
+                    <input id="advancedClusteringRandomState" type="number" value="-1">
+                </label>
+                <br>
+
+                <label for="advancedClusteringCopyX">Copy X:</label>
+                <br>
+                <select id="advancedClusteringCopyX">
+                    <option value='true'>true</option>
+                    <option value='false'>false</option>
+                </select>
+                <br>
+                <label for="advancedClusteringAlgorithm">Clustering algorithm:</label>
+                <br>
+                <select id="advancedClusteringAlgorithm">
+                    <option value="auto">auto</option>
+                    <option value="full">full</option>
+                    <option value="elkan">elkan</option>
+                </select>
+                <br>
+
+            </p>
+        </details>
+
+        <br>
+        <br>
+        <br>
+        <button id="drawClustering">create Clustering</button>
     </div>
+
 
 </div>
 
