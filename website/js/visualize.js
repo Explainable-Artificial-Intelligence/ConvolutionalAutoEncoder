@@ -11,8 +11,11 @@ var visualizeApi = new ConvolutionalAutoencoder.VisualizeApi();
 visualizeApi.timeout = 1600000;
 visualizeApi.defaultTimeout = 160000;
 
-
+/*
+    Global vars
+ */
 var colorMap = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd'];
+var clusterTimer;
 
 
 function callback(error, data, response) {
@@ -207,7 +210,25 @@ function readClusterParameter() {
 
 }
 
-function drawClustering() {
+function getClustering() {
+    function clusterCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+            console.log(response);
+            // clearInterval(clusterTimer)
+        } else {
+            console.log(response);
+            console.log(data);
+            clearInterval(clusterTimer);
+            var clusterChart = new ClusterChart("clusterView", 960, 640, colorMap, response.body)
+        }
+    }
+
+    visualizeApi.getHiddenLayerLatentClustering({}, clusterCallback);
+
+}
+
+function startClustering() {
 
 
     function clusterCallback(error, data, response) {
@@ -215,7 +236,7 @@ function drawClustering() {
             console.error(error);
         } else {
             console.log(response);
-            var clusterChart = new ClusterChart("clusterView", 960, 640, colorMap, response.body)
+            clusterTimer = setInterval(getClustering, 5000);
         }
     }
 
@@ -224,7 +245,7 @@ function drawClustering() {
     var dimensionReduction = document.getElementById("dimReductionAlgorithm").options[document.getElementById("dimReductionAlgorithm").selectedIndex].value;
 
 
-    visualizeApi.getHiddenLayerLatentClustering(algorithm, dimensionReduction, {clusterParameters: clusterParameter}, clusterCallback);
+    visualizeApi.computeHiddenLayerLatentClustering(algorithm, dimensionReduction, {clusterParameters: clusterParameter}, clusterCallback);
 }
 
 function updatePreviewImages(id) {
@@ -295,7 +316,7 @@ $(document).ready(function () {
     $('.slick').slick({
         lazyLoad: 'ondemand',
         slidesToShow: 50,
-        slidesToScroll: 10,
+        slidesToScroll: 10
     });
 });
 
@@ -309,7 +330,7 @@ $('.slick').on('afterChange', function (event, slick, direction) {
 /*
 init tab
  */
-document.getElementById("drawClustering").addEventListener('click', drawClustering);
+document.getElementById("drawClustering").addEventListener('click', startClustering);
 
 appendImages(70);
 

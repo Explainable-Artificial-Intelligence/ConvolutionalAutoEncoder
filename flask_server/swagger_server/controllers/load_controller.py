@@ -19,6 +19,17 @@ def get_available_data_sets():
     return list_data_files()
 
 
+def get_loaded_data_sets():
+    """get loaded data sets
+
+    returns a list of loaded data sets # noqa: E501
+
+
+    :rtype: List[str]
+    """
+    return Storage.input_data.keys()
+
+
 def get_image_batch(batch_size=100, datasetname="train_data", sort_by=None, filter=None, output=False):
     """
     returns the next batch of input/output images

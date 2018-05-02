@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**getImageById**](LoadApi.md#getImageById) | **GET** /load/getImageById | returns a single input/output image
 [**getImages**](LoadApi.md#getImages) | **GET** /load/getImages | returns a subset of input/output images
 [**getLatentRepresentationById**](LoadApi.md#getLatentRepresentationById) | **GET** /load/getLatentRepresentationById | returns a single latent representation as ()list of) png images
+[**getLoadedDataSets**](LoadApi.md#getLoadedDataSets) | **GET** /load/getLoadedDataSets | get loaded data sets
 [**getRandomImages**](LoadApi.md#getRandomImages) | **GET** /load/getRandomImages | returns the next batch of input/output images
 [**loadFile**](LoadApi.md#loadFile) | **POST** /load/loadFile | Load a train/test data file
 [**resetAllBatchIndices**](LoadApi.md#resetAllBatchIndices) | **POST** /load/resetAllBatchIndices | resets all batch indices of all image sets
@@ -266,6 +267,46 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ImageData**](ImageData.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getLoadedDataSets"></a>
+# **getLoadedDataSets**
+> [&#39;String&#39;] getLoadedDataSets()
+
+get loaded data sets
+
+returns a list of loaded data sets
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.LoadApi();
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.getLoadedDataSets(callback);
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**[&#39;String&#39;]**
 
 ### Authorization
 

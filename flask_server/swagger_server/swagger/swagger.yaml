@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "WebUI to build, train and tune a Convolutional Autoencoder"
-  version: "1.1.3"
+  version: "1.1.5"
   title: "Convolutional Autoencoder"
   termsOfService: "http://swagger.io/terms/"
   contact:
@@ -47,6 +47,28 @@ paths:
               type: "string"
         404:
           description: "Directory not found"
+      x-swagger-router-controller: "swagger_server.controllers.load_controller"
+  /load/getLoadedDataSets:
+    get:
+      tags:
+      - "load"
+      summary: "get loaded data sets"
+      description: "returns a list of loaded data sets"
+      operationId: "get_loaded_data_sets"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "data set names successfully returned"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        404:
+          description: "no data sets found"
       x-swagger-router-controller: "swagger_server.controllers.load_controller"
   /load/uploadFile:
     post:
@@ -368,6 +390,8 @@ paths:
         type: "boolean"
         default: false
       responses:
+        102:
+          description: "Precomputation necessary"
         200:
           description: "Images successfully returned"
           schema:
@@ -550,14 +574,14 @@ paths:
           schema:
             $ref: "#/definitions/TrainPerformance"
       x-swagger-router-controller: "swagger_server.controllers.train_controller"
-  /visualize/getHiddenLayerLatentClustering:
+  /visualize/computeHiddenLayerLatentClustering:
     post:
       tags:
       - "visualize"
-      summary: "returns the clustering of the latent representation of a hidden layer"
-      description: "returns the clustering of the latent representation of a hidden\
+      summary: "starts the clustering of the latent representation of a hidden layer"
+      description: "starts the clustering of the latent representation of a hidden\
         \ layer"
-      operationId: "get_hidden_layer_latent_clustering"
+      operationId: "compute_hidden_layer_latent_clustering"
       consumes:
       - "application/json"
       produces:
@@ -593,7 +617,38 @@ paths:
           $ref: "#/definitions/ClusterParameters"
       responses:
         200:
-          description: "Operation successful"
+          description: "Clustering startet"
+      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
+  /visualize/getHiddenLayerLatentClustering:
+    post:
+      tags:
+      - "visualize"
+      summary: "returns the clustering of the latent representation of a hidden layer"
+      description: "returns the clustering of the latent representation of a hidden\
+        \ layer"
+      operationId: "get_hidden_layer_latent_clustering"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dataset_name"
+        in: "query"
+        description: "determines the dataset which should be clustered"
+        required: false
+        type: "string"
+        default: "train_data"
+      - name: "layer"
+        in: "query"
+        description: "determines the hidden layer"
+        required: false
+        type: "integer"
+        format: "int32"
+      responses:
+        102:
+          description: "Clustering still running"
+        200:
+          description: "Clustering finished"
           schema:
             $ref: "#/definitions/Clustering"
       x-swagger-router-controller: "swagger_server.controllers.visualize_controller"

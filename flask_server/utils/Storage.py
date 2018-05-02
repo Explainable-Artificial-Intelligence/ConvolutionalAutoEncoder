@@ -22,6 +22,10 @@ class Storage(object):
     tuning_queue = object()
     tuning_status = ""
 
+    clustering_data = {}
+    clustering_status = {}
+    clustering_thread = threading.Thread()
+
     @classmethod
     def set_input_data(cls, train_data, dataset_name="train_data"):
         cls.input_data[dataset_name] = train_data
