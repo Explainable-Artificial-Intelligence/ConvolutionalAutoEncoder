@@ -27,7 +27,7 @@ def get_loaded_data_sets():
 
     :rtype: List[str]
     """
-    return Storage.input_data.keys()
+    return list(Storage.input_data.keys())
 
 
 def get_image_batch(batch_size=100, datasetname="train_data", sort_by=None, filter=None, output=False):
@@ -262,7 +262,7 @@ def reset_all_batch_indices():
     return 'All batch indices successfully reset', 200
 
 
-def reset_batch_index(dataset_name=None, output=None):
+def reset_batch_index(dataset_name="train_data", output=False):
     """
     resets the batch index of the image set
     resets the batch index of the image set

@@ -6,6 +6,7 @@ var fs = require('fs');
 var path = require('path');
 
 var selectedImageId = "";
+var datasetname = "train_data";
 
 var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
@@ -22,6 +23,7 @@ function callback(error, data, response) {
 function appendImages(numberOfImages) {
     // get image grid
     var imageGrid = document.getElementById("imageGrid");
+
 
     // load next Image batch through swagger client
     //var loadApi = new ConvolutionalAutoencoder.LoadApi();
@@ -73,7 +75,7 @@ function appendImages(numberOfImages) {
         }
     }
 
-    loadApi.getImageBatch({"batchSize": numberOfImages}, imageCallback);
+    loadApi.getImageBatch({"batchSize": numberOfImages, "datasetname": datasetname}, imageCallback);
 
 }
 
@@ -96,6 +98,27 @@ function getAvailableDataSets() {
     }
 
     loadApi.getAvailableDataSets(callback);
+}
+
+function getLoadedDataSets() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('loaded data sets retrieved');
+            // replace options in 'Loaded data sets' selection
+            console.log(data);
+            var selection = document.getElementById("inputLoadedDataSets");
+            // remove previous options
+            selection.options.length = 0;
+            // add available file names
+            for (var i = 0; i < data.length; i++) {
+                selection.options[i] = new Option(data[i], data[i], false, false)
+            }
+        }
+    }
+
+    loadApi.getLoadedDataSets(callback);
 }
 
 function loadFile() {
@@ -124,7 +147,7 @@ function loadFile() {
             //console.log(data);
             //load the first image batch
             console.log("File loaded");
-
+            getLoadedDataSets();
             appendImages(1000);
 
             // remove selection:
@@ -174,6 +197,16 @@ document.getElementById("showImagesBtn").addEventListener("click", function () {
 
 document.getElementById("uploadBtn").addEventListener("click", uploadFile);
 
+document.getElementById("inputLoadedDataSets").addEventListener("change", function () {
+    datasetname = document.getElementById("inputLoadedDataSets").options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
+    var imageGrid = document.getElementById("imageGrid");
+    while (imageGrid.firstChild) {
+        imageGrid.removeChild(imageGrid.firstChild);
+    }
+    loadApi.resetAllBatchIndices(callback);
+    appendImages(1000);
+});
+
 /*
 Initialisation
  */
@@ -185,5 +218,6 @@ loadApi.resetAllBatchIndices(callback);
 document.getElementById("imagePreview").linkedId = "";
 appendImages(1000);
 getAvailableDataSets();
+getLoadedDataSets();
 
 
