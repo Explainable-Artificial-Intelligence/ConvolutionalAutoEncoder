@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 <a name="controlTraining"></a>
 # **controlTraining**
-> controlTraining(trainStatus)
+> controlTraining(trainStatus, opts)
 
 starts, pauses and stops the training
 
@@ -25,6 +25,9 @@ var apiInstance = new ConvolutionalAutoencoder.TrainApi();
 
 var trainStatus = new ConvolutionalAutoencoder.TrainStatus(); // TrainStatus | new status for training
 
+var opts = { 
+  'datasetName': "datasetName_example" // String | determines data set for training
+};
 
 var callback = function(error, data, response) {
   if (error) {
@@ -33,7 +36,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully.');
   }
 };
-apiInstance.controlTraining(trainStatus, callback);
+apiInstance.controlTraining(trainStatus, opts, callback);
 ```
 
 ### Parameters
@@ -41,6 +44,7 @@ apiInstance.controlTraining(trainStatus, callback);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **trainStatus** | [**TrainStatus**](TrainStatus.md)| new status for training | 
+ **datasetName** | **String**| determines data set for training | [optional] 
 
 ### Return type
 

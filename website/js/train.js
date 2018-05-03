@@ -8,9 +8,8 @@ Global variables
  */
 var trainApi = new ConvolutionalAutoencoder.TrainApi();
 var loadApi = new ConvolutionalAutoencoder.LoadApi();
+var buildApi = new ConvolutionalAutoencoder.BuildApi();
 
-
-var trainTimer;
 
 /*
 API test
@@ -28,7 +27,69 @@ loadApi.resetAllBatchIndices(callback);
 /*
 Global variables
  */
+var trainTimer;
 var currentTrainImageEpoch = 0;
+var datasetname = "train_data";
+
+/*
+Helper function
+ */
+function getInputDimensions() {
+
+
+    function inputShapeCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(data);
+
+            //update data statistics:
+            document.getElementById("labelResolution").textContent = "Resolution: " + data[1] + "px x " + data[2] + "px";
+            document.getElementById("labelLayer").textContent = "Layer: " + data[3];
+            document.getElementById("labelNumberOfImages").textContent = "Number of Images: " + data[0];
+
+            //update input shape:
+            inputShape = data;
+
+            // add placeholder for first dim:
+            inputShape[0] = -1;
+
+            // update topology input output layers:
+            updateInputOutputLayer(inputShape[1], inputShape[2], inputShape[3]);
+        }
+    }
+
+    buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
+}
+
+function getAvailableDataSets() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('loaded data sets retrieved');
+            // replace options in 'Loaded data sets' selection
+            console.log(data);
+            var selection = document.getElementById("inputLoadedDataSets");
+            // remove previous options
+            selection.options.length = 0;
+            // add available file names
+            for (var i = 0; i < data.length; i++) {
+                selection.options[i] = new Option(data[i], data[i], false, false)
+            }
+            // select first element:
+            selection.options[0].selected = true;
+            selectLoadedDataset();
+        }
+    }
+
+    loadApi.getLoadedDataSets(callback);
+}
+
+function selectLoadedDataset() {
+    datasetname = document.getElementById("inputLoadedDataSets").options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
+    getInputDimensions();
+}
 
 /*
 Charts
@@ -192,9 +253,8 @@ function startTraining() {
         }
     }
 
-    trainApi.controlTraining('"start"', callback);
+    trainApi.controlTraining('"start"', {"datasetName": datasetname}, callback);
 }
-
 
 function stopTraining() {
 
@@ -218,9 +278,12 @@ function stopTraining() {
 /*
 attach Event Listener
  */
-
+document.getElementById("inputLoadedDataSets").addEventListener("change", selectLoadedDataset);
 document.getElementById("startTraining").addEventListener("click", startTraining);
 document.getElementById("stopTraining").addEventListener("click", stopTraining);
+
+getAvailableDataSets();
+
 
 
 

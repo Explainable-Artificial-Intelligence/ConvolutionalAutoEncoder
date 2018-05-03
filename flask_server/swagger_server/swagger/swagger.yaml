@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "WebUI to build, train and tune a Convolutional Autoencoder"
-  version: "1.1.5"
+  version: "1.1.7"
   title: "Convolutional Autoencoder"
   termsOfService: "http://swagger.io/terms/"
   contact:
@@ -527,6 +527,11 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/TrainStatus"
+      - name: "datasetName"
+        in: "query"
+        description: "determines data set for training"
+        required: false
+        type: "string"
       responses:
         200:
           description: "Train status updated"

@@ -297,8 +297,24 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _restore_variables_from_checkpoint(self):
         # get trained variables from file:
-        self.global_step = tf.get_default_graph().get_tensor_by_name("global_step:0")
+
         self.ann_status = tf.get_default_graph().get_tensor_by_name("ann_status:0")
+        self.global_step = tf.get_default_graph().get_tensor_by_name("global_step:0")
+        self.trained_epochs = tf.get_default_graph().get_tensor_by_name("trained_epochs:0")
+
+
+        # ann_status, global_step, trained_epochs = self.tf_session.run(
+        #     [tf.get_default_graph().get_tensor_by_name("ann_status:0"),
+        #      tf.get_default_graph().get_tensor_by_name("global_step:0"),
+        #      tf.get_default_graph().get_tensor_by_name("trained_epochs:0")])
+        #
+        # self.ann_status = tf.Variable(ann_status, name="ann_status", dtype=tf.string)
+        # # self.global_step = tf.Variable(global_step, trainable=False, dtype=tf.int64, name="global_step")
+        # # self.trained_epochs = tf.Variable(trained_epochs, dtype=tf.int32, name="trained_epochs")
+        # self.trained_epochs = tf.get_default_graph().get_tensor_by_name("trained_epochs:0")
+        # # self.merged_summary = tf.get_default_graph().get_tensor_by_name('Merge/MergeSummary:0')
+        # self.global_step = tf.get_default_graph().get_tensor_by_name("global_step:0")
+        # self._define_summary_variables()
 
     def _build_ann(self, restore=False):
         """
@@ -616,7 +632,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.tf_session.run(self.ann_status.assign("training"))
 
         # Fit all training data
-        start_epoch = self.trained_epochs.eval(self.tf_session)
+        start_epoch = self.tf_session.run(self.trained_epochs)
         for epoch_i in range(start_epoch, self.n_epochs):
             # mark model as trained:
             self.model_is_trained = True

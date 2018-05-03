@@ -8,12 +8,15 @@ from flask_server.utils.ANNHelperFunctions import generate_status_image_object_f
 from flask_server.utils.Storage import Storage
 
 
-def control_training(trainStatus):
-    """
-    starts, pauses and stops the training
-    uses a string enum
+def control_training(trainStatus, datasetName="train_data"):  # noqa: E501
+    """starts, pauses and stops the training
+
+    uses a string enum # noqa: E501
+
     :param trainStatus: new status for training
     :type trainStatus: dict | bytes
+    :param datasetName: determines data set for training
+    :type datasetName: str
 
     :rtype: None
     """
@@ -21,7 +24,7 @@ def control_training(trainStatus):
         if trainStatus == "start":
             # get cae and train data
             cae = Storage.get_cae()
-            train_data = Storage.get_input_data()
+            train_data = Storage.get_input_data(datasetName)
             # define background thread:
             cae_thread = threading.Thread(target=cae.fit, args=(train_data,))
             Storage.set_cae_thread(cae_thread)
