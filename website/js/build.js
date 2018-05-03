@@ -4,6 +4,7 @@ check if client and server are running correctly
 var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
 var buildApi = new ConvolutionalAutoencoder.BuildApi();
+var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
 // check API functionality
 function callback(error, data, response) {
@@ -94,7 +95,8 @@ Convolutional Auto Encoder topology
 /*
 Global Variables
  */
-var inputShape = [0, 0, 0, 0];
+var inputShape = [1, 1, 1, 1];
+var datasetname = "train_data";
 
 // var previewLayer = new ANNLayerPreview(500, 500, 28, 28, 3, 3, null, true, false, null);
 
@@ -110,10 +112,12 @@ function getInputDimensions() {
         if (error) {
             console.error(error);
         } else {
-            //console.log('API called successfully.');
-            //console.log(response);
             console.log(data);
 
+            //update data statistics:
+            document.getElementById("labelResolution").textContent = "Resolution: " + data[1] + "px x " + data[2] + "px";
+            document.getElementById("labelLayer").textContent = "Layer: " + data[3];
+            document.getElementById("labelNumberOfImages").textContent = "Number of Images: " + data[0];
 
             //update input shape:
             inputShape = data;
@@ -123,21 +127,25 @@ function getInputDimensions() {
 
             // update topology input output layers:
             updateInputOutputLayer(inputShape[1], inputShape[2], inputShape[3]);
-
         }
     }
 
-    console.log("test");
-    buildApi.getInputShape([], inputShapeCallback)
+    buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
 }
 
 function updateInputOutputLayer(resX, resY, channels) {
+    // remove previous input/output layer
+    var inputLayer = document.getElementById("input_layer");
+    var outputLayer = document.getElementById("output_layer");
+    if (inputLayer !== null) {
+        inputLayer.parentNode.removeChild(inputLayer);
+    }
+    if (outputLayer !== null) {
+        outputLayer.parentNode.removeChild(outputLayer);
+    }
+
     //add visualisation:
     inputOutputLayerPair = new ANNLayerPair(200, 200, resX, resY, channels, 3, "input_output_layer");
-
-    // add sample ANN
-    addLayer(null, 3, 12);
-    addLayer(null, 2, 6);
 
     // update global variable:
     inputLayerDim = [resX, resY];
@@ -145,9 +153,41 @@ function updateInputOutputLayer(resX, resY, channels) {
     // set input output layer as preview:
     annLayerPreview.setLinkedLayer(0);
 
+    // renumber layer
+    renumberLayers();
+
 }
 
-function renumberLayers() {
+function getAvailableDataSets() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('loaded data sets retrieved');
+            // replace options in 'Loaded data sets' selection
+            console.log(data);
+            var selection = document.getElementById("inputLoadedDataSets");
+            // remove previous options
+            selection.options.length = 0;
+            // add available file names
+            for (var i = 0; i < data.length; i++) {
+                selection.options[i] = new Option(data[i], data[i], false, false)
+            }
+            // select first element:
+            selection.options[0].selected = true;
+            selectLoadedDataset();
+        }
+    }
+
+    loadApi.getLoadedDataSets(callback);
+}
+
+function selectLoadedDataset() {
+    datasetname = document.getElementById("inputLoadedDataSets").options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
+    getInputDimensions();
+}
+
+/*function renumberLayers() {
     var layerDiv = document.getElementById("encoder").childNodes;
     console.log(layerDiv);
     var i = 1;
@@ -184,7 +224,7 @@ function renumberLayers() {
     //     i++;
     // }
 
-}
+}*/
 
 
 function buildANN() {
@@ -269,13 +309,20 @@ function buildANN() {
 Event Listener
  */
 document.getElementById("buildANN").addEventListener("click", buildANN);
+document.getElementById("inputLoadedDataSets").addEventListener("change", selectLoadedDataset);
 
 
 /*
 on load
  */
 
-getInputDimensions();
+getAvailableDataSets();
+// getInputDimensions();
+
+
+// add sample ANN
+addLayer(null, 3, 12);
+//addLayer(null, 2, 6);
 
 
 

@@ -9,7 +9,7 @@ var selectedImageId = "";
 var datasetname = "train_data";
 
 var loadApi = new ConvolutionalAutoencoder.LoadApi();
-
+var buildApi = new ConvolutionalAutoencoder.BuildApi();
 
 function callback(error, data, response) {
     if (error) {
@@ -18,7 +18,6 @@ function callback(error, data, response) {
         console.log('API called successfully.');
     }
 }
-
 
 function appendImages(numberOfImages) {
     // get image grid
@@ -121,6 +120,25 @@ function getLoadedDataSets() {
     loadApi.getLoadedDataSets(callback);
 }
 
+function updateDataSetStatistics() {
+    function inputShapeCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(data);
+            //update data statistics:
+            document.getElementById("labelResolution").textContent = "Resolution: " + data[1] + "px x " + data[2] + "px";
+            document.getElementById("labelLayer").textContent = "Layer: " + data[3];
+            document.getElementById("labelNumberOfImages").textContent = "Number of Images: " + data[0];
+
+
+        }
+    }
+
+
+    buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
+}
+
 function loadFile() {
 
     // abort if no data set is selected
@@ -204,6 +222,7 @@ document.getElementById("inputLoadedDataSets").addEventListener("change", functi
         imageGrid.removeChild(imageGrid.firstChild);
     }
     loadApi.resetAllBatchIndices(callback);
+    updateDataSetStatistics();
     appendImages(1000);
 });
 
