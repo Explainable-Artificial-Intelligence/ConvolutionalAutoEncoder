@@ -63,6 +63,7 @@ def control_tuning(trainStatus):
         trainStatus = TrainStatus.from_dict(connexion.request.get_json())
 
         if trainStatus == "start":
+            # prevent tuning to run twice
             if Storage.tuning_status == "running":
                 return "Tuning already running", 200
             # get tuning queue and train data

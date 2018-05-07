@@ -66,7 +66,7 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
 
     //axis:
     var xAxis = d3.axisBottom(xScale).ticks(5);
-    var yAxis = d3.axisLeft(yScale).ticks(5);
+    var yAxis = d3.axisLeft(yScale).tickFormat(d3.format(".3s")).ticks(5);
 
     //TODO: move styling in css
 
@@ -109,10 +109,14 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
 
 
         if (logScale) {
+            // yAxis = d3.axisLeft(yScale).tickFormat(d3.format(".3s")).ticks(5);
             yScale = d3.scaleLinear();
+
             logScale = false;
         } else {
+            // yAxis = d3.axisLeft(yScale).tickFormat(d3.format("e")).ticks(5);
             yScale = d3.scaleLog();
+
             logScale = true;
         }
         yScale.domain(domain);
@@ -137,7 +141,11 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
 
     function updateAxis() {
         xAxis = d3.axisBottom(xScale).ticks(5);
-        yAxis = d3.axisLeft(yScale).ticks(5);
+        if (logScale) {
+            yAxis = d3.axisLeft(yScale).tickFormat(d3.format(".1e")).ticks(5);
+        } else {
+            yAxis = d3.axisLeft(yScale).tickFormat(d3.format(".1s")).ticks(5);
+        }
         //panel.select(".x").call(xAxis);
         //panel.select(".y").call(yAxis);
         // update axis
