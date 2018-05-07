@@ -4,9 +4,10 @@ import threading
 
 class Storage(object):
     # storrage items
-
     input_data = {}
     input_batch_indices = {}
+
+    # current active model:
     output_data = {}
     latent_representation_data = {}
     score_data = {}

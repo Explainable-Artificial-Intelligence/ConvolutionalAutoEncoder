@@ -4,6 +4,59 @@ function to create a summary tile for tuning
 
 function SummaryTile(parentID, uuid, trainImageCount) {
     // functions:
+    function generateParameterList(list, parameterList) {
+        list.appendChild(document.createTextNode("Parameter List:"));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createElement("br"));
+
+        list.appendChild(document.createTextNode("Activation function: " + parameterList["activation_function"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Batch size: " + parameterList["batch_size"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Cost function: " + parameterList["cf_cost_function"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Filter sizes: " + parameterList["filter_sizes"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Input shape: " + parameterList["input_shape"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Learning rate function: " + parameterList["learning_rate_function"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Initial learning rate: " + parameterList["lr_initial_learning_rate"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Mirror weights: " + parameterList["mirror_weights"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Momentum: " + parameterList["momentum"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Epochs: " + parameterList["n_epochs"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Number of stacks: " + parameterList["number_of_stacks"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Optimizer: " + parameterList["optimizer"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Number of test Images: " + parameterList["num_test_pictures"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Initial biases: " + parameterList["random_function_for_biases"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Initial weights: " + parameterList["random_function_for_weights"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Min. initial weight: " + parameterList["rw_minval"]));
+        list.appendChild(document.createElement("br"));
+        list.appendChild(document.createTextNode("Max. initial weight: " + parameterList["rw_maxval"]));
+        list.appendChild(document.createElement("br"));
+
+
+        /*for (var parameterName in parameterList) {
+            // check if the property/key is defined in the object itself, not in parent
+            if (parameterList.hasOwnProperty(parameterName)) {
+
+                list.appendChild(document.createTextNode(parameterName + ": " + parameterList[parameterName]));
+                list.appendChild(document.createElement("br"));
+
+
+            }
+        }*/
+    }
+
     this.markAsFinished = function (aborted) {
         /*
         marks tile as trained
@@ -31,8 +84,19 @@ function SummaryTile(parentID, uuid, trainImageCount) {
         finalStats.appendChild(finalSteps);
 
 
-        fourthCell.appendChild(finalStats);
+        fifthCell.appendChild(finalStats);
     };
+
+    this.setParameterList = function (parameterList) {
+        console.log(parameterList);
+
+        var list = document.createElement("div");
+        list.id = "parameterList_" + this.uuid;
+        thirdCell.appendChild(list);
+
+        generateParameterList(list, parameterList);
+    };
+
 
     // set property variables
     this.uuid = uuid;
@@ -70,6 +134,11 @@ function SummaryTile(parentID, uuid, trainImageCount) {
     fourthCell.id = "fourthCell_" + uuid;
     table.appendChild(fourthCell);
 
+    var fifthCell = document.createElement("td");
+    fifthCell.classList.add("summaryColumn");
+    fifthCell.id = "fifthCell_" + uuid;
+    table.appendChild(fifthCell);
+
     // create columns:
     // var leftColumn = document.createElement("div");
     // leftColumn.className = "leftColumn";
@@ -86,7 +155,7 @@ function SummaryTile(parentID, uuid, trainImageCount) {
         "learning rate", {'learning rate': 'lightblue'});
 
     // add image grid:
-    this.imageGrid = new ImageGrid(thirdCell, trainImageCount);
+    this.imageGrid = new ImageGrid(fourthCell, trainImageCount);
     // this.imageGrid = document.createElement("table");
     // this.imageGrid.classList.add("imageGrid");
     // var scrollPane = document.createElement("div");

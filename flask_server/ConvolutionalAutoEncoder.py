@@ -235,8 +235,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.model_is_trained = False
 
         # set ANN status:
-        self.ann_status = tf.Variable("initialized", name="ann_status", dtype=tf.string)
-        self.trained_epochs = tf.Variable(0, dtype=tf.int32, name="trained_epochs")
+        # self.ann_status = tf.Variable("initialized", name="ann_status", dtype=tf.string)
+        self.ann_status_local = "initialized"
+        # self.trained_epochs = tf.Variable(0, dtype=tf.int32, name="trained_epochs")
+        self.trained_epochs_local = 0
 
         self._build_ann()
 
@@ -297,24 +299,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
     def _restore_variables_from_checkpoint(self):
         # get trained variables from file:
-
-        self.ann_status = tf.get_default_graph().get_tensor_by_name("ann_status:0")
         self.global_step = tf.get_default_graph().get_tensor_by_name("global_step:0")
-        self.trained_epochs = tf.get_default_graph().get_tensor_by_name("trained_epochs:0")
-
-
-        # ann_status, global_step, trained_epochs = self.tf_session.run(
-        #     [tf.get_default_graph().get_tensor_by_name("ann_status:0"),
-        #      tf.get_default_graph().get_tensor_by_name("global_step:0"),
-        #      tf.get_default_graph().get_tensor_by_name("trained_epochs:0")])
-        #
-        # self.ann_status = tf.Variable(ann_status, name="ann_status", dtype=tf.string)
-        # # self.global_step = tf.Variable(global_step, trainable=False, dtype=tf.int64, name="global_step")
-        # # self.trained_epochs = tf.Variable(trained_epochs, dtype=tf.int32, name="trained_epochs")
-        # self.trained_epochs = tf.get_default_graph().get_tensor_by_name("trained_epochs:0")
-        # # self.merged_summary = tf.get_default_graph().get_tensor_by_name('Merge/MergeSummary:0')
-        # self.global_step = tf.get_default_graph().get_tensor_by_name("global_step:0")
-        # self._define_summary_variables()
+        # self.ann_status = tf.get_default_graph().get_tensor_by_name("ann_status:0")
 
     def _build_ann(self, restore=False):
         """
@@ -629,10 +615,12 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self._load_session()
 
         # set ANN status
-        self.tf_session.run(self.ann_status.assign("training"))
+        # self.tf_session.run(self.ann_status.assign("training"))
+        self.ann_status_local = "training"
 
         # Fit all training data
-        start_epoch = self.tf_session.run(self.trained_epochs)
+        # start_epoch = self.trained_epochs.eval(self.tf_session)
+        start_epoch = self.trained_epochs_local
         for epoch_i in range(start_epoch, self.n_epochs):
             # mark model as trained:
             self.model_is_trained = True
@@ -645,21 +633,30 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 print("model saved to %s" % str(os.path.join(self.session_saver_path, 'tf_session.bak')))
             # mark model as trained:
             self.model_is_trained = True
-            print(self.ann_status.eval(self.tf_session))
-            if not self.ann_status.eval(self.tf_session) == b'training':
+            # print(self.ann_status.eval(self.tf_session))
+            # if not self.ann_status.eval(self.tf_session) == b'training':
+            #     break
+            print(self.ann_status_local)
+            if not self.ann_status_local == "training":
                 break
             # set number of trained epochs:
-            self.tf_session.run(self.trained_epochs.assign_add(1))
+            # self.tf_session.run(self.trained_epochs.assign_add(1))
+            self.trained_epochs_local += 1
 
             # evaluate current train status:
             self._evaluate_current_ann_status(train_data)
 
         # set new ann status:
-        if self.tf_session.run(self.trained_epochs) == self.n_epochs:
-            self.tf_session.run(self.ann_status.assign("completely trained"))
+        # if self.tf_session.run(self.trained_epochs) == self.n_epochs:
+        if self.trained_epochs_local == self.n_epochs:
+            # self.tf_session.run(self.ann_status.assign("completely trained"))
+            self.ann_status_local = "completely trained"
         else:
-            self.tf_session.run(self.ann_status.assign("partly trained"))
-            print("%i of %i epochs trained" % (self.tf_session.run(self.trained_epochs), self.n_epochs))
+            # self.tf_session.run(self.ann_status.assign("partly trained"))
+            self.ann_status_local = "partly trained"
+
+            # print("%i of %i epochs trained" % (self.tf_session.run(self.trained_epochs), self.n_epochs))
+            print("%i of %i epochs trained" % self.trained_epochs_local, self.n_epochs)
             # close session
             # self.tf_session.close()
 
@@ -682,7 +679,9 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
         for batch_index in range(len(train_data) // self.batch_size):
             # check if training is aborted:
-            if not self.ann_status.eval(self.tf_session) == b'training':
+            # if not self.ann_status.eval(self.tf_session) == b'training':
+            #     return
+            if not self.ann_status_local == "training":
                 return
             current_batch = train_data[batch_index * self.batch_size:(batch_index + 1) * self.batch_size]
             self._train_model_single_batch(current_batch)
@@ -695,21 +694,23 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
         # check if training is aborted:
-        if not self.ann_status.eval(self.tf_session) == b'training':
+        # if not self.ann_status.eval(self.tf_session) == b'training':
+        #     return
+        if not self.ann_status_local == "training":
             return
         if self.use_tensorboard:
-            summary, train_cost, _, step, epoch = self.tf_session.run(
-                [self.merged_summary, self.cost_function, self.final_optimizer, self.global_step, self.trained_epochs],
+            summary, train_cost, _, step = self.tf_session.run(
+                [self.merged_summary, self.cost_function, self.final_optimizer, self.global_step],
                 feed_dict={self.input_images: current_batch})
             # TODO:replace feed_dict?
             self.train_writer.add_summary(summary, step)
         else:
-            train_cost, _, step, epoch = self.tf_session.run(
-                [self.cost_function, self.final_optimizer, self.global_step, self.trained_epochs],
+            train_cost, _, step = self.tf_session.run(
+                [self.cost_function, self.final_optimizer, self.global_step],
                 feed_dict={self.input_images: current_batch})
 
         # save train status
-        self.train_status["epoch"].append(int(epoch))
+        self.train_status["epoch"].append(self.trained_epochs_local)
         self.train_status["step"].append(int(step))
         self.train_status["train_cost"].append(float(train_cost))
         if type(self.learning_rate) is float:
@@ -734,9 +735,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self.current_input_image_sample = train_data[self.current_sample_indices]
 
         # get latent representation and output images of the current subset
-        self.current_output_image_sample, self.current_latent_image_sample, self.current_train_epoch, self.current_train_step = self.tf_session.run(
-            [self.output_images, self.latent_representation, self.trained_epochs, self.global_step],
+        self.current_output_image_sample, self.current_latent_image_sample, self.current_train_step = self.tf_session.run(
+            [self.output_images, self.latent_representation, self.global_step],
             feed_dict={self.input_images: self.current_input_image_sample})
+        self.current_train_epoch = self.trained_epochs_local
 
     def update_ann_status(self, status):
         """
@@ -750,7 +752,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
                 # self.tf_session.run(self.ann_status.assign("stop", use_locking=True))
                 # self._close_session()
                 return
-            self.tf_session.run(self.ann_status.assign("stop", use_locking=True))
+            # self.tf_session.run(self.ann_status.assign("stop", use_locking=True))
+            self.ann_status_local = "stop"
 
     def get_latent_representation(self, input_data):
         """
@@ -839,7 +842,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
 
         """
-        if self.session_saver_path is not None or not self.ann_status.eval(self.tf_session) == b'training':
+        # if self.session_saver_path is not None or not self.ann_status.eval(self.tf_session) == b'training':
+        if self.session_saver_path is not None or not self.ann_status == 'training':
             self.tf_session.close()
             tf.reset_default_graph()
 
@@ -850,7 +854,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return:
         """
 
-        if not self.ann_status.eval(session=self.tf_session) == b'completely trained':
+        # if not self.ann_status.eval(session=self.tf_session) == b'completely trained':
+        if not self.ann_status == 'completely trained':
             print("WARNING: The ANN is not completely trained", file=sys.stderr)
 
     def _init_train_status_variables(self):

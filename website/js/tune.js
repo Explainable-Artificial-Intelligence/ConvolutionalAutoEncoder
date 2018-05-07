@@ -302,6 +302,15 @@ function getInputDimensions() {
     buildApi.getInputShape([], inputShapeCallback)
 }
 
+function getParameterList() {
+    var callback = function (error, data, response) {
+        console.log(response);
+        currentTile.setParameterList(response.body);
+    };
+
+    tuneApi.getTuneParameter(currentTile.uuid, callback);
+}
+
 function readLearningParameter() {
 
     var inputParameterList = new ConvolutionalAutoencoder.ParameterList();
@@ -451,6 +460,7 @@ function updateTrainImages() {
     tuneApi.getProcessedImageDataOfCurrentTuning(20, callback);
 }
 
+
 function updateTrainStatistics() {
     var callback = function (error, data, response) {
         if (error) {
@@ -464,6 +474,9 @@ function updateTrainStatistics() {
             if (currentTile === null) {
                 // create new tile:
                 currentTile = new SummaryTile("summaryTiles", data.model_id, 20);
+                // get parameter list:
+                getParameterList();
+
             } else if (currentTile.uuid !== data.model_id) {
                 // finish old summary tile:
                 finishSummaryTile(currentTile);
@@ -473,6 +486,9 @@ function updateTrainStatistics() {
 
                 // create new tile:
                 currentTile = new SummaryTile("summaryTiles", data.model_id, 20);
+
+                // get parameter list:
+                getParameterList();
             }
 
             //update diagrams

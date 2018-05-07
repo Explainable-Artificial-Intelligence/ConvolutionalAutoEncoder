@@ -79,13 +79,13 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
 
     plot.append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(52.5," + (panelHeight + 12.5) + ")")
+        .attr("transform", "translate(52.5," + (panelHeight + 25) + ")")
         .attr("id", "xAxis")
         .call(xAxis);
 
     plot.append("text")
-        .attr("x", 10)
-        .attr("y", 9)
+        .attr("x", 60)
+        .attr("y", 10)
         .attr("font-size", "12px")
         .text(yAxisName)
         .attr("fill", "orange");
