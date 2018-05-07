@@ -18,8 +18,10 @@ def compute_output_images(datasetname):
         cae = Storage.get_cae()
         # predict train images
         output_images = cae.predict(Storage.input_data[datasetname])
-        scores = [float(score) for score in cae.score(Storage.input_data[datasetname])]
+        scores = cae.score(Storage.input_data[datasetname])
         # save prediction
+        print(output_images.shape)
+        print(len(scores))
         Storage.output_data[datasetname] = output_images
         Storage.score_data[datasetname] = scores
 

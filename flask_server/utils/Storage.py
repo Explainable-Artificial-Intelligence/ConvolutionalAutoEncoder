@@ -23,6 +23,7 @@ class Storage(object):
     tuning_thread = threading.Thread()
     tuning_queue = object()
     tuning_status = ""
+    tuning_dataset_name = "train_data"
 
     clustering_data = {}
     clustering_status = {}

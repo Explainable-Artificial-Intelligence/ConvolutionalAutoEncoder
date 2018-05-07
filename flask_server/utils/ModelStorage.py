@@ -14,6 +14,7 @@ class ModelStorage(object):
     # ann stats
     ann = object()
     cae_thread = threading.Thread()
+    train_status = ""
     train_step = 0
     final_score = 0
 

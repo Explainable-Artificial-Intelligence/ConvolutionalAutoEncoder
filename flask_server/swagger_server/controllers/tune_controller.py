@@ -37,7 +37,7 @@ def apply_specific_tuning_as_default_model(modelId):
     Storage.parameter_set = tuned_model.parameter_set
     Storage.cae = tuned_model.ann
     Storage.cae_thread = tuned_model.cae_thread
-    Storage.train_step = tuned_model.Storage.train_step
+    Storage.train_step = tuned_model.train_step
 
     # delete precomputed data:
     Storage.output_data = {}
@@ -63,6 +63,8 @@ def control_tuning(trainStatus):
         trainStatus = TrainStatus.from_dict(connexion.request.get_json())
 
         if trainStatus == "start":
+            if Storage.tuning_status == "running":
+                return "Tuning already running", 200
             # get tuning queue and train data
             tuning_queue = TuningQueue()
             train_data = Storage.get_input_data()
@@ -73,7 +75,7 @@ def control_tuning(trainStatus):
             Storage.tuning_thread = tuning_thread
             # start training:
             tuning_thread.start()
-            return "Training started", 200
+            return "Tuning started", 200
         if trainStatus == "stop":
             # get get tuning queue and abort background thread:
             Storage.tuning_queue.stop_tuning()
@@ -241,8 +243,15 @@ def get_train_performance_of_specific_tuning(modelId):  # noqa: E501
     # build up response object and return it
     train_performance_object = TrainPerformance()
     train_performance_object.model_id = model_storage.id
-    train_performance_object.train_status = Storage.tuning_status
+    train_performance_object.train_status = model_storage.train_status
     train_performance_object.train_performance_data = []
+    print(model_storage.train_status)
+
+    # TODO: Remove
+    # workaround to test strange behaviour
+    if "train_cost" not in model_storage.train_performance:
+        return train_performance_object, 200
+
     for i in range(len(model_storage.train_performance["train_cost"])):
         train_performance_data_point = TrainPerformanceDataPoint()
         train_performance_data_point.step = model_storage.train_performance["step"][i]

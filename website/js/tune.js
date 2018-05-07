@@ -243,7 +243,8 @@ function readRandomFunctions(id, prefix) {
     return selectedFunctions;
 }
 
-function finishSummaryTile(currentTile) {
+function finishSummaryTile(summaryTile) {
+    summaryTile = summaryTile || currentTile;
     var callback = function (error, data, response) {
         if (error) {
             console.error(error);
@@ -254,18 +255,83 @@ function finishSummaryTile(currentTile) {
             // finish old summary tile:
 
             // update charts:
-            currentTile.costChart.replaceData({'cost': data.train_performance_data});
-            currentTile.learningRateChart.replaceData({'learning rate': data.train_performance_data});
+            summaryTile.costChart.replaceData({'cost': data.train_performance_data});
+            summaryTile.learningRateChart.replaceData({'learning rate': data.train_performance_data});
             currentTrainImageEpoch = 0;
 
             //mark tile as completely trained
-            currentTile.markAsFinished(!(data.train_status === "finished" || data.train_status === "running"));
+            summaryTile.markAsFinished(!(data.train_status === "finished" || data.train_status === "running"));
+
+            // link event listener
+            summaryTile.applyButton.addEventListener('click', function () {
+                var callback = function (error, data, response) {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        console.log(response);
+                    }
+                };
+                tuneApi.applySpecificTuningAsDefaultModel(summaryTile.uuid, callback);
+
+            })
+
+
         }
 
 
     };
 
-    tuneApi.getTrainPerformanceOfSpecificTuning(currentTile.uuid, callback);
+    tuneApi.getTrainPerformanceOfSpecificTuning(summaryTile.uuid, callback);
+}
+
+function generateFinishedSummaryTile(modelId) {
+    var callback = function (error, data, response) {
+        console.log(modelId);
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(response);
+            console.log(data);
+            console.log(data.train_status);
+            if (data.train_status === "finished" || data.train_status === "aborted") {
+                var summaryTile = new SummaryTile("summaryTiles", modelId, 20);
+                // finish summary tile
+                getParameterList(summaryTile);
+                finishSummaryTile(summaryTile);
+                summaryTile = summaryTile || currentTile;
+
+                // finish old summary tile:
+
+                // update charts:
+                summaryTile.costChart.replaceData({'cost': data.train_performance_data});
+                summaryTile.learningRateChart.replaceData({'learning rate': data.train_performance_data});
+
+                //mark tile as completely trained
+                summaryTile.markAsFinished(!(data.train_status === "finished" || data.train_status === "running"));
+
+                // link event listener
+                summaryTile.applyButton.addEventListener('click', function () {
+                    var callback = function (error, data, response) {
+                        if (error) {
+                            console.error(error);
+                        } else {
+                            console.log(response);
+                        }
+                    };
+                    tuneApi.applySpecificTuningAsDefaultModel(summaryTile.uuid, callback);
+
+                })
+            } else if (data.train_status === "running") {
+                startTuning();
+            }
+
+
+        }
+
+
+    };
+
+    tuneApi.getTrainPerformanceOfSpecificTuning(modelId, callback);
 }
 
 
@@ -302,13 +368,14 @@ function getInputDimensions() {
     buildApi.getInputShape([], inputShapeCallback)
 }
 
-function getParameterList() {
+function getParameterList(summaryTile) {
+    summaryTile = summaryTile || currentTile;
     var callback = function (error, data, response) {
-        console.log(response);
-        currentTile.setParameterList(response.body);
+        //console.log(response);
+        summaryTile.setParameterList(response.body);
     };
 
-    tuneApi.getTuneParameter(currentTile.uuid, callback);
+    tuneApi.getTuneParameter(summaryTile.uuid, callback);
 }
 
 function readLearningParameter() {
@@ -349,7 +416,7 @@ function buildANN() {
     // get learning parameters (sidebar):
     var inputParameters = readLearningParameter();
 
-    console.log(inputParameters);
+    // console.log(inputParameters);
 
 
     /*
@@ -365,8 +432,10 @@ function buildANN() {
         }
     }
 
-    console.log(tuneApi);
-    tuneApi.buildGridSearchANN(inputParameters, callback);
+    // console.log(tuneApi);
+    tuneApi.buildGridSearchANN(inputParameters,
+        {'deletePreviousModels': document.getElementById("cbRemovePreviousTunedModels").checked},
+        callback);
 
 
 }
@@ -459,7 +528,6 @@ function updateTrainImages() {
     };
     tuneApi.getProcessedImageDataOfCurrentTuning(20, callback);
 }
-
 
 function updateTrainStatistics() {
     var callback = function (error, data, response) {
@@ -562,6 +630,31 @@ function stopTuning() {
     tuneApi.controlTuning('"stop"', callback);
 }
 
+function loadPreviousTuningModels() {
+
+    var callback = function (error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(response);
+            console.log(data);
+
+            // create summary tile for older model
+            for (var i = 0; i < data.length; i++) {
+                // create summary tile:
+                generateFinishedSummaryTile(data[i]);
+            }
+            // create tile for current model:
+            // startTuning();
+
+
+        }
+    };
+
+    tuneApi.getTuneModelIds(callback)
+
+}
+
 
 /*
 Event Listener
@@ -579,6 +672,9 @@ getInputDimensions();
 
 // show parameters
 document.getElementById("LearningParameters").open = true;
+
+// load previous models:
+loadPreviousTuningModels();
 
 
 // // get input (output) dimensions

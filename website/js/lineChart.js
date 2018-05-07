@@ -27,7 +27,7 @@ function generateRandomArray(min, max, length) {
 }
 
 function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName, yAxisName, colorScheme) {
-    console.log(this);
+    // console.log(this);
 
     //storage for datapoints:
     var data = [];

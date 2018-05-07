@@ -58,6 +58,9 @@ function SummaryTile(parentID, uuid, trainImageCount) {
     }
 
     this.markAsFinished = function (aborted) {
+        if (finished) {
+            return;
+        }
         /*
         marks tile as trained
          */
@@ -72,6 +75,7 @@ function SummaryTile(parentID, uuid, trainImageCount) {
         // display final cost and steps:
         var finalStats = document.createElement("div");
 
+        // add cost
         var finalCost = document.createElement("p");
         finalCost.textContent = "Final Cost: " + this.costChart.getLatestYValue('cost');
         finalStats.appendChild(finalCost);
@@ -79,12 +83,22 @@ function SummaryTile(parentID, uuid, trainImageCount) {
         var br = document.createElement('br');
         finalStats.appendChild(br);
         finalStats.appendChild(br);
+
+        // add steps
         var finalSteps = document.createElement("p");
         finalSteps.textContent += "Steps: " + this.costChart.getLatestXValue('cost');
         finalStats.appendChild(finalSteps);
 
+        // add button to apply as default ann
+        this.applyButton = document.createElement("button");
+        this.applyButton.textContent = "Use as Default model";
+        finalStats.appendChild(this.applyButton);
 
+
+        //append div to column
         fifthCell.appendChild(finalStats);
+
+        finished = true;
     };
 
     this.setParameterList = function (parameterList) {
@@ -100,6 +114,7 @@ function SummaryTile(parentID, uuid, trainImageCount) {
 
     // set property variables
     this.uuid = uuid;
+    var finished = false;
 
     // create tile:
     var parentNode = document.getElementById(parentID);
@@ -156,12 +171,6 @@ function SummaryTile(parentID, uuid, trainImageCount) {
 
     // add image grid:
     this.imageGrid = new ImageGrid(fourthCell, trainImageCount);
-    // this.imageGrid = document.createElement("table");
-    // this.imageGrid.classList.add("imageGrid");
-    // var scrollPane = document.createElement("div");
-    // scrollPane.classList.add("scrollPane");
-    // scrollPane.appendChild(this.imageGrid);
-    // thirdCell.appendChild(scrollPane);
 
 
     //     = document.createElement("div");

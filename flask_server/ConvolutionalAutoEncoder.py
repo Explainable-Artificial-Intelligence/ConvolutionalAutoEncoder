@@ -823,13 +823,18 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             self._load_session()
             self._print_training_warning()
             # split input data into batches:
-            input_batches = np.array_split(X, self.max_predict_batch_size)
+            # input_batches = np.array_split(X, 1) # self.max_predict_batch_size)
             costs = []
-            for input_batch in input_batches:
-                cost = self.tf_session.run(self.cost_function, feed_dict={self.input_images: input_batch})
-                costs.append(cost)
+            # compute cost for each image separately
+            for i in range(len(X)):
+                single_image = X[i:i + 1, :, :, :]
+                cost = self.tf_session.run(self.cost_function, feed_dict={self.input_images: single_image})
+                costs.append(float(cost))
             # close session (if possible):
             self._close_session()
+
+            # concat single batches:
+            # concatenated_costs = list(itertools.chain(*list(costs)))
 
             return costs
         else:
@@ -855,7 +860,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         """
 
         # if not self.ann_status.eval(session=self.tf_session) == b'completely trained':
-        if not self.ann_status == 'completely trained':
+        if not self.ann_status_local == 'completely trained':
             print("WARNING: The ANN is not completely trained", file=sys.stderr)
 
     def _init_train_status_variables(self):

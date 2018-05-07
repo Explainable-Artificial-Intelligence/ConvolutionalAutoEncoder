@@ -112,7 +112,8 @@ function ClusterChart(parentNodeID, width, height, colorMap, clustering) {
     var plot = d3.select("#" + parentNodeID)
         .append("svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .attr("id", "clusterChart");
 
     //create inner panel:
     var panelWidth = width - 100;
@@ -220,6 +221,7 @@ function getClustering() {
             console.log(response);
             console.log(data);
             clearInterval(clusterTimer);
+            document.getElementById('clusterView').removeChild(document.getElementById('clusterChart'));
             var clusterChart = new ClusterChart("clusterView", 960, 640, colorMap, response.body)
         }
     }
@@ -249,18 +251,19 @@ function startClustering() {
 }
 
 function updatePreviewImages(id) {
-    // // update input image
-    // function inputImageCallback(error, data, response) {
-    //     if (error) {
-    //         console.error(error);
-    //     } else {
-    //         document.getElementById('inputPreview').src = "data:image/png;base64,"
-    //             + response.body.bytestring.substring(2, response.body.bytestring.length - 1);
-    //
-    //     }
-    //
-    // }
-    // loadApi.getImageById(Number(id), {'output': false}, inputImageCallback);
+    // update input image
+    function inputImageCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            document.getElementById('inputPreview').src = "data:image/png;base64,"
+                + response.body.bytestring.substring(2, response.body.bytestring.length - 1);
+
+        }
+
+    }
+
+    loadApi.getImageById(Number(id), {'output': false}, inputImageCallback);
 
     console.log("test");
 

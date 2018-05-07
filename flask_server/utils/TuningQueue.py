@@ -22,11 +22,13 @@ class TuningQueue(object):
         for parameter_combination in Storage.tuning_ANNs:
 
             # start training for this parameter combination:
+            parameter_combination.train_status = "running"
             self.current_running_model = parameter_combination
             self.current_running_model.ann.fit(train_data)
 
             # stop tuning if aborted
             if self.tuning_status == "stop":
+                parameter_combination.train_status = "aborted"
                 break
 
             # save final train stats and images:
@@ -44,7 +46,11 @@ class TuningQueue(object):
             if self.tuning_status == "stop":
                 # update tuning status
                 Storage.tuning_status = "aborted"
+                parameter_combination.train_status = "aborted"
                 break
+
+            # mark current model as trained
+            parameter_combination.train_status = "finished"
 
         # update tuning status
         Storage.tuning_status = "finished"
