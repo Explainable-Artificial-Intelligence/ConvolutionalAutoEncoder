@@ -14,6 +14,7 @@ class Storage(object):
     output_batch_indices = {}
     cae = object()
     parameter_set = {}
+    model_id = ""
     cae_thread = threading.Thread()
     train_step = 0
 

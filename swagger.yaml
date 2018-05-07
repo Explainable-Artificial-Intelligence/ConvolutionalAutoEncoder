@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: 'WebUI to build, train and tune a Convolutional Autoencoder'
-  version: 1.1.6
+  version: 1.1.8
   title: Convolutional Autoencoder
   termsOfService: 'http://swagger.io/terms/'
   contact:
@@ -509,6 +509,11 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/TrainStatus'
+        - name: datasetName
+          in: query
+          description: determines data set for training
+          required: false
+          type: string
       responses:
         '200':
           description: Train status updated
@@ -667,6 +672,12 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/ParameterList'
+        - name: deletePreviousModels
+          in: query
+          description: if true delete all previous tuned models
+          required: false
+          type: boolean
+          default: false
       responses:
         '202':
           description: Parameters successfully commited
@@ -690,11 +701,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/TrainStatus'
-        - name: datasetName
-          in: query
-          description: determines data set for training
-          required: false
-          type: string
       responses:
         '200':
           description: Train status updated
@@ -763,6 +769,26 @@ paths:
             $ref: '#/definitions/ParameterList'
         '404':
           description: Ressource not found
+  /tune/getTuneModelIds:
+    get:
+      tags:
+        - tune
+      summary: returns a list of all tuned model ids
+      description: returns a list of all tuned model ids
+      operationId: getTuneModelIds
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Parameters successfully returned
+          schema:
+            type: array
+            items:
+                type: string
+        '404':
+          description: Ressource not found
   /tune/getProcessedImageDataOfSpecificTuning:
     get:
       tags:
@@ -814,6 +840,27 @@ paths:
           description: Train status recieved
           schema:
             $ref: '#/definitions/TrainPerformance'
+  /tune/applySpecificTuningAsDefaultModel:
+    post:
+      tags:
+        - tune
+      summary: sets a given tuned model as default model
+      description: sets a given tuned model as default model
+      operationId: applySpecificTuningAsDefaultModel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: modelId
+          in: query
+          description: model id of the tuned model
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Default model set
+          
             
             
 definitions:

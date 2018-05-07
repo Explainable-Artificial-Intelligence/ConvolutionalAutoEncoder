@@ -4,18 +4,66 @@ All URIs are relative to *http://localhost:8080/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**applySpecificTuningAsDefaultModel**](TuneApi.md#applySpecificTuningAsDefaultModel) | **POST** /tune/applySpecificTuningAsDefaultModel | sets a given tuned model as default model
 [**buildGridSearchANN**](TuneApi.md#buildGridSearchANN) | **POST** /tune/buildGridSearchANN | passes all learning and ANN parameters to the server
 [**controlTuning**](TuneApi.md#controlTuning) | **POST** /tune/controlTuning | starts, pauses and stops the tuning
 [**getProcessedImageDataOfCurrentTuning**](TuneApi.md#getProcessedImageDataOfCurrentTuning) | **GET** /tune/getProcessedImageDataOfCurrentTuning | returns a subset of the current train images and the corresponding latent representation and output
 [**getProcessedImageDataOfSpecificTuning**](TuneApi.md#getProcessedImageDataOfSpecificTuning) | **GET** /tune/getProcessedImageDataOfSpecificTuning | returns a subset of the current train images and the corresponding latent representation and output
 [**getTrainPerformanceOfCurrentTuning**](TuneApi.md#getTrainPerformanceOfCurrentTuning) | **GET** /tune/getTrainPerformanceOfCurrentTuning | returns the next batch of scalar train variables
 [**getTrainPerformanceOfSpecificTuning**](TuneApi.md#getTrainPerformanceOfSpecificTuning) | **GET** /tune/getTrainPerformanceOfSpecificTuning | returns the complete set of scalar train variables to a given model
+[**getTuneModelIds**](TuneApi.md#getTuneModelIds) | **GET** /tune/getTuneModelIds | returns a list of all tuned model ids
 [**getTuneParameter**](TuneApi.md#getTuneParameter) | **GET** /tune/getTuneParameter | returns the parameter set of the ANN with the given model id
 
 
+<a name="applySpecificTuningAsDefaultModel"></a>
+# **applySpecificTuningAsDefaultModel**
+> applySpecificTuningAsDefaultModel(modelId)
+
+sets a given tuned model as default model
+
+sets a given tuned model as default model
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.TuneApi();
+
+var modelId = "modelId_example"; // String | model id of the tuned model
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+apiInstance.applySpecificTuningAsDefaultModel(modelId, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **modelId** | **String**| model id of the tuned model | 
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
 <a name="buildGridSearchANN"></a>
 # **buildGridSearchANN**
-> buildGridSearchANN(inputParameterLists)
+> buildGridSearchANN(inputParameterLists, opts)
 
 passes all learning and ANN parameters to the server
 
@@ -29,6 +77,9 @@ var apiInstance = new ConvolutionalAutoencoder.TuneApi();
 
 var inputParameterLists = new ConvolutionalAutoencoder.ParameterList(); // ParameterList | object with all tunable parameter lists
 
+var opts = { 
+  'deletePreviousModels': false // Boolean | if true delete all previous tuned models
+};
 
 var callback = function(error, data, response) {
   if (error) {
@@ -37,7 +88,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully.');
   }
 };
-apiInstance.buildGridSearchANN(inputParameterLists, callback);
+apiInstance.buildGridSearchANN(inputParameterLists, opts, callback);
 ```
 
 ### Parameters
@@ -45,6 +96,7 @@ apiInstance.buildGridSearchANN(inputParameterLists, callback);
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **inputParameterLists** | [**ParameterList**](ParameterList.md)| object with all tunable parameter lists | 
+ **deletePreviousModels** | **Boolean**| if true delete all previous tuned models | [optional] [default to false]
 
 ### Return type
 
@@ -276,6 +328,46 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**TrainPerformance**](TrainPerformance.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getTuneModelIds"></a>
+# **getTuneModelIds**
+> [&#39;String&#39;] getTuneModelIds()
+
+returns a list of all tuned model ids
+
+returns a list of all tuned model ids
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.TuneApi();
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.getTuneModelIds(callback);
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**[&#39;String&#39;]**
 
 ### Authorization
 

@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "WebUI to build, train and tune a Convolutional Autoencoder"
-  version: "1.1.7"
+  version: "1.1.8"
   title: "Convolutional Autoencoder"
   termsOfService: "http://swagger.io/terms/"
   contact:
@@ -699,6 +699,12 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/ParameterList"
+      - name: "deletePreviousModels"
+        in: "query"
+        description: "if true delete all previous tuned models"
+        required: false
+        type: "boolean"
+        default: false
       responses:
         202:
           description: "Parameters successfully commited"
@@ -795,6 +801,28 @@ paths:
         404:
           description: "Ressource not found"
       x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/getTuneModelIds:
+    get:
+      tags:
+      - "tune"
+      summary: "returns a list of all tuned model ids"
+      description: "returns a list of all tuned model ids"
+      operationId: "get_tune_model_ids"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Parameters successfully returned"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        404:
+          description: "Ressource not found"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
   /tune/getProcessedImageDataOfSpecificTuning:
     get:
       tags:
@@ -847,6 +875,27 @@ paths:
           description: "Train status recieved"
           schema:
             $ref: "#/definitions/TrainPerformance"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/applySpecificTuningAsDefaultModel:
+    post:
+      tags:
+      - "tune"
+      summary: "sets a given tuned model as default model"
+      description: "sets a given tuned model as default model"
+      operationId: "apply_specific_tuning_as_default_model"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "modelId"
+        in: "query"
+        description: "model id of the tuned model"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Default model set"
       x-swagger-router-controller: "swagger_server.controllers.tune_controller"
 definitions:
   ImageData:
