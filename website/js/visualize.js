@@ -5,6 +5,7 @@ var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 //var Slick = require('slick-carousel');
 
 var loadApi = new ConvolutionalAutoencoder.LoadApi();
+var buildApi = new ConvolutionalAutoencoder.BuildApi();
 var visualizeApi = new ConvolutionalAutoencoder.VisualizeApi();
 
 // increase timeout
@@ -16,6 +17,9 @@ visualizeApi.defaultTimeout = 160000;
  */
 var colorMap = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462', '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd'];
 var clusterTimer;
+var inputShape = [1, 1, 1, 1];
+var annInputShape = [1, 1, 1, 1]
+var datasetname = "train_data";
 
 
 function callback(error, data, response) {
@@ -28,6 +32,115 @@ function callback(error, data, response) {
 
 loadApi.resetAllBatchIndices(callback);
 
+
+function getInputDimensions() {
+
+
+    function inputShapeCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(data);
+
+            //update data statistics:
+            document.getElementById("labelResolution").textContent = "Resolution: " + data[1] + "px x " + data[2] + "px";
+            document.getElementById("labelLayer").textContent = "Layer: " + data[3];
+            document.getElementById("labelNumberOfImages").textContent = "Number of Images: " + data[0];
+
+            //update input shape:
+            inputShape = data;
+
+            // add placeholder for first dim:
+            inputShape[0] = -1;
+
+        }
+    }
+
+    buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
+}
+
+function checkInputDimensions(option) {
+    // disable option to prevent errors:
+    option.disabled = true;
+
+    // activate again if
+    function inputShapeCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(data);
+            console.log(annInputShape);
+
+            // disable option if input shape doesn't fit the ANN:
+
+            if (data[1] === annInputShape[1]) {
+                if (data[2] === annInputShape[2]) {
+                    if (data[3] === annInputShape[3]) {
+                        option.disabled = false;
+                    }
+                }
+            }
+        }
+    }
+
+    buildApi.getInputShape({'datasetName': option.value}, inputShapeCallback)
+
+
+}
+
+
+function getAnnInputDimension() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('parameter set received');
+            console.log(data);
+            annInputShape = data.input_shape[0];
+        }
+    }
+
+    buildApi.getANNParameter(callback);
+}
+
+function getAvailableDataSets() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('loaded data sets retrieved');
+            // replace options in 'Loaded data sets' selection
+            console.log(data);
+            var selection = document.getElementById("inputLoadedDataSets");
+            // remove previous options
+            selection.options.length = 0;
+            // add available file names
+            for (var i = 0; i < data.length; i++) {
+                selection.options[i] = new Option(data[i], data[i], false, false)
+                checkInputDimensions(selection.options[i]);
+            }
+            // select first element:
+            selection.options[0].selected = true;
+            selectLoadedDataset();
+        }
+    }
+
+    loadApi.getLoadedDataSets(callback);
+}
+
+function selectLoadedDataset() {
+    var newDatasetname = document.getElementById("inputLoadedDataSets")
+        .options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
+
+    // reset batch indices if dataset is changed:
+    if (datasetname !== newDatasetname) {
+        loadApi.resetAllBatchIndices();
+        datasetname = newDatasetname;
+        $('.slick').slick('removeSlide', null, null, true);
+        getInputDimensions();
+        appendImages(70);
+    }
+}
 
 function appendImages(batchSize) {
     // get image grid
@@ -88,7 +201,7 @@ function appendImages(batchSize) {
         }
     }
 
-    loadApi.getImageBatch({"batchSize": batchSize}, imageCallback);
+    loadApi.getImageBatch({'datasetname': datasetname, "batchSize": batchSize}, imageCallback);
 
 }
 
@@ -263,7 +376,7 @@ function updatePreviewImages(id) {
 
     }
 
-    loadApi.getImageById(Number(id), {'output': false}, inputImageCallback);
+    loadApi.getImageById(Number(id), {'datasetName': datasetname, 'output': false}, inputImageCallback);
 
     console.log("test");
 
@@ -290,7 +403,7 @@ function updatePreviewImages(id) {
 
     }
 
-    loadApi.getLatentRepresentationById(Number(id), {}, latentImageCallback);
+    loadApi.getLatentRepresentationById(Number(id), {'datasetName': datasetname}, latentImageCallback);
 
     // update output image
     function outputImageCallback(error, data, response) {
@@ -309,7 +422,7 @@ function updatePreviewImages(id) {
 
     }
 
-    loadApi.getImageById(Number(id), {'output': true}, outputImageCallback);
+    loadApi.getImageById(Number(id), {'datasetName': datasetname, 'output': true}, outputImageCallback);
 
 }
 
@@ -326,7 +439,7 @@ $(document).ready(function () {
 
 $('.slick').on('afterChange', function (event, slick, direction) {
     console.log(direction);
-    appendImages(11);
+    appendImages(20);
     // left
 });
 
@@ -334,8 +447,11 @@ $('.slick').on('afterChange', function (event, slick, direction) {
 init tab
  */
 document.getElementById("drawClustering").addEventListener('click', startClustering);
+document.getElementById("inputLoadedDataSets").addEventListener("change", selectLoadedDataset);
 
-appendImages(70);
+getAnnInputDimension();
+getAvailableDataSets();
+
 
 
 

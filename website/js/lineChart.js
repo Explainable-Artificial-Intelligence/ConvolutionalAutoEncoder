@@ -142,9 +142,9 @@ function LineChart(parentNodeID, width, height, xProperty, yProperty, xAxisName,
     function updateAxis() {
         xAxis = d3.axisBottom(xScale).ticks(5);
         if (logScale) {
-            yAxis = d3.axisLeft(yScale).tickFormat(d3.format(".1e")).ticks(5);
+            yAxis = d3.axisLeft(yScale).tickFormat(d3.format(".1e")).ticks(15);
         } else {
-            yAxis = d3.axisLeft(yScale).tickFormat(d3.format(".1s")).ticks(5);
+            yAxis = d3.axisLeft(yScale).tickFormat(d3.format(".2s")).ticks(5);
         }
         //panel.select(".x").call(xAxis);
         //panel.select(".y").call(yAxis);

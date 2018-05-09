@@ -1,6 +1,8 @@
 """includes a static class which stores all server data"""
 import threading
 
+from flask_server.swagger_server.models.parameter_list import ParameterList
+
 
 class Storage(object):
     # storrage items
@@ -13,7 +15,7 @@ class Storage(object):
     score_data = {}
     output_batch_indices = {}
     cae = object()
-    parameter_set = {}
+    parameter_set = ParameterList()
     model_id = ""
     cae_thread = threading.Thread()
     train_step = 0

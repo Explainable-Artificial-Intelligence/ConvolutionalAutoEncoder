@@ -215,6 +215,12 @@ document.getElementById("showImagesBtn").addEventListener("click", function () {
 
 document.getElementById("uploadBtn").addEventListener("click", uploadFile);
 
+document.getElementById("inputAvailableDataSets").addEventListener("change", function () {
+    document.getElementById("inputDatasetName").value =
+        document.getElementById("inputAvailableDataSets").options[document.getElementById("inputAvailableDataSets")
+            .selectedIndex].value.split('.')[0];
+});
+
 document.getElementById("inputLoadedDataSets").addEventListener("change", function () {
     datasetname = document.getElementById("inputLoadedDataSets").options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
     var imageGrid = document.getElementById("imageGrid");
@@ -235,7 +241,6 @@ var histogram = new Histogram("imagePreviewView", 400, 400);
 loadApi.resetAllBatchIndices(callback);
 // remove selection:
 document.getElementById("imagePreview").linkedId = "";
-appendImages(1000);
 getAvailableDataSets();
 getLoadedDataSets();
 

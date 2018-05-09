@@ -5,6 +5,7 @@ var ConvolutionalAutoencoder = require('convolutional_autoencoder');
 
 var tuneApi = new ConvolutionalAutoencoder.TuneApi();
 var buildApi = new ConvolutionalAutoencoder.BuildApi();
+var loadApi = new ConvolutionalAutoencoder.LoadApi();
 
 // check API functionality
 function callback(error, data, response) {
@@ -27,6 +28,7 @@ var updateTimer;
 var currentTile = null;
 var currentTrainImageEpoch = 0;
 var previousTiles = [];
+var datasetname = "train_data";
 
 /*
 Helper functions
@@ -365,7 +367,36 @@ function getInputDimensions() {
         }
     }
 
-    buildApi.getInputShape([], inputShapeCallback)
+    buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
+}
+
+function getAvailableDataSets() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('loaded data sets retrieved');
+            // replace options in 'Loaded data sets' selection
+            console.log(data);
+            var selection = document.getElementById("inputLoadedDataSets");
+            // remove previous options
+            selection.options.length = 0;
+            // add available file names
+            for (var i = 0; i < data.length; i++) {
+                selection.options[i] = new Option(data[i], data[i], false, false)
+            }
+            // select first element:
+            selection.options[0].selected = true;
+            selectLoadedDataset();
+        }
+    }
+
+    loadApi.getLoadedDataSets(callback);
+}
+
+function selectLoadedDataset() {
+    datasetname = document.getElementById("inputLoadedDataSets").options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
+    getInputDimensions();
 }
 
 function getParameterList(summaryTile) {
@@ -444,7 +475,6 @@ function buildANN() {
 /*
 Main tuning functions
  */
-
 function updateTrainImages() {
     var callback = function (error, data, response) {
         if (error) {
@@ -662,12 +692,15 @@ Event Listener
 document.getElementById("buildANN").addEventListener("click", buildANN);
 document.getElementById("startGridSearch").addEventListener("click", startTuning);
 document.getElementById("stopGridSearch").addEventListener("click", stopTuning);
+document.getElementById("inputLoadedDataSets").addEventListener("change", selectLoadedDataset);
+
 //
 
 /*
 on load
  */
 // get input shape
+getAvailableDataSets();
 getInputDimensions();
 
 // show parameters

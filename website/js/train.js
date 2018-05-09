@@ -30,10 +30,26 @@ Global variables
 var trainTimer;
 var currentTrainImageEpoch = 0;
 var datasetname = "train_data";
+var inputShape = [1, 1, 1, 1];
+var annInputShape = [1, 1, 1, 1];
 
 /*
 Helper function
  */
+function getAnnInputDimension() {
+    function callback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('parameter set received');
+            console.log(data);
+            annInputShape = data.input_shape[0];
+        }
+    }
+
+    buildApi.getANNParameter(callback);
+}
+
 function getInputDimensions() {
 
 
@@ -53,9 +69,6 @@ function getInputDimensions() {
 
             // add placeholder for first dim:
             inputShape[0] = -1;
-
-            // update topology input output layers:
-            updateInputOutputLayer(inputShape[1], inputShape[2], inputShape[3]);
         }
     }
 
@@ -76,6 +89,7 @@ function getAvailableDataSets() {
             // add available file names
             for (var i = 0; i < data.length; i++) {
                 selection.options[i] = new Option(data[i], data[i], false, false)
+                checkInputDimensions(selection.options[i]);
             }
             // select first element:
             selection.options[0].selected = true;
@@ -84,6 +98,35 @@ function getAvailableDataSets() {
     }
 
     loadApi.getLoadedDataSets(callback);
+}
+
+function checkInputDimensions(option) {
+    // disable option to prevent errors:
+    option.disabled = true;
+
+    // activate again if
+    function inputShapeCallback(error, data, response) {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(data);
+            console.log(annInputShape);
+
+            // disable option if input shape doesn't fit the ANN:
+
+            if (data[1] === annInputShape[1]) {
+                if (data[2] === annInputShape[2]) {
+                    if (data[3] === annInputShape[3]) {
+                        option.disabled = false;
+                    }
+                }
+            }
+        }
+    }
+
+    buildApi.getInputShape({'datasetName': option.value}, inputShapeCallback)
+
+
 }
 
 function selectLoadedDataset() {
@@ -282,6 +325,7 @@ document.getElementById("inputLoadedDataSets").addEventListener("change", select
 document.getElementById("startTraining").addEventListener("click", startTraining);
 document.getElementById("stopTraining").addEventListener("click", stopTraining);
 
+getAnnInputDimension();
 getAvailableDataSets();
 
 

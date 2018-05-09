@@ -17,6 +17,9 @@ def build_ann(inputParameters):
     if connexion.request.is_json:
         inputParameters = ParameterList.from_dict(connexion.request.get_json())
 
+        # store parameter set:
+        Storage.parameter_set = inputParameters
+
         # generate single parameter set
         parameter_set = {}
         for key in inputParameters.__dict__.keys():
@@ -113,7 +116,9 @@ def get_ann_parameter():  # noqa: E501
 
     :rtype: ParameterList
     """
-    return 'do some magic!'
+
+    test = Storage.parameter_set
+    return Storage.parameter_set, 200
 
 
 def get_input_shape(dataset_name="train_data"):
