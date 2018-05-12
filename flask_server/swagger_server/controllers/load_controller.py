@@ -220,7 +220,7 @@ def get_random_images(batch_size=100, datasetname="train_data", sort_by=None, fi
     return 'do some magic!'
 
 
-def load_file(filename, datasetname="train_data", read_labels=None, data_type=None):
+def load_file(filename, datasetname="train_data", read_labels=None, data_type="auto"):
     """
     Load a train/test data file
     Load a data file in different data formats
@@ -235,13 +235,21 @@ def load_file(filename, datasetname="train_data", read_labels=None, data_type=No
 
     :rtype: None
     """
-    print("input file/folder: %s" % filename, file=sys.stderr)
 
-    response, response_code, input_data = load_input_data(filename)
-    if response_code == 200:
-        # save train data
-        Storage.set_input_data(input_data, datasetname)
-    return response, response_code
+    supported_data_types = ["auto", "npy", "zip"]
+
+    if data_type in supported_data_types:
+        print("input file/folder: %s" % filename, file=sys.stderr)
+
+
+        response, response_code, input_data = load_input_data(filename, data_type)
+        if response_code == 200:
+            # save train data
+            Storage.set_input_data(input_data, datasetname)
+        return response, response_code
+    else:
+        print("unsupported data type: %s" % data_type, file=sys.stderr)
+        return "unsupported data type: %s" % data_type, 415
 
 
 def reset_all_batch_indices():

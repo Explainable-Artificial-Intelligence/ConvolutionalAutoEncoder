@@ -13,7 +13,7 @@ from PIL import Image
 from tensorflow.python.keras import datasets
 
 
-def load_input_data(filename):
+def load_input_data(filename, data_type):
     """
     imports input files in several formats
     :param filename:
@@ -23,23 +23,35 @@ def load_input_data(filename):
     file_path = os.path.join(data_path, filename)
     if os.path.isfile(file_path):
         print("file found", file=sys.stderr)
-        if file_path.lower().endswith('.npy'):
+        if data_type == "auto":
+            # start file detection:
+            if file_path.lower().endswith('.npy'):
+                try:
+                    input_data = read_npy_arr_file(file_path)
+                    return 'file loaded', 200, input_data
+                except ValueError:
+                    return 'file parsing error', 415, None
+            if file_path.lower().endswith('.zip'):
+                try:
+                    return read_zip_file(file_path)
+                except ValueError:
+                    return 'file parsing error', 415, None
+        else if data_type == "npy":
+            # np array
             try:
                 input_data = read_npy_arr_file(file_path)
                 return 'file loaded', 200, input_data
             except ValueError:
                 return 'file parsing error', 415, None
-        if file_path.lower().endswith('.zip'):
+        else if data_type == "zip":
+            # zip file
             try:
-                # extract zip file
-                extract_directory = extract_zip_file(file_path)
-                # load content
-                input_data = read_image_folder(extract_directory)
-                # delete temporary extraction folder
-                shutil.rmtree(extract_directory, ignore_errors=True)
-                return 'file loaded', 200, input_data
+                return read_zip_file(file_path)
             except ValueError:
                 return 'file parsing error', 415, None
+        else:
+            return 'unsupported data type', 415, None
+
 
     if os.path.isdir(file_path):
         print("folder found", file=sys.stderr)
@@ -50,6 +62,22 @@ def load_input_data(filename):
             return 'folder parsing error', 415, None
 
     return 'file or folder not found', 404, None
+
+
+def read_zip_file(file_path):
+    """
+    reads a zip file containing image files as np array (pixel values)
+
+    :param file_path:
+    :return:
+    """
+    # extract zip file
+    extract_directory = extract_zip_file(file_path)
+    # load content
+    input_data = read_image_folder(extract_directory)
+    # delete temporary extraction folder
+    shutil.rmtree(extract_directory, ignore_errors=True)
+    return 'file loaded', 200, input_data
 
 
 def extract_zip_file(file_path):
