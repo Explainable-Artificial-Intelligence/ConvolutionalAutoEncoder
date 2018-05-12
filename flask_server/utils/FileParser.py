@@ -1,8 +1,12 @@
 """
 Collection of methods to parse input data files
 """
+import datetime
 import os
+import shutil
 import sys
+import uuid
+import zipfile
 
 import numpy as np
 from PIL import Image
@@ -16,20 +20,31 @@ def load_input_data(filename):
     :return:
     """
     data_path = os.path.join(os.getcwd(), "data")
-    filepath = os.path.join(data_path, filename)
-    if os.path.isfile(filepath):
+    file_path = os.path.join(data_path, filename)
+    if os.path.isfile(file_path):
         print("file found", file=sys.stderr)
-        if filepath.endswith('.npy') or filepath.endswith('.NPY'):
+        if file_path.lower().endswith('.npy'):
             try:
-                input_data = read_npy_arr_file(filepath)
+                input_data = read_npy_arr_file(file_path)
+                return 'file loaded', 200, input_data
+            except ValueError:
+                return 'file parsing error', 415, None
+        if file_path.lower().endswith('.zip'):
+            try:
+                # extract zip file
+                extract_directory = extract_zip_file(file_path)
+                # load content
+                input_data = read_image_folder(extract_directory)
+                # delete temporary extraction folder
+                shutil.rmtree(extract_directory, ignore_errors=True)
                 return 'file loaded', 200, input_data
             except ValueError:
                 return 'file parsing error', 415, None
 
-    if os.path.isdir(filepath):
+    if os.path.isdir(file_path):
         print("folder found", file=sys.stderr)
         try:
-            input_data = read_image_folder(filepath)
+            input_data = read_image_folder(file_path)
             return 'file loaded', 200, input_data
         except ValueError:
             return 'folder parsing error', 415, None
@@ -37,28 +52,42 @@ def load_input_data(filename):
     return 'file or folder not found', 404, None
 
 
-def read_npy_arr_file(filepath):
+def extract_zip_file(file_path):
+    """
+    extracts a zip file into a random folder and returns the folder name
+
+    :param file_path:
+    :return:
+    """
+    extract_directory = datetime.datetime.now().strftime("%Y%m%d_%H%M%S-") + str(uuid.uuid4())[:8]
+    zip_ref = zipfile.ZipFile(file_path, 'r')
+    zip_ref.extractall(extract_directory)
+    zip_ref.close()
+    return extract_directory
+
+
+def read_npy_arr_file(file_path):
     """
     return a numpy array from a numpy array save file (np.save())
 
-    :param filepath: file path to the input file
+    :param file_path: file path to the input file
     """
-    np_array = np.load(filepath)
+    np_array = np.load(file_path)
 
     return np_array
 
 
-def read_image_folder(folderpath):
+def read_image_folder(folder_path):
     """
     returns a numpy array of all images of the folder
 
-    :param folderpath:
+    :param folder_path:
     :return:
     """
     # TODO: allow resizing and check for image size
     # TODO: superwised learning by folder
     image_array_list = []
-    for (path, dirs, files) in os.walk(folderpath):
+    for (path, dirs, files) in os.walk(folder_path):
         for file in files:
             filename = os.path.join(path, file)
             if filename.endswith('.png') or filename.endswith('.PNG'):
