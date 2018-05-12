@@ -241,7 +241,6 @@ def load_file(filename, datasetname="train_data", read_labels=None, data_type="a
     if data_type in supported_data_types:
         print("input file/folder: %s" % filename, file=sys.stderr)
 
-
         response, response_code, input_data = load_input_data(filename, data_type)
         if response_code == 200:
             # save train data

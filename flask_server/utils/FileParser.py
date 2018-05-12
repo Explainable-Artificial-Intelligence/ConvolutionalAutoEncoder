@@ -12,6 +12,8 @@ import numpy as np
 from PIL import Image
 from tensorflow.python.keras import datasets
 
+data_path = os.path.join(os.getcwd(), "data")
+
 
 def load_input_data(filename, data_type):
     """
@@ -19,7 +21,7 @@ def load_input_data(filename, data_type):
     :param filename:
     :return:
     """
-    data_path = os.path.join(os.getcwd(), "data")
+
     file_path = os.path.join(data_path, filename)
     if os.path.isfile(file_path):
         print("file found", file=sys.stderr)
@@ -36,14 +38,14 @@ def load_input_data(filename, data_type):
                     return read_zip_file(file_path)
                 except ValueError:
                     return 'file parsing error', 415, None
-        else if data_type == "npy":
+        elif data_type == "npy":
             # np array
             try:
                 input_data = read_npy_arr_file(file_path)
                 return 'file loaded', 200, input_data
             except ValueError:
                 return 'file parsing error', 415, None
-        else if data_type == "zip":
+        elif data_type == "zip":
             # zip file
             try:
                 return read_zip_file(file_path)
@@ -74,7 +76,7 @@ def read_zip_file(file_path):
     # extract zip file
     extract_directory = extract_zip_file(file_path)
     # load content
-    input_data = read_image_folder(extract_directory)
+    input_data = read_image_folder(os.path.join(data_path, extract_directory))
     # delete temporary extraction folder
     shutil.rmtree(extract_directory, ignore_errors=True)
     return 'file loaded', 200, input_data
@@ -89,7 +91,7 @@ def extract_zip_file(file_path):
     """
     extract_directory = datetime.datetime.now().strftime("%Y%m%d_%H%M%S-") + str(uuid.uuid4())[:8]
     zip_ref = zipfile.ZipFile(file_path, 'r')
-    zip_ref.extractall(extract_directory)
+    zip_ref.extractall(os.path.join(data_path, extract_directory))
     zip_ref.close()
     return extract_directory
 
