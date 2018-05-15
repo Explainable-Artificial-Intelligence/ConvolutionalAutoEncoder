@@ -3,7 +3,6 @@ Collection of methods to parse input data files
 """
 import datetime
 import os
-import pickle
 import shutil
 import sys
 import uuid
@@ -19,7 +18,6 @@ data_path = os.path.join(os.getcwd(), "data")
 def load_input_data(filename, data_type):
     """
     imports input files in several formats
-    :param data_type:
     :param filename:
     :return:
     """
@@ -149,6 +147,8 @@ def download_test_data():
 
     print("Getting test data...")
     # check if data folder exists
+    data_path = os.path.join(os.getcwd(), "data")
+    print(os.path.abspath(data_path))
     if not os.path.exists(data_path):
         os.makedirs(data_path)
 
@@ -216,18 +216,9 @@ def list_data_files():
 
 def save_data_file(file):
     try:
+        data_path = os.path.join(os.getcwd(), "data")
         filename = file.filename
         file.save(os.path.join(data_path, filename))
         return "File successfully saved", 200
     except IOError:
         return 'File could not be saved to disk', 415
-
-
-def save_object(python_object, file_path):
-    with open(file_path, 'wb') as file:
-        pickle.dump(python_object, file, pickle.HIGHEST_PROTOCOL)
-
-
-def load_object(file_path):
-    with open(file_path, 'rb') as file:
-        return pickle.load(file)

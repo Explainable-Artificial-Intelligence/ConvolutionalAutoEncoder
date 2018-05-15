@@ -13,6 +13,7 @@ from flask_server.swagger_server.models.train_performance_data_point import Trai
 from flask_server.swagger_server.models.train_status import TrainStatus
 from flask_server.utils.ANNHelperFunctions import generate_status_image_object_from_status_images, \
     generate_parameter_combination_list
+from flask_server.utils.FileParser import save_object
 from flask_server.utils.ModelStorage import ModelStorage
 from flask_server.utils.Storage import Storage
 from flask_server.utils.TuningQueue import TuningQueue
@@ -205,6 +206,9 @@ def build_grid_search_ann(inputParameterLists, deletePreviousModels=False):
             parameter_combination['session_saver_path'] = unique_path
             if not os.path.exists(unique_path):
                 os.makedirs(unique_path)
+
+            # save parameter set:
+            save_object(parameter_combination, os.path.join(unique_path, 'parameter_set.pkl'))
 
             # generate ann
             cae = SklearnCAE(**parameter_combination)

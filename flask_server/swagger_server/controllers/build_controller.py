@@ -1,7 +1,10 @@
+import os
+
 import connexion
 
 from flask_server.ConvolutionalAutoEncoder import SklearnCAE
 from flask_server.swagger_server.models.parameter_list import ParameterList
+from flask_server.utils.FileParser import save_object
 from flask_server.utils.Storage import Storage
 
 
@@ -94,6 +97,9 @@ def build_ann(inputParameters):
             parameter_set['rb_seed'] = None
         if parameter_set['cf_weights'] == [0.0]:
             parameter_set['cf_weights'] = None
+
+        # save parameter set:
+        save_object(parameter_set, os.path.join(parameter_set['session_saver_path'], 'parameter_set.pkl'))
 
         # create convolutional auto encoder:
         cae = SklearnCAE(**parameter_set)

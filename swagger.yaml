@@ -654,6 +654,23 @@ paths:
           description: Operation successful
           schema:
             $ref: '#/definitions/Image'
+  /visualize/getPretrainedModelAsZip:
+    get:
+      tags:
+        - visualize
+      summary: returns a zip file with the pre trained model as runable python script
+      description: ''
+      operationId: getPretrainedModelAsZip
+      consumes:
+        - application/json
+      produces:
+        - multipart/form-data
+      responses:
+        '200':
+          description: Operation successful
+          schema:
+           type: file
+           description: a zip file containing a pretrained model
   /tune/buildGridSearchANN:
     post:
       tags:
@@ -860,6 +877,29 @@ paths:
       responses:
         '200':
           description: Default model set
+  /tune/getTunedModelAsZip:
+    get:
+      tags:
+        - visualize
+      summary: returns a zip file with the pre trained model as runable python script
+      description: ''
+      operationId: getTunedModelAsZip
+      consumes:
+        - application/json
+      produces:
+        - multipart/form-data
+      parameters:
+        - name: modelId
+          in: query
+          description: model id of the tuned model
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Operation successful
+          schema:
+           type: file
+           description: a zip file containing a pretrained model
           
             
             
