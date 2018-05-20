@@ -334,7 +334,10 @@ function getClustering() {
             console.log(response);
             console.log(data);
             clearInterval(clusterTimer);
-            document.getElementById('clusterView').removeChild(document.getElementById('clusterChart'));
+            // if (document.getElementById('clusterView') !== null) {
+            //     document.getElementById('clusterView').removeChild(document.getElementById('clusterChart'));
+            // }
+
             var clusterChart = new ClusterChart("clusterView", 960, 640, colorMap, response.body)
         }
     }

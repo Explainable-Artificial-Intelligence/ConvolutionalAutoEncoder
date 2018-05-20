@@ -1,0 +1,6 @@
+model_checkpoint_path: "tf_session_final.bak-1500"
+all_model_checkpoint_paths: "tf_session.bak-930"
+all_model_checkpoint_paths: "tf_session.bak-1080"
+all_model_checkpoint_paths: "tf_session.bak-1230"
+all_model_checkpoint_paths: "tf_session.bak-1380"
+all_model_checkpoint_paths: "tf_session_final.bak-1500"

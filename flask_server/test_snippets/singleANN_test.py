@@ -1,6 +1,6 @@
 import numpy as np
 
-from flask_server import ConvolutionalAutoEncoder
+from flask_server.utils import ConvolutionalAutoEncoder
 
 # extract train/test data
 

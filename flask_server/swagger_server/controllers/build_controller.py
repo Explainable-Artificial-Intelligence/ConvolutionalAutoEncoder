@@ -2,8 +2,8 @@ import os
 
 import connexion
 
-from flask_server.ConvolutionalAutoEncoder import SklearnCAE
 from flask_server.swagger_server.models.parameter_list import ParameterList
+from flask_server.utils.ConvolutionalAutoEncoder import SklearnCAE
 from flask_server.utils.FileParser import save_object
 from flask_server.utils.Storage import Storage
 

@@ -6,13 +6,13 @@ import uuid
 
 import connexion
 
-from flask_server.ConvolutionalAutoEncoder import SklearnCAE
 from flask_server.swagger_server.models.parameter_list import ParameterList
 from flask_server.swagger_server.models.train_performance import TrainPerformance
 from flask_server.swagger_server.models.train_performance_data_point import TrainPerformanceDataPoint
 from flask_server.swagger_server.models.train_status import TrainStatus
 from flask_server.utils.ANNHelperFunctions import generate_status_image_object_from_status_images, \
     generate_parameter_combination_list
+from flask_server.utils.ConvolutionalAutoEncoder import SklearnCAE
 from flask_server.utils.FileParser import save_object
 from flask_server.utils.ModelStorage import ModelStorage
 from flask_server.utils.Storage import Storage

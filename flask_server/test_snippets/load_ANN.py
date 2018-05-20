@@ -2,7 +2,7 @@
 import numpy as np
 
 # extract train/test data
-from flask_server import ConvolutionalAutoEncoder
+from flask_server.utils import ConvolutionalAutoEncoder
 
 train_data = np.load("../../data/mnist_train_data.npy")
 test_data = np.load("../../data/mnist_test_data.npy")
