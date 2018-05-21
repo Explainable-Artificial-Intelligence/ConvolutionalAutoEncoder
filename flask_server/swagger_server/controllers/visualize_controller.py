@@ -81,3 +81,14 @@ def get_hidden_layer_latent_clustering(dataset_name='train_data', layer=0):
 
     if Storage.clustering_status[(dataset_name, layer)] == "finished":
         return Storage.clustering_data[(dataset_name, layer)], 200
+
+
+def get_pretrained_model_as_zip():  # noqa: E501
+    """returns a zip file with the pre trained model as runable python script
+
+     # noqa: E501
+
+
+    :rtype: file
+    """
+    return 'do some magic!'

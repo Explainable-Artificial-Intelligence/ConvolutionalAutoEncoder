@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**getTrainPerformanceOfSpecificTuning**](TuneApi.md#getTrainPerformanceOfSpecificTuning) | **GET** /tune/getTrainPerformanceOfSpecificTuning | returns the complete set of scalar train variables to a given model
 [**getTuneModelIds**](TuneApi.md#getTuneModelIds) | **GET** /tune/getTuneModelIds | returns a list of all tuned model ids
 [**getTuneParameter**](TuneApi.md#getTuneParameter) | **GET** /tune/getTuneParameter | returns the parameter set of the ANN with the given model id
+[**getTunedModelAsZip**](TuneApi.md#getTunedModelAsZip) | **GET** /tune/getTunedModelAsZip | returns a zip file with the pre trained model as runable python script
 
 
 <a name="applySpecificTuningAsDefaultModel"></a>
@@ -423,4 +424,50 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
+<a name="getTunedModelAsZip"></a>
+# **getTunedModelAsZip**
+> File getTunedModelAsZip(modelId)
+
+returns a zip file with the pre trained model as runable python script
+
+
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.TuneApi();
+
+var modelId = "modelId_example"; // String | model id of the tuned model
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.getTunedModelAsZip(modelId, callback);
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **modelId** | **String**| model id of the tuned model | 
+
+### Return type
+
+**File**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: multipart/form-data
 

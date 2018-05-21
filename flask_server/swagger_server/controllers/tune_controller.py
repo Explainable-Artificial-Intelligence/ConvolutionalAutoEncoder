@@ -317,3 +317,16 @@ def get_tune_parameter(modelId):  # noqa: E501
     if model_storage is None:
         return "Model ID not found", 415
     return model_storage.parameter_set, 200
+
+
+def get_tuned_model_as_zip(modelId):  # noqa: E501
+    """returns a zip file with the pre trained model as runable python script
+
+     # noqa: E501
+
+    :param modelId: model id of the tuned model
+    :type modelId: str
+
+    :rtype: file
+    """
+    return 'do some magic!'

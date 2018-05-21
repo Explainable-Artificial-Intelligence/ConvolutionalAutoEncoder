@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**computeHiddenLayerLatentClustering**](VisualizeApi.md#computeHiddenLayerLatentClustering) | **POST** /visualize/computeHiddenLayerLatentClustering | starts the clustering of the latent representation of a hidden layer
 [**generateImageFromSinglePoint**](VisualizeApi.md#generateImageFromSinglePoint) | **GET** /visualize/generateImageFromSinglePoint | generates the AE output from a given point of the sample distribution
 [**getHiddenLayerLatentClustering**](VisualizeApi.md#getHiddenLayerLatentClustering) | **POST** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
+[**getPretrainedModelAsZip**](VisualizeApi.md#getPretrainedModelAsZip) | **GET** /visualize/getPretrainedModelAsZip | returns a zip file with the pre trained model as runable python script
 
 
 <a name="computeHiddenLayerLatentClustering"></a>
@@ -160,4 +161,44 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
+<a name="getPretrainedModelAsZip"></a>
+# **getPretrainedModelAsZip**
+> File getPretrainedModelAsZip()
+
+returns a zip file with the pre trained model as runable python script
+
+
+
+### Example
+```javascript
+var ConvolutionalAutoencoder = require('convolutional_autoencoder');
+
+var apiInstance = new ConvolutionalAutoencoder.VisualizeApi();
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+apiInstance.getPretrainedModelAsZip(callback);
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**File**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: multipart/form-data
 

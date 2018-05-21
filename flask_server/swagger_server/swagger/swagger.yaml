@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "WebUI to build, train and tune a Convolutional Autoencoder"
-  version: "1.1.8"
+  version: "1.2.0"
   title: "Convolutional Autoencoder"
   termsOfService: "http://swagger.io/terms/"
   contact:
@@ -681,6 +681,25 @@ paths:
           schema:
             $ref: "#/definitions/Image"
       x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
+  /visualize/getPretrainedModelAsZip:
+    get:
+      tags:
+      - "visualize"
+      summary: "returns a zip file with the pre trained model as runable python script"
+      description: ""
+      operationId: "get_pretrained_model_as_zip"
+      consumes:
+      - "application/json"
+      produces:
+      - "multipart/form-data"
+      parameters: []
+      responses:
+        200:
+          description: "Operation successful"
+          schema:
+            type: "file"
+            description: "a zip file containing a pretrained model"
+      x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
   /tune/buildGridSearchANN:
     post:
       tags:
@@ -896,6 +915,30 @@ paths:
       responses:
         200:
           description: "Default model set"
+      x-swagger-router-controller: "swagger_server.controllers.tune_controller"
+  /tune/getTunedModelAsZip:
+    get:
+      tags:
+      - "tune"
+      summary: "returns a zip file with the pre trained model as runable python script"
+      description: ""
+      operationId: "get_tuned_model_as_zip"
+      consumes:
+      - "application/json"
+      produces:
+      - "multipart/form-data"
+      parameters:
+      - name: "modelId"
+        in: "query"
+        description: "model id of the tuned model"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Operation successful"
+          schema:
+            type: "file"
+            description: "a zip file containing a pretrained model"
       x-swagger-router-controller: "swagger_server.controllers.tune_controller"
 definitions:
   ImageData:
