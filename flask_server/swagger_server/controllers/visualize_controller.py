@@ -1,12 +1,18 @@
+import os
 import threading
+import zipfile
 
 import connexion
+from werkzeug.datastructures import FileStorage
 
 from flask_server.swagger_server.models.cluster_parameters import ClusterParameters
 from flask_server.swagger_server.models.clustering import Clustering
 from flask_server.swagger_server.models.point2_d import Point2D
 from flask_server.utils.Clustering import perform_clustering
 from flask_server.utils.Storage import Storage
+
+
+# from connexion.decorators.decorator import ResponseContainer
 
 
 def compute_hidden_layer_latent_clustering(algorithm, dimension_reduction, dataset_name='train_data', layer=0,
@@ -91,4 +97,82 @@ def get_pretrained_model_as_zip():  # noqa: E501
 
     :rtype: file
     """
-    return 'do some magic!'
+
+    # get save path:
+    save_path = Storage.parameter_set.session_saver_path
+
+    # get file list:
+    file_list = []
+
+    print("HI")
+
+    # add python script files:
+    file_list.append("./utils/ConvolutionalAutoEncoder.py")
+    file_list.append("./utils/FileParser.py")
+    file_list.append("./utils/CAE_predictor.py")
+
+    # add checkpoint file:
+    file_list.append(os.path.join(save_path, "checkpoint"))
+    file_list.append(os.path.join(save_path, "parameter_set.pkl"))
+
+    # add latest checkpoint:
+    with open(os.path.join(save_path, "checkpoint")) as checkpoint_file:
+        latest_checkpoint_name = checkpoint_file.readlines()[0].split(':')[1].strip()[1:-1]
+
+        # get all related files:
+        file_list += [os.path.join(save_path, f) for f in os.listdir(save_path) if f.startswith(latest_checkpoint_name)]
+
+    # create zip file:
+    # output = io.StringIO()
+    zip_file = zipfile.ZipFile(os.path.join(save_path, "download.zip"), "w")
+    # zip_file = zipfile.ZipFile(output, "w")
+    # zip_file = zipstream.ZipFile(mode='w', compression=zipstream.ZIP_DEFLATED)
+    # append files:
+    for file in file_list:
+        zip_file.write(file, os.path.basename(file))
+    zip_file.close()
+
+    print(file_list)
+
+    # with open(os.path.join(save_path, "download.zip"), "rb") as file:
+    #     byte_string = file.read()
+
+    with open(os.path.join(save_path, "download.zip"), 'rb') as fp:
+        test_zip = FileStorage(fp)
+
+    in_file = open(os.path.join(save_path, "download.zip"), "rb")  # opening for [r]eading as [b]inary
+    data = in_file.read()  # if you only wanted to read 512 bytes, do .read(512)
+    in_file.close()
+
+    test = file
+    return test, 200
+
+# return send_file(os.path.join(os.path.abspath(save_path), "download.zip"), attachment_filename='sample.zip', as_attachment=True)
+
+# resp = Response(zip_file, mimetype="text/zip")
+# resp.headers["Accept"] = "text/zip"
+# resp.headers['Access-Control-Allow-Origin'] = '*'
+# resp.headers["Content-Disposition"] = "attachment; filename=download.zip"
+# return resp
+
+# resp = io.send_from_directory('uploads', 'test.bin',
+#                                      as_attachment=True,
+#                                      mimetype='application/octet-stream',
+#                                      attachment_filename='test_rsp.bin'
+#                                      )
+# return resp
+#
+# #return connexion.send_from_directory(os.path.abspath(save_path), "download.zip", as_attachment=True), 200
+
+# resp = send_from_directory(save_path, 'download.zip',
+#                            as_attachment=True,
+#                            mimetype='application/octet-stream',
+#                            attachment_filename='download.zip'
+#                            )
+#
+# return ResponseContainer(
+#     mimetype=resp.mimetype,
+#     data=resp.response,
+#     status_code=200,
+#     headers=resp.headers
+# )

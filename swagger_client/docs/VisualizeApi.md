@@ -199,6 +199,6 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: multipart/form-data
+ - **Content-Type**: multipart/form-data
+ - **Accept**: application/octet-stream
 

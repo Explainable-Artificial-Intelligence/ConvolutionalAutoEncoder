@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "WebUI to build, train and tune a Convolutional Autoencoder"
-  version: "1.2.0"
+  version: "1.2.2"
   title: "Convolutional Autoencoder"
   termsOfService: "http://swagger.io/terms/"
   contact:
@@ -682,23 +682,22 @@ paths:
             $ref: "#/definitions/Image"
       x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
   /visualize/getPretrainedModelAsZip:
-    get:
+    post:
       tags:
       - "visualize"
       summary: "returns a zip file with the pre trained model as runable python script"
       description: ""
       operationId: "get_pretrained_model_as_zip"
-      consumes:
-      - "application/json"
       produces:
-      - "multipart/form-data"
+      - "application/zip"
       parameters: []
       responses:
         200:
-          description: "Operation successful"
+          description: "MOdel zip successfully created"
           schema:
             type: "file"
-            description: "a zip file containing a pretrained model"
+        404:
+          description: "File not found"
       x-swagger-router-controller: "swagger_server.controllers.visualize_controller"
   /tune/buildGridSearchANN:
     post:
@@ -924,9 +923,9 @@ paths:
       description: ""
       operationId: "get_tuned_model_as_zip"
       consumes:
-      - "application/json"
-      produces:
       - "multipart/form-data"
+      produces:
+      - "application/octet-stream"
       parameters:
       - name: "modelId"
         in: "query"
@@ -938,7 +937,6 @@ paths:
           description: "Operation successful"
           schema:
             type: "file"
-            description: "a zip file containing a pretrained model"
       x-swagger-router-controller: "swagger_server.controllers.tune_controller"
 definitions:
   ImageData:

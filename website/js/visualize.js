@@ -88,7 +88,6 @@ function checkInputDimensions(option) {
 
 }
 
-
 function getAnnInputDimension() {
     function callback(error, data, response) {
         if (error) {
@@ -429,6 +428,25 @@ function updatePreviewImages(id) {
 
 }
 
+function downloadModel() {
+    function callback(error, data, response) {
+        // if (error) {
+        //     console.error(error);
+        // } else {
+        //     //console.log('API called successfully.');
+        //     console.log(response);
+        //     console.log(data);
+        // }
+
+        console.log(response);
+        console.log(data);
+        console.log(response.text);
+    }
+
+    visualizeApi.getPretrainedModelAsZip(callback);
+
+}
+
 
 //init slick slider
 $(document).ready(function () {
@@ -451,6 +469,7 @@ init tab
  */
 document.getElementById("drawClustering").addEventListener('click', startClustering);
 document.getElementById("inputLoadedDataSets").addEventListener("change", selectLoadedDataset);
+document.getElementById("btnDownloadModel").addEventListener("click", downloadModel);
 
 getAnnInputDimension();
 getAvailableDataSets();

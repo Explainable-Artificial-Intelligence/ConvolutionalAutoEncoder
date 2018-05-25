@@ -289,8 +289,14 @@ function startTraining() {
         } else {
             console.log(response);
             console.log(data);
-            document.getElementById("responseLabel").textContent = response.text;
 
+            // abort if no model is available:
+            if (response.statusCode === 204) {
+                document.getElementById("responseLabel").textContent = "No CAE model available to train";
+                return;
+            }
+
+            document.getElementById("responseLabel").textContent = response.text;
             // start update timer
             trainTimer = setInterval(updateView, 500);
         }

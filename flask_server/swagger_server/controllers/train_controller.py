@@ -5,6 +5,7 @@ import connexion
 from flask_server.swagger_server.models.train_performance import TrainPerformance
 from flask_server.swagger_server.models.train_performance_data_point import TrainPerformanceDataPoint
 from flask_server.utils.ANNHelperFunctions import generate_status_image_object_from_status_images
+from flask_server.utils.ConvolutionalAutoEncoder import SklearnCAE
 from flask_server.utils.Storage import Storage
 
 
@@ -21,9 +22,12 @@ def control_training(trainStatus, datasetName="train_data"):  # noqa: E501
     :rtype: None
     """
     if connexion.request.is_json:
+        if not isinstance(Storage.get_cae(), SklearnCAE):
+            return "No CAE model available to train", 204
         if trainStatus == "start":
             # get cae and train data
             cae = Storage.get_cae()
+            print(type(cae))
             train_data = Storage.get_input_data(datasetName)
             # define background thread:
             cae_thread = threading.Thread(target=cae.fit, args=(train_data,))
