@@ -10,19 +10,19 @@
 </head>
 
 
-
 <body>
-    <header>
-        <ul>
-            <li><a href="load.html">Load</a></li>
-            <li><a href="build.html">Build</a></li>
-            <li class="tabSelected"><a href="train.html">Train</a></li>
-            <li><a href="visualize.html">Visualize</a></li>
-            <li><a href="tune.html">Tuning</a></li>
-        </ul>
-    </header>
+<header>
+    <ul>
+        <li><a href="load.html">Load</a></li>
+        <li><a href="build.html">Build</a></li>
+        <li class="tabSelected"><a href="train.html">Train</a></li>
+        <li><a href="visualize.html">Visualize</a></li>
+        <li><a href="tune.html">Tuning</a></li>
+    </ul>
+</header>
 
-    <aside id="sidebar">
+<div class="row">
+    <div class="columnFixed" style="width: 250px">
         <h4>Loaded data sets:</h4>
         <select id="inputLoadedDataSets" size="3">
 
@@ -47,25 +47,28 @@
         <label id="responseLabel"></label>
         <br>
         <br>
-    </aside>
-
-    <div id="content">
-        <div id="charts">
-
-        </div>
-
-        <div id="sampleImages">
-            <table id="imageGrid">
-
-            </table>
-        </div>
+    </div>
+    <div id="charts" class="columnFixed" style="width: calc(100% - 250px)">
 
     </div>
+</div>
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="../js/lineChart.js"></script>
-    <script src="../js/imageGrid.js"></script>
-    <script src="../js/train_bundle.js"></script>
+
+<div id="contentFullWidth">
+
+
+    <!--<div id="sampleImages">-->
+    <!--<table id="imageGrid">-->
+
+    <!--</table>-->
+    <!--</div>-->
+
+</div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../js/lineChart.js"></script>
+<script src="../js/imageGrid.js"></script>
+<script src="../js/train_bundle.js"></script>
 </body>
 
 

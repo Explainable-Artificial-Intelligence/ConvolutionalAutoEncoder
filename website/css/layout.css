@@ -101,8 +101,8 @@ path:hover {
 
 #contentFullWidth {
     padding: 15px;
-    min-height: 600px;
-    margin: 15px;
+    /*min-height: 600px;*/
+    margin: 0 10px 10px;
     background-color: #2a2a2a;
 }
 

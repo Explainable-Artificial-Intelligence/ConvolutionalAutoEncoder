@@ -2,42 +2,40 @@
 div.scrollPane {
     margin: 0;
     padding: 0;
-    height: 600px;
     overflow: auto;
     white-space: nowrap;
-    max-width: 500px;
+    max-width: 100%;
 }
 
 table.imageGrid {
-    margin: 0;
-    padding: 0;
+    /*margin: 0;*/
+    /*padding: 0;*/
 }
 
 table.imageGrid td, tr {
-    margin: 0;
-    padding: 0;
+    /*margin: 0;*/
+    /*padding: 0;*/
     table-layout: fixed;
 
 }
 
 table.imageGrid td.inputImageColumn {
-    width: 52px;
+    margin-left: 20px;
 
 }
 
 table.imageGrid td.outputImageColumn {
-    width: 52px;
 
 }
 
 table.imageGrid td.latentImageColumn {
-    width: 82px;
+
 
 }
 
 .imageGrid .header {
 
-    font-size: 8px;
+    font-size: 12px;
     /*transform: rotate(45.0deg);*/
     /*-moz-transform: rotate(-90.0deg); !* FF3.5+ *!*/
     /*-o-transform: rotate(-90.0deg); !* Opera 10.5 *!*/

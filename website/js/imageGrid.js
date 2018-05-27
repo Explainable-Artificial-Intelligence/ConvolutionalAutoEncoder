@@ -6,7 +6,7 @@ helper function to create a image grid for train images
 function ImageGrid(parentNode, rowCount) {
 
     var scrollPane = document.createElement("div");
-    scrollPane.classList.add("scrollPane");
+    scrollPane.classList.add("horizontal-scroll");
     parentNode.appendChild(scrollPane);
 
     var outerTable = document.createElement("table");
@@ -23,11 +23,11 @@ function ImageGrid(parentNode, rowCount) {
     this.addNewImageColumn = function (trainImages) {
         // add epoch and step:
         var tableCell = document.createElement("td");
-        tableCell.textContent = "Epoch:";
+        tableCell.textContent = "Epoch: " + trainImages.epoch;
         outerTable.rows[0].appendChild(tableCell);
 
         var tableCell = document.createElement("td");
-        tableCell.textContent = trainImages.epoch;
+        tableCell.textContent = "";
         outerTable.rows[0].appendChild(tableCell);
 
         var tableCell = document.createElement("td");
@@ -65,7 +65,7 @@ function ImageGrid(parentNode, rowCount) {
             newInputImage.id = "InputImage_" + trainImages.inputLayer[i].id;
             newInputImage.src = "data:image/png;base64," + trainImages.inputLayer[i].bytestring.substring(2,
                 trainImages.inputLayer[i].bytestring.length - 1);
-            newInputImage.style.width = "50px";
+            newInputImage.style.width = "160px";
             newInputImage.classList.add("imageThumbnail");
 
 
@@ -81,12 +81,12 @@ function ImageGrid(parentNode, rowCount) {
                 newLatentImage.id = "LatentImage_" + trainImages.latentLayer[i][j].id + "_" + j;
                 newLatentImage.src = "data:image/png;base64," + trainImages.latentLayer[i][j].bytestring.substring(2,
                     trainImages.latentLayer[i][j].bytestring.length - 1);
-                newLatentImage.style.width = "20px";
+                newLatentImage.style.width = "32px";
                 newLatentImage.classList.add("imageThumbnail");
 
                 // append new image div to image grid
                 latentCell.appendChild(newLatentImage);
-                if ((j + 1) % 4 === 0) { //Math.ceil(Math.sqrt(data.latentLayer[i].length))
+                if ((j + 1) % 3 === 0) { //Math.ceil(Math.sqrt(data.latentLayer[i].length))
                     latentCell.appendChild(document.createElement('br'));
                 }
 
@@ -102,7 +102,7 @@ function ImageGrid(parentNode, rowCount) {
             newOutputImage.id = "OutputImage_" + trainImages.outputLayer[i].id;
             newOutputImage.src = "data:image/png;base64," + trainImages.outputLayer[i].bytestring.substring(2,
                 trainImages.outputLayer[i].bytestring.length - 1);
-            newOutputImage.style.width = "50px";
+            newOutputImage.style.width = "160px";
             newOutputImage.classList.add("imageThumbnail");
 
 
@@ -111,6 +111,9 @@ function ImageGrid(parentNode, rowCount) {
             tableRow.appendChild(outputCell);
 
         }
+
+        // scroll right:
+        scrollPane.scrollTo(trainImages.epoch * 416, 0);
     };
 
 
