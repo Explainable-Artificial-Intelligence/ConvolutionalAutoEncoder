@@ -123,7 +123,6 @@ def get_ann_parameter():  # noqa: E501
     :rtype: ParameterList
     """
 
-    test = Storage.parameter_set
     return Storage.parameter_set, 200
 
 
@@ -136,6 +135,10 @@ def get_input_shape(dataset_name="train_data"):
 
     :rtype: List[int]
     """
-    input_shape = Storage.input_data[dataset_name].shape
-    print(input_shape)
-    return input_shape, 200
+    if dataset_name in Storage.input_data:
+        input_shape = Storage.input_data[dataset_name].shape
+        print(input_shape)
+        return input_shape, 200
+    else:
+        print("Dataset not found")
+        return "Dataset not found", 404

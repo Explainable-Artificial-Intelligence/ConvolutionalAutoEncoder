@@ -6,7 +6,7 @@ var fs = require('fs');
 var path = require('path');
 
 var selectedImageId = "";
-var datasetname = "train_data";
+var datasetname = "";
 
 var loadApi = new ConvolutionalAutoencoder.LoadApi();
 var buildApi = new ConvolutionalAutoencoder.BuildApi();
@@ -53,6 +53,8 @@ function appendImages(numberOfImages) {
                     // remove old border
                     if (imagePreview.linkedId !== "") {
                         document.getElementById(imagePreview.linkedId).style.border = "";
+                        document.getElementById(imagePreview.linkedId).style.width = "";
+                        document.getElementById(imagePreview.linkedId).style.margin = "";
                     }
 
                     imagePreview.src = this.src;
@@ -63,6 +65,9 @@ function appendImages(numberOfImages) {
 
                     // mark selected image:
                     this.style.border = "1px solid orange";
+                    this.style.width = "64px";
+                    this.style.marginLeft = "32px";
+                    this.style.marginRight = "32px";
                     // save current id in preview
                     imagePreview.linkedId = this.id;
                 });
@@ -74,7 +79,10 @@ function appendImages(numberOfImages) {
         }
     }
 
-    loadApi.getImageBatch({"batchSize": numberOfImages, "datasetname": datasetname}, imageCallback);
+    if (datasetname !== "") {
+        loadApi.getImageBatch({"batchSize": numberOfImages, "datasetname": datasetname}, imageCallback);
+    }
+
 
 }
 
@@ -135,8 +143,10 @@ function updateDataSetStatistics() {
         }
     }
 
+    if (datasetname !== "") {
+        buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
+    }
 
-    buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
 }
 
 function loadFile() {
@@ -237,7 +247,7 @@ Initialisation
  */
 
 // create histogram
-var histogram = new Histogram("imagePreviewView", 400, 400);
+var histogram = new Histogram("histogramView", 400, 400);
 loadApi.resetAllBatchIndices(callback);
 // remove selection:
 document.getElementById("imagePreview").linkedId = "";

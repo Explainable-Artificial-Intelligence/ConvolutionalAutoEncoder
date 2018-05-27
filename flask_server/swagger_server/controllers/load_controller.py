@@ -220,7 +220,7 @@ def get_random_images(batch_size=100, datasetname="train_data", sort_by=None, fi
     return 'do some magic!'
 
 
-def load_file(filename, datasetname="train_data", read_labels=None, data_type="auto"):
+def load_file(filename, datasetname="unknown", read_labels=None, data_type="auto"):
     """
     Load a train/test data file
     Load a data file in different data formats

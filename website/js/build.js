@@ -15,7 +15,7 @@ function callback(error, data, response) {
     }
 }
 
-buildApi.getInputShape([], callback);
+// buildApi.getInputShape([], callback);
 
 
 function readLearningParameter() {
@@ -96,7 +96,7 @@ Convolutional Auto Encoder topology
 Global Variables
  */
 var inputShape = [1, 1, 1, 1];
-var datasetname = "train_data";
+var datasetname = "";
 
 // var previewLayer = new ANNLayerPreview(500, 500, 28, 28, 3, 3, null, true, false, null);
 
@@ -130,7 +130,10 @@ function getInputDimensions() {
         }
     }
 
-    buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
+    if (datasetname !== "") {
+        buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
+    }
+
 }
 
 function updateInputOutputLayer(resX, resY, channels) {
