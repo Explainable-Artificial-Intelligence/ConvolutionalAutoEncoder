@@ -20,26 +20,10 @@
         <li><a href="tune.html">Tuning</a></li>
     </ul>
 </header>
-<aside id="sidebar">
-    <div id="BuildColumn">
-        <h4>Loaded data sets:</h4>
-        <select id="inputLoadedDataSets" size="3">
 
-        </select>
-        <br>
-        <br>
-        Dataset statistics:
-        <br>
-        <label id="labelResolution">Resolution: </label>
-        <br>
-        <label id="labelLayer">Layer: </label>
-        <br>
-        <label id="labelNumberOfImages">Number of Images: </label>
-        <br>
-        <br>
-
+<div class="row">
+    <div class="columnFixed" style="width: 250px">
         <h4>Learning Parameters:</h4>
-        <br>
 
         <label>Mirror weights <input id="mirrorWeights" type="checkbox"></label><br>
         <br>
@@ -54,6 +38,7 @@
             <option value="sigmoid">sigmoid</option>
             <option value="tanh">tanh</option>
         </select><br>
+        <br>
         <section>
             <img id="activationFunctionPreviewImage" src="../img/relu.svg">
         </section>
@@ -65,12 +50,6 @@
 
         Number of Epochs <br>
         <input id="nEpochs" type="number" value="50"><br>
-        <br>
-
-        <label>Use Tensorboard Visualisation <input id="useTensorboard" type="checkbox" checked></label><br>
-        <br>
-
-        <label>Activate verbose console output <input id="verbose" type="checkbox" checked></label><br>
         <br>
 
         Learning Rate Function: <br>
@@ -132,6 +111,8 @@
                 <br>
             </div>
         </section>
+        <br>
+
         Optimizer: <br>
         <select id="Optimizer" size="1">
             <option value="GradientDescentOptimizer">GradientDescentOptimizer</option>
@@ -158,7 +139,7 @@
             "squared_pixel_distance", "pixel_distance", "msssim"
             <option value="squared_pixel_distance">squared pixel distance</option>
             <option value="pixel_distance">pixel distance</option>
-            <option value="msssim">MS-SSIM</option>
+            <!--<option value="msssim">MS-SSIM</option>-->
         </select><br>
         <br>
         <section id="MsssimDiv" style="display:none">
@@ -181,6 +162,14 @@
             <input id="cfWeights" value="[0]"><br>
             <br>
         </section>
+
+
+    </div>
+
+    <div class="columnFixed" style="width: 250px">
+        <br>
+        <br>
+        <br>
 
         <label for="randomFunctionForWeights">Random functions for weights:</label>
         <select id="randomFunctionForWeights" size="1">
@@ -237,6 +226,7 @@
             </div>
 
         </section>
+        <br>
 
         <label for="randomFunctionForBiases">Random functions for biases:</label>
         <select id="randomFunctionForBiases" size="1">
@@ -294,114 +284,132 @@
             </div>
         </section>
 
-    </div>
+        <!--Unmodifiable server parameters-->
+        <div style="display: none">
+            Path for session saving: <br>
+            <!--<input id="sessionSaverPath" type="file" webkitdirectory directory value="./save/"><br>-->
+            <input id="sessionSaverPath" value="./save/"><br>
+            <br>
 
-    Path for session saving: <br>
-    <!--<input id="sessionSaverPath" type="file" webkitdirectory directory value="./save/"><br>-->
-    <input id="sessionSaverPath" value="./save/"><br>
-    <br>
+            Duration of session saving:<br>
+            <input id="sessionSaveDuration" type="number" value="5"><br>
+            <br>
 
-    Duration of session saving:<br>
-    <input id="sessionSaveDuration" type="number" value="5"><br>
-    <br>
+            Number of test images during train evaluation: <br>
+            <input id="numTestPictures" type="number" value="100"><br>
+            <br>
 
-    Number of test images during train evaluation: <br>
-    <input id="numTestPictures" type="number" value="100"><br>
-    <br>
+            <label>Use Tensorboard Visualisation <input id="useTensorboard" type="checkbox" checked></label><br>
+            <br>
 
-</aside>
-
-<div id="content">
-
-    <div>
-        <table>
-            <tr>
-                <td>
-                    <div id="layerPreview">
-
-                    </div>
-                </td>
-                <td class="layerPreviewTableCell">
-
-                    <label for="filtersizeModifier">Filtersize:</label>
-                    <br>
-                    <input id="filtersizeModifier" type="number" value="3">
-                    <br>
-                    <br>
-                    <label for="stackCountModifier">Stack count:</label>
-                    <br>
-                    <input id="stackCountModifier" type="number" value="3">
-                    <br>
-                    <button id="applyLayerModification">apply</button>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <button id="addLayer">add Layer</button>
-                    <br>
-                    <button id="buildANN">Build ANN</button>
-                    <br>
-                    <label id="responseLabel"></label>
-                </td>
-            </tr>
-        </table>
-
-
-    </div>
-
-    <div id="ConvolutionalAutoEncoder">
-
-
-        <!--<div id="inputLayer_old" class="ANNLayer">-->
-        <!--Input Layer:-->
-        <!--<br>-->
-        <!--<br>-->
-        <!--Resolution:-->
-        <!--<label id="resXLabel">?</label> x <label id="resYLabel">?</label>-->
-        <!--Channels:-->
-        <!--<label id="channelLabel">?</label>-->
-        <!--<br>-->
-        <!--</div>-->
-        <div class="horizontal-scroll">
-            <div id="input" class="layer-svg">
-            </div>
-            <div id="encoder" class="layer-svg">
-            </div>
-        </div>
-        <div class="horizontal-scroll">
-            <div id="decoder" class="layer-svg">
-            </div>
-            <div id="output" class="layer-svg">
-            </div>
+            <label>Activate verbose console output <input id="verbose" type="checkbox" checked></label><br>
+            <br>
         </div>
 
+        <h4>Loaded data sets:</h4>
+        <select id="inputLoadedDataSets" size="3">
 
-        <!--<div id="outputLayer" class="ANNLayer">-->
-        <!--Output Layer:-->
-        <!--<br>-->
-        <!--<br>-->
-        <!--Resolution:-->
-        <!--<label id="resXLabel2">?</label> x <label id="resYLabel2">?</label>-->
-        <!--Channels: <label id="channelLabel2">?</label>-->
-        <!--<br>-->
-        <!--</div>-->
-
+        </select>
+        <br>
+        <br>
+        Dataset statistics:
+        <br>
+        <label id="labelResolution">Resolution: </label>
+        <br>
+        <label id="labelLayer">Layer: </label>
+        <br>
+        <label id="labelNumberOfImages">Number of Images: </label>
+        <br>
+        <br>
 
     </div>
 
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="../js/layerVisualisation.js"></script>
-    <script src="../js/build_bundle.js"></script>
-    <script src="../js/hideAndShowBuildParameters.js"></script>
+    <div class="columnFixed" style="width: calc(100% - 500px)">
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        <div id="layerPreview">
+
+                        </div>
+                    </td>
+                    <td class="layerPreviewTableCell">
+
+                        <label for="filtersizeModifier">Filtersize:</label>
+                        <br>
+                        <input id="filtersizeModifier" type="number" value="3">
+                        <br>
+                        <br>
+                        <label for="stackCountModifier">Stack count:</label>
+                        <br>
+                        <input id="stackCountModifier" type="number" value="3">
+                        <br>
+                        <button id="applyLayerModification">apply</button>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <button id="addLayer">add Layer</button>
+                        <br>
+                        <button id="buildANN">Build ANN</button>
+                        <br>
+                        <label id="responseLabel"></label>
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+
+        <div id="ConvolutionalAutoEncoder">
+            <!--<div id="inputLayer_old" class="ANNLayer">-->
+            <!--Input Layer:-->
+            <!--<br>-->
+            <!--<br>-->
+            <!--Resolution:-->
+            <!--<label id="resXLabel">?</label> x <label id="resYLabel">?</label>-->
+            <!--Channels:-->
+            <!--<label id="channelLabel">?</label>-->
+            <!--<br>-->
+            <!--</div>-->
+            <div class="horizontal-scroll">
+                <div id="input" class="layer-svg">
+                </div>
+                <div id="encoder" class="layer-svg">
+                </div>
+            </div>
+            <div class="horizontal-scroll">
+                <div id="decoder" class="layer-svg">
+                </div>
+                <div id="output" class="layer-svg">
+                </div>
+            </div>
+            <!--<div id="outputLayer" class="ANNLayer">-->
+            <!--Output Layer:-->
+            <!--<br>-->
+            <!--<br>-->
+            <!--Resolution:-->
+            <!--<label id="resXLabel2">?</label> x <label id="resYLabel2">?</label>-->
+            <!--Channels: <label id="channelLabel2">?</label>-->
+            <!--<br>-->
+            <!--</div>-->
+        </div>
+
+    </div>
 </div>
+</div>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../js/layerVisualisation.js"></script>
+<script src="../js/build_bundle.js"></script>
+<script src="../js/hideAndShowBuildParameters.js"></script>
 </body>
 </html>
 
