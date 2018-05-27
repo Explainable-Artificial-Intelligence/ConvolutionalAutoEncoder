@@ -86,7 +86,7 @@ function ImageGrid(parentNode, rowCount) {
 
                 // append new image div to image grid
                 latentCell.appendChild(newLatentImage);
-                if ((j + 1) % 3 === 0) { //Math.ceil(Math.sqrt(data.latentLayer[i].length))
+                if ((j + 1) % Math.floor(Math.sqrt(trainImages.latentLayer[i].length)) === 0) { //Math.ceil(Math.sqrt(data.latentLayer[i].length))
                     latentCell.appendChild(document.createElement('br'));
                 }
 
@@ -113,7 +113,7 @@ function ImageGrid(parentNode, rowCount) {
         }
 
         // scroll right:
-        scrollPane.scrollTo(trainImages.epoch * 416, 0);
+        scrollPane.scrollTo(trainImages.epoch * (360 + 32 * Math.floor(Math.sqrt(trainImages.latentLayer[0].length))), 0);
     };
 
 
