@@ -80,7 +80,11 @@ function appendImages(numberOfImages) {
     }
 
     if (datasetname !== "") {
-        loadApi.getImageBatch({"batchSize": numberOfImages, "datasetname": datasetname}, imageCallback);
+        loadApi.getImageBatch({
+            "batchSize": numberOfImages,
+            "datasetname": datasetname,
+            "sortBy": "color"
+        }, imageCallback);
     }
 
 
@@ -239,7 +243,7 @@ document.getElementById("inputLoadedDataSets").addEventListener("change", functi
     }
     loadApi.resetAllBatchIndices(callback);
     updateDataSetStatistics();
-    appendImages(1000);
+    appendImages(5000);
 });
 
 /*

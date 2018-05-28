@@ -5,6 +5,7 @@ from flask_server.swagger_server.models.image_data import ImageData
 from flask_server.utils.ANNHelperFunctions import compute_output_images, compute_latent_representation
 from flask_server.utils.FileParser import load_input_data, list_data_files, save_data_file
 from flask_server.utils.ImageProcessing import convert_image_array_to_byte_string
+from flask_server.utils.Sorting import apply_sorting
 from flask_server.utils.Storage import Storage
 
 
@@ -51,7 +52,7 @@ def get_image_batch(batch_size=100, datasetname="train_data", sort_by=None, filt
 
     next_batch_index = min(current_batch_index + batch_size, Storage.get_dataset_length(datasetname, output))
 
-    result = get_images(current_batch_index, next_batch_index, datasetname, output=output)
+    result = get_images(current_batch_index, next_batch_index, datasetname, output=output, sort_by=sort_by)
 
     # if operation successful, update batch index
     if result[1] == 200:
@@ -150,6 +151,11 @@ def get_images(start_idx, end_idx, datasetname="train_data", sort_by=None, filte
         image.bytestring = convert_image_array_to_byte_string(image_data[i], channels=image_data.shape[3])
         input_images.images.append(image)
 
+    # sort images:
+    if sort_by == "color" and not output:
+        input_images.images.sort(
+            key=lambda image: Storage.input_data_input_to_ranking[(datasetname, "color")][image.id])
+
     # save train data
     Storage.set_input_data(image_data)
 
@@ -245,6 +251,10 @@ def load_file(filename, datasetname="unknown", read_labels=None, data_type="auto
         if response_code == 200:
             # save train data
             Storage.set_input_data(input_data, datasetname)
+
+            # apply sorting:
+            apply_sorting(datasetname)
+
         return response, response_code
     else:
         print("unsupported data type: %s" % data_type, file=sys.stderr)

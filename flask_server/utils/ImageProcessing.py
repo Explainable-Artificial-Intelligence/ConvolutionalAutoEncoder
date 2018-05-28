@@ -4,6 +4,7 @@ this file contains all image processing methods
 import base64
 import io
 
+import numpy as np
 from PIL import Image
 
 
@@ -15,7 +16,6 @@ def convert_image_array_to_byte_string(image_array, channels=1, normalize=True):
     :param normalize:
     :return:
     """
-
 
     if normalize:
         image_array = (image_array - image_array.min()) / (image_array.max() - image_array.min()) * 255
@@ -35,3 +35,16 @@ def convert_image_array_to_byte_string(image_array, channels=1, normalize=True):
 
     # return byte string
     return str(base64.b64encode(image_byte_array))
+
+
+def compute_average_color(image_array):
+    """
+    computes the average color/layer mean of a given array of images
+    :param image_array:
+    :return: list of colors
+    """
+    shape = image_array.shape
+
+    colors = [[np.mean(image[:, :, i]) for i in range(shape[3])] for image in image_array]
+
+    return colors

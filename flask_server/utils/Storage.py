@@ -7,6 +7,8 @@ from flask_server.swagger_server.models.parameter_list import ParameterList
 class Storage(object):
     # storrage items
     input_data = {}
+    input_data_ranking_to_input = {}
+    input_data_input_to_ranking = {}
     input_batch_indices = {}
 
     # current active model:
