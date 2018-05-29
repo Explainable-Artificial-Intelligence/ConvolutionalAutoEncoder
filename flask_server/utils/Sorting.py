@@ -59,7 +59,9 @@ def sort_by_color(data_set_name):
     ranking = list(range(len(avg_colors)))
     if len(avg_colors[0]) == 3:
         # perform rgb luminance sort:
-        ranking.sort(key=lambda x: rgb_step_sort(avg_colors[x], 8))
+        # ranking.sort(key=lambda x: rgb_step_sort(avg_colors[x], 8))
+        # perform hsv sort:
+        ranking.sort(key=lambda x: colorsys.rgb_to_hsv(*avg_colors[x]))
     else:
         # sort by mean layer intensity:
         ranking.sort(key=lambda x: np.mean(avg_colors[x]))

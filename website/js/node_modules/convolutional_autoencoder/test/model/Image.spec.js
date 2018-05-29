@@ -69,11 +69,11 @@
       //expect(instance).to.be();
     });
 
-      it('should have the property cost (base name: "cost")', function () {
-          // uncomment below and update the code to test the property cost
-          //var instane = new ConvolutionalAutoencoder.Image();
-          //expect(instance).to.be();
-      });
+    it('should have the property cost (base name: "cost")', function() {
+      // uncomment below and update the code to test the property cost
+      //var instane = new ConvolutionalAutoencoder.Image();
+      //expect(instance).to.be();
+    });
 
   });
 

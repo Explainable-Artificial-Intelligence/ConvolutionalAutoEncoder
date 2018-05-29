@@ -51,16 +51,16 @@
   }
 
   describe('VisualizeApi', function() {
-      describe('computeHiddenLayerLatentClustering', function () {
-          it('should call computeHiddenLayerLatentClustering successfully', function (done) {
-              //uncomment below and update the code to test computeHiddenLayerLatentClustering
-              //instance.computeHiddenLayerLatentClustering(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('computeHiddenLayerLatentClustering', function() {
+      it('should call computeHiddenLayerLatentClustering successfully', function(done) {
+        //uncomment below and update the code to test computeHiddenLayerLatentClustering
+        //instance.computeHiddenLayerLatentClustering(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
     describe('generateImageFromSinglePoint', function() {
       it('should call generateImageFromSinglePoint successfully', function(done) {
         //uncomment below and update the code to test generateImageFromSinglePoint

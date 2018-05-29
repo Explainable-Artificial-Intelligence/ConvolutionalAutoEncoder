@@ -64,8 +64,8 @@
      * @param {String} opts.datasetName determines data set for training
      * @param {module:api/TrainApi~controlTrainingCallback} callback The callback function, accepting three arguments: error, data, response
      */
-    this.controlTraining = function (trainStatus, opts, callback) {
-        opts = opts || {};
+    this.controlTraining = function(trainStatus, opts, callback) {
+      opts = opts || {};
       var postBody = trainStatus;
 
       // verify the required parameter 'trainStatus' is set
@@ -77,9 +77,10 @@
       var pathParams = {
       };
       var queryParams = {
-          'datasetName': opts['datasetName'],
+        'datasetName': opts['datasetName'],
       };
-        var collectionQueryParams = {};
+      var collectionQueryParams = {
+      };
       var headerParams = {
       };
       var formParams = {
@@ -92,7 +93,7 @@
 
       return this.apiClient.callApi(
         '/train/controlTraining', 'POST',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -124,9 +125,9 @@
       var pathParams = {
       };
       var queryParams = {
-          'setSize': setSize,
+        'setSize': setSize,
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -140,7 +141,7 @@
 
       return this.apiClient.callApi(
         '/train/getProcessedImageData', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -167,7 +168,8 @@
       };
       var queryParams = {
       };
-        var collectionQueryParams = {};
+      var collectionQueryParams = {
+      };
       var headerParams = {
       };
       var formParams = {
@@ -180,7 +182,7 @@
 
       return this.apiClient.callApi(
         '/train/getTrainPerformance', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }

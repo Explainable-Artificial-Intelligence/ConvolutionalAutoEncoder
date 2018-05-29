@@ -105,6 +105,14 @@ function getAvailableDataSets() {
             for (var i = 0; i < data.length; i++) {
                 selection.options[i] = new Option(data[i], data[i], false, false)
             }
+
+            if (selection.options.length > 0) {
+                // select first element
+                selection.options[0].selected = true;
+                document.getElementById("inputDatasetName").value = document.getElementById("inputAvailableDataSets")
+                    .options[document.getElementById("inputAvailableDataSets").selectedIndex].value.split('.')[0];
+            }
+
         }
     }
 
@@ -126,6 +134,12 @@ function getLoadedDataSets() {
             for (var i = 0; i < data.length; i++) {
                 selection.options[i] = new Option(data[i], data[i], false, false)
             }
+            if (selection.options.length > 0) {
+                // select first element
+                selection.options[0].selected = true;
+                updateImageGrid();
+            }
+
         }
     }
 
@@ -216,6 +230,17 @@ function uploadFile() {
 
 }
 
+function updateImageGrid() {
+    datasetname = document.getElementById("inputLoadedDataSets").options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
+    var imageGrid = document.getElementById("imageGrid");
+    while (imageGrid.firstChild) {
+        imageGrid.removeChild(imageGrid.firstChild);
+    }
+    loadApi.resetAllBatchIndices(callback);
+    updateDataSetStatistics();
+    appendImages(5000);
+}
+
 
 /*
 Attach button events
@@ -235,16 +260,7 @@ document.getElementById("inputAvailableDataSets").addEventListener("change", fun
             .selectedIndex].value.split('.')[0];
 });
 
-document.getElementById("inputLoadedDataSets").addEventListener("change", function () {
-    datasetname = document.getElementById("inputLoadedDataSets").options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
-    var imageGrid = document.getElementById("imageGrid");
-    while (imageGrid.firstChild) {
-        imageGrid.removeChild(imageGrid.firstChild);
-    }
-    loadApi.resetAllBatchIndices(callback);
-    updateDataSetStatistics();
-    appendImages(5000);
-});
+document.getElementById("inputLoadedDataSets").addEventListener("change", updateImageGrid);
 
 /*
 Initialisation

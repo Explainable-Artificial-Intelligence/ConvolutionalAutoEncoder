@@ -57,17 +57,17 @@
       //expect(instance).to.be.a(ConvolutionalAutoencoder.ProcessedImageData);
     });
 
-      it('should have the property epoch (base name: "epoch")', function () {
-          // uncomment below and update the code to test the property epoch
-          //var instane = new ConvolutionalAutoencoder.ProcessedImageData();
-          //expect(instance).to.be();
-      });
+    it('should have the property epoch (base name: "epoch")', function() {
+      // uncomment below and update the code to test the property epoch
+      //var instane = new ConvolutionalAutoencoder.ProcessedImageData();
+      //expect(instance).to.be();
+    });
 
-      it('should have the property step (base name: "step")', function () {
-          // uncomment below and update the code to test the property step
-          //var instane = new ConvolutionalAutoencoder.ProcessedImageData();
-          //expect(instance).to.be();
-      });
+    it('should have the property step (base name: "step")', function() {
+      // uncomment below and update the code to test the property step
+      //var instane = new ConvolutionalAutoencoder.ProcessedImageData();
+      //expect(instance).to.be();
+    });
 
     it('should have the property inputLayer (base name: "inputLayer")', function() {
       // uncomment below and update the code to test the property inputLayer

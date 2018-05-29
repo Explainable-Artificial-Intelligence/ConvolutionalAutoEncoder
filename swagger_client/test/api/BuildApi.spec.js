@@ -61,16 +61,16 @@
         done();
       });
     });
-      describe('getANNParameter', function () {
-          it('should call getANNParameter successfully', function (done) {
-              //uncomment below and update the code to test getANNParameter
-              //instance.getANNParameter(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('getANNParameter', function() {
+      it('should call getANNParameter successfully', function(done) {
+        //uncomment below and update the code to test getANNParameter
+        //instance.getANNParameter(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
     describe('getInputShape', function() {
       it('should call getInputShape successfully', function(done) {
         //uncomment below and update the code to test getInputShape

@@ -49,6 +49,10 @@
     var _this = this;
 
 
+
+
+
+
   };
 
   /**
@@ -62,17 +66,17 @@
     if (data) {
       obj = obj || new exports();
 
-        if (data.hasOwnProperty('epoch')) {
-            obj['epoch'] = ApiClient.convertToType(data['epoch'], 'Number');
-        }
-        if (data.hasOwnProperty('step')) {
-            obj['step'] = ApiClient.convertToType(data['step'], 'Number');
-        }
+      if (data.hasOwnProperty('epoch')) {
+        obj['epoch'] = ApiClient.convertToType(data['epoch'], 'Number');
+      }
+      if (data.hasOwnProperty('step')) {
+        obj['step'] = ApiClient.convertToType(data['step'], 'Number');
+      }
       if (data.hasOwnProperty('inputLayer')) {
         obj['inputLayer'] = ApiClient.convertToType(data['inputLayer'], [Image]);
       }
       if (data.hasOwnProperty('latentLayer')) {
-          obj['latentLayer'] = ApiClient.convertToType(data['latentLayer'], [[Image]]);
+        obj['latentLayer'] = ApiClient.convertToType(data['latentLayer'], [[Image]]);
       }
       if (data.hasOwnProperty('outputLayer')) {
         obj['outputLayer'] = ApiClient.convertToType(data['outputLayer'], [Image]);
@@ -81,14 +85,14 @@
     return obj;
   }
 
-    /**
-     * @member {Number} epoch
-     */
-    exports.prototype['epoch'] = undefined;
-    /**
-     * @member {Number} step
-     */
-    exports.prototype['step'] = undefined;
+  /**
+   * @member {Number} epoch
+   */
+  exports.prototype['epoch'] = undefined;
+  /**
+   * @member {Number} step
+   */
+  exports.prototype['step'] = undefined;
   /**
    * @member {Array.<module:model/Image>} inputLayer
    */

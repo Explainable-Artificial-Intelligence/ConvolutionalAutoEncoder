@@ -51,16 +51,16 @@
   }
 
   describe('LoadApi', function() {
-      describe('getAvailableDataSets', function () {
-          it('should call getAvailableDataSets successfully', function (done) {
-              //uncomment below and update the code to test getAvailableDataSets
-              //instance.getAvailableDataSets(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('getAvailableDataSets', function() {
+      it('should call getAvailableDataSets successfully', function(done) {
+        //uncomment below and update the code to test getAvailableDataSets
+        //instance.getAvailableDataSets(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
     describe('getImageBatch', function() {
       it('should call getImageBatch successfully', function(done) {
         //uncomment below and update the code to test getImageBatch
@@ -91,26 +91,26 @@
         done();
       });
     });
-      describe('getLatentRepresentationById', function () {
-          it('should call getLatentRepresentationById successfully', function (done) {
-              //uncomment below and update the code to test getLatentRepresentationById
-              //instance.getLatentRepresentationById(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('getLatentRepresentationById', function() {
+      it('should call getLatentRepresentationById successfully', function(done) {
+        //uncomment below and update the code to test getLatentRepresentationById
+        //instance.getLatentRepresentationById(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
-      describe('getLoadedDataSets', function () {
-          it('should call getLoadedDataSets successfully', function (done) {
-              //uncomment below and update the code to test getLoadedDataSets
-              //instance.getLoadedDataSets(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    });
+    describe('getLoadedDataSets', function() {
+      it('should call getLoadedDataSets successfully', function(done) {
+        //uncomment below and update the code to test getLoadedDataSets
+        //instance.getLoadedDataSets(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
     describe('getRandomImages', function() {
       it('should call getRandomImages successfully', function(done) {
         //uncomment below and update the code to test getRandomImages
@@ -151,16 +151,16 @@
         done();
       });
     });
-      describe('uploadFile', function () {
-          it('should call uploadFile successfully', function (done) {
-              //uncomment below and update the code to test uploadFile
-              //instance.uploadFile(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('uploadFile', function() {
+      it('should call uploadFile successfully', function(done) {
+        //uncomment below and update the code to test uploadFile
+        //instance.uploadFile(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
   });
 
 }));

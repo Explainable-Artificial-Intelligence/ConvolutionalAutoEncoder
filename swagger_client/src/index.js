@@ -17,12 +17,12 @@
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-      define(['ApiClient', 'model/ClusterParameters', 'model/Clustering', 'model/CostFunction', 'model/Image', 'model/ImageData', 'model/LearningRate', 'model/ParameterList', 'model/Point2D', 'model/ProcessedImageData', 'model/RandomFunction', 'model/TrainPerformance', 'model/TrainPerformanceDataPoint', 'model/TrainStatus', 'api/BuildApi', 'api/LoadApi', 'api/TrainApi', 'api/TuneApi', 'api/VisualizeApi'], factory);
+    define(['ApiClient', 'model/ClusterParameters', 'model/Clustering', 'model/CostFunction', 'model/Image', 'model/ImageData', 'model/LearningRate', 'model/ParameterList', 'model/Point2D', 'model/ProcessedImageData', 'model/RandomFunction', 'model/TrainPerformance', 'model/TrainPerformanceDataPoint', 'model/TrainStatus', 'api/BuildApi', 'api/LoadApi', 'api/TrainApi', 'api/TuneApi', 'api/VisualizeApi'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-      module.exports = factory(require('./ApiClient'), require('./model/ClusterParameters'), require('./model/Clustering'), require('./model/CostFunction'), require('./model/Image'), require('./model/ImageData'), require('./model/LearningRate'), require('./model/ParameterList'), require('./model/Point2D'), require('./model/ProcessedImageData'), require('./model/RandomFunction'), require('./model/TrainPerformance'), require('./model/TrainPerformanceDataPoint'), require('./model/TrainStatus'), require('./api/BuildApi'), require('./api/LoadApi'), require('./api/TrainApi'), require('./api/TuneApi'), require('./api/VisualizeApi'));
+    module.exports = factory(require('./ApiClient'), require('./model/ClusterParameters'), require('./model/Clustering'), require('./model/CostFunction'), require('./model/Image'), require('./model/ImageData'), require('./model/LearningRate'), require('./model/ParameterList'), require('./model/Point2D'), require('./model/ProcessedImageData'), require('./model/RandomFunction'), require('./model/TrainPerformance'), require('./model/TrainPerformanceDataPoint'), require('./model/TrainStatus'), require('./api/BuildApi'), require('./api/LoadApi'), require('./api/TrainApi'), require('./api/TuneApi'), require('./api/VisualizeApi'));
   }
-}(function (ApiClient, ClusterParameters, Clustering, CostFunction, Image, ImageData, LearningRate, ParameterList, Point2D, ProcessedImageData, RandomFunction, TrainPerformance, TrainPerformanceDataPoint, TrainStatus, BuildApi, LoadApi, TrainApi, TuneApi, VisualizeApi) {
+}(function(ApiClient, ClusterParameters, Clustering, CostFunction, Image, ImageData, LearningRate, ParameterList, Point2D, ProcessedImageData, RandomFunction, TrainPerformance, TrainPerformanceDataPoint, TrainStatus, BuildApi, LoadApi, TrainApi, TuneApi, VisualizeApi) {
   'use strict';
 
   /**
@@ -77,11 +77,11 @@
      * @property {module:model/CostFunction}
      */
     CostFunction: CostFunction,
-      /**
-       * The Image model constructor.
-       * @property {module:model/Image}
-       */
-      Image: Image,
+    /**
+     * The Image model constructor.
+     * @property {module:model/Image}
+     */
+    Image: Image,
     /**
      * The ImageData model constructor.
      * @property {module:model/ImageData}
@@ -92,11 +92,11 @@
      * @property {module:model/LearningRate}
      */
     LearningRate: LearningRate,
-      /**
-       * The ParameterList model constructor.
-       * @property {module:model/ParameterList}
-       */
-      ParameterList: ParameterList,
+    /**
+     * The ParameterList model constructor.
+     * @property {module:model/ParameterList}
+     */
+    ParameterList: ParameterList,
     /**
      * The Point2D model constructor.
      * @property {module:model/Point2D}
@@ -112,21 +112,21 @@
      * @property {module:model/RandomFunction}
      */
     RandomFunction: RandomFunction,
-      /**
-       * The TrainPerformance model constructor.
-       * @property {module:model/TrainPerformance}
-       */
-      TrainPerformance: TrainPerformance,
+    /**
+     * The TrainPerformance model constructor.
+     * @property {module:model/TrainPerformance}
+     */
+    TrainPerformance: TrainPerformance,
     /**
      * The TrainPerformanceDataPoint model constructor.
      * @property {module:model/TrainPerformanceDataPoint}
      */
     TrainPerformanceDataPoint: TrainPerformanceDataPoint,
-      /**
-       * The TrainStatus model constructor.
-       * @property {module:model/TrainStatus}
-       */
-      TrainStatus: TrainStatus,
+    /**
+     * The TrainStatus model constructor.
+     * @property {module:model/TrainStatus}
+     */
+    TrainStatus: TrainStatus,
     /**
      * The BuildApi service constructor.
      * @property {module:api/BuildApi}
