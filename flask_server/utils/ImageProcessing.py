@@ -45,6 +45,8 @@ def compute_average_color(image_array):
     """
     shape = image_array.shape
 
+    print(shape)
+
     colors = [[np.mean(image[:, :, i]) for i in range(shape[3])] for image in image_array]
 
     return colors
