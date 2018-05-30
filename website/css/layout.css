@@ -94,7 +94,7 @@ path:hover {
 
 #content {
     padding: 15px;
-    min-height: 600px;
+    /*min-height: 600px;*/
     margin: 15px 15px 15px 305px;
     background-color: #2a2a2a;
 }

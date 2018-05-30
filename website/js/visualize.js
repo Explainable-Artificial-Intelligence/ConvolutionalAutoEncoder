@@ -168,6 +168,7 @@ function appendImages(batchSize) {
                 // create new image object
                 var newImage = document.createElement("img");
                 newImage.id = "Image_" + data.images[i].id;
+                newImage.style.width = "48px";
                 newImage.src = "data:image/png;base64," + data.images[i].bytestring.substring(2, data.images[i].bytestring.length - 1);
                 newImage.classList.add("imageRibbonThumbnail");
                 // add eventListener
@@ -457,7 +458,7 @@ function downloadModel() {
 $(document).ready(function () {
     $('.slick').slick({
         lazyLoad: 'ondemand',
-        slidesToShow: 50,
+        slidesToShow: 30,
         slidesToScroll: 10
     });
 });
