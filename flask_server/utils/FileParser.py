@@ -107,6 +107,19 @@ def read_npy_arr_file(file_path):
     :param file_path: file path to the input file
     """
     np_array = np.load(file_path)
+    shape = np_array.shape
+
+    # check dimensions:
+    if len(shape) != 4:
+        print("Error: input data is not 4 dimensional")
+        print(shape)
+
+        # workaround for 3D data (b/w images):
+        if len(shape) == 3:
+            print("3D data will be automatically reshaped")
+            np_array = np_array.reshape((shape[0], shape[1], shape[2], 1))
+
+            print(np_array)
 
     return np_array
 

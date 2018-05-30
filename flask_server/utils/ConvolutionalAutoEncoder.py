@@ -244,7 +244,10 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         self._init_train_status_variables()
 
         # create tensorflow session
-        self.tf_session = tf.Session()
+        # workaround for gpu bug:
+        self.tf_session_config = tf.ConfigProto()
+        self.tf_session_config.gpu_options.allow_growth = True
+        self.tf_session = tf.Session(config=self.tf_session_config)
 
         # init status images
         self.num_test_pictures = num_test_pictures
@@ -280,7 +283,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
             # reset currently active tf graph
             tf.reset_default_graph()
-            self.tf_session = tf.Session()
+            self.tf_session = tf.Session(config=self.tf_session_config)
 
             prev_session = tf.train.get_checkpoint_state(self.session_saver_path)
 

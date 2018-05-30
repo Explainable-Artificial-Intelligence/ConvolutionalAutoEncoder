@@ -94,10 +94,10 @@
       this.agent = new superagent.agent();
     }
 
-      /*
-       * Allow user to override superagent agent
-       */
-      this.requestAgent = null;
+    /*
+     * Allow user to override superagent agent
+     */
+    this.requestAgent = null;
   };
 
   /**
@@ -377,8 +377,8 @@
    * @returns {Object} The SuperAgent request object.
    */
   exports.prototype.callApi = function callApi(path, httpMethod, pathParams,
-                                               queryParams, collectionQueryParams, headerParams, formParams, bodyParam, authNames, contentTypes, accepts,
-                                               returnType, callback) {
+      queryParams, collectionQueryParams, headerParams, formParams, bodyParam, authNames, contentTypes, accepts,
+      returnType, callback) {
 
     var _this = this;
     var url = this.buildUrl(path, pathParams);
@@ -387,24 +387,24 @@
     // apply authentications
     this.applyAuthToRequest(request, authNames);
 
-      // set collection query parameters
-      for (var key in collectionQueryParams) {
-          if (collectionQueryParams.hasOwnProperty(key)) {
-              var param = collectionQueryParams[key];
-              if (param.collectionFormat === 'csv') {
-                  // SuperAgent normally percent-encodes all reserved characters in a query parameter. However,
-                  // commas are used as delimiters for the 'csv' collectionFormat so they must not be encoded. We
-                  // must therefore construct and encode 'csv' collection query parameters manually.
-                  if (param.value != null) {
-                      var value = param.value.map(this.paramToString).map(encodeURIComponent).join(',');
-                      request.query(encodeURIComponent(key) + "=" + value);
-                  }
-              } else {
-                  // All other collection query parameters should be treated as ordinary query parameters.
-                  queryParams[key] = this.buildCollectionParam(param.value, param.collectionFormat);
-              }
+    // set collection query parameters
+    for (var key in collectionQueryParams) {
+      if (collectionQueryParams.hasOwnProperty(key)) {
+        var param = collectionQueryParams[key];
+        if (param.collectionFormat === 'csv') {
+          // SuperAgent normally percent-encodes all reserved characters in a query parameter. However,
+          // commas are used as delimiters for the 'csv' collectionFormat so they must not be encoded. We
+          // must therefore construct and encode 'csv' collection query parameters manually.
+          if (param.value != null) {
+            var value = param.value.map(this.paramToString).map(encodeURIComponent).join(',');
+            request.query(encodeURIComponent(key) + "=" + value);
           }
+        } else {
+          // All other collection query parameters should be treated as ordinary query parameters.
+          queryParams[key] = this.buildCollectionParam(param.value, param.collectionFormat);
+        }
       }
+    }
 
     // set query parameters
     if (httpMethod.toUpperCase() === 'GET' && this.cache === false) {
@@ -416,10 +416,10 @@
     request.set(this.defaultHeaders).set(this.normalizeParams(headerParams));
 
 
-      // set requestAgent if it is set by user
-      if (this.requestAgent) {
-          request.agent(this.requestAgent);
-      }
+    // set requestAgent if it is set by user
+    if (this.requestAgent) {
+      request.agent(this.requestAgent);
+    }
 
     // set request timeout
     request.timeout(this.timeout);

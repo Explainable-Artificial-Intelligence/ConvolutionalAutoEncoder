@@ -176,9 +176,12 @@ function getAvailableDataSets() {
             for (var i = 0; i < data.length; i++) {
                 selection.options[i] = new Option(data[i], data[i], false, false)
             }
-            // select first element:
-            selection.options[0].selected = true;
-            selectLoadedDataset();
+            if (selection.options.length > 0) {
+                // select first element:
+                selection.options[0].selected = true;
+                selectLoadedDataset();
+            }
+
         }
     }
 

@@ -17,18 +17,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-      define(['ApiClient', 'model/CostFunction', 'model/LearningRate', 'model/RandomFunction'], factory);
+    define(['ApiClient', 'model/CostFunction', 'model/LearningRate', 'model/RandomFunction'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-      module.exports = factory(require('../ApiClient'), require('./CostFunction'), require('./LearningRate'), require('./RandomFunction'));
+    module.exports = factory(require('../ApiClient'), require('./CostFunction'), require('./LearningRate'), require('./RandomFunction'));
   } else {
     // Browser globals (root is window)
     if (!root.ConvolutionalAutoencoder) {
       root.ConvolutionalAutoencoder = {};
     }
-      root.ConvolutionalAutoencoder.ParameterList = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.CostFunction, root.ConvolutionalAutoencoder.LearningRate, root.ConvolutionalAutoencoder.RandomFunction);
+    root.ConvolutionalAutoencoder.ParameterList = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.CostFunction, root.ConvolutionalAutoencoder.LearningRate, root.ConvolutionalAutoencoder.RandomFunction);
   }
-}(this, function (ApiClient, CostFunction, LearningRate, RandomFunction) {
+}(this, function(ApiClient, CostFunction, LearningRate, RandomFunction) {
   'use strict';
 
 
@@ -47,6 +47,24 @@
    */
   var exports = function() {
     var _this = this;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   };
@@ -89,11 +107,11 @@
       if (data.hasOwnProperty('verbose')) {
         obj['verbose'] = ApiClient.convertToType(data['verbose'], 'Boolean');
       }
-        if (data.hasOwnProperty('learning_rate_dict')) {
-            obj['learning_rate_dict'] = ApiClient.convertToType(data['learning_rate_dict'], [LearningRate]);
+      if (data.hasOwnProperty('learning_rate_dict')) {
+        obj['learning_rate_dict'] = ApiClient.convertToType(data['learning_rate_dict'], [LearningRate]);
       }
-        if (data.hasOwnProperty('cost_function_dict')) {
-            obj['cost_function_dict'] = ApiClient.convertToType(data['cost_function_dict'], [CostFunction]);
+      if (data.hasOwnProperty('cost_function_dict')) {
+        obj['cost_function_dict'] = ApiClient.convertToType(data['cost_function_dict'], [CostFunction]);
       }
       if (data.hasOwnProperty('optimizer')) {
         obj['optimizer'] = ApiClient.convertToType(data['optimizer'], ['String']);
@@ -101,11 +119,11 @@
       if (data.hasOwnProperty('momentum')) {
         obj['momentum'] = ApiClient.convertToType(data['momentum'], ['Number']);
       }
-        if (data.hasOwnProperty('random_weights_dict')) {
-            obj['random_weights_dict'] = ApiClient.convertToType(data['random_weights_dict'], [RandomFunction]);
+      if (data.hasOwnProperty('random_weights_dict')) {
+        obj['random_weights_dict'] = ApiClient.convertToType(data['random_weights_dict'], [RandomFunction]);
       }
-        if (data.hasOwnProperty('random_biases_dict')) {
-            obj['random_biases_dict'] = ApiClient.convertToType(data['random_biases_dict'], [RandomFunction]);
+      if (data.hasOwnProperty('random_biases_dict')) {
+        obj['random_biases_dict'] = ApiClient.convertToType(data['random_biases_dict'], [RandomFunction]);
       }
       if (data.hasOwnProperty('session_saver_path')) {
         obj['session_saver_path'] = ApiClient.convertToType(data['session_saver_path'], 'String');

@@ -48,41 +48,46 @@
     this.apiClient = apiClient || ApiClient.instance;
 
 
-      /**
-       * Callback function to receive the result of the getAvailableDataSets operation.
-       * @callback module:api/LoadApi~getAvailableDataSetsCallback
-       * @param {String} error Error message, if any.
-       * @param {Array.<'String'>} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
+    /**
+     * Callback function to receive the result of the getAvailableDataSets operation.
+     * @callback module:api/LoadApi~getAvailableDataSetsCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<'String'>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-      /**
-       * get available data sets
-       * returns a list of available data set files
-       * @param {module:api/LoadApi~getAvailableDataSetsCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link Array.<'String'>}
-       */
-      this.getAvailableDataSets = function (callback) {
-          var postBody = null;
+    /**
+     * get available data sets
+     * returns a list of available data set files
+     * @param {module:api/LoadApi~getAvailableDataSetsCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<'String'>}
+     */
+    this.getAvailableDataSets = function(callback) {
+      var postBody = null;
 
 
-          var pathParams = {};
-          var queryParams = {};
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = ['String'];
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = ['String'];
 
-          return this.apiClient.callApi(
-              '/load/getAvailableDataSets', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
-      }
+      return this.apiClient.callApi(
+        '/load/getAvailableDataSets', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the getImageBatch operation.
@@ -116,9 +121,9 @@
         'datasetname': opts['datasetname'],
         'sort_by': opts['sortBy'],
         'filter': opts['filter'],
-          'output': opts['output'],
+        'output': opts['output'],
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -132,7 +137,7 @@
 
       return this.apiClient.callApi(
         '/load/getImageBatch', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -174,9 +179,9 @@
         'datasetname': opts['datasetname'],
         'sort_by': opts['sortBy'],
         'filter': opts['filter'],
-          'output': opts['output'],
+        'output': opts['output'],
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -190,7 +195,7 @@
 
       return this.apiClient.callApi(
         '/load/getImageById', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -239,9 +244,9 @@
         'datasetname': opts['datasetname'],
         'sort_by': opts['sortBy'],
         'filter': opts['filter'],
-          'output': opts['output'],
+        'output': opts['output'],
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -255,94 +260,103 @@
 
       return this.apiClient.callApi(
         '/load/getImages', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
 
-      /**
-       * Callback function to receive the result of the getLatentRepresentationById operation.
-       * @callback module:api/LoadApi~getLatentRepresentationByIdCallback
-       * @param {String} error Error message, if any.
-       * @param {module:model/ImageData} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
+    /**
+     * Callback function to receive the result of the getLatentRepresentationById operation.
+     * @callback module:api/LoadApi~getLatentRepresentationByIdCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ImageData} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-      /**
-       * returns a single latent representation as ()list of) png images
-       * images are encoded as png byte strings
-       * @param {Number} id defines the id of the images
-       * @param {Object} opts Optional parameters
-       * @param {String} opts.datasetname name for dataset on the server (default to train_data)
-       * @param {module:api/LoadApi~getLatentRepresentationByIdCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link module:model/ImageData}
-       */
-      this.getLatentRepresentationById = function (id, opts, callback) {
-          opts = opts || {};
-          var postBody = null;
+    /**
+     * returns a single latent representation as ()list of) png images
+     * images are encoded as png byte strings
+     * @param {Number} id defines the id of the images
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.datasetname name for dataset on the server (default to train_data)
+     * @param {module:api/LoadApi~getLatentRepresentationByIdCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ImageData}
+     */
+    this.getLatentRepresentationById = function(id, opts, callback) {
+      opts = opts || {};
+      var postBody = null;
 
-          // verify the required parameter 'id' is set
-          if (id === undefined || id === null) {
-              throw new Error("Missing the required parameter 'id' when calling getLatentRepresentationById");
-          }
-
-
-          var pathParams = {};
-          var queryParams = {
-              'id': id,
-              'datasetname': opts['datasetname'],
-          };
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
-
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = ImageData;
-
-          return this.apiClient.callApi(
-              '/load/getLatentRepresentationById', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      // verify the required parameter 'id' is set
+      if (id === undefined || id === null) {
+        throw new Error("Missing the required parameter 'id' when calling getLatentRepresentationById");
       }
 
-      /**
-       * Callback function to receive the result of the getLoadedDataSets operation.
-       * @callback module:api/LoadApi~getLoadedDataSetsCallback
-       * @param {String} error Error message, if any.
-       * @param {Array.<'String'>} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
 
-      /**
-       * get loaded data sets
-       * returns a list of loaded data sets
-       * @param {module:api/LoadApi~getLoadedDataSetsCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link Array.<'String'>}
-       */
-      this.getLoadedDataSets = function (callback) {
-          var postBody = null;
+      var pathParams = {
+      };
+      var queryParams = {
+        'id': id,
+        'datasetname': opts['datasetname'],
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = ImageData;
+
+      return this.apiClient.callApi(
+        '/load/getLatentRepresentationById', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getLoadedDataSets operation.
+     * @callback module:api/LoadApi~getLoadedDataSetsCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<'String'>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * get loaded data sets
+     * returns a list of loaded data sets
+     * @param {module:api/LoadApi~getLoadedDataSetsCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<'String'>}
+     */
+    this.getLoadedDataSets = function(callback) {
+      var postBody = null;
 
 
-          var pathParams = {};
-          var queryParams = {};
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = ['String'];
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = ['String'];
 
-          return this.apiClient.callApi(
-              '/load/getLoadedDataSets', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
-      }
+      return this.apiClient.callApi(
+        '/load/getLoadedDataSets', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the getRandomImages operation.
@@ -376,9 +390,9 @@
         'datasetname': opts['datasetname'],
         'sort_by': opts['sortBy'],
         'filter': opts['filter'],
-          'output': opts['output'],
+        'output': opts['output'],
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -392,7 +406,7 @@
 
       return this.apiClient.callApi(
         '/load/getRandomImages', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -431,9 +445,9 @@
         'filename': filename,
         'datasetname': opts['datasetname'],
         'read_labels': opts['readLabels'],
-          'data_type': opts['dataType'],
+        'data_type': opts['dataType'],
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -447,7 +461,7 @@
 
       return this.apiClient.callApi(
         '/load/loadFile', 'POST',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -473,7 +487,8 @@
       };
       var queryParams = {
       };
-        var collectionQueryParams = {};
+      var collectionQueryParams = {
+      };
       var headerParams = {
       };
       var formParams = {
@@ -486,7 +501,7 @@
 
       return this.apiClient.callApi(
         '/load/resetAllBatchIndices', 'POST',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -516,9 +531,9 @@
       };
       var queryParams = {
         'dataset_name': opts['datasetName'],
-          'output': opts['output'],
+        'output': opts['output'],
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -532,53 +547,57 @@
 
       return this.apiClient.callApi(
         '/load/resetBatchIndex', 'POST',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-          authNames, contentTypes, accepts, returnType, callback
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
     }
 
-      /**
-       * Callback function to receive the result of the uploadFile operation.
-       * @callback module:api/LoadApi~uploadFileCallback
-       * @param {String} error Error message, if any.
-       * @param data This operation does not return a value.
-       * @param {String} response The complete HTTP response.
-       */
+    /**
+     * Callback function to receive the result of the uploadFile operation.
+     * @callback module:api/LoadApi~uploadFileCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
 
-      /**
-       * uploads a data file
-       * Load a data file in different data formats
-       * @param {File} upfile The file to upload.
-       * @param {module:api/LoadApi~uploadFileCallback} callback The callback function, accepting three arguments: error, data, response
-       */
-      this.uploadFile = function (upfile, callback) {
-          var postBody = null;
+    /**
+     * uploads a data file
+     * Load a data file in different data formats
+     * @param {File} upfile The file to upload.
+     * @param {module:api/LoadApi~uploadFileCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    this.uploadFile = function(upfile, callback) {
+      var postBody = null;
 
-          // verify the required parameter 'upfile' is set
-          if (upfile === undefined || upfile === null) {
-              throw new Error("Missing the required parameter 'upfile' when calling uploadFile");
-          }
-
-
-          var pathParams = {};
-          var queryParams = {};
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {
-              'upfile': upfile
-          };
-
-          var authNames = [];
-          var contentTypes = ['multipart/form-data'];
-          var accepts = [];
-          var returnType = null;
-
-          return this.apiClient.callApi(
-              '/load/uploadFile', 'POST',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      // verify the required parameter 'upfile' is set
+      if (upfile === undefined || upfile === null) {
+        throw new Error("Missing the required parameter 'upfile' when calling uploadFile");
       }
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+        'upfile': upfile
+      };
+
+      var authNames = [];
+      var contentTypes = ['multipart/form-data'];
+      var accepts = [];
+      var returnType = null;
+
+      return this.apiClient.callApi(
+        '/load/uploadFile', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
   };
 
   return exports;

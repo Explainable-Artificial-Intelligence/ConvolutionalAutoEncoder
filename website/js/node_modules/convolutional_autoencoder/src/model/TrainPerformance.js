@@ -17,18 +17,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-      define(['ApiClient', 'model/TrainPerformanceDataPoint'], factory);
+    define(['ApiClient', 'model/TrainPerformanceDataPoint'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-      module.exports = factory(require('../ApiClient'), require('./TrainPerformanceDataPoint'));
+    module.exports = factory(require('../ApiClient'), require('./TrainPerformanceDataPoint'));
   } else {
     // Browser globals (root is window)
     if (!root.ConvolutionalAutoencoder) {
       root.ConvolutionalAutoencoder = {};
     }
-      root.ConvolutionalAutoencoder.TrainPerformance = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.TrainPerformanceDataPoint);
+    root.ConvolutionalAutoencoder.TrainPerformance = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.TrainPerformanceDataPoint);
   }
-}(this, function (ApiClient, TrainPerformanceDataPoint) {
+}(this, function(ApiClient, TrainPerformanceDataPoint) {
   'use strict';
 
 
@@ -67,11 +67,11 @@
       if (data.hasOwnProperty('model_id')) {
         obj['model_id'] = ApiClient.convertToType(data['model_id'], 'String');
       }
-        if (data.hasOwnProperty('train_status')) {
-            obj['train_status'] = ApiClient.convertToType(data['train_status'], 'String');
+      if (data.hasOwnProperty('train_status')) {
+        obj['train_status'] = ApiClient.convertToType(data['train_status'], 'String');
       }
-        if (data.hasOwnProperty('train_performance_data')) {
-            obj['train_performance_data'] = ApiClient.convertToType(data['train_performance_data'], [TrainPerformanceDataPoint]);
+      if (data.hasOwnProperty('train_performance_data')) {
+        obj['train_performance_data'] = ApiClient.convertToType(data['train_performance_data'], [TrainPerformanceDataPoint]);
       }
     }
     return obj;
@@ -85,10 +85,10 @@
    * @member {String} train_status
    */
   exports.prototype['train_status'] = undefined;
-    /**
-     * @member {Array.<module:model/TrainPerformanceDataPoint>} train_performance_data
+  /**
+   * @member {Array.<module:model/TrainPerformanceDataPoint>} train_performance_data
    */
-    exports.prototype['train_performance_data'] = undefined;
+  exports.prototype['train_performance_data'] = undefined;
 
 
 

@@ -111,14 +111,14 @@
       //expect(instance).to.be();
     });
 
-      it('should have the property learningRateDict (base name: "learning_rate_dict")', function () {
-          // uncomment below and update the code to test the property learningRateDict
+    it('should have the property learningRateDict (base name: "learning_rate_dict")', function() {
+      // uncomment below and update the code to test the property learningRateDict
       //var instane = new ConvolutionalAutoencoder.ParameterList();
       //expect(instance).to.be();
     });
 
-      it('should have the property costFunctionDict (base name: "cost_function_dict")', function () {
-          // uncomment below and update the code to test the property costFunctionDict
+    it('should have the property costFunctionDict (base name: "cost_function_dict")', function() {
+      // uncomment below and update the code to test the property costFunctionDict
       //var instane = new ConvolutionalAutoencoder.ParameterList();
       //expect(instance).to.be();
     });
@@ -135,14 +135,14 @@
       //expect(instance).to.be();
     });
 
-      it('should have the property randomWeightsDict (base name: "random_weights_dict")', function () {
-          // uncomment below and update the code to test the property randomWeightsDict
+    it('should have the property randomWeightsDict (base name: "random_weights_dict")', function() {
+      // uncomment below and update the code to test the property randomWeightsDict
       //var instane = new ConvolutionalAutoencoder.ParameterList();
       //expect(instance).to.be();
     });
 
-      it('should have the property randomBiasesDict (base name: "random_biases_dict")', function () {
-          // uncomment below and update the code to test the property randomBiasesDict
+    it('should have the property randomBiasesDict (base name: "random_biases_dict")', function() {
+      // uncomment below and update the code to test the property randomBiasesDict
       //var instane = new ConvolutionalAutoencoder.ParameterList();
       //expect(instance).to.be();
     });

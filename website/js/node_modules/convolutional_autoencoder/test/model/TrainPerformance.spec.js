@@ -63,14 +63,14 @@
       //expect(instance).to.be();
     });
 
-      it('should have the property trainStatus (base name: "train_status")', function () {
-          // uncomment below and update the code to test the property trainStatus
-          //var instane = new ConvolutionalAutoencoder.TrainPerformance();
-          //expect(instance).to.be();
-      });
+    it('should have the property trainStatus (base name: "train_status")', function() {
+      // uncomment below and update the code to test the property trainStatus
+      //var instane = new ConvolutionalAutoencoder.TrainPerformance();
+      //expect(instance).to.be();
+    });
 
-      it('should have the property trainPerformanceData (base name: "train_performance_data")', function () {
-          // uncomment below and update the code to test the property trainPerformanceData
+    it('should have the property trainPerformanceData (base name: "train_performance_data")', function() {
+      // uncomment below and update the code to test the property trainPerformanceData
       //var instane = new ConvolutionalAutoencoder.TrainPerformance();
       //expect(instance).to.be();
     });

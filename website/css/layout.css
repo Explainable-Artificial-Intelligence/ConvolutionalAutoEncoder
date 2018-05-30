@@ -88,7 +88,7 @@ path:hover {
     width: 250px;
     min-height: 600px;
     padding: 15px;
-    margin: 0px 15px 15px 15px;
+    margin: 0 15px 15px 15px;
     background-color: #2a2a2a;
 }
 
@@ -101,9 +101,9 @@ path:hover {
 
 #contentFullWidth {
     padding: 15px;
-    /*min-height: 600px;*/
     margin: 0 10px 10px;
     background-color: #2a2a2a;
+    overflow: auto;
 }
 
 #footer {

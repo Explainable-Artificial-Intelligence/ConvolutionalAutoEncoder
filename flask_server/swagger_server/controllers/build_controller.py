@@ -99,6 +99,10 @@ def build_ann(inputParameters):
             parameter_set['cf_weights'] = None
 
         # save parameter set:
+        # check if data folder exists
+        if not os.path.exists(parameter_set['session_saver_path']):
+            # create save folder
+            os.makedirs(parameter_set['session_saver_path'])
         save_object(parameter_set, os.path.join(parameter_set['session_saver_path'], 'parameter_set.pkl'))
 
         # create convolutional auto encoder:
