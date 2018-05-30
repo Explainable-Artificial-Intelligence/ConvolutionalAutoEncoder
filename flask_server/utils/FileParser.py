@@ -9,6 +9,7 @@ import sys
 import uuid
 import zipfile
 
+import SimpleITK as sitk
 import numpy as np
 from PIL import Image
 from tensorflow.python.keras import datasets
@@ -92,8 +93,10 @@ def extract_zip_file(file_path):
     """
     extract_directory = datetime.datetime.now().strftime("%Y%m%d_%H%M%S-") + str(uuid.uuid4())[:8]
     zip_ref = zipfile.ZipFile(file_path, 'r')
+    print("extracting ...", file=sys.stderr)
     zip_ref.extractall(os.path.join(data_path, extract_directory))
     zip_ref.close()
+    print("extracting finished", file=sys.stderr)
     return extract_directory
 
 
@@ -108,7 +111,7 @@ def read_npy_arr_file(file_path):
     return np_array
 
 
-def read_image_folder(folder_path):
+def read_image_folder(folder_path, layers=[74, 75, 76]):
     """
     returns a numpy array of all images of the folder
 
@@ -121,10 +124,15 @@ def read_image_folder(folder_path):
     for (path, dirs, files) in os.walk(folder_path):
         for file in files:
             filename = os.path.join(path, file)
-            if filename.endswith('.png') or filename.endswith('.PNG'):
+            if filename.lower().endswith('.png'):
                 image = Image.open(filename)
                 # convert to numpy array and save the array to the list
                 image_array_list.append(np.array(image))
+            if filename.lower().endswith('.mha'):
+                image = sitk.ReadImage(filename)
+                # convert to numpy array and save the array to the list
+
+                image_array_list.append(sitk.GetArrayFromImage(np.swapaxes(image, 1, 3)[:, :, :, layers]))
 
     # create a np array for all images
     image_array = np.array(image_array_list)
