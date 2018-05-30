@@ -19,7 +19,7 @@ var colorMap = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462'
 var clusterTimer;
 var inputShape = [1, 1, 1, 1];
 var annInputShape = [1, 1, 1, 1]
-var datasetname = "train_data";
+var dataSetName = "";
 
 
 function callback(error, data, response) {
@@ -56,7 +56,7 @@ function getInputDimensions() {
         }
     }
 
-    buildApi.getInputShape({'datasetName': datasetname}, inputShapeCallback)
+    buildApi.getInputShape({'datasetName': dataSetName}, inputShapeCallback)
 }
 
 function checkInputDimensions(option) {
@@ -115,12 +115,14 @@ function getAvailableDataSets() {
             selection.options.length = 0;
             // add available file names
             for (var i = 0; i < data.length; i++) {
-                selection.options[i] = new Option(data[i], data[i], false, false)
+                selection.options[i] = new Option(data[i], data[i], false, false);
                 checkInputDimensions(selection.options[i]);
             }
-            // select first element:
-            selection.options[0].selected = true;
-            selectLoadedDataset();
+            if (selection.options.length > 0) {
+                // select first element:
+                selection.options[0].selected = true;
+                selectLoadedDataset();
+            }
         }
     }
 
@@ -132,13 +134,16 @@ function selectLoadedDataset() {
         .options[document.getElementById("inputLoadedDataSets").selectedIndex].value;
 
     // reset batch indices if dataset is changed:
-    if (datasetname !== newDatasetname) {
+    if (dataSetName !== newDatasetname) {
         loadApi.resetAllBatchIndices();
-        datasetname = newDatasetname;
+        dataSetName = newDatasetname;
         $('.slick').slick('removeSlide', null, null, true);
         getInputDimensions();
         appendImages(70);
     }
+
+    // update dataset name
+    dataSetName = newDatasetname;
 }
 
 function appendImages(batchSize) {
@@ -200,7 +205,7 @@ function appendImages(batchSize) {
         }
     }
 
-    loadApi.getImageBatch({'datasetname': datasetname, "batchSize": batchSize}, imageCallback);
+    loadApi.getImageBatch({'datasetname': dataSetName, "batchSize": batchSize}, imageCallback);
 
 }
 
@@ -366,6 +371,8 @@ function startClustering() {
 }
 
 function updatePreviewImages(id) {
+
+    console.log(dataSetName);
     // update input image
     function inputImageCallback(error, data, response) {
         if (error) {
@@ -378,9 +385,7 @@ function updatePreviewImages(id) {
 
     }
 
-    loadApi.getImageById(Number(id), {'datasetName': datasetname, 'output': false}, inputImageCallback);
-
-    console.log("test");
+    loadApi.getImageById(Number(id), {'datasetname': dataSetName, 'output': false}, inputImageCallback);
 
     // update latent image(s)
     function latentImageCallback(error, data, response) {
@@ -405,7 +410,7 @@ function updatePreviewImages(id) {
 
     }
 
-    loadApi.getLatentRepresentationById(Number(id), {'datasetName': datasetname}, latentImageCallback);
+    loadApi.getLatentRepresentationById(Number(id), {'datasetname': dataSetName}, latentImageCallback);
 
     // update output image
     function outputImageCallback(error, data, response) {
@@ -424,7 +429,7 @@ function updatePreviewImages(id) {
 
     }
 
-    loadApi.getImageById(Number(id), {'datasetName': datasetname, 'output': true}, outputImageCallback);
+    loadApi.getImageById(Number(id), {'datasetname': dataSetName, 'output': true}, outputImageCallback);
 
 }
 

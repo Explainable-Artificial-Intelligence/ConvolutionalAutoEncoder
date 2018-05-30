@@ -100,7 +100,7 @@ def get_image_by_id(id=None, datasetname="train_data", sort_by=None, filter=None
     return image, 200
 
 
-def get_images(start_idx, end_idx, datasetname="train_data", sort_by=None, filter=None, output=False):
+def get_images(start_idx, end_idx, datasetname=None, sort_by=None, filter=None, output=False):
     """
     returns a subset of input/output images
     images are encoded as png byte strings
