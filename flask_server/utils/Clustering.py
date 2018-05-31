@@ -1,6 +1,8 @@
 """
 contains some clustering function
 """
+import threading
+
 import numpy as np
 from sklearn.cluster import KMeans
 
@@ -45,6 +47,11 @@ def perform_clustering(algorithm, cluster_parameters, dataset_name, dimension_re
 
         :return:
     """
+
+    # TODO: remove workaround
+    # dirty fix to allow multicore:
+    threading.current_thread().name = 'MainThread'
+
     # set clustering status:
     Storage.clustering_status[(dataset_name, layer)] = "running, getting layer data"
     print("running, getting layer data")

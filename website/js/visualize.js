@@ -383,7 +383,7 @@ function generateClusteredImageGrid(NumClusters) {
 
             loadApi.getRandomImages({
                 'datasetname': dataSetName,
-                "batchSize": 100,
+                "batchSize": 228,
                 "filter": "cluster:" + cluster,
                 "sortBy": "color"
             }, imageCallback);

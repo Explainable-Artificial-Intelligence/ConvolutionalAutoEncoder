@@ -42,9 +42,6 @@ def compute_hidden_layer_latent_clustering(algorithm, dimension_reduction, datas
                                              args=(
                                                  algorithm, cluster_parameters, dataset_name, dimension_reduction,
                                                  layer,))
-        # TODO: remove workaround
-        # dirty fix to allow multicore:
-        clustering_thread.name = 'MainThread'
 
         Storage.set_cae_thread(clustering_thread)
         # start clustering:
