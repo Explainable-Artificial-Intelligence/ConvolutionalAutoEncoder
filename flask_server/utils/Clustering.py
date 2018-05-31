@@ -59,7 +59,7 @@ def perform_clustering(algorithm, cluster_parameters, dataset_name, dimension_re
     print("running, performing clustering")
     # perform clustering
     kmeans_clustering = perform_kmeans_clustering(flat_latent_representation, cluster_parameters)
-    labels = kmeans_clustering.predict(flat_latent_representation)
+    Storage.input_data_clustering[dataset_name] = kmeans_clustering.predict(flat_latent_representation)
 
     # set clustering status:
     Storage.clustering_status[(dataset_name, layer)] = "running, performing dimension reduction"
@@ -73,7 +73,7 @@ def perform_clustering(algorithm, cluster_parameters, dataset_name, dimension_re
     # create Clustering object
     clustering = Clustering()
     # transfer properties
-    clustering.n_clusters = 10
+    clustering.n_clusters = cluster_parameters.n_clusters
     clustering.min_x = float(np.min(latent_representation_2d[:, 0]))
     clustering.max_x = float(np.max(latent_representation_2d[:, 0]))
     clustering.min_y = float(np.min(latent_representation_2d[:, 1]))
@@ -82,7 +82,7 @@ def perform_clustering(algorithm, cluster_parameters, dataset_name, dimension_re
     # generate cluster points:
     for i in range(latent_representation_2d.shape[0]):
         point = Point2D(x=float(latent_representation_2d[i, 0]), y=float(latent_representation_2d[i, 1]),
-                        cluster=int(labels[i]))
+                        cluster=int(Storage.input_data_clustering[dataset_name][i]))
         clustering.points.append(point)
 
     # save data in Storage class

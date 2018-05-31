@@ -329,6 +329,69 @@ function readClusterParameter() {
 
 }
 
+function generateClusteredImageGrid(NumClusters) {
+
+    console.log("Building cluster grid..");
+    // clear previous image grid:
+    var imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+
+    // iterate over all clusters:
+    for (var cluster = 0; cluster < NumClusters; cluster++) {
+        // generate image grid for current cluster:
+        var currentImageGrid = document.createElement("div");
+        currentImageGrid.id = "imageGrid_Cluster_" + cluster;
+        imageGrid.appendChild(currentImageGrid);
+
+        //generate description:
+        var description = document.createElement("label");
+        description.textContent = "Cluster " + cluster + ":";
+        currentImageGrid.appendChild(description);
+        currentImageGrid.appendChild(document.createElement("br"));
+
+        (function (cluster) {
+            function imageCallback(error, data, response) {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(data);
+
+                    // get image grid:
+                    console.log(cluster);
+                    var imageGrid = document.getElementById("imageGrid_Cluster_" + cluster);
+                    // iterate over all images
+                    for (var i = 0; i < data.images.length; i++) {
+                        // create new image object
+                        var newImage = document.createElement("img");
+                        newImage.id = "Image_" + data.images[i].id + "_cluster_" + cluster;
+                        newImage.style.width = "48px";
+                        newImage.src = "data:image/png;base64," + data.images[i].bytestring.substring(2, data.images[i].bytestring.length - 1);
+                        newImage.classList.add("imageRibbonThumbnail");
+                        // add eventListener
+                        newImage.addEventListener("click", function () {
+                                console.log(this.id);
+                                document.getElementById("inputPreview").src = this.src;
+                                var image_id = this.id.split('_')[1];
+                                updatePreviewImages(image_id);
+                            }
+                        );
+                        // append new image to image grid
+                        imageGrid.appendChild(newImage);
+                    }
+                }
+            }
+
+            loadApi.getRandomImages({
+                'datasetname': dataSetName,
+                "batchSize": 100,
+                "filter": "cluster:" + cluster,
+                "sortBy": "color"
+            }, imageCallback);
+        })(cluster);
+    }
+
+}
+
 function getClustering() {
     function clusterCallback(error, data, response) {
         if (error) {
@@ -343,11 +406,13 @@ function getClustering() {
             //     document.getElementById('clusterView').removeChild(document.getElementById('clusterChart'));
             // }
 
-            var clusterChart = new ClusterChart("clusterView", 960, 640, colorMap, response.body)
+            var clusterChart = new ClusterChart("clusterView", 960, 640, colorMap, response.body);
+
+            generateClusteredImageGrid(response.body.nClusters);
         }
     }
 
-    visualizeApi.getHiddenLayerLatentClustering({}, clusterCallback);
+    visualizeApi.getHiddenLayerLatentClustering({'datasetName': dataSetName}, clusterCallback);
 
 }
 
@@ -364,16 +429,22 @@ function startClustering() {
     }
 
     var clusterParameter = readClusterParameter();
-    var algorithm = document.getElementById("clusteringAlgorithm").options[document.getElementById("clusteringAlgorithm").selectedIndex].value;
-    var dimensionReduction = document.getElementById("dimReductionAlgorithm").options[document.getElementById("dimReductionAlgorithm").selectedIndex].value;
+    var algorithm = document.getElementById("clusteringAlgorithm").options[document
+        .getElementById("clusteringAlgorithm").selectedIndex].value;
+    var dimensionReduction = document.getElementById("dimReductionAlgorithm").options[document
+        .getElementById("dimReductionAlgorithm").selectedIndex].value;
 
 
-    visualizeApi.computeHiddenLayerLatentClustering(algorithm, dimensionReduction, {clusterParameters: clusterParameter}, clusterCallback);
+    visualizeApi.computeHiddenLayerLatentClustering(algorithm, dimensionReduction, {
+        "clusterParameters": clusterParameter,
+        'datasetName': dataSetName
+    }, clusterCallback);
 }
 
 function updatePreviewImages(id) {
 
     console.log(dataSetName);
+
     // update input image
     function inputImageCallback(error, data, response) {
         if (error) {

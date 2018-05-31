@@ -9,6 +9,7 @@ class Storage(object):
     input_data = {}
     input_data_ranking_to_input = {}
     input_data_input_to_ranking = {}
+    input_data_clustering = {}
     input_batch_indices = {}
 
     # current active model:

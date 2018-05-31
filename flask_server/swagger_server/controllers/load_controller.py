@@ -1,5 +1,7 @@
 import sys
 
+import numpy as np
+
 from flask_server.swagger_server.models.image import Image
 from flask_server.swagger_server.models.image_data import ImageData
 from flask_server.utils.ANNHelperFunctions import compute_output_images, compute_latent_representation
@@ -52,7 +54,8 @@ def get_image_batch(batch_size=100, datasetname="train_data", sort_by=None, filt
 
     next_batch_index = min(current_batch_index + batch_size, Storage.get_dataset_length(datasetname, output))
 
-    result = get_images(current_batch_index, next_batch_index, datasetname, output=output, sort_by=sort_by)
+    result = get_images(current_batch_index, next_batch_index, datasetname, filter=filter, output=output,
+                        sort_by=sort_by)
 
     # if operation successful, update batch index
     if result[1] == 200:
@@ -100,7 +103,7 @@ def get_image_by_id(id=None, datasetname="train_data", sort_by=None, filter=None
     return image, 200
 
 
-def get_images(start_idx, end_idx, datasetname=None, sort_by=None, filter=None, output=False):
+def get_images(start_idx, end_idx, data_set_name=None, sort_by=None, filter=None, output=False):
     """
     returns a subset of input/output images
     images are encoded as png byte strings
@@ -108,8 +111,8 @@ def get_images(start_idx, end_idx, datasetname=None, sort_by=None, filter=None, 
     :type start_idx: int
     :param end_idx: name for dataset on the server
     :type end_idx: int
-    :param datasetname: name for dataset on the server
-    :type datasetname: str
+    :param data_set_name: name for dataset on the server
+    :type data_set_name: str
     :param sort_by: defines the sorting of the input images
     :type sort_by: str
     :param filter: the values which should be filtered (whitelist)
@@ -127,37 +130,62 @@ def get_images(start_idx, end_idx, datasetname=None, sort_by=None, filter=None, 
     try:
         if output:
             # check if output images already computed
-            compute_output_images(datasetname)
-            image_data = Storage.output_data[datasetname]
+            compute_output_images(data_set_name)
+            image_data = Storage.output_data[data_set_name]
         else:
-            image_data = Storage.input_data[datasetname]
+            image_data = Storage.input_data[data_set_name]
 
     except KeyError:
         return 'No data found', 404
 
-    if end_idx > Storage.get_dataset_length(datasetname, output):
+    if end_idx > Storage.get_dataset_length(data_set_name, output):
         return 'Index out of bounds', 415
+
+    # generate list of indices:
+    indices = list(range(start_idx, end_idx))
+
+    # filter images:
+    print(filter)
+    if filter is not None:
+        if data_set_name in Storage.input_data_clustering:
+            if filter.startswith("cluster"):
+                # get cluster:
+                cluster_number = int(filter.split(':')[1])
+                # generate filter mask:
+                print(cluster_number)
+                # mask = [(i == cluster_number) for i in Storage.input_data_clustering[data_set_name][indices]]
+                # mask = Storage.input_data_clustering[data_set_name][indices] == cluster_number
+                # filter indices:
+                # indices = np.extract(mask, indices)
+                indices = [index for index in indices if
+                           Storage.input_data_clustering[data_set_name][index] == cluster_number]
+                print(indices)
+            else:
+                return 'Unsupported filter', 404
+        else:
+            return 'No clustering found', 404
+
+    # sort images:
+    if sort_by == "color" and not output:
+        # indices = [index for _, index in
+        # sorted(zip(Storage.input_data_input_to_ranking[(data_set_name, "color")][indices], indices))]
+        indices.sort(key=lambda index: Storage.input_data_input_to_ranking[(data_set_name, "color")][index])
+
+    # save train data
+    # Storage.set_input_data(image_data)
 
     input_images = ImageData()
     input_images.num_images = end_idx - start_idx
     input_images.res_x = image_data.shape[1]
     input_images.res_y = image_data.shape[2]
     input_images.images = []
-    for i in range(start_idx, end_idx):
+    for i in indices:
         image = Image()
         image.cost = 0.0
         image.id = i
         # TODO : use byte array
         image.bytestring = convert_image_array_to_byte_string(image_data[i], channels=image_data.shape[3])
         input_images.images.append(image)
-
-    # sort images:
-    if sort_by == "color" and not output:
-        input_images.images.sort(
-            key=lambda image: Storage.input_data_input_to_ranking[(datasetname, "color")][image.id])
-
-    # save train data
-    Storage.set_input_data(image_data)
 
     return input_images, 200
 
@@ -223,7 +251,56 @@ def get_random_images(batch_size=100, datasetname="train_data", sort_by=None, fi
 
     :rtype: ImageData
     """
-    return 'do some magic!'
+    # generate list of all indices:
+    indices = list(range(0, Storage.input_data[datasetname].shape[0]))
+
+    # filter images:
+    print(filter)
+    if filter is not None:
+        if datasetname in Storage.input_data_clustering:
+            if filter.startswith("cluster"):
+                # get cluster:
+                cluster_number = int(filter.split(':')[1])
+                # generate filter mask:
+                print(cluster_number)
+                # mask = [(i == cluster_number) for i in Storage.input_data_clustering[datasetname][indices]]
+                # mask = Storage.input_data_clustering[datasetname][indices] == cluster_number
+                # filter indices:
+                # indices = np.extract(mask, indices)
+                indices = [index for index in indices if
+                           Storage.input_data_clustering[datasetname][index] == cluster_number]
+            else:
+                return 'Unsupported filter', 404
+        else:
+            return 'No clustering found', 404
+
+    # pick random subset:
+    indices = np.random.choice(indices, batch_size, replace=False).tolist()
+
+    # sort images:
+    if sort_by == "color" and not output:
+        # indices = [index for _, index in
+        #            sorted(zip(Storage.input_data_input_to_ranking[(datasetname, "color")][indices], indices))]
+        indices.sort(key=lambda index: Storage.input_data_input_to_ranking[(datasetname, "color")][index])
+
+    # save train data
+    # Storage.set_input_data(image_data)
+
+    input_images = ImageData()
+    input_images.num_images = batch_size
+    input_images.res_x = Storage.input_data[datasetname].shape[1]
+    input_images.res_y = Storage.input_data[datasetname].shape[2]
+    input_images.images = []
+    for i in indices:
+        image = Image()
+        image.cost = 0.0
+        image.id = i
+        # TODO : use byte array
+        image.bytestring = convert_image_array_to_byte_string(Storage.input_data[datasetname][i],
+                                                              channels=Storage.input_data[datasetname].shape[3])
+        input_images.images.append(image)
+
+    return input_images, 200
 
 
 def load_file(filename, datasetname="unknown", read_labels=None, data_type="auto"):
