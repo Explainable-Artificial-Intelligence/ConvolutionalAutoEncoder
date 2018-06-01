@@ -27,12 +27,12 @@ div.SummaryTile {
     /*border: 5px solid lime;*/
 }
 
-td.summaryColumn {
-    margin: 10px;
-    padding: 10px;
-    background-color: #4a4a4a;
-    width: 300px;
-    height: 300px;
+div.summaryColumn {
+    /*margin: 10px;*/
+    /*padding: 10px;*/
+    /*background-color: #4a4a4a;*/
+    /*width: 300px;*/
+    max-height: 400px;
     vertical-align: top;
 
     /*border: 5px solid lime;*/
@@ -64,6 +64,35 @@ div.trained {
 
 div.aborted {
     border: 1px solid darkred;
+}
+
+table.imageGrid td.inputImageColumn {
+
+}
+
+table.imageGrid td.outputImageColumn {
+    /*border-right: 2px solid orange;*/
+    padding-right: 40px;
+
+}
+
+table.imageGrid td.latentImageColumn {
+
+}
+
+table.imageGrid img.inputImageThumbnail {
+    width: 48px;
+
+}
+
+table.imageGrid img.outputImageThumbnail {
+    width: 48px
+
+}
+
+table.imageGrid img.latentImageThumbnail {
+    width: 16px
+
 }
 
 .imageGrid .header {

@@ -20,9 +20,6 @@ table.imageGrid td, tr {
 }
 
 table.imageGrid td.inputImageColumn {
-    /*border-left: 2px solid orange;*/
-    /*margin-left: 20px;*/
-
 
 }
 
@@ -47,4 +44,25 @@ table.imageGrid td.latentImageColumn {
     /*-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; !* IE8 *!*/
     /*margin-left: -10em;*/
     /*margin-right: -10em;*/
+}
+
+table.imageGrid img.inputImageThumbnail {
+    width: 160px;
+
+}
+
+table.imageGrid img.outputImageThumbnail {
+    width: 160px
+
+}
+
+table.imageGrid img.latentImageThumbnail {
+    width: 32px
+
+}
+
+.imageGrid-scrollPane {
+    overflow-x: scroll;
+    /*overflow-y: hidden;*/
+    white-space: nowrap;
 }

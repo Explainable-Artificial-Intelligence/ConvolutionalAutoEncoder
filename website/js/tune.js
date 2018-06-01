@@ -275,15 +275,18 @@ function finishSummaryTile(summaryTile) {
                 };
                 tuneApi.applySpecificTuningAsDefaultModel(summaryTile.uuid, callback);
 
-            })
+            });
 
+            sortSummaryTile();
 
+            summaryTile.scrollImagePaneRight();
         }
 
 
     };
 
     tuneApi.getTrainPerformanceOfSpecificTuning(summaryTile.uuid, callback);
+
 }
 
 function generateFinishedSummaryTile(modelId) {
@@ -334,6 +337,7 @@ function generateFinishedSummaryTile(modelId) {
     };
 
     tuneApi.getTrainPerformanceOfSpecificTuning(modelId, callback);
+    sortSummaryTile();
 }
 
 
@@ -471,6 +475,33 @@ function buildANN() {
 
 }
 
+function sortSummaryTile() {
+    // function to compare 2 summary tiles by final cost
+    function compareFinalCosts(a, b) {
+        return a.finalCost - b.finalCost;
+    }
+
+    // get ChildList
+    var summaryTiles = document.getElementById("summaryTiles").childNodes;
+
+    //convert to array
+    var tilesArray = [];
+    for (var i = 0; i < summaryTiles.length; ++i) {
+        var tile = summaryTiles[i];
+        tilesArray.push(tile);
+    }
+    // sort ChildList
+    var sortedSummaryTiles = tilesArray.sort(compareFinalCosts);
+
+    // apply sorting
+    var parentNode = document.getElementById("summaryTiles");
+    parentNode.innerHTML = "";
+    for (i = 0; i < sortedSummaryTiles.length; ++i) {
+        parentNode.appendChild(sortedSummaryTiles[i]);
+        sortedSummaryTiles[i].scrollImagePaneRight();
+    }
+}
+
 
 /*
 Main tuning functions
@@ -489,6 +520,8 @@ function updateTrainImages() {
                 currentTile.imageGrid.addNewImageColumn(data);
 
                 currentTrainImageEpoch = data.epoch;
+
+                currentTile.scrollImagePaneRight();
             }
 
 
@@ -556,7 +589,7 @@ function updateTrainImages() {
 
         }
     };
-    tuneApi.getProcessedImageDataOfCurrentTuning(20, callback);
+    tuneApi.getProcessedImageDataOfCurrentTuning(15, callback);
 }
 
 function updateTrainStatistics() {

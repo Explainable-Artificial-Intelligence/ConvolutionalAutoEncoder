@@ -80,6 +80,9 @@ function SummaryTile(parentID, uuid, trainImageCount) {
         finalCost.textContent = "Final Cost: " + this.costChart.getLatestYValue('cost');
         finalStats.appendChild(finalCost);
 
+        //update tile cost:
+        tile.finalCost = this.costChart.getLatestYValue('cost');
+
         var br = document.createElement('br');
         finalStats.appendChild(br);
         finalStats.appendChild(br);
@@ -111,6 +114,12 @@ function SummaryTile(parentID, uuid, trainImageCount) {
         generateParameterList(list, parameterList);
     };
 
+    this.scrollImagePaneRight = function () {
+        console.log("scroll right!");
+        // scroll right:
+        fourthCell.scrollTo(Number.MAX_SAFE_INTEGER, 0);
+    };
+
 
     // set property variables
     this.uuid = uuid;
@@ -120,37 +129,47 @@ function SummaryTile(parentID, uuid, trainImageCount) {
     var parentNode = document.getElementById(parentID);
 
     var tile = document.createElement("div");
-    tile.className = 'SummaryTile columnDiv';
+    tile.classList.add("SummaryTile");
+    tile.classList.add("columnDiv");
+    tile.finalCost = Number.MAX_VALUE;
     tile.id = "summaryTile_" + uuid;
 
     parentNode.appendChild(tile);
 
     // create table
-    var table = document.createElement("table");
+    var table = document.createElement("div");
+    table.classList.add("row");
     tile.appendChild(table);
 
-    var firstCell = document.createElement("td");
+    var firstCell = document.createElement("div");
     firstCell.classList.add("summaryColumn");
+    firstCell.classList.add("column6");
     firstCell.id = "firstCell_" + uuid;
     table.appendChild(firstCell);
 
-    var secondCell = document.createElement("td");
+    var secondCell = document.createElement("div");
     secondCell.classList.add("summaryColumn");
+    secondCell.classList.add("column6");
     secondCell.id = "secondCell_" + uuid;
     table.appendChild(secondCell);
 
-    var thirdCell = document.createElement("td");
+    var thirdCell = document.createElement("div");
     thirdCell.classList.add("summaryColumn");
+    thirdCell.classList.add("column6");
     thirdCell.id = "thirdCell_" + uuid;
     table.appendChild(thirdCell);
 
-    var fourthCell = document.createElement("td");
+    var fourthCell = document.createElement("div");
     fourthCell.classList.add("summaryColumn");
+    fourthCell.classList.add("column6");
+    fourthCell.classList.add("vertical-scroll");
+    fourthCell.classList.add("horizontal-scroll");
     fourthCell.id = "fourthCell_" + uuid;
     table.appendChild(fourthCell);
 
-    var fifthCell = document.createElement("td");
+    var fifthCell = document.createElement("div");
     fifthCell.classList.add("summaryColumn");
+    fifthCell.classList.add("column6");
     fifthCell.id = "fifthCell_" + uuid;
     table.appendChild(fifthCell);
 
