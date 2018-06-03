@@ -345,7 +345,8 @@ function generateClusteredImageGrid(NumClusters) {
 
         //generate description:
         var description = document.createElement("label");
-        description.textContent = "Cluster " + cluster + ":";
+        description.textContent = "Cluster " + (cluster + 1) + ":";
+        description.style.color = colorMap[cluster];
         currentImageGrid.appendChild(description);
         currentImageGrid.appendChild(document.createElement("br"));
 
@@ -359,12 +360,16 @@ function generateClusteredImageGrid(NumClusters) {
                     // get image grid:
                     console.log(cluster);
                     var imageGrid = document.getElementById("imageGrid_Cluster_" + cluster);
+                    imageGrid.classList.add("horizontal-scroll");
+                    imageGrid.classList.add("clusteredImageGrid");
+                    //imageGrid.style.width= '800px';
                     // iterate over all images
                     for (var i = 0; i < data.images.length; i++) {
                         // create new image object
                         var newImage = document.createElement("img");
                         newImage.id = "Image_" + data.images[i].id + "_cluster_" + cluster;
                         newImage.style.width = "48px";
+                        newImage.style.border = "1px solid " + colorMap[cluster];
                         newImage.src = "data:image/png;base64," + data.images[i].bytestring.substring(2, data.images[i].bytestring.length - 1);
                         newImage.classList.add("imageRibbonThumbnail");
                         // add eventListener
@@ -398,20 +403,24 @@ function getClustering() {
             console.error(error);
             console.log(response);
             // clearInterval(clusterTimer)
+            clusterTimer = setInterval(getClustering, 5000);
         } else {
             console.log(response);
             console.log(data);
             clearInterval(clusterTimer);
-            // if (document.getElementById('clusterView') !== null) {
-            //     document.getElementById('clusterView').removeChild(document.getElementById('clusterChart'));
-            // }
 
-            var clusterChart = new ClusterChart("clusterView", 960, 640, colorMap, response.body);
+            // delete previous clustering
+            document.getElementById("clusterView").innerHTML = "";
+
+            var clusterChart = new ClusterChart("clusterView", 780, 640, colorMap, response.body);
 
             generateClusteredImageGrid(response.body.nClusters);
+
+            document.getElementById("drawClustering").disabled = false;
         }
     }
 
+    clearInterval(clusterTimer);
     visualizeApi.getHiddenLayerLatentClustering({'datasetName': dataSetName}, clusterCallback);
 
 }
@@ -435,6 +444,7 @@ function startClustering() {
         .getElementById("dimReductionAlgorithm").selectedIndex].value;
 
 
+    document.getElementById("drawClustering").disabled = true;
     visualizeApi.computeHiddenLayerLatentClustering(algorithm, dimensionReduction, {
         "clusterParameters": clusterParameter,
         'datasetName': dataSetName

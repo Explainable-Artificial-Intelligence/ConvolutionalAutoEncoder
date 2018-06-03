@@ -5,6 +5,7 @@
     <title>Visualize</title>
 
     <link rel="stylesheet" type="text/css" href="../css/layout.css">
+    <link rel="stylesheet" type="text/css" href="../css/visualize.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css"/>
 
@@ -23,158 +24,163 @@
     </ul>
 </header>
 
-<aside id="sidebar">
-    <h4>Loaded data sets:</h4>
-    <select id="inputLoadedDataSets" size="3">
-
-    </select>
-    <br>
-    <br>
-    Dataset statistics:
-    <br>
-    <label id="labelResolution">Resolution: </label>
-    <br>
-    <label id="labelLayer">Layer: </label>
-    <br>
-    <label id="labelNumberOfImages">Number of Images: </label>
-    <br>
-    <br>
-    <button id="btnDownloadModel">Download trained model</button>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <h4>Clustering:</h4>
-
-    <label for="clusteringAlgorithm">Clustering algorithm:</label>
-    <br>
-    <select id="clusteringAlgorithm">
-        <option value="auto">auto</option>
-        <option value="kmeans">kmeans</option>
-    </select>
-    <br>
-    <br>
-    <label for="dimReductionAlgorithm">Dimension reduction algorithm:</label>
-    <br>
-    <select id="dimReductionAlgorithm">
-        <option value="PCA">PCA</option>
-        <option value="t-SNE">t-SNE</option>
-    </select>
-    <br>
-    <br>
-
-    <details>
-        <summary>Advanced cluster parameters:</summary>
-        <p style="margin-left: 15px">
-            <label>
-                Number of clusters:
-                <input id="advancedClusteringNClusters" type="number" value="10">
-            </label>
-            <br>
-            <br>
-
-            <label for="advancedClusteringInit">Init:</label>
-            <br>
-            <select id="advancedClusteringInit">
-                <option value="k-means++">k-means++</option>
-                <option value="random">random</option>
-            </select>
-            <br>
-            <br>
-
-            <label>
-                Number of runs:
-                <input id="advancedClusteringNInit" type="number" value="10">
-            </label>
-            <br>
-            <br>
-
-            <label>
-                Maximum number of iterations:
-                <input id="advancedClusteringMaxIter" type="number" value="300">
-            </label>
-            <br>
-            <br>
-
-            <label>
-                Tolerance:
-                <input id="advancedClusteringTol" type="number" value="0.0001">
-            </label>
-            <br>
-            <br>
-
-            <label for="advancedClusteringPrecomputeDistances">Precompute distances:</label>
-            <br>
-            <select id="advancedClusteringPrecomputeDistances">
-                <option value=true>true</option>
-                <option value=false>false</option>
-            </select>
-            <br>
-            <br>
-
-            <label>
-                Random state:
-                <input id="advancedClusteringRandomState" type="number" value="-1">
-            </label>
-            <br>
-            <br>
-
-            <label for="advancedClusteringCopyX">Copy X:</label>
-            <br>
-            <select id="advancedClusteringCopyX">
-                <option value='true'>true</option>
-                <option value='false'>false</option>
-            </select>
-            <br>
-            <br>
-
-            <label for="advancedClusteringAlgorithm">Clustering algorithm:</label>
-            <br>
-            <select id="advancedClusteringAlgorithm">
-                <option value="auto">auto</option>
-                <option value="full">full</option>
-                <option value="elkan">elkan</option>
-            </select>
-            <br>
-
-        </p>
-    </details>
-
-    <br>
-    <button id="drawClustering">create Clustering</button>
-</aside>
-
 <div id="content">
     <div id="imageRibbon" class="slick">
 
     </div>
 </div>
 
-<div id="imagePreviewView" class="row">
-    <div class="column3">
-        <img src="" id="inputPreview" width="400px">
-    </div>
-    <div class="column3">
-        <div id="latentImages" width="400px"></div>
-    </div>
-    <div class="column3">
-        <img src="" id="outputPreview" width="400px">
+<div class="row">
+    <div id="sidebar" class="vertical-scroll columnFixed" style="height: 500px; width: 300px">
+        <h4>Loaded data sets:</h4>
+        <select id="inputLoadedDataSets" size="3">
+
+        </select>
         <br>
-        <p id="scoreLabel">
-            Score: -
-        </p>
+        <br>
+        Dataset statistics:
+        <br>
+        <label id="labelResolution">Resolution: </label>
+        <br>
+        <label id="labelLayer">Layer: </label>
+        <br>
+        <label id="labelNumberOfImages">Number of Images: </label>
+        <br>
+        <br>
+        <button id="btnDownloadModel">Download trained model</button>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <h4>Clustering:</h4>
+
+        <label for="clusteringAlgorithm">Clustering algorithm:</label>
+        <br>
+        <select id="clusteringAlgorithm">
+            <option value="auto">auto</option>
+            <option value="kmeans">kmeans</option>
+        </select>
+        <br>
+        <br>
+        <label for="dimReductionAlgorithm">Dimension reduction algorithm:</label>
+        <br>
+        <select id="dimReductionAlgorithm">
+            <option value="PCA">PCA</option>
+            <option value="t-SNE">t-SNE</option>
+        </select>
+        <br>
+        <br>
+
+        <details>
+            <summary>Advanced cluster parameters:</summary>
+            <p style="margin-left: 15px">
+                <label>
+                    Number of clusters:<br>
+                    <input id="advancedClusteringNClusters" type="number" value="10">
+                </label>
+                <br>
+                <br>
+
+                <label for="advancedClusteringInit">Init:</label>
+                <br>
+                <select id="advancedClusteringInit">
+                    <option value="k-means++">k-means++</option>
+                    <option value="random">random</option>
+                </select>
+                <br>
+                <br>
+
+                <label>
+                    Number of runs:<br>
+                    <input id="advancedClusteringNInit" type="number" value="10">
+                </label>
+                <br>
+                <br>
+
+                <label>
+                    Maximum number of iterations:<br>
+                    <input id="advancedClusteringMaxIter" type="number" value="300">
+                </label>
+                <br>
+                <br>
+
+                <label>
+                    Tolerance:<br>
+                    <input id="advancedClusteringTol" type="number" value="0.0001">
+                </label>
+                <br>
+                <br>
+
+                <label for="advancedClusteringPrecomputeDistances">Precompute distances:</label>
+                <br>
+                <select id="advancedClusteringPrecomputeDistances">
+                    <option value=true>true</option>
+                    <option value=false>false</option>
+                </select>
+                <br>
+                <br>
+
+                <label>
+                    Random state:<br>
+                    <input id="advancedClusteringRandomState" type="number" value="-1">
+                </label>
+                <br>
+                <br>
+
+                <label for="advancedClusteringCopyX">Copy X:</label>
+                <br>
+                <select id="advancedClusteringCopyX">
+                    <option value='true'>true</option>
+                    <option value='false'>false</option>
+                </select>
+                <br>
+                <br>
+
+                <label for="advancedClusteringAlgorithm">Clustering algorithm:</label>
+                <br>
+                <select id="advancedClusteringAlgorithm">
+                    <option value="auto">auto</option>
+                    <option value="full">full</option>
+                    <option value="elkan">elkan</option>
+                </select>
+                <br>
+
+            </p>
+        </details>
+
+        <br>
+        <button id="drawClustering">create Clustering</button>
     </div>
+
+
+    <div id="imagePreviewView" class="row">
+        <div class="columnFixed" style="width: 450px">
+            <img src="" id="inputPreview" style="width: 440px">
+        </div>
+        <div class="columnFixed" style="width: 450px">
+            <div id="latentImages" style="width: 440px"></div>
+        </div>
+        <div class="columnFixed" style="width: 450px">
+            <img src="" id="outputPreview" style="width: 440px">
+            <br>
+            <p id="scoreLabel">
+                Score: -
+            </p>
+        </div>
+    </div>
+    <br>
 </div>
-<br>
 
 
-<div id="clusterView">
+<div class="row">
+    <div id="clusterView" class="columnFixed" style="width:800px">
 
-</div>
+    </div>
 
-<div id="imageGrid">
+    <div id="imageGrid" class="columnFixed">
 
+    </div>
 </div>
 
 

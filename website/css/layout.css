@@ -279,3 +279,38 @@ path:hover {
     border: dashed red;
     width: 150px;
 }*/
+
+/*
+.scroll_container {
+    background-color:#000000;
+    width:421px;
+    height:420px;
+    color:#999999;
+    border:2px solid #000000;
+    border-radius:10px;
+    overflow:hidden;
+    text-align:justify;
+}
+*/
+
+/*.scroll_content {
+    position:relative;
+    width:400px;
+    height:414px;
+    top:-17px;
+    padding:20px 10px 20px 10px;
+    overflow-y:auto;
+}*/
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track-piece {
+    background-color: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    background-color: darkorange;
+}
