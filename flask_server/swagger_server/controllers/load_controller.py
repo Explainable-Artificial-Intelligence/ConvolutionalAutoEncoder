@@ -275,6 +275,9 @@ def get_random_images(batch_size=100, datasetname="train_data", sort_by=None, fi
             return 'No clustering found', 404
 
     # pick random subset:
+    # prevent errors if cluster isn't large enough
+    if batch_size > len(indices):
+        batch_size = indices
     indices = np.random.choice(indices, batch_size, replace=False).tolist()
 
     # sort images:

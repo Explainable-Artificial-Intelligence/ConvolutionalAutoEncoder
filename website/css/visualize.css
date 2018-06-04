@@ -39,7 +39,11 @@ img#inputPreview, img#outputPreview {
 }
 
 .clusteredImageGrid {
-    /*width: calc(100% - 820px);*/
-    width: 1000px;
+    width: 100%;
+    /*float:right;*/
 
+}
+
+#imageGrid {
+    width: calc(100% - 900px);
 }

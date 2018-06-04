@@ -145,7 +145,17 @@ def read_image_folder(folder_path, layers=[74, 75, 76]):
                 image = sitk.ReadImage(filename)
                 # convert to numpy array and save the array to the list
 
-                image_array_list.append(sitk.GetArrayFromImage(np.swapaxes(image, 1, 3)[:, :, :, layers]))
+                image_data = sitk.GetArrayFromImage(image)
+
+                # rearrange axes:
+                image_data = np.swapaxes(image_data, 0, 2)
+
+                # limit to layers:
+                image_data = image_data[:, :, layers]
+
+                print(image_data.shape)
+                # add to image array list
+                image_array_list.append(image_data)
 
     # create a np array for all images
     image_array = np.array(image_array_list)
