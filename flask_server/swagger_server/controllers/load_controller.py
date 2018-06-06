@@ -203,7 +203,7 @@ def get_latent_representation_by_id(id, datasetname=None):
     :rtype: List[ImageData]
     """
     # check if output images already computed
-    compute_latent_representation(datasetname)
+    compute_output_images(datasetname)
     # get the image as nd array
     image_array = Storage.latent_representation_data[datasetname][id]
 

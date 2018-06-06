@@ -51,26 +51,26 @@
   }
 
   describe('TuneApi', function() {
-      describe('applySpecificTuningAsDefaultModel', function () {
-          it('should call applySpecificTuningAsDefaultModel successfully', function (done) {
-              //uncomment below and update the code to test applySpecificTuningAsDefaultModel
-              //instance.applySpecificTuningAsDefaultModel(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('applySpecificTuningAsDefaultModel', function() {
+      it('should call applySpecificTuningAsDefaultModel successfully', function(done) {
+        //uncomment below and update the code to test applySpecificTuningAsDefaultModel
+        //instance.applySpecificTuningAsDefaultModel(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
-      describe('buildGridSearchANN', function () {
-          it('should call buildGridSearchANN successfully', function (done) {
-              //uncomment below and update the code to test buildGridSearchANN
-              //instance.buildGridSearchANN(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    });
+    describe('buildGridSearchANN', function() {
+      it('should call buildGridSearchANN successfully', function(done) {
+        //uncomment below and update the code to test buildGridSearchANN
+        //instance.buildGridSearchANN(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
     describe('controlTuning', function() {
       it('should call controlTuning successfully', function(done) {
         //uncomment below and update the code to test controlTuning
@@ -91,16 +91,16 @@
         done();
       });
     });
-      describe('getProcessedImageDataOfSpecificTuning', function () {
-          it('should call getProcessedImageDataOfSpecificTuning successfully', function (done) {
-              //uncomment below and update the code to test getProcessedImageDataOfSpecificTuning
-              //instance.getProcessedImageDataOfSpecificTuning(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('getProcessedImageDataOfSpecificTuning', function() {
+      it('should call getProcessedImageDataOfSpecificTuning successfully', function(done) {
+        //uncomment below and update the code to test getProcessedImageDataOfSpecificTuning
+        //instance.getProcessedImageDataOfSpecificTuning(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
     describe('getTrainPerformanceOfCurrentTuning', function() {
       it('should call getTrainPerformanceOfCurrentTuning successfully', function(done) {
         //uncomment below and update the code to test getTrainPerformanceOfCurrentTuning
@@ -111,46 +111,46 @@
         done();
       });
     });
-      describe('getTrainPerformanceOfSpecificTuning', function () {
-          it('should call getTrainPerformanceOfSpecificTuning successfully', function (done) {
-              //uncomment below and update the code to test getTrainPerformanceOfSpecificTuning
-              //instance.getTrainPerformanceOfSpecificTuning(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('getTrainPerformanceOfSpecificTuning', function() {
+      it('should call getTrainPerformanceOfSpecificTuning successfully', function(done) {
+        //uncomment below and update the code to test getTrainPerformanceOfSpecificTuning
+        //instance.getTrainPerformanceOfSpecificTuning(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
-      describe('getTuneModelIds', function () {
-          it('should call getTuneModelIds successfully', function (done) {
-              //uncomment below and update the code to test getTuneModelIds
-              //instance.getTuneModelIds(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    });
+    describe('getTuneModelIds', function() {
+      it('should call getTuneModelIds successfully', function(done) {
+        //uncomment below and update the code to test getTuneModelIds
+        //instance.getTuneModelIds(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
-      describe('getTuneParameter', function () {
-          it('should call getTuneParameter successfully', function (done) {
-              //uncomment below and update the code to test getTuneParameter
-              //instance.getTuneParameter(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    });
+    describe('getTuneParameter', function() {
+      it('should call getTuneParameter successfully', function(done) {
+        //uncomment below and update the code to test getTuneParameter
+        //instance.getTuneParameter(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
-      describe('getTunedModelAsZip', function () {
-          it('should call getTunedModelAsZip successfully', function (done) {
-              //uncomment below and update the code to test getTunedModelAsZip
-              //instance.getTunedModelAsZip(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    });
+    describe('getTunedModelAsZip', function() {
+      it('should call getTunedModelAsZip successfully', function(done) {
+        //uncomment below and update the code to test getTunedModelAsZip
+        //instance.getTunedModelAsZip(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
   });
 
 }));

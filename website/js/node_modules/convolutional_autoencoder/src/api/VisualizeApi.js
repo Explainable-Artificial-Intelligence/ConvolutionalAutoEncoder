@@ -17,18 +17,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-      define(['ApiClient', 'model/ClusterParameters', 'model/Clustering', 'model/Image', 'model/Point2D'], factory);
+    define(['ApiClient', 'model/ClusterParameters', 'model/Clustering', 'model/Image', 'model/Point2D'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-      module.exports = factory(require('../ApiClient'), require('../model/ClusterParameters'), require('../model/Clustering'), require('../model/Image'), require('../model/Point2D'));
+    module.exports = factory(require('../ApiClient'), require('../model/ClusterParameters'), require('../model/Clustering'), require('../model/Image'), require('../model/Point2D'));
   } else {
     // Browser globals (root is window)
     if (!root.ConvolutionalAutoencoder) {
       root.ConvolutionalAutoencoder = {};
     }
-      root.ConvolutionalAutoencoder.VisualizeApi = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.ClusterParameters, root.ConvolutionalAutoencoder.Clustering, root.ConvolutionalAutoencoder.Image, root.ConvolutionalAutoencoder.Point2D);
+    root.ConvolutionalAutoencoder.VisualizeApi = factory(root.ConvolutionalAutoencoder.ApiClient, root.ConvolutionalAutoencoder.ClusterParameters, root.ConvolutionalAutoencoder.Clustering, root.ConvolutionalAutoencoder.Image, root.ConvolutionalAutoencoder.Point2D);
   }
-}(this, function (ApiClient, ClusterParameters, Clustering, Image, Point2D) {
+}(this, function(ApiClient, ClusterParameters, Clustering, Image, Point2D) {
   'use strict';
 
   /**
@@ -48,62 +48,66 @@
     this.apiClient = apiClient || ApiClient.instance;
 
 
-      /**
-       * Callback function to receive the result of the computeHiddenLayerLatentClustering operation.
-       * @callback module:api/VisualizeApi~computeHiddenLayerLatentClusteringCallback
-       * @param {String} error Error message, if any.
-       * @param data This operation does not return a value.
-       * @param {String} response The complete HTTP response.
-       */
+    /**
+     * Callback function to receive the result of the computeHiddenLayerLatentClustering operation.
+     * @callback module:api/VisualizeApi~computeHiddenLayerLatentClusteringCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
 
-      /**
-       * starts the clustering of the latent representation of a hidden layer
-       * starts the clustering of the latent representation of a hidden layer
-       * @param {String} algorithm determines the clutering algorithm
-       * @param {String} dimensionReduction determines the algorithm for dim reduction
-       * @param {Object} opts Optional parameters
-       * @param {String} opts.datasetName determines the dataset which should be clustered (default to train_data)
-       * @param {Number} opts.layer determines the hidden layer
-       * @param {module:model/ClusterParameters} opts.clusterParameters determines the clutering parameters
-       * @param {module:api/VisualizeApi~computeHiddenLayerLatentClusteringCallback} callback The callback function, accepting three arguments: error, data, response
-       */
-      this.computeHiddenLayerLatentClustering = function (algorithm, dimensionReduction, opts, callback) {
-          opts = opts || {};
-          var postBody = opts['clusterParameters'];
+    /**
+     * starts the clustering of the latent representation of a hidden layer
+     * starts the clustering of the latent representation of a hidden layer
+     * @param {String} algorithm determines the clutering algorithm
+     * @param {String} dimensionReduction determines the algorithm for dim reduction
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.datasetName determines the dataset which should be clustered (default to train_data)
+     * @param {Number} opts.layer determines the hidden layer
+     * @param {module:model/ClusterParameters} opts.clusterParameters determines the clutering parameters
+     * @param {module:api/VisualizeApi~computeHiddenLayerLatentClusteringCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    this.computeHiddenLayerLatentClustering = function(algorithm, dimensionReduction, opts, callback) {
+      opts = opts || {};
+      var postBody = opts['clusterParameters'];
 
-          // verify the required parameter 'algorithm' is set
-          if (algorithm === undefined || algorithm === null) {
-              throw new Error("Missing the required parameter 'algorithm' when calling computeHiddenLayerLatentClustering");
-          }
-
-          // verify the required parameter 'dimensionReduction' is set
-          if (dimensionReduction === undefined || dimensionReduction === null) {
-              throw new Error("Missing the required parameter 'dimensionReduction' when calling computeHiddenLayerLatentClustering");
-          }
-
-
-          var pathParams = {};
-          var queryParams = {
-              'algorithm': algorithm,
-              'dataset_name': opts['datasetName'],
-              'dimension_reduction': dimensionReduction,
-              'layer': opts['layer'],
-          };
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
-
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = null;
-
-          return this.apiClient.callApi(
-              '/visualize/computeHiddenLayerLatentClustering', 'POST',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      // verify the required parameter 'algorithm' is set
+      if (algorithm === undefined || algorithm === null) {
+        throw new Error("Missing the required parameter 'algorithm' when calling computeHiddenLayerLatentClustering");
       }
+
+      // verify the required parameter 'dimensionReduction' is set
+      if (dimensionReduction === undefined || dimensionReduction === null) {
+        throw new Error("Missing the required parameter 'dimensionReduction' when calling computeHiddenLayerLatentClustering");
+      }
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+        'algorithm': algorithm,
+        'dataset_name': opts['datasetName'],
+        'dimension_reduction': dimensionReduction,
+        'layer': opts['layer'],
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = null;
+
+      return this.apiClient.callApi(
+        '/visualize/computeHiddenLayerLatentClustering', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the generateImageFromSinglePoint operation.
@@ -133,7 +137,8 @@
       };
       var queryParams = {
       };
-        var collectionQueryParams = {};
+      var collectionQueryParams = {
+      };
       var headerParams = {
       };
       var formParams = {
@@ -146,7 +151,7 @@
 
       return this.apiClient.callApi(
         '/visualize/generateImageFromSinglePoint', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -168,18 +173,18 @@
      * @param {module:api/VisualizeApi~getHiddenLayerLatentClusteringCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/Clustering}
      */
-    this.getHiddenLayerLatentClustering = function (opts, callback) {
+    this.getHiddenLayerLatentClustering = function(opts, callback) {
       opts = opts || {};
-        var postBody = null;
+      var postBody = null;
 
 
       var pathParams = {
       };
       var queryParams = {
         'dataset_name': opts['datasetName'],
-          'layer': opts['layer'],
+        'layer': opts['layer'],
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -192,44 +197,49 @@
       var returnType = Clustering;
 
       return this.apiClient.callApi(
-          '/visualize/getHiddenLayerLatentClustering', 'POST',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-          authNames, contentTypes, accepts, returnType, callback
+        '/visualize/getHiddenLayerLatentClustering', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
     }
 
-      /**
-       * Callback function to receive the result of the getPretrainedModelAsZip operation.
-       * @callback module:api/VisualizeApi~getPretrainedModelAsZipCallback
-       * @param {String} error Error message, if any.
-       * @param {File} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
+    /**
+     * Callback function to receive the result of the getPretrainedModelAsZip operation.
+     * @callback module:api/VisualizeApi~getPretrainedModelAsZipCallback
+     * @param {String} error Error message, if any.
+     * @param {File} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-      /**
-       * returns a zip file with the pre trained model as runable python script
-       *
-       * @param {module:api/VisualizeApi~getPretrainedModelAsZipCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link File}
-       */
-      this.getPretrainedModelAsZip = function (callback) {
-          var postBody = null;
+    /**
+     * returns a zip file with the pre trained model as runable python script
+     * 
+     * @param {module:api/VisualizeApi~getPretrainedModelAsZipCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link File}
+     */
+    this.getPretrainedModelAsZip = function(callback) {
+      var postBody = null;
 
 
-          var pathParams = {};
-          var queryParams = {};
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-          var authNames = [];
-          var contentTypes = ['multipart/form-data'];
-          var accepts = ['application/octet-stream'];
-          var returnType = File;
+      var authNames = [];
+      var contentTypes = [];
+      var accepts = ['multipart/form-data'];
+      var returnType = File;
 
-          return this.apiClient.callApi(
-              '/visualize/getPretrainedModelAsZip', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+      return this.apiClient.callApi(
+        '/visualize/getPretrainedModelAsZip', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }

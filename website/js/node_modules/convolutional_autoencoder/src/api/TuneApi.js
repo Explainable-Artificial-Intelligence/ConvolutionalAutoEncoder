@@ -48,94 +48,102 @@
     this.apiClient = apiClient || ApiClient.instance;
 
 
-      /**
-       * Callback function to receive the result of the applySpecificTuningAsDefaultModel operation.
-       * @callback module:api/TuneApi~applySpecificTuningAsDefaultModelCallback
-       * @param {String} error Error message, if any.
-       * @param data This operation does not return a value.
-       * @param {String} response The complete HTTP response.
-       */
+    /**
+     * Callback function to receive the result of the applySpecificTuningAsDefaultModel operation.
+     * @callback module:api/TuneApi~applySpecificTuningAsDefaultModelCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
 
-      /**
-       * sets a given tuned model as default model
-       * sets a given tuned model as default model
-       * @param {String} modelId model id of the tuned model
-       * @param {module:api/TuneApi~applySpecificTuningAsDefaultModelCallback} callback The callback function, accepting three arguments: error, data, response
-       */
-      this.applySpecificTuningAsDefaultModel = function (modelId, callback) {
-          var postBody = null;
+    /**
+     * sets a given tuned model as default model
+     * sets a given tuned model as default model
+     * @param {String} modelId model id of the tuned model
+     * @param {module:api/TuneApi~applySpecificTuningAsDefaultModelCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    this.applySpecificTuningAsDefaultModel = function(modelId, callback) {
+      var postBody = null;
 
-          // verify the required parameter 'modelId' is set
-          if (modelId === undefined || modelId === null) {
-              throw new Error("Missing the required parameter 'modelId' when calling applySpecificTuningAsDefaultModel");
-          }
-
-
-          var pathParams = {};
-          var queryParams = {
-              'modelId': modelId,
-          };
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
-
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = null;
-
-          return this.apiClient.callApi(
-              '/tune/applySpecificTuningAsDefaultModel', 'POST',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      // verify the required parameter 'modelId' is set
+      if (modelId === undefined || modelId === null) {
+        throw new Error("Missing the required parameter 'modelId' when calling applySpecificTuningAsDefaultModel");
       }
 
-      /**
-       * Callback function to receive the result of the buildGridSearchANN operation.
-       * @callback module:api/TuneApi~buildGridSearchANNCallback
-       * @param {String} error Error message, if any.
-       * @param data This operation does not return a value.
-       * @param {String} response The complete HTTP response.
-       */
 
-      /**
-       * passes all learning and ANN parameters to the server
-       * Includes learning parameters and ANN topology as lists
-       * @param {module:model/ParameterList} inputParameterLists object with all tunable parameter lists
-       * @param {Object} opts Optional parameters
-       * @param {Boolean} opts.deletePreviousModels if true delete all previous tuned models (default to false)
-       * @param {module:api/TuneApi~buildGridSearchANNCallback} callback The callback function, accepting three arguments: error, data, response
-       */
-      this.buildGridSearchANN = function (inputParameterLists, opts, callback) {
-          opts = opts || {};
-          var postBody = inputParameterLists;
+      var pathParams = {
+      };
+      var queryParams = {
+        'modelId': modelId,
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-          // verify the required parameter 'inputParameterLists' is set
-          if (inputParameterLists === undefined || inputParameterLists === null) {
-              throw new Error("Missing the required parameter 'inputParameterLists' when calling buildGridSearchANN");
-          }
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = null;
 
+      return this.apiClient.callApi(
+        '/tune/applySpecificTuningAsDefaultModel', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
-          var pathParams = {};
-          var queryParams = {
-              'deletePreviousModels': opts['deletePreviousModels'],
-          };
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
+    /**
+     * Callback function to receive the result of the buildGridSearchANN operation.
+     * @callback module:api/TuneApi~buildGridSearchANNCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
 
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = null;
+    /**
+     * passes all learning and ANN parameters to the server
+     * Includes learning parameters and ANN topology as lists
+     * @param {module:model/ParameterList} inputParameterLists object with all tunable parameter lists
+     * @param {Object} opts Optional parameters
+     * @param {Boolean} opts.deletePreviousModels if true delete all previous tuned models (default to false)
+     * @param {module:api/TuneApi~buildGridSearchANNCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    this.buildGridSearchANN = function(inputParameterLists, opts, callback) {
+      opts = opts || {};
+      var postBody = inputParameterLists;
 
-          return this.apiClient.callApi(
-              '/tune/buildGridSearchANN', 'POST',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      // verify the required parameter 'inputParameterLists' is set
+      if (inputParameterLists === undefined || inputParameterLists === null) {
+        throw new Error("Missing the required parameter 'inputParameterLists' when calling buildGridSearchANN");
       }
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+        'deletePreviousModels': opts['deletePreviousModels'],
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = null;
+
+      return this.apiClient.callApi(
+        '/tune/buildGridSearchANN', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the controlTuning operation.
@@ -164,7 +172,8 @@
       };
       var queryParams = {
       };
-        var collectionQueryParams = {};
+      var collectionQueryParams = {
+      };
       var headerParams = {
       };
       var formParams = {
@@ -176,8 +185,8 @@
       var returnType = null;
 
       return this.apiClient.callApi(
-          '/tune/controlTuning', 'POST',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        '/tune/controlTuning', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
@@ -209,9 +218,9 @@
       var pathParams = {
       };
       var queryParams = {
-          'setSize': setSize,
+        'setSize': setSize,
       };
-        var collectionQueryParams = {
+      var collectionQueryParams = {
       };
       var headerParams = {
       };
@@ -225,61 +234,65 @@
 
       return this.apiClient.callApi(
         '/tune/getProcessedImageDataOfCurrentTuning', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
     }
 
-      /**
-       * Callback function to receive the result of the getProcessedImageDataOfSpecificTuning operation.
-       * @callback module:api/TuneApi~getProcessedImageDataOfSpecificTuningCallback
-       * @param {String} error Error message, if any.
-       * @param {module:model/ProcessedImageData} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
+    /**
+     * Callback function to receive the result of the getProcessedImageDataOfSpecificTuning operation.
+     * @callback module:api/TuneApi~getProcessedImageDataOfSpecificTuningCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ProcessedImageData} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-      /**
-       * returns a subset of the current train images and the corresponding latent representation and output
-       *
-       * @param {Number} setSize size of the image subset
-       * @param {String} modelId model id of the exspected parameter set
-       * @param {module:api/TuneApi~getProcessedImageDataOfSpecificTuningCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link module:model/ProcessedImageData}
-       */
-      this.getProcessedImageDataOfSpecificTuning = function (setSize, modelId, callback) {
-          var postBody = null;
+    /**
+     * returns a subset of the current train images and the corresponding latent representation and output
+     * 
+     * @param {Number} setSize size of the image subset
+     * @param {String} modelId model id of the exspected parameter set
+     * @param {module:api/TuneApi~getProcessedImageDataOfSpecificTuningCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ProcessedImageData}
+     */
+    this.getProcessedImageDataOfSpecificTuning = function(setSize, modelId, callback) {
+      var postBody = null;
 
-          // verify the required parameter 'setSize' is set
-          if (setSize === undefined || setSize === null) {
-              throw new Error("Missing the required parameter 'setSize' when calling getProcessedImageDataOfSpecificTuning");
-          }
-
-          // verify the required parameter 'modelId' is set
-          if (modelId === undefined || modelId === null) {
-              throw new Error("Missing the required parameter 'modelId' when calling getProcessedImageDataOfSpecificTuning");
-          }
-
-
-          var pathParams = {};
-          var queryParams = {
-              'setSize': setSize,
-              'modelId': modelId,
-          };
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
-
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = ProcessedImageData;
-
-          return this.apiClient.callApi(
-              '/tune/getProcessedImageDataOfSpecificTuning', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      // verify the required parameter 'setSize' is set
+      if (setSize === undefined || setSize === null) {
+        throw new Error("Missing the required parameter 'setSize' when calling getProcessedImageDataOfSpecificTuning");
       }
+
+      // verify the required parameter 'modelId' is set
+      if (modelId === undefined || modelId === null) {
+        throw new Error("Missing the required parameter 'modelId' when calling getProcessedImageDataOfSpecificTuning");
+      }
+
+
+      var pathParams = {
+      };
+      var queryParams = {
+        'setSize': setSize,
+        'modelId': modelId,
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = ProcessedImageData;
+
+      return this.apiClient.callApi(
+        '/tune/getProcessedImageDataOfSpecificTuning', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
     /**
      * Callback function to receive the result of the getTrainPerformanceOfCurrentTuning operation.
@@ -303,7 +316,8 @@
       };
       var queryParams = {
       };
-        var collectionQueryParams = {};
+      var collectionQueryParams = {
+      };
       var headerParams = {
       };
       var formParams = {
@@ -316,178 +330,195 @@
 
       return this.apiClient.callApi(
         '/tune/getTrainPerformanceOfCurrentTuning', 'GET',
-          pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-          authNames, contentTypes, accepts, returnType, callback
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
       );
     }
 
-      /**
-       * Callback function to receive the result of the getTrainPerformanceOfSpecificTuning operation.
-       * @callback module:api/TuneApi~getTrainPerformanceOfSpecificTuningCallback
-       * @param {String} error Error message, if any.
-       * @param {module:model/TrainPerformance} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
+    /**
+     * Callback function to receive the result of the getTrainPerformanceOfSpecificTuning operation.
+     * @callback module:api/TuneApi~getTrainPerformanceOfSpecificTuningCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/TrainPerformance} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-      /**
-       * returns the complete set of scalar train variables to a given model
-       * as list of dicts
-       * @param {String} modelId model id of the exspected parameter set
-       * @param {module:api/TuneApi~getTrainPerformanceOfSpecificTuningCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link module:model/TrainPerformance}
-       */
-      this.getTrainPerformanceOfSpecificTuning = function (modelId, callback) {
-          var postBody = null;
+    /**
+     * returns the complete set of scalar train variables to a given model
+     * as list of dicts
+     * @param {String} modelId model id of the exspected parameter set
+     * @param {module:api/TuneApi~getTrainPerformanceOfSpecificTuningCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/TrainPerformance}
+     */
+    this.getTrainPerformanceOfSpecificTuning = function(modelId, callback) {
+      var postBody = null;
 
-          // verify the required parameter 'modelId' is set
-          if (modelId === undefined || modelId === null) {
-              throw new Error("Missing the required parameter 'modelId' when calling getTrainPerformanceOfSpecificTuning");
-          }
-
-
-          var pathParams = {};
-          var queryParams = {
-              'modelId': modelId,
-          };
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
-
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = TrainPerformance;
-
-          return this.apiClient.callApi(
-              '/tune/getTrainPerformanceOfSpecificTuning', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      // verify the required parameter 'modelId' is set
+      if (modelId === undefined || modelId === null) {
+        throw new Error("Missing the required parameter 'modelId' when calling getTrainPerformanceOfSpecificTuning");
       }
 
-      /**
-       * Callback function to receive the result of the getTuneModelIds operation.
-       * @callback module:api/TuneApi~getTuneModelIdsCallback
-       * @param {String} error Error message, if any.
-       * @param {Array.<'String'>} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
 
-      /**
-       * returns a list of all tuned model ids
-       * returns a list of all tuned model ids
-       * @param {module:api/TuneApi~getTuneModelIdsCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link Array.<'String'>}
-       */
-      this.getTuneModelIds = function (callback) {
-          var postBody = null;
+      var pathParams = {
+      };
+      var queryParams = {
+        'modelId': modelId,
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = TrainPerformance;
+
+      return this.apiClient.callApi(
+        '/tune/getTrainPerformanceOfSpecificTuning', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getTuneModelIds operation.
+     * @callback module:api/TuneApi~getTuneModelIdsCallback
+     * @param {String} error Error message, if any.
+     * @param {Array.<'String'>} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * returns a list of all tuned model ids
+     * returns a list of all tuned model ids
+     * @param {module:api/TuneApi~getTuneModelIdsCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link Array.<'String'>}
+     */
+    this.getTuneModelIds = function(callback) {
+      var postBody = null;
 
 
-          var pathParams = {};
-          var queryParams = {};
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
+      var pathParams = {
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = ['String'];
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = ['String'];
 
-          return this.apiClient.callApi(
-              '/tune/getTuneModelIds', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      return this.apiClient.callApi(
+        '/tune/getTuneModelIds', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the getTuneParameter operation.
+     * @callback module:api/TuneApi~getTuneParameterCallback
+     * @param {String} error Error message, if any.
+     * @param {module:model/ParameterList} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * returns the parameter set of the ANN with the given model id
+     * returns a object of type ParameterList
+     * @param {String} modelId model id of the exspected parameter set
+     * @param {module:api/TuneApi~getTuneParameterCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link module:model/ParameterList}
+     */
+    this.getTuneParameter = function(modelId, callback) {
+      var postBody = null;
+
+      // verify the required parameter 'modelId' is set
+      if (modelId === undefined || modelId === null) {
+        throw new Error("Missing the required parameter 'modelId' when calling getTuneParameter");
       }
 
-      /**
-       * Callback function to receive the result of the getTuneParameter operation.
-       * @callback module:api/TuneApi~getTuneParameterCallback
-       * @param {String} error Error message, if any.
-       * @param {module:model/ParameterList} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
 
-      /**
-       * returns the parameter set of the ANN with the given model id
-       * returns a object of type ParameterList
-       * @param {String} modelId model id of the exspected parameter set
-       * @param {module:api/TuneApi~getTuneParameterCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link module:model/ParameterList}
-       */
-      this.getTuneParameter = function (modelId, callback) {
-          var postBody = null;
+      var pathParams = {
+      };
+      var queryParams = {
+        'modelId': modelId,
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-          // verify the required parameter 'modelId' is set
-          if (modelId === undefined || modelId === null) {
-              throw new Error("Missing the required parameter 'modelId' when calling getTuneParameter");
-          }
+      var authNames = [];
+      var contentTypes = ['application/json'];
+      var accepts = ['application/json'];
+      var returnType = ParameterList;
 
+      return this.apiClient.callApi(
+        '/tune/getTuneParameter', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
 
-          var pathParams = {};
-          var queryParams = {
-              'modelId': modelId,
-          };
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
+    /**
+     * Callback function to receive the result of the getTunedModelAsZip operation.
+     * @callback module:api/TuneApi~getTunedModelAsZipCallback
+     * @param {String} error Error message, if any.
+     * @param {File} data The data returned by the service call.
+     * @param {String} response The complete HTTP response.
+     */
 
-          var authNames = [];
-          var contentTypes = ['application/json'];
-          var accepts = ['application/json'];
-          var returnType = ParameterList;
+    /**
+     * returns a zip file with the pre trained model as runable python script
+     * 
+     * @param {String} modelId model id of the tuned model
+     * @param {module:api/TuneApi~getTunedModelAsZipCallback} callback The callback function, accepting three arguments: error, data, response
+     * data is of type: {@link File}
+     */
+    this.getTunedModelAsZip = function(modelId, callback) {
+      var postBody = null;
 
-          return this.apiClient.callApi(
-              '/tune/getTuneParameter', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
+      // verify the required parameter 'modelId' is set
+      if (modelId === undefined || modelId === null) {
+        throw new Error("Missing the required parameter 'modelId' when calling getTunedModelAsZip");
       }
 
-      /**
-       * Callback function to receive the result of the getTunedModelAsZip operation.
-       * @callback module:api/TuneApi~getTunedModelAsZipCallback
-       * @param {String} error Error message, if any.
-       * @param {File} data The data returned by the service call.
-       * @param {String} response The complete HTTP response.
-       */
 
-      /**
-       * returns a zip file with the pre trained model as runable python script
-       *
-       * @param {String} modelId model id of the tuned model
-       * @param {module:api/TuneApi~getTunedModelAsZipCallback} callback The callback function, accepting three arguments: error, data, response
-       * data is of type: {@link File}
-       */
-      this.getTunedModelAsZip = function (modelId, callback) {
-          var postBody = null;
+      var pathParams = {
+      };
+      var queryParams = {
+        'modelId': modelId,
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
 
-          // verify the required parameter 'modelId' is set
-          if (modelId === undefined || modelId === null) {
-              throw new Error("Missing the required parameter 'modelId' when calling getTunedModelAsZip");
-          }
+      var authNames = [];
+      var contentTypes = ['multipart/form-data'];
+      var accepts = ['application/octet-stream'];
+      var returnType = File;
 
-
-          var pathParams = {};
-          var queryParams = {
-              'modelId': modelId,
-          };
-          var collectionQueryParams = {};
-          var headerParams = {};
-          var formParams = {};
-
-          var authNames = [];
-          var contentTypes = ['multipart/form-data'];
-          var accepts = ['application/octet-stream'];
-          var returnType = File;
-
-          return this.apiClient.callApi(
-              '/tune/getTunedModelAsZip', 'GET',
-              pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
-              authNames, contentTypes, accepts, returnType, callback
-          );
-      }
+      return this.apiClient.callApi(
+        '/tune/getTunedModelAsZip', 'GET',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
   };
 
   return exports;

@@ -81,16 +81,16 @@
         done();
       });
     });
-      describe('getPretrainedModelAsZip', function () {
-          it('should call getPretrainedModelAsZip successfully', function (done) {
-              //uncomment below and update the code to test getPretrainedModelAsZip
-              //instance.getPretrainedModelAsZip(function(error) {
-              //  if (error) throw error;
-              //expect().to.be();
-              //});
-              done();
-          });
+    describe('getPretrainedModelAsZip', function() {
+      it('should call getPretrainedModelAsZip successfully', function(done) {
+        //uncomment below and update the code to test getPretrainedModelAsZip
+        //instance.getPretrainedModelAsZip(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
       });
+    });
   });
 
 }));

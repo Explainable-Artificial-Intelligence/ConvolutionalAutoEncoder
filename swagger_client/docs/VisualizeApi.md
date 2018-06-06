@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**computeHiddenLayerLatentClustering**](VisualizeApi.md#computeHiddenLayerLatentClustering) | **POST** /visualize/computeHiddenLayerLatentClustering | starts the clustering of the latent representation of a hidden layer
 [**generateImageFromSinglePoint**](VisualizeApi.md#generateImageFromSinglePoint) | **GET** /visualize/generateImageFromSinglePoint | generates the AE output from a given point of the sample distribution
 [**getHiddenLayerLatentClustering**](VisualizeApi.md#getHiddenLayerLatentClustering) | **POST** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
-[**getPretrainedModelAsZip**](VisualizeApi.md#getPretrainedModelAsZip) | **GET** /visualize/getPretrainedModelAsZip | returns a zip file with the pre trained model as runable python script
+[**getPretrainedModelAsZip**](VisualizeApi.md#getPretrainedModelAsZip) | **POST** /visualize/getPretrainedModelAsZip | returns a zip file with the pre trained model as runable python script
 
 
 <a name="computeHiddenLayerLatentClustering"></a>
@@ -199,6 +199,6 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: multipart/form-data
- - **Accept**: application/octet-stream
+ - **Content-Type**: Not defined
+ - **Accept**: multipart/form-data
 

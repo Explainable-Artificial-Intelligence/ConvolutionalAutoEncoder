@@ -21,6 +21,7 @@ class Storage(object):
     parameter_set = ParameterList()
     model_id = ""
     cae_thread = threading.Thread()
+    prediction_thread = {}
     train_step = 0
 
     tuning_ANNs = []

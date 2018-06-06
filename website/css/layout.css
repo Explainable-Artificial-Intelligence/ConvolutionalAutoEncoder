@@ -311,6 +311,16 @@ path:hover {
     background-color: #1a1a1a;
 }
 
+::-webkit-scrollbar-corner{
+    background-color: #1a1a1a;
+}
+
+
 ::-webkit-scrollbar-thumb:vertical {
     background-color: darkorange;
 }
+
+::-webkit-scrollbar-thumb:horizontal {
+    background-color: darkorange;
+}
+

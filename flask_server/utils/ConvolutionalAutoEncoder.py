@@ -281,6 +281,8 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         if self.session_saver_path is not None:
             # if not self.ann_status.eval(self.tf_session) == b'training':
 
+
+
             # reset currently active tf graph
             tf.reset_default_graph()
             self.tf_session = tf.Session(config=self.tf_session_config)
@@ -351,12 +353,15 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         current_input = self.input_images
         # self.layers.append(self.input_images)
         # iterate over all encoder layer
+        print(self.number_of_stacks)
         print(list(enumerate(self.number_of_stacks)))
         for layer_i, n_output in enumerate(self.number_of_stacks):
             output = self._build_encoder_layer(current_input, layer_i, n_output, restore)
             self.layers.append(output)
             current_input = output
             print(output.get_shape())
+
+        print("encoder shapes: " + str(self.encoder_shapes))
 
         # save latent representation
         self.latent_representation = output
@@ -372,6 +377,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         :return: output of the new layer
         """
         number_of_input_layers = current_input.get_shape().as_list()[3]
+        print(current_input.get_shape().as_list())
         self.encoder_shapes.append(current_input.get_shape().as_list())
         if restore:
             weights_of_layer_i = tf.get_default_graph().get_tensor_by_name(
@@ -384,7 +390,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
             bias_of_layer_i = self._create_layer_biases([n_output], "encoder_biases_layer_" + str(layer_i))
         self.encoder_weights.append(weights_of_layer_i)
         self.encoder_biases.append(bias_of_layer_i)
-        # TODO: understand strides /padding
         output = self.activation_function(
             tf.nn.conv2d(current_input, weights_of_layer_i, strides=self.layer_strides, padding='SAME') +
             bias_of_layer_i)
@@ -439,6 +444,7 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
         current_input = self.latent_representation
 
         # iterate over all encoder layer
+        print(len(self.decoder_shapes))
         for layer_i, shape in enumerate(self.decoder_shapes):
             output = self._build_decoder_layer(current_input, layer_i, shape, restore)
             self.layers.append(output)
@@ -846,8 +852,6 @@ class SklearnCAE(BaseEstimator, TransformerMixin):
 
         :return:
         """
-        # TODO: Remove
-        print(self.tf_session.run(self.ann_status))
         if not self.tf_session.run(self.ann_status) == b'completely trained':
             print("WARNING: The ANN is not completely trained", file=sys.stderr)
 

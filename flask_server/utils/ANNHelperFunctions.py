@@ -2,6 +2,7 @@
 Helper functions to handle the communication between Storage and ANN
 """
 import itertools
+import threading
 
 from flask_server.swagger_server.models.image import Image
 from flask_server.swagger_server.models.processed_image_data import ProcessedImageData
@@ -14,16 +15,33 @@ def compute_output_images(datasetname):
     if not Storage.output_images_computed(datasetname):
         # compute all output images for this dataset:
 
-        # get CAE
-        cae = Storage.get_cae()
-        # predict train images
-        output_images = cae.predict(Storage.input_data[datasetname])
-        scores = cae.score(Storage.input_data[datasetname])
-        # save prediction
-        print(output_images.shape)
-        print(len(scores))
-        Storage.output_data[datasetname] = output_images
-        Storage.score_data[datasetname] = scores
+        # check if thread is already running
+        if datasetname in Storage.prediction_thread:
+            # if yes wait for completion
+            if Storage.prediction_thread[datasetname].isAlive():
+                Storage.prediction_thread[datasetname].join()
+                return
+
+        # otherwise: create and start thread
+        Storage.prediction_thread[datasetname] = threading.Thread(target=predict_output, args=(datasetname,))
+        Storage.prediction_thread[datasetname].start()
+        Storage.prediction_thread[datasetname].join()
+        return
+
+
+def predict_output(datasetname):
+    # get CAE
+    cae = Storage.get_cae()
+    # predict train images
+    output_images = cae.predict(Storage.input_data[datasetname])
+    latent_representation = cae.get_latent_representation(Storage.input_data[datasetname])
+    scores = cae.score(Storage.input_data[datasetname])
+    # save prediction
+    print(output_images.shape)
+    print(len(scores))
+    Storage.output_data[datasetname] = output_images
+    Storage.score_data[datasetname] = scores
+    Storage.latent_representation_data[datasetname] = latent_representation
 
 
 def compute_latent_representation(datasetname):

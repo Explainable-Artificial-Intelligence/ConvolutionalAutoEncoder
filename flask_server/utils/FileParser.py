@@ -119,7 +119,7 @@ def read_npy_arr_file(file_path):
             print("3D data will be automatically reshaped")
             np_array = np_array.reshape((shape[0], shape[1], shape[2], 1))
 
-            print(np_array)
+            # print(np_array)
 
     return np_array
 
@@ -153,7 +153,7 @@ def read_image_folder(folder_path, layers=[74, 75, 76]):
                 # limit to layers:
                 image_data = image_data[:, :, layers]
 
-                print(image_data.shape)
+                # print(image_data.shape)
                 # add to image array list
                 image_array_list.append(image_data)
 

@@ -147,7 +147,7 @@ Class | Method | HTTP request | Description
 *ConvolutionalAutoencoder.VisualizeApi* | [**computeHiddenLayerLatentClustering**](docs/VisualizeApi.md#computeHiddenLayerLatentClustering) | **POST** /visualize/computeHiddenLayerLatentClustering | starts the clustering of the latent representation of a hidden layer
 *ConvolutionalAutoencoder.VisualizeApi* | [**generateImageFromSinglePoint**](docs/VisualizeApi.md#generateImageFromSinglePoint) | **GET** /visualize/generateImageFromSinglePoint | generates the AE output from a given point of the sample distribution
 *ConvolutionalAutoencoder.VisualizeApi* | [**getHiddenLayerLatentClustering**](docs/VisualizeApi.md#getHiddenLayerLatentClustering) | **POST** /visualize/getHiddenLayerLatentClustering | returns the clustering of the latent representation of a hidden layer
-*ConvolutionalAutoencoder.VisualizeApi* | [**getPretrainedModelAsZip**](docs/VisualizeApi.md#getPretrainedModelAsZip) | **GET** /visualize/getPretrainedModelAsZip | returns a zip file with the pre trained model as runable python script
+*ConvolutionalAutoencoder.VisualizeApi* | [**getPretrainedModelAsZip**](docs/VisualizeApi.md#getPretrainedModelAsZip) | **POST** /visualize/getPretrainedModelAsZip | returns a zip file with the pre trained model as runable python script
 
 
 ## Documentation for Models
