@@ -41,6 +41,7 @@ function appendImages(numberOfImages) {
                 var newImage = document.createElement("img");
                 newImage.id = "Image_" + data.images[i].id;
                 newImage.src = "data:image/png;base64," + data.images[i].bytestring.substring(2, data.images[i].bytestring.length - 1);
+                newImage.style.width = "32px";
                 newImage.class = "imageThumbnail";
                 // add eventListener
                 // change preview view
@@ -53,7 +54,7 @@ function appendImages(numberOfImages) {
                     // remove old border
                     if (imagePreview.linkedId !== "") {
                         document.getElementById(imagePreview.linkedId).style.border = "";
-                        document.getElementById(imagePreview.linkedId).style.width = "";
+                        document.getElementById(imagePreview.linkedId).style.width = "32px";
                         document.getElementById(imagePreview.linkedId).style.margin = "";
                     }
 

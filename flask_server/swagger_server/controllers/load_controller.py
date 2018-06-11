@@ -4,7 +4,7 @@ import numpy as np
 
 from flask_server.swagger_server.models.image import Image
 from flask_server.swagger_server.models.image_data import ImageData
-from flask_server.utils.ANNHelperFunctions import compute_output_images, compute_latent_representation
+from flask_server.utils.ANNHelperFunctions import compute_output_images
 from flask_server.utils.FileParser import load_input_data, list_data_files, save_data_file
 from flask_server.utils.ImageProcessing import convert_image_array_to_byte_string
 from flask_server.utils.Sorting import apply_sorting
@@ -277,7 +277,7 @@ def get_random_images(batch_size=100, datasetname="train_data", sort_by=None, fi
     # pick random subset:
     # prevent errors if cluster isn't large enough
     if batch_size > len(indices):
-        batch_size = indices
+        batch_size = len(indices)
     indices = np.random.choice(indices, batch_size, replace=False).tolist()
 
     # sort images:

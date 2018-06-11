@@ -368,6 +368,11 @@ function getInputDimensions() {
             // console.log(inputShape);
             document.getElementById("InputShape").value = JSON.stringify([inputShape], null, 1);
 
+            //update data statistics:
+            document.getElementById("labelResolution").textContent = "Resolution: " + data[1] + "px x " + data[2] + "px";
+            document.getElementById("labelLayer").textContent = "Layer: " + data[3];
+            document.getElementById("labelNumberOfImages").textContent = "Number of Images: " + data[0];
+
         }
     }
 

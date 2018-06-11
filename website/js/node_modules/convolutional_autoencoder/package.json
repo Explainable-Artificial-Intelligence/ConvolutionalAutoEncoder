@@ -11,8 +11,7 @@
     "fs": false
   },
   "dependencies": {
-    "growl": "^1.10.5",
-    "superagent": "^3.8.3"
+    "superagent": "3.5.2"
   },
   "devDependencies": {
     "mocha": "~2.3.4",
